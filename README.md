@@ -79,7 +79,7 @@
 Antigravity, ...).
 
 ```bash
-git clone https://github.com/<owner>/<repo>.git deep-research
+git clone https://github.com/kaloyan052/deep-research.git deep-research
 cd deep-research
 python -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements.txt
