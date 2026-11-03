@@ -1,0 +1,107 @@
+[
+  {
+    "id": "KILLED_EDGE_LONDON_FIX_REVERSAL",
+    "name": "WM/R London 4 PM Fix FX Reversal",
+    "status": "KILLED",
+    "patterns": [
+      "(?:london\\s*(?:4\\s*pm|16:00)?\\s*fix(?:ing)?|wm/?r\\s*london|валутни[яа]\\s*фиксинг|лондонски[яа]\\s*фиксинг)[^.\\n]*?(?:reversal|обръщане|edge|шампион|champion|surviving|оцелял|предимство|strategy|стратегия|alpha|алфа|anomaly|аномалия|печеливш|profitable|viable)",
+      "(?:reversal|обръщане|edge|шампион|champion|surviving|оцелял|предимство|strategy|стратегия|alpha|алфа|anomaly|аномалия|печеливш|profitable|viable)[^.\\n]*?(?:london\\s*(?:4\\s*pm|16:00)?\\s*fix(?:ing)?|wm/?r\\s*london|валутни[яа]\\s*фиксинг|лондонски[яа]\\s*фиксинг)"
+    ],
+    "refutation": "Lab experiment P31 (FXFIX01/02) empirically refuted this edge across real CFD execution runs with t-stat = -5.2 to -11.09. Broker spreads, execution slippage, and dealer inventory pre-hedging completely invert the gross paper anomaly into net loss.",
+    "acknowledgment_patterns": [
+      "(?:p31|fxfix01|fxfix02|t\\s*=\\s*-(?:5\\.2|11\\.09)|refuted\\s+in\\s+lab|killed\\s+in\\s+lab|отхвърлен\\s+в\\s+лабораторни|опроверган\\s+в\\s+реални|не\\s+оцелява\\s+при\\s+реални|отрицателен\\s+t-stat)"
+    ]
+  },
+  {
+    "id": "TRAP_NATURAL_PERSON_CONSUMER_KYC",
+    "name": "Natural Person KYC != EU Consumer Status (Directive 93/13/EEC)",
+    "status": "TRAP",
+    "patterns": [
+      "(?:\\b(?:baštová|bastova)\\b.*?(?:refuted|\\*\\*refuted\\*\\*|опроверган)|(?:refuted|\\*\\*refuted\\*\\*|опроверган).*?\\b(?:baštová|bastova)\\b)",
+      "(?:\\b(?:refuted|\\*\\*refuted\\*\\*|опроверган)\\b.*?(?:consumer|потребител|non[- ]consumer).*?(?:natural\\s*person|физическо\\s*лице|kyc)|\\b(?:refuted|\\*\\*refuted\\*\\*|опроверган)\\b.*?(?:natural\\s*person|физическо\\s*лице|kyc).*?(?:consumer|потребител|non[- ]consumer))",
+      "(?:\\b(?:kyc|natural\\s*person\\s*kyc)\\b.*?(?:confer|grant|дава|гарантира|осигурява).*?(?:потребител|consumer|directive\\s*93/13|директива\\s*93/13)|(?:потребител|consumer|directive\\s*93/13|директива\\s*93/13).*?(?:confer|grant|дава|гарантира|осигурява).*?\\b(?:kyc|natural\\s*person\\s*kyc)\\b)"
+    ],
+    "refutation": "Registering as a natural person for KYC does not confer consumer status under Directive 93/13/EEC when trading under commercial terms. Analogy to CJEU Baštová horse-racing prize law cannot declare a kill hypothesis refuted when contracts define payouts as rewards for data.",
+    "acknowledgment_patterns": [
+      "(?:not\\s+(?:confer|grant|protect|exempt)|не\\s+(?:предоставя|дава|гарантира|освобождава)|untested\\s+in\\s+court|неприложим[ао]\\s+по\\s+аналогия|cannot\\s+refute|не\\s+може\\s+да\\s+опровергае|commercial\\s+contract\\s+overrides|commercial\\s+terms\\s+override|търговският\\s+договор\\s+има\\s+превес|reward\\s+for\\s+data\\s+overrides|non-binding\\s+analogy|необвързваща\\s+аналогия)"
+    ]
+  },
+  {
+    "id": "TRAP_UNOFFICIAL_COMMUNITY_API",
+    "name": "Unofficial Community Repository != Official API Specification",
+    "status": "TRAP",
+    "patterns": [
+      "joshuaanthony6",
+      "world-quant-brain-mcp"
+    ],
+    "refutation": "Personal community GitHub repositories and reverse-engineered wrappers are Tier 5 community sources. They cannot be cited as Tier 1 or Tier 2 evidence for official platform API availability.",
+    "acknowledgment_patterns": [
+      "(?:unofficial|community|third-party|t5|неофициален)"
+    ]
+  },
+  {
+    "id": "TRAP_SEASONAL_PANEL_CONDITIONAL_APPROVAL",
+    "name": "Multi-Asset Seasonal Panel Conditional Approval Without Post-Pub Evidence",
+    "status": "TRAP",
+    "patterns": [
+      "(?:vol-managed|volatility-managed|панел\\s+по\\s+сезонност|мулти-активен\\s+панел|мулти-активната\\s+сезонност)[^\\n]*?(?:условно\\s+одобрение|conditional\\s+approval|conditional\\s+pass|одобрен\\s+кандидат|одобрена\\s+семейна)",
+      "(?:условно\\s+одобрение|conditional\\s+approval|conditional\\s+pass)[^\\n]*?(?:vol-managed|volatility-managed|панел\\s+по\\s+сезонност|мулти-активен\\s+панел|сезонност)"
+    ],
+    "refutation": "Decayed out-of-sample and in FX; swap kills net Sharpe.",
+    "acknowledgment_patterns": [
+      "(?:отхвърлен|kill|rejected|decayed|li\\s+et\\s+al|kln)"
+    ]
+  },
+  {
+    "id": "TRAP_ANNUAL_SWAP_VS_PER_TRADE_FLOOR",
+    "name": "Comparing Annual Financing Rate Against Per-Trade Hurdle Floor",
+    "status": "TRAP",
+    "patterns": [
+      "(?:годишен\\s+суап|annual\\s+swap|swap\\s+rate\\s+p\\.a\\.|\\d+(?:\\.\\d+)?%\\s+p\\.a\\.)[^\\n]*?(?:сравнен\\s+с\\s+пода|пода\\s+на\\s+g9|g9\\s+floor|изяжда\\s+пода|надхвърля\\s+пода)",
+      "(?:пода\\s+на\\s+g9|g9\\s+floor)[^\\n]*?(?:годишен\\s+суап|annual\\s+swap|swap\\s+rate\\s+p\\.a\\.|\\d+(?:\\.\\d+)?%\\s+p\\.a\\.)"
+    ],
+    "refutation": "Holding costs must be per-holding period duration.",
+    "acknowledgment_patterns": [
+      "(?:период\\s+на\\s+задържане|holding\\s+period|1-дневен\\s+престой|1d\\s+hold|daily\\s+swap)"
+    ]
+  },
+  {
+    "id": "TRAP_STOCK_CFD_LONG_SHORT_FINANCING_DOUBLE_COUNT",
+    "name": "Applying Flat Gross Swap to Both Legs of Long-Short Equity Book",
+    "status": "TRAP",
+    "patterns": [
+      "(?:long-short|дълги-къси|equity\\s+book|книга\\s+от\\s+акции)[^\\n]*?(?:850\\s*bp|8\\.5%|850\\s*базисни\\s*пункта)[^\\n]*?(?:swap|суап|разход|cost|financing)",
+      "(?:850\\s*bp|8\\.5%|850\\s*базисни\\s*пункта)[^\\n]*?(?:long-short|дълги-къси|equity\\s+book|книга\\s+от\\s+акции)[^\\n]*?(?:swap|суап|разход|cost|financing)"
+    ],
+    "refutation": "Net financing is r_long - r_short ~ 6%.",
+    "acknowledgment_patterns": [
+      "(?:не\\s+(?:се\\s+начислява|е\\s+плосък|е\\s+симетричен)|not\\s+(?:flat|symmetric)|грешно|заблуда|fallacy|митология|дългото\\s+рамо|нетен\\s+(?:лихвен\\s+)?спред|net\\s+spread|6\\.0%|1\\.64\\s*bp)"
+    ]
+  },
+  {
+    "id": "TRAP_FX_MAJORS_S2_GEOMETRY_MISMATCH",
+    "name": "Claiming FX Majors Pass S2 Under Pillar 1 Intraday Geometry",
+    "status": "TRAP",
+    "patterns": [
+      "(?:fx\\s+majors?|основни\\s+fx|eurusd|gbpusd)[^\\n]*?(?:минават\\s+s2|покриват\\s+s2|pass\\s+s2|eligible\\s+under\\s+s2)[^\\n]*?(?:pillar\\s*1|първи\\s*стълб|10\\s*bp|0\\.030r)",
+      "(?:минават\\s+s2|покриват\\s+s2|pass\\s+s2|eligible\\s+under\\s+s2)[^\\n]*?(?:fx\\s+majors?|основни\\s+fx|eurusd|gbpusd)[^\\n]*?(?:pillar\\s*1|първи\\s*стълб|10\\s*bp|0\\.030r)"
+    ],
+    "refutation": "EURUSD friction is 0.070R > 0.030R.",
+    "acknowledgment_patterns": [
+      "(?:0\\.07[01]?r|надхвърля\\s+тавана|fails\\s+s2|провал\\s+по\\s+s2)"
+    ]
+  },
+  {
+    "id": "TRAP_GENERIC_UNGROUNDED_EV_TABLE",
+    "name": "Generic Ungrounded EV Table / 50-35-15 Copy-Paste",
+    "status": "TRAP",
+    "patterns": [
+      "(?:€38\\.5k|38500|38,500)[^\\n]*?(?:50\\s*/\\s*35\\s*/\\s*15|50%\\\\s*\\\\/\\\\s*35%|p\\\\*\\\\s*[:=]?\\\\s*2\\\\.6%)",
+      "(?:50\\s*/\\s*35\\s*/\\s*15|50%\\\\s*\\\\/\\\\s*35%|p\\\\*\\\\s*[:=]?\\\\s*2\\\\.6%)[^\\n]*?(?:€38\\.5k|38500|38,500)"
+    ],
+    "refutation": "EV must be grounded in primary calculations.",
+    "acknowledgment_patterns": [
+      "(?:pillar\\s*1\\s*сравнение|baseline\\s*comparison|opportunity\\s*cost)"
+    ]
+  }
+]

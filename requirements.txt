@@ -1,0 +1,11 @@
+# Research toolkit (dr_engine/tools, science, evals). Python >= 3.10.
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+pdfplumber>=0.11.0     # PDF snapshots with tables as quotable rows (parse_pdf.py, evidence.py fetch)
+pypdf>=4.0.0           # fallback PDF text extraction
+python-dotenv>=1.0.0   # science CLIs read optional keys from .env
+
+# Optional
+# langextract>=1.0     # extract_doc.py (long-document extraction)
+# ddgs>=9.0.0          # scanner.py web search
+# polite-http>=0.1.3   # science CLIs (a stdlib fallback is bundled)

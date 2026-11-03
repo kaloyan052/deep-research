@@ -1,0 +1,55 @@
+# Whitelist: everything is private unless listed below. Research folders, reports, prompts,
+# notes, the experimental engine and third-party code never leave this machine.
+/*
+!/.gitignore
+!/.gitattributes
+!/AGENTS.md
+!/CLAUDE.md
+!/README.md
+!/requirements.txt
+
+# Protocol: rules + the research skills written for this workspace
+!/.agents/
+/.agents/*
+!/.agents/rules/
+/.agents/rules/*.bak*
+!/.agents/skills/
+/.agents/skills/*
+!/.agents/skills/deep-research/
+!/.agents/skills/doubt-driven-development/
+!/.agents/skills/source-driven-development/
+!/.claude/
+/.claude/*
+!/.claude/skills/
+
+# Tools (the experimental autonomous engine in dr_engine/core etc. stays local)
+!/dr_engine/
+/dr_engine/*
+!/dr_engine/tools/
+!/dr_engine/science/
+!/dr_engine/evals/
+!/dr_engine/quant/
+
+# Tests for the tools
+!/tests/
+/tests/*
+!/tests/test_report_tools.py
+
+# Design document of the protocol
+!/docs/
+/docs/*
+!/docs/V4_ARCHITECTURE.md
+
+# Empty working folders (studies and reports themselves are never committed)
+!/research/
+/research/*
+!/research/.gitkeep
+!/reports/
+/reports/*
+!/reports/.gitkeep
+
+# Never, anywhere
+__pycache__/
+*.pyc
+.env
+*.sqlite
