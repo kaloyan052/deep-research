@@ -33,8 +33,12 @@ EVIDENCE_ORDER = ("E3", "E4", "E1", "E2", "E6", "E5", "E7", "E8", "E9")
 COVERAGE_WORD_RE = re.compile(r"\b(coverage|saturat\w*|покрити\w*|насищ\w*)", re.I)
 SCREENING_WORD_RE = re.compile(r"\b(screening|скрининг\w*)", re.I)
 
-REPORT_ORDER = ("R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R10")
+REPORT_ORDER = ("R1", "R14", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R10")
 HELP = {
+    "R14": ("Expand the report to meet all volume and table quotas in quotas.json",
+            "do NOT delete or truncate sections; add the missing table rows, complaint clusters, "
+            "verbatim quotes (" + T + "evidence.py add-batch), calculations (" + T + "calc.py eval), "
+            "and full Deep Dive sections until every threshold in {dir}/quotas.json is satisfied"),
     "E1": ("Restore the snapshot", T + "evidence.py fetch --dir {dir} --refresh <that source's URL>  "
            "(never edit sources/*.txt by hand)"),
     "E2": ("Replace the broken evidence record", T + "evidence.py retract --dir {dir} --id E### --reason "
@@ -138,6 +142,29 @@ def next_step(d: Path) -> dict:
   index = _jsonl(d / "sources" / "index.jsonl")
   evidence = load_evidence(d)
   strict = gate_mod.study_is_strict(d)
+
+  # 2b. Check pre-drafting evidence & calculation quotas if quotas.json exists
+  q_path = d / "quotas.json"
+  if q_path.exists():
+    try:
+      quotas = json.loads(q_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+      return _step("Fix syntax error in quotas.json", f"edit {dir_s}/quotas.json", str(e))
+    min_ev = int(quotas.get("min_evidence", 0))
+    if len(evidence) < min_ev:
+      return _step(
+          f"Collect more verified evidence ({len(evidence)}/{min_ev} required by quotas.json)",
+          f"{T}evidence.py fetch --dir {dir_s} <urls...>  then  "
+          f"{T}evidence.py add-batch --dir {dir_s} --file batch.jsonl",
+          f"quotas.json requires >= {min_ev} evidence items before drafting; currently have {len(evidence)}",
+      )
+    min_calcs = int(quotas.get("min_calculations", 0))
+    if len(g.calculations) < min_calcs:
+      return _step(
+          f"Register deterministic calculations ({len(g.calculations)}/{min_calcs} required by quotas.json)",
+          f"{T}calc.py eval --dir {dir_s} --label \"...\" --expr \"...\" --cites E###",
+          f"quotas.json requires >= {min_calcs} [C###] records before drafting; currently have {len(g.calculations)}",
+      )
 
   # 3. corpus and claim ledger (v4)
   if len(index) > 15 and not (d / "corpus.sqlite").exists():

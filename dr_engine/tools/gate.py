@@ -87,6 +87,8 @@ from traps import (  # noqa: E402
 EID_RE = re.compile(r"\bE\d{3}\b")
 CID_RE = re.compile(r"\bC\d{3}\b")
 INFERENCE_LABEL_RE = re.compile(r"\b(Inference|Извод)\s*:", re.I)
+INLINE_INF_TAG_RE = re.compile(r"\[(?:I|EST|Инференция|Оценка)(?:\s*[:\-–]\s*[^\]]*)?\]", re.I)
+ASSUMPTION_LABEL_RE = re.compile(r"(?:^|\|)\s*(?:[-*]\s*)?\*{0,2}(?:Assumption|Hypothetical|Допускане|Проект)\s*:", re.I)
 ESTIMATE_LABEL_RE = re.compile(r"\b(Estimate|Оценка)\b", re.I)
 CALC_OPERATOR_RE = re.compile(
     r"(=|≈|≤|≥|<=|>=|[×÷]|\d\s*[+\-*/x]\s*[$€£¥]?\d)",
@@ -102,7 +104,52 @@ SOURCE_REF_LINE_RE = re.compile(r"^\s*(?:[-*]\s*)?\[(?:S|E)?\d{1,3}\]")
 # against gates E1-E8") are process claims, not findings about the subject.
 PROCESS_RE = re.compile(r"\b(gates?|[ER]\d{1,2}|records?|snapshots?|sha-?256|checksums?|AST|"
                         r"calculations?|searches|epistemic|scorecard|audit)\b", re.I)
-SELF_SCORE_RE = re.compile(r"\b\d{1,2}(?:\.\d)?\s*/\s*10\b|rubric score|self[- ]score|оценка\s*\d+\s*/\s*10", re.I)
+SELF_SCORE_RE = re.compile(r"\b\d{1,2}(?:\.\d)?\s*/\s*10\b|self[- ]score|оценка\s*\d+\s*/\s*10", re.I)
+
+# Platforms for consumer/user reviews and marketplaces whose feedback represents empirical Voice-of-Customer
+REVIEW_DOMAINS = (
+    "g2.com", "capterra.com", "trustpilot.com", "apps.shopify.com",
+    "marketplace.atlassian.com", "chromewebstore.google.com", "chrome.google.com",
+    "wordpress.org", "reddit.com", "news.ycombinator.com", "getapp.com",
+    "softwareadvice.com", "play.google.com", "apps.apple.com", "etsy.com",
+    "gumroad.com", "upwork.com", "fiverr.com",
+)
+
+# Structural and prompt template tokens that must NOT trigger R3 number binding
+STRUCTURAL_PATTERNS = (
+    re.compile(r"^\s*\|\s*#?\d{1,3}\s*(?=\|)"),  # Leading table row index in Markdown: | 1 | ... | 35 |
+    re.compile(r"\b(?:SQ|K|E|C|S|R|P|T)\d{1,3}[a-z]?\b", re.I),  # Structural identifiers SQ1, K5, T1, R14
+    re.compile(r"\b\d+(?:\.\d+)?\s*[-–—]\s*\d+(?:\.\d+)?\s*(?:★|⭐|stars?|звезди|точки|pts?)\b", re.I),  # 1-5★, 1-3★
+    re.compile(r"\b\d+(?:\.\d+)?\s*(?:★|⭐)\b"),  # 4.2★
+    re.compile(r"\b\d+(?:\.\d+)?\s*/\s*(?:5|10|100)\b"),  # 4.8/5, 85/100
+    re.compile(r"(?:≤|<=|≥|>=|<|>|~)?\s*\b(?:2\s*[-–]\s*3|3)\s+(?:weeks?|седмици)\b", re.I),  # ≤ 3 weeks
+    re.compile(r"\b14[-–\s]+(?:day|дни|дневен)\b", re.I),  # 14-day demand test
+    re.compile(r"\b(?:month|месец)\s+12\b|\b12[-–\s]+(?:month|месеца|месечен)\b", re.I),  # month 12
+    re.compile(r"\b(?:first|първите)\s+100\s+(?:customers?|buyers?|клиенти|потребители)\b", re.I),  # first 100 customers
+    re.compile(r"\b(?:top|топ)\s+\d{1,2}\b", re.I),  # Top 5 deep dives
+    re.compile(r"\b(?:section|секция|глава|част)\s+\d+(?:\.\d+)*\b", re.I),  # Section 3, Секция 7.4
+    re.compile(r"\b24\s*/\s*7\b"),  # 24/7
+    re.compile(r"\b1\s*[-–]\s*10\s+(?:people|employees|души|служители|заети)\b", re.I),  # 1-10 people
+)
+
+
+def is_review_pain_evidence(rec: dict, index_rec: dict | None = None) -> bool:
+  """True if the evidence record is a customer complaint/review from a software marketplace or forum."""
+  if rec.get("kind") == "review_pain":
+    return True
+  if rec.get("kind") == "de_facto":
+    url = (rec.get("url") or (index_rec or {}).get("url") or "").lower()
+    if any(dom in url for dom in REVIEW_DOMAINS):
+      return True
+  return False
+
+
+def strip_structural_tokens(text: str) -> str:
+  """Removes table index columns, prompt template horizons, and rating scale labels before R3 number extraction."""
+  cleaned = text
+  for pat in STRUCTURAL_PATTERNS:
+    cleaned = pat.sub(" ", cleaned)
+  return cleaned
 UNIT_SUFFIXES = {
     "%", "‰", "bps", "bp", "bips", "pt", "pts", "point", "points", "точка", "точки",
     "pip", "pips", "пип", "пипа", "пипсове",
@@ -139,7 +186,7 @@ NUM_RE = re.compile(
     r"dollars?\b|долар[аи]?\b|"
     r"euros?\b|евро\b|"
     r"lev(?:a)?\b|лв\.?|лев[а]?\b|"
-    r"k\b|m\b|mn\b|bn\b|million\b|billion\b|хил\.|млн\.?|млрд\.?)"
+    r"k\b|m\b|mn\b|bn\b|million\b|billion\b|хил\.|млн\.?|млрд\.?|милиард[аи]?\b)"
     r")?",
     re.I,
 )
@@ -181,8 +228,10 @@ class Num(float):
     return obj
 
 
-def numbers(text: str) -> set:
+def numbers(text: str, strip_structural: bool = False) -> set:
   """Numeric values in text; '400,000', '$400K' and '400000' all map to 400000.0."""
+  if strip_structural:
+    text = strip_structural_tokens(text)
   text = EID_RE.sub(" ", text)
   text = CID_RE.sub(" ", text)
   text = re.sub(r"https?://\S+", " ", text)
@@ -209,7 +258,8 @@ def numbers(text: str) -> set:
     except ValueError:
       continue
     mult = {"k": 1e3, "хил.": 1e3, "m": 1e6, "mn": 1e6, "million": 1e6, "млн": 1e6,
-            "млн.": 1e6, "bn": 1e9, "billion": 1e9, "млрд": 1e9, "млрд.": 1e9}.get(suffix, 1)
+            "млн.": 1e6, "bn": 1e9, "billion": 1e9, "млрд": 1e9, "млрд.": 1e9,
+            "милиард": 1e9, "милиарда": 1e9}.get(suffix, 1)
     val = round(v * mult, 6)
     has_unit = bool(prefix) or (suffix in UNIT_SUFFIXES)
     if val in out_dict:
@@ -361,14 +411,18 @@ class Gate:
           self.F("E7", f"{eid}: exact duplicate evidence record of {prev['id']} ({sid}, {r.get('sq')})")
       seen_source_quotes.setdefault(q_key, []).append(r)
 
-    # E7b: Primary / Peer-Reviewed Depth Floor (when >= 4 evidence items)
-    if len(self.evidence) >= 4 and min_primary_share > 0:
-      t123 = sum(1 for r in self.evidence.values() if r.get("tier") in ("T1", "T2", "T3"))
-      t123_share = t123 / len(self.evidence)
+    # E7b: Primary / Peer-Reviewed Depth Floor (excluding review_pain / VoC marketplace reviews from denominator)
+    core_ev = [
+        r for r in self.evidence.values()
+        if not is_review_pain_evidence(r, index.get(r.get("source", "")))
+    ]
+    if len(core_ev) >= 4 and min_primary_share > 0:
+      t123 = sum(1 for r in core_ev if r.get("tier") in ("T1", "T2", "T3"))
+      t123_share = t123 / len(core_ev)
       if t123_share < min_primary_share:
-        self.F("E7", f"insufficient primary/peer-reviewed depth: {t123}/{len(self.evidence)} "
-                     f"({t123_share:.0%}) items are T1-T3; need >= {min_primary_share:.0%} "
-                     f"(replace T4 encyclopedias/T5 forums with primary or peer-reviewed sources)")
+        self.F("E7", f"insufficient primary/peer-reviewed depth in core evidence: {t123}/{len(core_ev)} "
+                     f"({t123_share:.0%}) non-review items are T1-T3; need >= {min_primary_share:.0%} "
+                     f"(replace T4 encyclopedias/T5 blogs with primary or official sources)")
 
     # E8: Deterministic Calculations Integrity (calculations.jsonl)
     for calc_err in calc.verify_calculations(d, known_evidence_ids=set(self.evidence.keys())):
@@ -505,7 +559,8 @@ class Gate:
           if ce in self.evidence and ce not in effective_eids:
             effective_eids.append(ce)
 
-      if not effective_eids:
+      explicit_assumption = bool(known_cids and ASSUMPTION_LABEL_RE.search(cr.LEADING_ENUM_RE.sub("", u.text)))
+      if not effective_eids and not explicit_assumption:
         self.F("R2", f"L{u.line}: claim has no valid evidence ID [E###]: {u.text[:110]}")
         continue
 
@@ -515,39 +570,47 @@ class Gate:
       if uncal_err:
         self.F("R7", f"L{u.line}: {uncal_err}")
 
-      # R3: Strict Quote + [C###] Number Binding (Inference:/Извод: cannot bypass!)
+      # R3: Strict Quote + [C###] Number Binding (with row-scope union for table_row and structural whitelist)
       bound: set = set()
       for e in effective_eids:
-        bound |= numbers(quotes[e])
+        bound |= numbers(quotes[e], strip_structural=False)
       for c in known_cids:
         bound |= calc_bound_nums[c]
 
+      unit_nums = material(numbers(u.text, strip_structural=True))
       missing = sorted(
-          material(numbers(u.text)) - bound,
+          unit_nums - bound,
           key=lambda x: (0, float(x)) if isinstance(x, (int, float)) else (1, str(x)),
       )
       if not missing:
         continue
 
+      has_inf_marker = bool(INLINE_INF_TAG_RE.search(u.text))
       is_formal_calc = bool(FORMAL_CALC_RE.search(u.text) and CALC_OPERATOR_RE.search(u.text))
-      is_calibrated_sample = bool(ESTIMATE_LABEL_RE.search(u.text) and SAMPLE_SIZE_RE.search(u.text))
-      if is_formal_calc or is_calibrated_sample:
-        if is_formal_calc and not known_cids:
+      is_calibrated_sample = bool(
+          (ESTIMATE_LABEL_RE.search(u.text) or has_inf_marker) and SAMPLE_SIZE_RE.search(u.text)
+      )
+      # Allow [I] / [EST] heuristic scores and projections in table rows, paragraphs, and bullets,
+      # when the unit has valid [E###] or [C###] and is explicitly tagged with [I] or [EST].
+      is_tagged_inference = has_inf_marker and bool(effective_eids or known_cids)
+
+      if is_formal_calc or is_calibrated_sample or is_tagged_inference:
+        if (is_formal_calc or is_tagged_inference) and not known_cids and u.kind != "table_row":
           inline_unverified_calc_count += 1
         continue
 
       shown = ", ".join(f"{m:g}" if isinstance(m, (int, float)) else str(m) for m in missing[:5])
-      if INFERENCE_LABEL_RE.search(u.text):
+      if INFERENCE_LABEL_RE.search(u.text) and not has_inf_marker:
         self.F("R3", f"L{u.line}: number(s) {shown} not in {', '.join(effective_eids)} - "
-                     f"'Inference:'/'Извод:' is for qualitative conclusions and cannot introduce unbound numbers; "
+                     f"'Inference:'/'Извод:' cannot introduce unbound numbers without [I]/[EST] + [C###]; "
                      f"register math with calc.py [C###] or fetch primary evidence")
       elif FORMAL_CALC_RE.search(u.text):
         self.F("R3", f"L{u.line}: 'Calculation:' unit introduces number(s) {shown} without an explicit "
                      f"formula/equation (=, +, -, *, /) or verified calc.py [C###] record")
       else:
         refs_shown = ", ".join(effective_eids + known_cids)
-        self.F("R3", f"L{u.line}: number(s) {shown} not in the quotes/calculations of {refs_shown} - "
-                     f"cite the evidence that states them or register a calculation with calc.py [C###]")
+        self.F("R3", f"L{u.line} ({u.kind}): number(s) {shown} not in the union of quotes/calculations "
+                     f"of [{refs_shown}] - cite the evidence on this row/sentence or register calc.py [C###]")
 
     # R9: Anti-Bypass Ceiling on unverified inline 'Calculation:' prose
     if claim_count >= 5 and (inline_unverified_calc_count / claim_count) > max_inline_calc_share:
@@ -573,6 +636,7 @@ class Gate:
 
     self._conflicts_check(units)
     self._audit_check(text, require_audit, max_error)
+    self._completeness_check(text, units)
 
     # R10: Mechanical Confidence Cap Enforcement via formula.py
     self.scorecard = formula.compute_epistemic_score(self.d, report_path=report)
@@ -672,6 +736,107 @@ class Gate:
     if not s["pending"] and s["upper_bound"] > max_error:
       self.F("R12", f"unsupported-claim rate upper bound {s['upper_bound']:.1%} > {max_error:.0%} "
                     f"({s['errors']} error(s) in {s['n']}); fix them and re-audit a fresh sample")
+
+  # R14: Anti-Goodhart Completeness Gate (validates mandatory volume and structural quotas from quotas.json)
+  def _completeness_check(self, report_text: str, units: list) -> None:
+    q_path = self.d / "quotas.json"
+    if not q_path.exists():
+      return
+    try:
+      quotas = json.loads(q_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+      self.F("R14", f"quotas.json is not valid JSON: {e}")
+      return
+
+    # 1. Минимален общ брой думи в доклада
+    min_words = int(quotas.get("min_words", 0))
+    if min_words > 0:
+      word_count = len(re.findall(r"\S+", report_text))
+      if word_count < min_words:
+        self.F("R14", f"report has {word_count} words; quotas.json requires >= {min_words} words "
+                      f"(anti-truncation gate: expand analysis, tables, and deep dives)")
+
+    # 2. Минимален брой доказателства [E###] и изчисления [C###]
+    min_ev = int(quotas.get("min_evidence", 0))
+    if min_ev > 0 and len(self.evidence) < min_ev:
+      self.F("R14", f"study has {len(self.evidence)} evidence records; quotas.json requires >= {min_ev}")
+
+    min_calcs = int(quotas.get("min_calculations", 0))
+    if min_calcs > 0 and len(self.calculations) < min_calcs:
+      self.F("R14", f"study has {len(self.calculations)} [C###] calculations; quotas.json requires >= {min_calcs}")
+
+    # 3. Минимален брой уникални цитирани [E###] от тип review_pain / потребителски цитати в тялото
+    min_review_cites = int(quotas.get("min_review_quotes_cited", 0))
+    if min_review_cites > 0:
+      cited_eids = set(EID_RE.findall(report_text))
+      review_cites = sum(
+          1 for eid in cited_eids
+          if eid in self.evidence and is_review_pain_evidence(
+              self.evidence[eid], self.index.get(self.evidence[eid].get("source", ""))
+          )
+      )
+      if review_cites < min_review_cites:
+        self.F("R14", f"report cites {review_cites} review/complaint evidence items; "
+                      f"quotas.json requires >= {min_review_cites}")
+
+    # 4. Минимален брой редове в таблици по секции (напр. {"SQ1": 30, "Long list": 20, "Scoring": 20})
+    section_table_quotas: dict[str, int] = quotas.get("min_table_rows_by_section", {})
+    if section_table_quotas:
+      sec_rows: dict[str, int] = {k: 0 for k in section_table_quotas}
+      current_headings: list[str] = []
+      for u in units:
+        if u.kind == "heading":
+          lvl = len(u.text) - len(u.text.lstrip("#"))
+          current_headings = [h for h in current_headings if (len(h) - len(h.lstrip("#"))) < lvl]
+          current_headings.append(u.text)
+        elif u.kind == "table_row":
+          joined_h = " ".join(current_headings)
+          for sec_pat, _ in section_table_quotas.items():
+            if re.search(sec_pat, joined_h, re.I):
+              sec_rows[sec_pat] += 1
+      for sec_pat, req_rows in section_table_quotas.items():
+        if sec_rows[sec_pat] < req_rows:
+          self.F("R14", f"section matching {sec_pat!r} has {sec_rows[sec_pat]} table data rows; "
+                        f"quotas.json requires >= {req_rows} rows")
+
+    # 5. Минимален брой Deep Dive профили и минимална дължина на всеки
+    min_deep_dives = int(quotas.get("min_deep_dives", 0))
+    min_dd_words = int(quotas.get("min_deep_dive_words", 400))
+    dd_heading_pat = quotas.get("deep_dive_heading_pattern", r"(?:Deep\s*Dive|Дълбок\s*анализ|Концепция|Candidate|Идея)\s*#?\d+")
+    if min_deep_dives > 0:
+      dd_re = re.compile(dd_heading_pat, re.I)
+      dd_sections: list[tuple[str, list[str]]] = []
+      cur_dd_title: str | None = None
+      cur_dd_lines: list[str] = []
+      cur_dd_level = 0
+      for line in report_text.splitlines():
+        s = line.strip()
+        if s.startswith("#"):
+          lvl = len(s) - len(s.lstrip("#"))
+          if dd_re.search(s):
+            if cur_dd_title is not None:
+              dd_sections.append((cur_dd_title, cur_dd_lines))
+            cur_dd_title = s
+            cur_dd_lines = []
+            cur_dd_level = lvl
+            continue
+          elif cur_dd_title is not None and lvl <= cur_dd_level:
+            dd_sections.append((cur_dd_title, cur_dd_lines))
+            cur_dd_title = None
+            cur_dd_lines = []
+        if cur_dd_title is not None:
+          cur_dd_lines.append(line)
+      if cur_dd_title is not None:
+        dd_sections.append((cur_dd_title, cur_dd_lines))
+
+      if len(dd_sections) < min_deep_dives:
+        self.F("R14", f"found {len(dd_sections)} deep-dive section(s) matching {dd_heading_pat!r}; "
+                      f"quotas.json requires >= {min_deep_dives}")
+      for title, dlines in dd_sections:
+        w_cnt = len(re.findall(r"\S+", "\n".join(dlines)))
+        if w_cnt < min_dd_words:
+          self.F("R14", f"deep-dive {title!r} has only {w_cnt} words; "
+                        f"quotas.json requires >= {min_dd_words} words per deep dive")
 
   # ---------------------------------------------------------------- live
   def live_sample(self, n: int) -> None:

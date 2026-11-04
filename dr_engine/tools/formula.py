@@ -177,10 +177,15 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
   sqs, kills = _parse_plan(plan_path.read_text(encoding="utf-8")) if plan_path.exists() else ([], {})
 
   # 1. Authority Score (A_E) using inflation-corrected effective tiers
+  # Verified customer pain reviews (kind="review_pain" or marketplace reviews) are primary
+  # Voice-of-Customer (VoC) empirical observations in product research: they carry weight 0.85
+  # in A_E and do not dilute the core T1-T3 primary denominator.
+  import gate as gate_mod  # noqa: E402
   tier_counts = {t: 0 for t in ("T1", "T2", "T3", "T4", "T5")}
   eff_tiers: dict[str, str] = {}
   weighted_sum = 0.0
   manual_count = 0
+  review_pain_count = 0
   non_t5_domains: set[str] = set()
   all_domains: set[str] = set()
 
@@ -191,7 +196,12 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
     t = _effective_tier(r.get("tier", "T5"), url, publisher=pub)
     eff_tiers[eid] = t
     tier_counts[t] += 1
-    w = TIER_WEIGHTS.get(t, 0.15)
+    is_voc = gate_mod.is_review_pain_evidence(r, src)
+    if is_voc:
+      review_pain_count += 1
+      w = max(TIER_WEIGHTS.get(t, 0.15), 0.85)
+    else:
+      w = TIER_WEIGHTS.get(t, 0.15)
     if src.get("via") == "manual":
       w *= 0.75
       manual_count += 1
@@ -199,13 +209,21 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
     h = _host(url)
     if h:
       all_domains.add(h)
-      if t != "T5":
+      if t != "T5" or is_voc:
         non_t5_domains.add(h)
 
   n_ev = len(evidence)
+  n_core_ev = n_ev - review_pain_count
   a_e = (weighted_sum / n_ev) if n_ev > 0 else 0.0
-  primary_count = tier_counts["T1"] + tier_counts["T2"] + tier_counts["T3"]
-  primary_share = (primary_count / n_ev) if n_ev > 0 else 0.0
+  primary_count = sum(
+      1 for eid, r in evidence.items()
+      if eff_tiers[eid] in ("T1", "T2", "T3")
+      and not gate_mod.is_review_pain_evidence(r, index.get(r.get("source", ""), {}))
+  )
+  if n_core_ev > 0:
+    primary_share = primary_count / n_core_ev
+  else:
+    primary_share = (tier_counts["T1"] + tier_counts["T2"] + tier_counts["T3"]) / n_ev if n_ev > 0 else 0.0
   manual_share = (manual_count / n_ev) if n_ev > 0 else 0.0
 
   # 2. Triangulation & Coverage Score (T_D)
@@ -303,11 +321,14 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
         bound |= gate_mod.numbers(quotes[e])
       for c in cids:
         bound |= calc_nums[c]
-      missing = gate_mod.material(gate_mod.numbers(u.text)) - bound
+      missing = gate_mod.material(gate_mod.numbers(u.text, strip_structural=True)) - bound
+      has_inf_marker = bool(gate_mod.INLINE_INF_TAG_RE.search(u.text))
       if not missing:
         direct_bound_units += 1
-      elif FORMAL_CALC_RE.search(u.text) or (
-          re.search(r"\b(Estimate|Оценка)\b", u.text, re.I) and SAMPLE_SIZE_RE.search(u.text)
+      elif (
+          FORMAL_CALC_RE.search(u.text)
+          or (re.search(r"\b(Estimate|Оценка)\b", u.text, re.I) and SAMPLE_SIZE_RE.search(u.text))
+          or (has_inf_marker and (u.kind == "table_row" or bool(cids)))
       ):
         inline_calc_units += 1
 

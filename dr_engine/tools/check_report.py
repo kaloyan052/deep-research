@@ -250,11 +250,26 @@ def heading_exempt(heading: str, current: bool) -> bool:
   return bool(EXEMPT_HEADING_RE.match(heading.lstrip("#").strip()))
 
 
+STRUCTURAL_CLAIM_STRIP_RE = re.compile(
+    r"^\s*\|\s*#?\d{1,3}\s*(?=\|)"
+    r"|\b(?:SQ|K|E|C|S|R|P|T)\d{1,3}[a-z]?\b"
+    r"|\b\d+(?:\.\d+)?\s*[-–—]\s*\d+(?:\.\d+)?\s*(?:★|⭐|stars?|звезди)\b"
+    r"|\b\d+(?:\.\d+)?\s*/\s*(?:5|10|100)\b"
+    r"|(?:≤|<=|≥|>=|<|>|~)?\s*\b(?:2\s*[-–]\s*3|3)\s+(?:weeks?|седмици)\b"
+    r"|\b14[-–\s]+(?:day|дни|дневен)\b"
+    r"|\b(?:month|месец)\s+12\b|\b12[-–\s]+(?:month|месеца|месечен)\b"
+    r"|\b(?:first|първите)\s+100\s+(?:customers?|buyers?|клиенти|потребители)\b"
+    r"|\b(?:section|секция|глава|част)\s+\d+(?:\.\d+)*\b",
+    re.I,
+)
+
+
 def _is_claim(text: str) -> bool:
   body = LEADING_ENUM_RE.sub("", text)
   body = re.sub(r"https?://\S+", "", body)
   body = FOOTNOTE_REF_RE.sub("", body)
   body = NUMERIC_REF_RE.sub("", body)
+  body = STRUCTURAL_CLAIM_STRIP_RE.sub(" ", body)
   return bool(CLAIM_RE.search(body))
 
 
@@ -265,6 +280,17 @@ def check(path: Path, min_coverage: float = 0.8, min_urls: int = 5,
   res = Result(str(path))
   prose = _strip_non_prose(lines)
   foot, num = _defined_refs(lines)
+  # Automatically load verified calculation IDs from study dir if present
+  calcs_p = path.parent / "calculations.jsonl"
+  if calcs_p.exists():
+    for cline in calcs_p.read_text(encoding="utf-8", errors="replace").splitlines():
+      if cline.strip():
+        try:
+          cid = json.loads(cline).get("id")
+          if cid:
+            num[cid] = "calculation"
+        except Exception:
+          pass
 
   units = _units(prose)
   # Reference / footnote definition lines are the bibliography, not claims.

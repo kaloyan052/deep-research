@@ -103,7 +103,7 @@ def claim_units(report_text: str) -> list[dict]:
     if exempt or not cr._is_claim(u.text):
       continue
     eids = list(dict.fromkeys(EID_RE.findall(u.text)))
-    if eids:
+    if eids or re.search(r"\bC\d{3}\b", u.text):
       units.append({"line": u.line, "text": u.text, "eids": eids})
   return units
 
@@ -259,7 +259,8 @@ def _h(text: str) -> str:
 
 
 def _item_key(it: dict) -> tuple:
-  return (it["text"], tuple((q["eid"], q["quote"]) for q in it["quotes"]))
+  return (it["text"], tuple((q["eid"], q["quote"]) for q in it["quotes"]),
+          json.dumps(it.get("calcs", []), sort_keys=True, ensure_ascii=False))
 
 
 def load(d: Path) -> dict | None:

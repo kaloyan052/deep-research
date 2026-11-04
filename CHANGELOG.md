@@ -3,6 +3,32 @@
 Newest first. **Study** lists what an agent must now do differently in a research folder;
 **Tools** lists everything else.
 
+## 2026-11-04 — Anti-Goodhart Architecture & Completeness Engine (v4.2)
+
+Study:
+- **Zero-Truncation Policy:** High-stakes research must satisfy breadth and recall quotas without
+  defensively compressing analysis or deleting candidate tables to bypass gates.
+- **`quotas.json` & Gate R14:** Studies define explicit completion thresholds (word count, table rows,
+  unique review quotes, deep-dive section length). `gate.py` and `next_step.py` enforce these quotas
+  before final sign-off.
+- **Voice-of-Customer (`review_pain`):** User complaint quotes from verified app stores and B2B directories
+  (G2, Capterra, Shopify, Chrome Web Store, Atlassian, Reddit) are treated as first-class empirical
+  data (`--kind review_pain`), excluded from the academic T1–T3 denominator of E7b.
+- **Structural Whitelisting & Table Row-Scope Binding (R3):** Table rows are evaluated by row-scope union;
+  structural tokens (row indices, SQ1–SQ5, K1–K5, rating scales 1–5★, template deadlines) do not trigger
+  unbound number failures. Heuristic candidate scoring is supported via `[I]` / `[EST]` accompanied by
+  deterministic `[C###]` calculations.
+- **Batch Evidence Ingestion:** `evidence.py add-batch --file <jsonl>` allows rapid batch registration of
+  verified candidate cards and complaint quotes.
+- **Rubric Scoring Engine:** `calc.py score-rubric --file <candidates.json>` computes 9-criterion candidate
+  evaluations, registers deterministic AST calculations, and renders compliant markdown comparison tables.
+
+## 2026-11-04 — marketplace review measurement
+
+Study:
+- Shopify's displayed score is weighted; record its definition and date, calculate arithmetic
+  averages only from star counts, date-filter recent complaints, and distinguish reviews from
+  paying customers. See `.agents/skills/deep-research/references/source-hierarchy.md`.
 ## 2026-11-04 — clean install, period sentinel, audit rounds
 
 Study:

@@ -94,6 +94,14 @@ This workspace integrates with the global open-standard skills registry (https:/
   "proven", "certain". Statistics with their uncertainty.
 - **Decisions with money, tax, legal or health consequences:** add a brief "not
   professional advice" note and state what the user should verify themselves.
+- **Anti-Goodhart & Completeness Invariant (Zero-Truncation Policy):** Never truncate or shrink
+  analysis, tables, or candidate profiles to make verification gates pass faster. Precision
+  must never destroy Recall. In product and market due diligence, customer complaint quotes from
+  verified platforms (G2, Capterra, Shopify App Store, Reddit) are first-class empirical
+  Voice-of-Customer (`--kind review_pain`), excluded from the T1–T3 academic denominator of E7b.
+  Use `quotas.json` and rule R14 to enforce mandatory breadth (tables, word count, candidate
+  matrices) before passing gates. Batch evidence ingestion is performed via `evidence.py add-batch`
+  and candidate scoring via `calc.py score-rubric`.
 
 ## Autonomous Self-Improvement Protocol
 

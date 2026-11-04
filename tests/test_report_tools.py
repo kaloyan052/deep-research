@@ -2539,5 +2539,42 @@ class AuditRoundsTest(unittest.TestCase):
     self.assertIn("Periods named near it: 2004.1-2020.12 (above)", brief)
 
 
+class AssumptionCalculationAuditTest(unittest.TestCase):
+  """Hypothetical arithmetic must be explicit and audited without decorative evidence."""
+
+  def _case(self, prefix="Допускане:", total=580):
+    d = GateTest()._setup()
+    c = calc.record_calculation(d, "Hypothetical gross monthly revenue, not a forecast",
+                                "customers * price", {"customers": 20, "price": 29}, unit="EUR")
+    text = GateTest.GOOD.replace("## Kill", f"{prefix} 20 customers at EUR 29 = EUR {total} gross monthly revenue [{c['id']}].\n\n## Kill")
+    return d, text
+
+  def test_explicit_assumption_needs_no_unrelated_evidence(self):
+    d, text = self._case()
+    self.assertNotIn("R2", GateTest()._run(d, text))
+
+  def test_unlabelled_calculation_does_not_establish_empirical_claim(self):
+    d, text = self._case(prefix="Actual revenue:")
+    self.assertIn("R2", GateTest()._run(d, text))
+
+  def test_numbered_assumption_is_not_rejected(self):
+    d, text = self._case(prefix="4. Проект:")
+    self.assertNotIn("R2", GateTest()._run(d, text))
+
+  def test_assumption_still_requires_bound_numbers(self):
+    d, text = self._case(total=999)
+    self.assertIn("R3", GateTest()._run(d, text))
+
+  def test_calculation_only_unit_is_in_blind_audit(self):
+    d, text = self._case()
+    self.assertTrue(any("580" in u['text'] for u in audit.claim_units(text)))
+
+  def test_changed_calculation_invalidates_audit_carryover(self):
+    a = {"text": "Допускане: gross EUR580 [C001].", "quotes": [],
+         "calcs": [{"cid": "C001", "expr": "20*29", "result": 580}]}
+    b = dict(a, calcs=[{"cid": "C001", "expr": "20*39", "result": 780}])
+    self.assertNotEqual(audit._item_key(a), audit._item_key(b))
+
+
 if __name__ == "__main__":
   unittest.main()

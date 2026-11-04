@@ -48,7 +48,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TEMPLATES = ROOT / ".agents" / "skills" / "deep-research" / "templates"
 PROTOCOL = "4.1"  # written to study.json by init; gate.py enforces the rules of this version
 TIERS = ("T1", "T2", "T3", "T4", "T5")
-KINDS = ("de_jure", "de_facto", "empirical", "context")
+KINDS = ("de_jure", "de_facto", "empirical", "context", "review_pain")
 STANCES = ("supports", "contradicts", "context")
 # Who is speaking (conflict-of-interest axis in claims.py): disinterested vs with a stake.
 INTERESTS = ("academic", "regulator", "independent", "issuer", "affiliate", "vendor")
@@ -490,6 +490,138 @@ def cmd_add(args) -> int:
   return 0
 
 
+def cmd_add_batch(args) -> int:
+  """Batch-registers multiple evidence items from a JSONL file in a single CLI call.
+  Each line in the input file must be a JSON object with keys:
+    source, sq, tier, kind, stance, quote, claim
+  and optional keys:
+    title, publisher, published, interest, sample_period, sample_type
+  """
+  d = Path(args.dir)
+  batch_path = Path(args.file)
+  if not batch_path.exists():
+    print(f"ERROR: batch file not found: {batch_path}")
+    return 1
+
+  raw_items = _jsonl(batch_path)
+  if not raw_items:
+    print(f"REFUSED: batch file {batch_path} is empty")
+    return 1
+
+  index = {r["id"]: r for r in _jsonl(d / "sources" / "index.jsonl")}
+  snaps: dict[str, str] = {}
+  evid_path = d / "evidence.jsonl"
+  records = _jsonl(evid_path)
+
+  added_ids: list[str] = []
+  errors: list[str] = []
+
+  for idx, item in enumerate(raw_items, 1):
+    src_id = item.get("source", "")
+    src = index.get(src_id)
+    if not src:
+      errors.append(f"Row {idx}: unknown source {src_id!r}")
+      continue
+    if src_id not in snaps:
+      snap_file = d / "sources" / f"{src_id}.txt"
+      if not snap_file.exists():
+        errors.append(f"Row {idx}: snapshot file {src_id}.txt missing")
+        continue
+      snap_text = snap_file.read_text(encoding="utf-8")
+      if sha256_text(snap_text) != src["sha256"]:
+        errors.append(f"Row {idx}: snapshot {src_id}.txt sha256 mismatch")
+        continue
+      snaps[src_id] = snap_text
+
+    snap = snaps[src_id]
+    sq = item.get("sq", "")
+    tier = item.get("tier", "T5")
+    kind = item.get("kind", "de_facto")
+    stance = item.get("stance", "supports")
+    quote = item.get("quote", "")
+    claim = item.get("claim", "")
+
+    if not SQ_RE.match(sq):
+      errors.append(f"Row {idx}: invalid sq {sq!r} (must be SQ<n> or K<n>)")
+      continue
+    if tier not in TIERS or kind not in KINDS or stance not in STANCES:
+      errors.append(f"Row {idx}: invalid tier/kind/stance ({tier}, {kind}, {stance})")
+      continue
+    if not quote or not claim:
+      errors.append(f"Row {idx}: missing quote or claim")
+      continue
+
+    pub = item.get("publisher") or src.get("publisher", "")
+    inflation_err = check_source_tier_inflation(src["url"], tier, publisher=pub)
+    if inflation_err:
+      errors.append(f"Row {idx}: {inflation_err}")
+      continue
+
+    score = match_score(quote, snap)
+    if score < 1.0:
+      errors.append(
+          f"Row {idx} ({src_id}): quote not verbatim (match {score:.0%}). "
+          f"Nearest: {_nearest(quote, snap, width=140)}"
+      )
+      continue
+
+    periods = periods_near(snap, quote_span(quote, snap))
+    given = (item.get("sample_period") or "").strip()
+    if kind == "empirical" and periods and not given:
+      errors.append(
+          f"Row {idx} ({src_id}): empirical quote requires 'sample_period' "
+          f"(detected near quote: {', '.join(periods[:3])})"
+      )
+      continue
+
+    q_norm = normalise(quote)
+    dup_err = ""
+    for existing in (r for r in records if not r.get("retracted")):
+      if existing.get("source") == src_id and normalise(existing.get("quote", "")) == q_norm:
+        stances = {existing.get("stance"), stance}
+        if "supports" in stances and "contradicts" in stances:
+          dup_err = f"Row {idx}: opposite stance duplicate of {existing['id']}"
+          break
+        if existing.get("sq") == sq and existing.get("stance") == stance:
+          dup_err = f"Row {idx}: exact duplicate of {existing['id']}"
+          break
+    if dup_err:
+      errors.append(dup_err)
+      continue
+
+    new_id = _next_id(records, "E")
+    rec = {
+        "id": new_id,
+        "source": src_id,
+        "url": src["url"],
+        "sq": sq,
+        "tier": tier,
+        "kind": kind,
+        "stance": stance,
+        "quote": quote,
+        "claim": claim,
+        "title": item.get("title") or src.get("title", ""),
+        "publisher": pub,
+        "published": item.get("published") or "",
+        "page_date": src.get("page_date", ""),
+        "interest": item.get("interest") or "",
+        "sample_period": given,
+        "context_periods": periods,
+        "sample_type": item.get("sample_type") or "",
+        "accessed": src["fetched_at"][:10],
+        "snapshot_sha256": src["sha256"],
+    }
+    _append(evid_path, rec)
+    records.append(rec)
+    added_ids.append(new_id)
+
+  for e in errors:
+    print(f"  FAIL  {e}")
+  print(f"BATCH SUMMARY: {len(added_ids)}/{len(raw_items)} added ({', '.join(added_ids[:10])}"
+        f"{'...' if len(added_ids) > 10 else ''}), {len(errors)} failed.")
+  return 1 if (errors and not added_ids) else 0
+
+
 # ---------------------------------------------------------------- retract
 def cmd_retract(args) -> int:
   """The only way to withdraw a wrong evidence record (duplicate, opposite-stance copy, wrong
@@ -632,6 +764,10 @@ def main(argv: list[str] | None = None) -> int:
                       "--kind empirical when the page names a period near the quote")
   p.add_argument("--sample-type", choices=SAMPLE_TYPES)
   p.set_defaults(fn=cmd_add)
+  p = sub.add_parser("add-batch")
+  p.add_argument("--dir", required=True)
+  p.add_argument("--file", required=True, help="JSONL file with batch evidence items")
+  p.set_defaults(fn=cmd_add_batch)
   p = sub.add_parser("retract"); p.add_argument("--dir", required=True)
   p.add_argument("--id", required=True, help="E### to withdraw")
   p.add_argument("--reason", required=True); p.set_defaults(fn=cmd_retract)

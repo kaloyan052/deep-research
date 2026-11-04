@@ -631,6 +631,88 @@ def cmd_decision(args: argparse.Namespace) -> int:
   return 0
 
 
+def cmd_score_rubric(args: argparse.Namespace) -> int:
+  """Calculates 9-criteria rubric scoring for candidates from a JSON file,
+  records calculations in calculations.jsonl, and prints a formatted markdown table."""
+  d = Path(args.dir)
+  fpath = Path(args.file)
+  if not fpath.exists():
+    print(f"ERROR: rubric candidates file not found: {fpath}", file=sys.stderr)
+    return 1
+  try:
+    candidates = json.loads(fpath.read_text(encoding="utf-8"))
+  except Exception as exc:
+    print(f"ERROR reading {fpath}: {exc}", file=sys.stderr)
+    return 1
+
+  criteria_keys = [
+      ("pain", "Болка"),
+      ("tam", "TAM"),
+      ("tech", "Техн"),
+      ("mrr", "MRR"),
+      ("dist", "Канал"),
+      ("moat", "Moat"),
+      ("ops", "Опер"),
+      ("ai", "AI"),
+      ("fit", "Fit"),
+  ]
+
+  results = []
+  for item in candidates:
+    name = item.get("name", "Unknown")
+    scores = item.get("scores", {})
+    cites = item.get("cites", [])
+    if isinstance(cites, str):
+      cites = [c.strip() for c in cites.split(",") if c.strip()]
+
+    expr_parts = []
+    vars_dict = {}
+    for k, label in criteria_keys:
+      val = float(scores.get(k, 0))
+      vars_dict[k] = val
+      expr_parts.append(k)
+    expr = " + ".join(expr_parts)
+
+    calc_rec = record_calculation(
+        study_dir=d,
+        label=f"Rubric Score 9-Criteria: {name}",
+        expr=expr,
+        variables=vars_dict,
+        cited_eids=cites,
+        unit="pts",
+    )
+    results.append({
+        "name": name,
+        "scores": vars_dict,
+        "total": calc_rec["result"],
+        "calc_id": calc_rec["id"],
+        "cites": cites,
+    })
+
+  # Rank descending
+  results.sort(key=lambda x: x["total"], reverse=True)
+
+  lines = []
+  lines.append("| Ранг | Кандидат | Болка | TAM | Техн | MRR | Канал | Moat | Опер | AI | Fit | Общ сбор (90) | Изчисление | Доказателства |")
+  lines.append("| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |")
+  for rank, r in enumerate(results, 1):
+    s = r["scores"]
+    cite_str = ", ".join(f"[{c}]" for c in r["cites"]) if r["cites"] else "—"
+    line = (
+        f"| {rank} | {r['name']} | {s['pain']:g} | {s['tam']:g} | {s['tech']:g} | {s['mrr']:g} | "
+        f"{s['dist']:g} | {s['moat']:g} | {s['ops']:g} | {s['ai']:g} | {s['fit']:g} | "
+        f"{r['total']:g}/90 | [{r['calc_id']}] | {cite_str} |"
+    )
+    lines.append(line)
+
+  out_md = "\n".join(lines)
+  print(out_md)
+  if getattr(args, "out", None):
+    Path(args.out).write_text(out_md, encoding="utf-8")
+    print(f"\n[Saved markdown table to {args.out}]")
+  return 0
+
+
 def cmd_verify(args: argparse.Namespace) -> int:
   d = Path(args.dir)
   ev_path = d / "evidence.jsonl"
@@ -726,6 +808,12 @@ def main(argv: list[str] | None = None) -> int:
   p_show = sub.add_parser("show", help="print all logged [C###] calculations")
   p_show.add_argument("--dir", required=True)
   p_show.set_defaults(fn=cmd_show)
+
+  p_rubric = sub.add_parser("score-rubric", help="score candidates across 9 criteria and generate Markdown table")
+  p_rubric.add_argument("--dir", required=True)
+  p_rubric.add_argument("--file", required=True, help="JSON file with candidates and scores")
+  p_rubric.add_argument("--out", help="optional output path for markdown table")
+  p_rubric.set_defaults(fn=cmd_score_rubric)
 
   args = ap.parse_args(argv)
   return args.fn(args)

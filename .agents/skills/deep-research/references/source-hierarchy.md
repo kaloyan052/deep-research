@@ -95,3 +95,14 @@ replications and critiques.
 
 **Software** — docs for the exact version, changelogs, source, issue tracker, NVD
 (nvd.nist.gov). Vendor benchmarks are T5 claims until independently reproduced.
+
+**App-marketplace ratings** — Shopify's displayed overall rating is a weighted score, not the arithmetic mean of its star counts. Record the platform's definition and capture date; calculate any requested arithmetic average from the underlying counts. A lifetime star distribution does not establish the share of low ratings in the last 12 months: filter reviews by date and show the denominator. An install or review also does not establish that the merchant pays. Primary source: https://shopify.dev/docs/apps/launch/marketing/manage-app-reviews
+
+### Product-research attribution traps (2026-11-04)
+
+- App pages contain recommendations for OTHER products. Attribute price/count/rating using the product heading and structured SoftwareApplication record, never a nearby recommended-app card.
+- A correctly reproduced competitor price does not establish paid conversion, future subscribers, CAC, processor approval or a calibrated success probability. Scenario weights without observed frequencies are assumptions, not expected-value evidence.
+- Compare current fee schedules with dated announcements. Atlassian postponed its announced increases; the original May 2025 post is not sufficient for the November 2026 rate.
+- Vendor legal disclaimers do not establish legality, regulated-provider status, liability immunity or payment-provider acceptance.
+- A data-reporting fine is not interchangeable with a registration or system-participation fine. Preserve obligation-specific scope, dates and exemptions.
+- Explicit Assumption:/Hypothetical:/?????????:/??????: units may use verified C calculations without irrelevant E citations. Their numbers still bind to the calculation, and calculation-only units enter the blind audit. Changing the calculation invalidates carried audit verdicts.

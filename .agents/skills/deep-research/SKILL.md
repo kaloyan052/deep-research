@@ -43,7 +43,7 @@ never argue with it, never stop before it prints `DONE`.
 | 1 | Start | `python dr_engine/tools/evidence.py init <slug>` | it printed `D` (contains `plan.md`, `study.json`) |
 | 2 | Plan | edit `D/plan.md`: question, decision + stake, user's thesis, mechanism hypothesis, 4–8 rows `\| SQn \| ... \|`, ≥ 3 rows `\| Kn \| <how the thesis could be wrong> \| <kill threshold> \|` | `next_step.py` no longer says "Fill plan.md". STOP and ask the user if you cannot name the decision |
 | 3 | Discover | per SQ/K: `discover.py "<query>" --dir D --purpose SQn\|Kn`; from the 1–3 best papers: `discover.py --snowball <W-id or DOI> --direction both --dir D --purpose SQn`; web: host search, then `evidence.py log-search --dir D --purpose Kn --query "..." --opened <EVERY result URL you saw> --channel web\|registry` | ≥ 12 searches, ≥ 30% for kills, ≥ 3 per Kn, each with its result URLs recorded |
-| 4 | Capture | `evidence.py fetch --dir D <url>` for every page you rely on → `evidence.py show --dir D --source S### --grep "<word>"` → `evidence.py add --dir D --source S### --sq SQn\|Kn --tier T1..T5 --kind ... --stance ... --quote "<copied from show>" --claim "..."` (`--kind empirical`: add `--sample-period` of the number's own table — `add` refuses without it when the page names a period near the quote, and lists those periods) | every SQ/K has evidence or is marked unresolved; ≥ 50% T1–T3 |
+| 4 | Capture | `evidence.py fetch --dir D <url>` for every page you rely on → `evidence.py show --dir D --source S### --grep "<word>"` → `evidence.py add --dir D --source S### --sq SQn\|Kn --tier T1..T5 --kind de_jure\|de_facto\|empirical\|context\|review_pain --stance ... --quote "<copied from show>" --claim "..."` (or batch register via `evidence.py add-batch --dir D --file batch.jsonl`; `--kind empirical`: add `--sample-period` of the number's own table — `add` refuses without it when the page names a period near the quote, and lists those periods) | every SQ/K has evidence or is marked unresolved; ≥ 50% T1–T3 (excluding review_pain) |
 | 5 | Corpus (> 15 sources) | `corpus.py build --dir D` → `corpus.py triage --dir D` → `corpus.py query --dir D "<terms>" --log --purpose SQn\|Kn` | each SQ/K read through ranked passages |
 | 6 | Claim ledger | `claims.py add --dir D ... --eids E### --load-bearing` per number/rule/status the decision rests on → `claims.py conflicts --dir D` | every conflict known |
 | 7 | Completeness | `screening.py sample --dir D` → judge every `X##` in `D/audit/screening_brief.md` (fetch the relevant ones first) with `screening.py record` → `screening.py bound --dir D`; then `corpus.py stats --dir D --save` (rebuilds the corpus first) | stats says `SATURATED` (coverage ≥ 80% and < 1 new decisive fact in each of the last 2 batches of 10 sources), or `CONTINUE`/`UNKNOWN` is explained in the report's Limitations. On `CONTINUE` first go back to step 3 with the printed blind spots |
@@ -137,6 +137,16 @@ These are enforced by `dr_engine/tools/gate.py`. A report that fails the gate is
     (subagent with only `audit/brief.md` and the snapshots) → `audit.py record` → fix every error
     → `audit.py sample` again (unchanged verdicts carry over; fixes are re-judged) →
     `gate.py --require-audit`. A known error blocks the report whatever the bound says.
+14. **Anti-Goodhart & Completeness Invariant (Zero-Truncation Policy — gate R14).** Never truncate
+    or defensively compress analysis, tables, or candidate profiles to make verification gates
+    pass faster. Precision must never destroy Recall.
+    - Studies define mandatory breadth thresholds in `quotas.json` (`min_words`, `min_evidence`,
+      `min_calculations`, `min_table_rows_by_section`, `min_deep_dives`, `min_deep_dive_words`).
+    - Customer complaint quotes from verified platforms (G2, Capterra, Shopify App Store, Reddit)
+      are first-class empirical Voice-of-Customer (`--kind review_pain`), excluded from the T1–T3
+      academic denominator of E7b.
+    - Batch evidence ingestion is performed via `evidence.py add-batch --dir <dir> --file <jsonl>`
+      and multi-candidate scoring via `calc.py score-rubric --file <candidates.json>`.
 
 ## 0. Tools
 
@@ -159,7 +169,8 @@ These are enforced by `dr_engine/tools/gate.py`. A report that fails the gate is
 | Triage & blind spots | `python dr_engine/tools/corpus.py triage --dir D` → reading order per SQ/K, blind spots (search outside the corpus), surprise queue (uncited sources matching nothing), shared text across sites (syndication = ONE source for triangulation) |
 | Withdraw a wrong calculation | `python dr_engine/tools/calc.py retract --dir D --id C004 --reason "input E001 retracted"` (needed when a retracted E### is an input; claims resting on retracted evidence drop out automatically and must be re-added) |
 | Withdraw a wrong record | `python dr_engine/tools/evidence.py retract --dir D --id E009 --reason "duplicate of E004"` (kept in the file, marked; every tool ignores it; the corrected record gets a new id) |
-| Log verified quote | `python dr_engine/tools/evidence.py add --dir D --source S003 --sq SQ2\|K1 --tier T1..T5 --kind de_jure\|de_facto\|empirical\|context --stance supports\|contradicts\|context --quote "..." --claim "..."` |
+| Log verified quote | `python dr_engine/tools/evidence.py add --dir D --source S003 --sq SQ2\|K1 --tier T1..T5 --kind de_jure\|de_facto\|empirical\|context\|review_pain --stance supports\|contradicts\|context --quote "..." --claim "..."` (or batch register via `python dr_engine/tools/evidence.py add-batch --dir D --file batch.jsonl`) |
+| Candidate rubric scoring | `python dr_engine/tools/calc.py score-rubric --file <candidates.json> [--dir D]` (scores multi-candidate options across 9 weighted criteria, registers AST `[C###]` calculations, and renders markdown comparison tables) |
 | Claim ledger | `python dr_engine/tools/claims.py add --dir D --subject X --attribute "..." --value 6 --unit "USD RT" --scope "Raw feed" --time 2026-10 --eids E002,E003 [--sample-period 2010-2019 --sample-type out_of_sample]` (numeric values must be in the cited quotes; units are normalised by `units.py`, so always state RT vs per side and p.a. vs per day) · `claims.py keys` · `claims.py table` |
 | Units & conversions | `python dr_engine/tools/units.py parse "USD per side"` · `convert 3 "USD per side" "USD per lot RT"` · `hold --nights 3 --annual-bp 600 --spread-bp 1.5` (trap G9) · `ls --long-pct 8.5 --short-pct 2.5` (long pays, short receives) · `r --cost-bp 0.7 --stop-bp 10`. The same functions work inside `calc.py eval` (`hold_cost_bp`, `ls_net_bp_day`, `bp_to_r`, `side_to_rt`, `pct_to_bp`, ...) |
 | Synonyms / acronyms | global `dr_engine/tools/aliases.json` + optional `research/<dir>/aliases.json` (`{"groups": [[...]], "disable": ["EMA"]}`); `corpus.py aliases --dir D "CySEC warning"` shows the expansion |
