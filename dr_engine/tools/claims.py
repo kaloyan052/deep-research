@@ -154,7 +154,8 @@ def _side_meta(c: dict, evidence: dict) -> dict:
   recs = [evidence[e] for e in c["eids"] if e in evidence]
   tiers = [TIER_RANK.get(r.get("tier", "T5"), 5) for r in recs] or [5]
   kinds = {r.get("kind", "") for r in recs}
-  dates = sorted(r.get("published", "") for r in recs if r.get("published"))
+  dates = sorted(r.get("published") or r.get("page_date", "") for r in recs
+                 if r.get("published") or r.get("page_date"))
   interests = {i for i in (_interest(r, c.get("subject", "")) for r in recs) if i}
   periods = [c["sample_period"]] if c.get("sample_period") else [
       r["sample_period"] for r in recs if r.get("sample_period")]

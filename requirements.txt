@@ -4,6 +4,7 @@ beautifulsoup4>=4.12.0
 pdfplumber>=0.11.0     # PDF snapshots with tables as quotable rows (parse_pdf.py, evidence.py fetch)
 pypdf>=4.0.0           # fallback PDF text extraction
 python-dotenv>=1.0.0   # science CLIs read optional keys from .env
+trafilatura>=2.0      # page metadata only (title, page date, author); snapshot text stays the full page
 
 # Optional
 # langextract>=1.0     # extract_doc.py (long-document extraction)

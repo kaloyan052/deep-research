@@ -2203,6 +2203,33 @@ class TrialFixesTest(unittest.TestCase):
     self.assertEqual(calc.verify_calculations(d, {"E002"}), [])
     self.assertNotIn("C001", calc.load_calculations(d))
 
+  def test_openalex_prefers_open_copy_and_keeps_doi(self):
+    item = dict(_work("W5", "Overnight paper", 3, doi="https://doi.org/10.1016/j.x.2019.01.001"),
+                best_oa_location={"pdf_url": "https://repo.test/paper.pdf", "version": "submittedVersion"},
+                open_access={"oa_url": "https://repo.test/landing"})
+    r = discover._openalex_item(item)
+    self.assertEqual(r["fetch_url"], "https://repo.test/paper.pdf")
+    self.assertEqual(r["url"], "https://doi.org/10.1/w5")  # the publisher landing page stays canonical
+    self.assertEqual(r["oa_version"], "submittedVersion")
+    closed = discover._openalex_item(_work("W6", "Closed paper", 1))
+    self.assertEqual(closed["fetch_url"], "https://doi.org/10.1/w6")
+
+  @unittest.skipUnless(__import__("importlib").util.find_spec("trafilatura"), "trafilatura not installed")
+  def test_page_metadata_without_touching_the_snapshot(self):
+    html = ("<html><head><title>Fee schedule - Broker</title><meta property='article:published_time' "
+            "content='2025-03-01'></head><body><table><tr><td>Commission</td><td>USD 3 per lot</td></tr>"
+            "</table><p>" + "Terms apply to every account. " * 20 + "</p></body></html>")
+    meta = evidence._html_metadata(html, "https://broker.test/fees")
+    self.assertEqual(meta.get("page_date"), "2025-03-01")
+    self.assertIn("Fee schedule", meta.get("title", ""))
+    d = _study()
+    rows = evidence._jsonl(d / "sources" / "index.jsonl")
+    rows[0].update(title="FAQ - Firm", page_date="2026-01-02")
+    (d / "sources" / "index.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    _add(d, quote="limited to $400,000 per trader")
+    rec = evidence._jsonl(d / "evidence.jsonl")[-1]
+    self.assertEqual((rec["title"], rec["page_date"], rec["published"]), ("FAQ - Firm", "2026-01-02", ""))
+
   def test_next_step_points_to_sources_table(self):
     d = GateTest._setup(None)
     (d / "report.md").write_text(GateTest.GOOD.split("## Sources")[0] + "## Sources\n", encoding="utf-8")

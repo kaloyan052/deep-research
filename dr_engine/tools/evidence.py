@@ -133,6 +133,26 @@ def _try_jina(url: str, timeout: float, fallback_out: dict) -> dict:
   return fallback_out
 
 
+def _html_metadata(raw: str, url: str) -> dict:
+  """Title / publication date / author from the page (trafilatura, if installed). Metadata only:
+  trafilatura's main-text extraction dropped 28 of 88 previously cited quotes (fee tables, rule
+  lists) in a check on 2026-11-04, so the snapshot text itself stays the full page."""
+  try:
+    from trafilatura import extract_metadata
+  except ImportError:
+    return {}
+  try:
+    m = extract_metadata(raw, default_url=url)
+  except Exception:  # metadata is a convenience; never fail a fetch over it
+    return {}
+  if m is None:
+    return {}
+  # page_date: the date in the page's metadata - often "last updated", not first published
+  meta = {"title": m.title or "", "page_date": m.date or "", "author": m.author or "",
+          "publisher": m.sitename or ""}
+  return {k: v for k, v in meta.items() if v}
+
+
 def fetch_page(url: str, timeout: float = 25, jina_fallback: bool = False) -> dict:
   """Fetches a page and returns {ok, text, final_url, http_status, content_type, error, via}."""
   out = {"ok": False, "text": "", "final_url": url, "http_status": None,
@@ -172,6 +192,7 @@ def fetch_page(url: str, timeout: float = 25, jina_fallback: bool = False) -> di
       return out
   elif "html" in ctype or "<html" in r.text[:2000].lower():
     text = html_to_text(r.text)
+    out.update(_html_metadata(r.text, r.url))
   elif ctype.startswith("text/") or "json" in ctype or "xml" in ctype:
     text = r.text
   else:
@@ -226,7 +247,7 @@ def cmd_fetch(args) -> int:
     via = page.get("via", "direct")
     rec = {"id": sid, "url": url, "final_url": page["final_url"],
            "http_status": page["http_status"], "content_type": page["content_type"],
-           "via": via, **{k: page[k] for k in ("parser", "tables") if k in page},
+           "via": via, **{k: page[k] for k in ("parser", "tables", "title", "page_date", "author", "publisher") if k in page},
            "fetched_at": dt.datetime.now().isoformat(timespec="seconds"),
            "chars": len(page["text"]), "sha256": sha256_text(page["text"])}
     _append(index_path, rec)
@@ -254,7 +275,7 @@ def cmd_fetch(args) -> int:
       via = page.get("via", "direct")
       rec = {"id": sid, "url": u, "final_url": page.get("final_url", u),
              "http_status": page.get("http_status"), "content_type": page.get("content_type", ""),
-             "via": via, **{k: page[k] for k in ("parser", "tables") if k in page},
+             "via": via, **{k: page[k] for k in ("parser", "tables", "title", "page_date", "author", "publisher") if k in page},
              "fetched_at": dt.datetime.now().isoformat(timespec="seconds"),
              "chars": len(page["text"]), "sha256": sha256_text(page["text"])}
       _append(index_path, rec)
@@ -351,8 +372,9 @@ def cmd_add(args) -> int:
         return 1
   rec = {"id": _next_id(records, "E"), "source": args.source, "url": src["url"],
          "sq": args.sq, "tier": args.tier, "kind": args.kind, "stance": args.stance,
-         "quote": args.quote, "claim": args.claim, "title": args.title or "",
-         "publisher": args.publisher or "", "published": args.published or "",
+         "quote": args.quote, "claim": args.claim, "title": args.title or src.get("title", ""),
+         "publisher": args.publisher or src.get("publisher", ""),
+         "published": args.published or "", "page_date": src.get("page_date", ""),
          "interest": args.interest or "", "sample_period": args.sample_period or "",
          "sample_type": args.sample_type or "",
          "accessed": src["fetched_at"][:10], "snapshot_sha256": src["sha256"]}

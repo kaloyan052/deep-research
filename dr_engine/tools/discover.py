@@ -139,9 +139,13 @@ def _openalex_item(item: dict) -> dict[str, Any] | None:
       and "ssrn" not in venue.lower()
   )
   oa = item.get("open_access") or {}
-  oa_url = oa.get("oa_url") or ""
+  best = item.get("best_oa_location") or {}
+  # Publisher landing pages (doi.org) are often bot walls or paywalls; a legal open copy of the
+  # same work is fetched first and the DOI stays the canonical url.
+  oa_url = best.get("pdf_url") or best.get("landing_page_url") or oa.get("oa_url") or ""
+  oa_version = best.get("version") or ""
   landing_url = loc.get("landing_page_url") or (f"https://doi.org/{doi}" if doi else item.get("id", ""))
-  fetch_url = landing_url or oa_url
+  fetch_url = oa_url or landing_url
   if "arxiv.org/abs/" in (oa_url or ""):
     arx_id = oa_url.split("arxiv.org/abs/")[-1].split("v")[0].strip("/")
     fetch_url = f"https://arxiv.org/html/{arx_id}"
@@ -157,6 +161,8 @@ def _openalex_item(item: dict) -> dict[str, Any] | None:
       "url": landing_url or fetch_url,
       "fetch_url": fetch_url,
       "oa_url": oa_url,
+      # submittedVersion = the preprint, not the peer-reviewed text: quote it as such
+      "oa_version": oa_version,
       "snippet": _reconstruct_inverted_abstract(item.get("abstract_inverted_index")),
   }
 
@@ -566,7 +572,9 @@ def _print_results(results: list[dict[str, Any]]) -> None:
     tag = f" {r['direction']}" if r.get("direction") else ""
     print(f"\n  {i}. [{r['suggested_tier']}{tag}] {r['title']} ({yr}) — {r['venue']}  "
           f"[cites={r['citations']}, via={regs}]")
-    print(f"     fetch_url : {r['fetch_url']}")
+    note = {"submittedVersion": "  (open copy is the PREPRINT - check claims against the published version)",
+            "acceptedVersion": "  (open copy is the accepted manuscript)"}.get(r.get("oa_version", ""), "")
+    print(f"     fetch_url : {r['fetch_url']}{note}")
     if r.get("url") and r["url"] != r["fetch_url"]:
       print(f"     canonical : {r['url']}")
     if r.get("oa_url") and r["oa_url"] not in (r["fetch_url"], r.get("url")):
