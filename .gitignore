@@ -5,8 +5,13 @@
 !/.gitattributes
 !/AGENTS.md
 !/CLAUDE.md
+!/GEMINI.md
 !/README.md
+!/CHANGELOG.md
 !/requirements.txt
+
+# CI: the test suite on Linux and Windows
+!/.github/
 
 # Protocol: rules + the research skills written for this workspace
 !/.agents/

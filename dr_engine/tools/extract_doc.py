@@ -12,6 +12,7 @@ into the evidence.py pipeline.
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
@@ -19,7 +20,17 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import langextract as lx
+try:  # optional: only online extraction and the HTML view need it
+    import langextract as lx
+except ImportError:
+    lx = None
+
+
+def _require_langextract(feature: str):
+    if lx is None:
+        raise ImportError(f"{feature} needs langextract: python -m pip install langextract "
+                          f"(the offline extractor works without it)")
+    return lx
 
 
 PRESET_PROMPTS = {
@@ -44,45 +55,49 @@ PRESET_PROMPTS = {
     ),
 }
 
-PRESET_EXAMPLES = {
-    "prop_rules": [
-        lx.data.ExampleData(
-            text="The maximum daily loss limit is 5% based on previous day balance, and trading is prohibited 2 minutes before red news.",
-            extractions=[
-                lx.data.Extraction(extraction_class="daily_loss", extraction_text="maximum daily loss limit is 5%"),
-                lx.data.Extraction(extraction_class="news_rule", extraction_text="trading is prohibited 2 minutes before red news"),
-            ],
-        )
-    ],
-    "legal_tax": [
-        lx.data.ExampleData(
-            text="Pursuant to Art. 97a of the VAT Act, registration is mandatory 7 days before supplying services to EU entities.",
-            extractions=[
-                lx.data.Extraction(extraction_class="vat_rule", extraction_text="Art. 97a of the VAT Act"),
-                lx.data.Extraction(extraction_class="deadline", extraction_text="mandatory 7 days before supplying services"),
-            ],
-        )
-    ],
-    "quant_alpha": [
-        lx.data.ExampleData(
-            text="The strategy achieves a Sharpe ratio of 1.42 out-of-sample between 2020 and 2026, with an average duration of 54 minutes.",
-            extractions=[
-                lx.data.Extraction(extraction_class="sharpe", extraction_text="Sharpe ratio of 1.42"),
-                lx.data.Extraction(extraction_class="sample_period", extraction_text="out-of-sample between 2020 and 2026"),
-                lx.data.Extraction(extraction_class="duration", extraction_text="average duration of 54 minutes"),
-            ],
-        )
-    ],
-    "general": [
-        lx.data.ExampleData(
-            text="The platform manages over $400,000 in simulated allocation with an annual fee of 420 EUR.",
-            extractions=[
-                lx.data.Extraction(extraction_class="allocation", extraction_text="$400,000 in simulated allocation"),
-                lx.data.Extraction(extraction_class="fee", extraction_text="annual fee of 420 EUR"),
-            ],
-        )
-    ],
-}
+def _preset_examples(category: str) -> list:
+    """LangExtract few-shot examples (built lazily: langextract is optional)."""
+    lx = _require_langextract("online extraction")
+    examples = {
+        "prop_rules": [
+            lx.data.ExampleData(
+                text="The maximum daily loss limit is 5% based on previous day balance, and trading is prohibited 2 minutes before red news.",
+                extractions=[
+                    lx.data.Extraction(extraction_class="daily_loss", extraction_text="maximum daily loss limit is 5%"),
+                    lx.data.Extraction(extraction_class="news_rule", extraction_text="trading is prohibited 2 minutes before red news"),
+                ],
+            )
+        ],
+        "legal_tax": [
+            lx.data.ExampleData(
+                text="Pursuant to Art. 97a of the VAT Act, registration is mandatory 7 days before supplying services to EU entities.",
+                extractions=[
+                    lx.data.Extraction(extraction_class="vat_rule", extraction_text="Art. 97a of the VAT Act"),
+                    lx.data.Extraction(extraction_class="deadline", extraction_text="mandatory 7 days before supplying services"),
+                ],
+            )
+        ],
+        "quant_alpha": [
+            lx.data.ExampleData(
+                text="The strategy achieves a Sharpe ratio of 1.42 out-of-sample between 2020 and 2026, with an average duration of 54 minutes.",
+                extractions=[
+                    lx.data.Extraction(extraction_class="sharpe", extraction_text="Sharpe ratio of 1.42"),
+                    lx.data.Extraction(extraction_class="sample_period", extraction_text="out-of-sample between 2020 and 2026"),
+                    lx.data.Extraction(extraction_class="duration", extraction_text="average duration of 54 minutes"),
+                ],
+            )
+        ],
+        "general": [
+            lx.data.ExampleData(
+                text="The platform manages over $400,000 in simulated allocation with an annual fee of 420 EUR.",
+                extractions=[
+                    lx.data.Extraction(extraction_class="allocation", extraction_text="$400,000 in simulated allocation"),
+                    lx.data.Extraction(extraction_class="fee", extraction_text="annual fee of 420 EUR"),
+                ],
+            )
+        ],
+    }
+    return examples.get(category, examples["general"])
 
 
 def offline_heuristic_extract(text: str, category: str) -> List[Dict[str, Any]]:
@@ -138,6 +153,27 @@ def offline_heuristic_extract(text: str, category: str) -> List[Dict[str, Any]]:
     return extractions
 
 
+def _plain_html(text: str, results: List[Dict[str, Any]]) -> str:
+    """Static HTML view (stdlib only): the document with every extraction highlighted in place."""
+    spans = []
+    for r in results:
+        start, end = r.get("start"), r.get("end")
+        if not (isinstance(start, int) and isinstance(end, int) and text[start:end] == r["text"]):
+            start = text.find(r["text"])
+            end = start + len(r["text"])
+        if start >= 0 and all(end <= s or start >= e for s, e, _ in spans):
+            spans.append((start, end, r["class"]))
+    parts, pos = [], 0
+    for start, end, cls in sorted(spans):
+        parts.append(html.escape(text[pos:start]))
+        parts.append(f'<mark title="{html.escape(cls)}">{html.escape(text[start:end])}</mark>')
+        pos = end
+    parts.append(html.escape(text[pos:]))
+    return ("<!doctype html><meta charset=\"utf-8\"><title>Extractions</title>"
+            "<style>body{font:15px/1.6 sans-serif;max-width:60em;margin:2em auto;white-space:pre-wrap}"
+            "mark{background:#ffe08a}</style>\n" + "".join(parts))
+
+
 def run_extraction(
     file_path: str,
     category: str = "general",
@@ -159,7 +195,6 @@ def run_extraction(
 
     text = path.read_text(encoding="utf-8", errors="ignore")
     prompt_desc = prompt or PRESET_PROMPTS.get(category, PRESET_PROMPTS["general"])
-    examples = PRESET_EXAMPLES.get(category, PRESET_EXAMPLES["general"])
 
     api_key = api_key or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     use_online = bool(api_key) and not offline
@@ -169,10 +204,10 @@ def run_extraction(
     if use_online:
         print(f"[*] Running LangExtract online with model {model_id} on {path.name} ({len(text)} chars)...")
         try:
-            annotated_doc = lx.extract(
+            annotated_doc = _require_langextract("online extraction").extract(
                 text_or_documents=text,
                 prompt_description=prompt_desc,
-                examples=examples,
+                examples=_preset_examples(category),
                 model_id=model_id,
                 api_key=api_key,
                 show_progress=True,
@@ -199,19 +234,22 @@ def run_extraction(
 
     # Create annotated document for visualization if HTML requested
     if html_out:
-        lx_extractions = [
-            lx.data.Extraction(
-                extraction_class=r["class"],
-                extraction_text=r["text"],
-            )
-            for r in results
-        ]
-        ann = lx.data.AnnotatedDocument(text=text, extractions=lx_extractions)
-        html_code = lx.visualize(ann)
+        if lx is None:  # static view; the interactive one needs langextract
+            html_code = _plain_html(text, results)
+        else:
+            lx_extractions = [
+                lx.data.Extraction(
+                    extraction_class=r["class"],
+                    extraction_text=r["text"],
+                )
+                for r in results
+            ]
+            ann = lx.data.AnnotatedDocument(text=text, extractions=lx_extractions)
+            html_code = lx.visualize(ann)
         out_html_path = Path(html_out)
         out_html_path.parent.mkdir(parents=True, exist_ok=True)
         out_html_path.write_text(str(html_code), encoding="utf-8")
-        print(f"[+] Interactive visualization saved: {out_html_path}")
+        print(f"[+] {'Static' if lx is None else 'Interactive'} visualization saved: {out_html_path}")
 
     # Output JSON if requested
     if json_out:
@@ -223,19 +261,21 @@ def run_extraction(
     # Generate evidence.py add commands if evidence_dir and source_id are given
     if evidence_dir and source_id:
         print("\n" + "=" * 70)
-        print("PIPELINE EVIDENCE COMMANDS (READY TO EXECUTE):")
+        print("EVIDENCE COMMAND TEMPLATES - replace the <...> parts, then run (the quote must stay")
+        print("verbatim in the source snapshot; the claim is your own sentence):")
         print("=" * 70)
         for i, r in enumerate(results[:10], start=1):
             quote = r["text"].replace('"', '\\"').replace("\n", " ").strip()
             # Truncate clean sentence if too long
             if len(quote) > 280:
                 quote = quote[:277] + "..."
-            claim = f"{r['class'].replace('_', ' ').capitalize()}: {quote[:60]}..."
+            # stance and claim are left for the agent to decide: a pre-filled "supports" turned
+            # every extraction into supporting evidence
             cmd = (
-                f".venv\\Scripts\\python.exe dr_engine\\tools\\evidence.py add "
+                f"python dr_engine/tools/evidence.py add "
                 f"--dir {evidence_dir} --source {source_id} --sq {sq} "
-                f"--tier {tier} --kind {kind} --stance supports "
-                f'--quote "{quote}" --claim "{claim}"'
+                f"--tier {tier} --kind {kind} --stance <supports|contradicts|context> "
+                f'--quote "{quote}" --claim "<one sentence in your words>"'
             )
             print(f"{i}. {cmd}\n")
 
@@ -290,4 +330,6 @@ def main():
 
 
 if __name__ == "__main__":
+    if hasattr(sys.stdout, "reconfigure"):  # Windows pipes default to cp1252
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     main()

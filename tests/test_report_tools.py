@@ -1271,7 +1271,7 @@ class CorpusTest(unittest.TestCase):
                "the decision before the revocation takes effect. ")
     pages = {f"S00{i}": release + f"Page {i} commentary about unrelated markets." for i in (1, 2, 3)}
     d = _corpus_study(pages)
-    idx = [json.loads(line) for line in (d / "sources" / "index.jsonl").read_text().splitlines()]
+    idx = [json.loads(line) for line in (d / "sources" / "index.jsonl").read_text(encoding="utf-8").splitlines()]
     with (d / "sources" / "index.jsonl").open("w", encoding="utf-8") as f:
       for r, host in zip(idx, ("a.test", "news.b.test", "www.c.test")):
         f.write(json.dumps(dict(r, url=f"https://{host}/x")) + "\n")
@@ -2291,6 +2291,252 @@ class NextStepTest(unittest.TestCase):
     res = next_step.next_step(d)
     self.assertEqual(res["action"], "Audit the leads you did not fetch")
     self.assertIn("screening.py sample", res["command"])
+
+
+import doctor  # noqa: E402
+
+
+class CleanInstallTest(unittest.TestCase):
+  """What a friend's fresh clone needs: optional packages stay optional, output survives pipes."""
+
+  def _doc(self, tmp):
+    p = Path(tmp) / "doc.txt"
+    p.write_text("Fintokei applies a 3% open risk cap on all trades. Daily loss <limit> is 5%.",
+                 encoding="utf-8")
+    return p
+
+  def test_extract_doc_without_langextract(self):
+    with tempfile.TemporaryDirectory() as tmp, \
+         unittest.mock.patch.object(extract_doc, "lx", None), \
+         contextlib.redirect_stdout(io.StringIO()):
+      html_path = Path(tmp) / "view.html"
+      res = extract_doc.run_extraction(str(self._doc(tmp)), category="prop_rules",
+                                       offline=True, html_out=str(html_path))
+      page = html_path.read_text(encoding="utf-8")
+    self.assertTrue(res)
+    self.assertIn("<mark", page)
+    self.assertIn("&lt;limit&gt;", page)  # document text is escaped
+    with unittest.mock.patch.object(extract_doc, "lx", None):
+      with self.assertRaisesRegex(ImportError, "pip install langextract"):
+        extract_doc._preset_examples("general")
+
+  def test_extract_doc_leaves_stance_and_claim_to_the_agent(self):
+    with tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stdout(io.StringIO()) as out:
+      extract_doc.run_extraction(str(self._doc(tmp)), category="prop_rules", offline=True,
+                                 evidence_dir="research/x", source_id="S001")
+    text = out.getvalue()
+    self.assertIn("--stance <supports|contradicts|context>", text)
+    self.assertNotIn("--stance supports ", text)
+    self.assertNotIn(".venv", text)
+
+  def test_requirements_cover_every_required_check(self):
+    failed = [f"{name}: {detail} -> {fix}" for status, name, detail, fix in doctor.checks()
+              if status == "FAIL"]
+    self.assertEqual(failed, [], "python -m pip install -r requirements.txt did not give a working toolkit")
+
+  def test_doctor_names_the_fix(self):
+    broken = [("missingpkg", "import missingpkg_does_not_exist_42", "a test", "pip install missingpkg")]
+    with unittest.mock.patch.object(doctor, "REQUIRED", broken), \
+         contextlib.redirect_stdout(io.StringIO()) as out:
+      code = doctor.main([])
+    self.assertEqual(code, 1)
+    self.assertIn("fix: pip install missingpkg", out.getvalue())
+    self.assertIn("NOT READY", out.getvalue())
+
+  def test_every_cli_writes_utf8_to_a_pipe(self):
+    """On Windows a pipe (how agents read tool output) is cp1252: Cyrillic made print() raise."""
+    missing = []
+    for sub in ("tools", "science", "quant", "evals"):
+      for f in sorted((ROOT / "dr_engine" / sub).glob("*.py")):
+        t = f.read_text(encoding="utf-8")
+        if 'if __name__ == "__main__"' in t and "reconfigure(" not in t:
+          missing.append(f"{sub}/{f.name}")
+    self.assertEqual(missing, [], "add sys.stdout.reconfigure(encoding='utf-8', errors='replace')")
+
+
+PERIOD_SNAP = ("Intro text. " * 30 + "Table 3. Overnight returns, sample 2004.1 - 2020.12, E-mini futures. "
+               "Row: CTO 4.6% and OTC 4.2% per year. " + "Method notes. " * 10
+               + "The paper's full sample runs from 1993 to 2020 for SPY. " + "More. " * 50)
+
+
+def _period_study() -> Path:
+  d = _study()
+  (d / "sources" / "S002.txt").write_text(PERIOD_SNAP, encoding="utf-8")
+  with (d / "sources" / "index.jsonl").open("a", encoding="utf-8") as f:
+    f.write(json.dumps({"id": "S002", "url": "https://journal.test/paper", "fetched_at": "2026-11-04T10:00:00",
+                        "chars": len(PERIOD_SNAP), "sha256": evidence.sha256_text(PERIOD_SNAP)}) + "\n")
+  return d
+
+
+def _add_period(d, *extra):
+  args = ["add", "--dir", str(d), "--source", "S002", "--sq", "SQ1", "--tier", "T3", "--kind", "empirical",
+          "--stance", "supports", "--claim", "c", "--quote", "CTO 4.6% and OTC 4.2% per year", *extra]
+  with contextlib.redirect_stdout(io.StringIO()) as out:
+    code = evidence.main(args)
+  return code, out.getvalue()
+
+
+class PeriodSentinelTest(unittest.TestCase):
+  """A number is only right for its own period: the trial cited a table's number with the paper's period."""
+
+  def test_quote_span_and_periods(self):
+    sp = evidence.quote_span("CTO 4.6% and OTC 4.2%", PERIOD_SNAP)
+    self.assertEqual(PERIOD_SNAP[sp[0]:sp[1]], "CTO 4.6% and OTC 4.2%")
+    self.assertEqual(evidence.periods_near(PERIOD_SNAP, sp)[:2],
+                     ["2004.1-2020.12 (above)", "1993-2020 (below)"])
+    self.assertIn("⟪CTO 4.6% and OTC 4.2%⟫", evidence.context_excerpt(PERIOD_SNAP, sp))
+    self.assertEqual(evidence.periods_near("Цените между 2010 и 2019 г. бяха ниски, а от 2021 растат.", (0, 6)),
+                     ["2010-2019 (below)", "от 2021 (below)"])
+    self.assertIsNone(evidence.quote_span("not on the page at all", PERIOD_SNAP))
+    footer = "Win rate was 61% last quarter. © 2010-2025 Firm Ltd. All rights reserved."
+    self.assertEqual(evidence.periods_near(footer, evidence.quote_span("Win rate was 61%", footer)), [])
+
+  def test_empirical_number_needs_its_period(self):
+    code, out = _add_period(_period_study())
+    self.assertEqual(code, 1)
+    self.assertIn("2004.1-2020.12 (above)", out)
+    self.assertIn("--sample-period", out)
+    d = _period_study()
+    code, out = _add_period(d, "--sample-period", "2004.1-2020.12")
+    self.assertEqual((code, "NOTE" in out), (0, False))
+    rec = evidence.load_evidence(d)[-1]
+    self.assertEqual(rec["sample_period"], "2004.1-2020.12")
+    self.assertIn("2004.1-2020.12 (above)", rec["context_periods"])
+
+  def test_unknown_or_unnamed_period(self):
+    code, out = _add_period(_period_study(), "--sample-period", "unknown")
+    self.assertEqual((code, "NOTE" in out), (0, False))
+    code, out = _add_period(_period_study(), "--sample-period", "2000-2010")
+    self.assertEqual(code, 0)
+    self.assertIn("NOTE: --sample-period 2000-2010 is not among the periods", out)
+
+  def test_rules_and_context_need_no_period(self):
+    d = _period_study()
+    code, _ = _add_period(d)
+    self.assertEqual(code, 1)
+    args = ["add", "--dir", str(d), "--source", "S002", "--sq", "SQ1", "--tier", "T3", "--kind", "context",
+            "--stance", "context", "--claim", "c", "--quote", "CTO 4.6% and OTC 4.2% per year"]
+    with contextlib.redirect_stdout(io.StringIO()):
+      self.assertEqual(evidence.main(args), 0)
+
+
+class ScreeningDisclosureTest(unittest.TestCase):
+
+  def test_high_screening_bound_must_be_stated_in_limitations(self):
+    d = _screening_study()
+    _screen("sample", "--dir", str(d), "--n", "20")
+    for i in range(1, 21):  # 1 relevant of 20 -> Clopper-Pearson upper bound ~22% > 20%
+      _screen("record", "--dir", str(d), "--item", f"X{i:02d}",
+              "--verdict", "relevant" if i == 3 else "irrelevant", "--note", "n")
+    n_src = len(evidence._jsonl(d / "sources" / "index.jsonl"))
+    (d / "coverage.json").write_text(json.dumps({"sources": n_src, "verdict": "SATURATED"}), encoding="utf-8")
+    (d / "report.md").write_text("# T\n\n## Limitations\n\n- Coverage: SATURATED.\n", encoding="utf-8")
+    with unittest.mock.patch.object(gate.Gate, "evidence_stage", lambda self, *a, **k: None), \
+         unittest.mock.patch.object(gate, "parse_plan", lambda t: (["SQ1"], ["K1", "K2", "K3"])), \
+         unittest.mock.patch.object(gate, "study_is_strict", lambda d: True):
+      res = next_step.next_step(d)
+      self.assertEqual(res["action"], "Continue discovery, or state the gap in Limitations")
+      self.assertIn("the screening audit leaves a high bound on relevant leads discarded unread", res["command"])
+      self.assertNotIn("Coverage: SATURATED", res["command"])  # coverage already stated
+      (d / "report.md").write_text("# T\n\n## Limitations\n\n- Coverage: SATURATED, and the screening audit "
+                                   "leaves a high bound on relevant leads discarded unread.\n", encoding="utf-8")
+      with unittest.mock.patch.object(gate.Gate, "report_stage", lambda self, *a, **k: None):
+        self.assertEqual(next_step.next_step(d)["action"], "Run the blind claim audit")
+
+
+class AuditRoundsTest(unittest.TestCase):
+  """Re-sampling must never lose a verdict, hide an unfixed error, or skip checking a fix."""
+
+  def _sample(self, d, *extra):
+    with contextlib.redirect_stdout(io.StringIO()) as out:
+      audit.main(["sample", "--dir", str(d), *extra])
+    return audit.load(d), out.getvalue()
+
+  def _record(self, d, verdicts):
+    with contextlib.redirect_stdout(io.StringIO()):
+      for i, v in verdicts.items():
+        audit.main(["record", "--dir", str(d), "--item", i, "--verdict", v])
+
+  def test_resample_of_the_same_report_keeps_verdicts(self):
+    d = _study()
+    (d / "report.md").write_text(AuditTest._report(None, 6), encoding="utf-8")
+    data, _ = self._sample(d)
+    self._record(d, {it["id"]: "supported" for it in data["items"]})
+    data, _ = self._sample(d)
+    self.assertEqual(len(data["verdicts"]), 6)
+    self.assertEqual(audit.summary(data)["pending"], [])
+
+  def test_fresh_drops_supported_never_errors(self):
+    d = _study()
+    (d / "report.md").write_text(AuditTest._report(None, 4), encoding="utf-8")
+    self._sample(d)
+    self._record(d, {"A01": "unsupported", "A02": "supported", "A03": "supported", "A04": "supported"})
+    data, _ = self._sample(d, "--fresh")
+    self.assertEqual(data["verdicts"], {"A01": {"verdict": "unsupported", "note": ""}})
+
+  def test_unfixed_error_survives_an_edit_elsewhere(self):
+    d = _study()
+    report = AuditTest._report(None, 12)
+    (d / "report.md").write_text(report, encoding="utf-8")
+    data, _ = self._sample(d, "--n", "3")
+    bad = data["items"][0]["text"]
+    self._record(d, {"A01": "wrong_number", "A02": "supported", "A03": "supported"})
+    saw_forced = False
+    for k in range(12):  # each edit re-seeds the draw; the error must stay in every round
+      report = report.replace("## Sources", f"Note {k} is $3 per lot [E001].\n\n## Sources")
+      (d / "report.md").write_text(report, encoding="utf-8")
+      data, _ = self._sample(d, "--n", "3")
+      kept = [it for it in data["items"] if it["text"] == bad]
+      self.assertEqual(len(kept), 1)
+      self.assertEqual(data["verdicts"][kept[0]["id"]]["verdict"], "wrong_number")
+      self.assertTrue(any("still in the report unfixed" in p for p in audit.check_against_report(data, report)))
+      saw_forced = saw_forced or bool(kept[0].get("forced"))
+    self.assertTrue(saw_forced)
+
+  def test_fix_goes_to_the_verifier_even_when_not_drawn(self):
+    d = _study()
+    report = AuditTest._report(None, 12)
+    (d / "report.md").write_text(report, encoding="utf-8")
+    data, _ = self._sample(d, "--n", "3")
+    bad = data["items"][0]["text"]
+    self._record(d, {"A01": "unsupported", "A02": "supported", "A03": "supported"})
+    fixed_text = bad.replace("per lot", "per lot round turn")
+    report = report.replace(bad, fixed_text)
+    (d / "report.md").write_text(report, encoding="utf-8")
+    data, _ = self._sample(d, "--n", "3")
+    fix = [it for it in data["items"] if it["text"] == fixed_text]
+    self.assertEqual(len(fix), 1)
+    self.assertIn(fix[0]["id"], audit.summary(data)["pending"])
+    self.assertIn(fixed_text, (d / "audit" / "brief.md").read_text(encoding="utf-8"))
+    self.assertEqual(audit.check_against_report(data, report), [])
+    again, _ = self._sample(d, "--n", "3")  # same report again: the pending fix must not drop out
+    self.assertEqual([it["id"] for it in again["items"]], [it["id"] for it in data["items"]])
+    self._record(d, {fix[0]["id"]: "supported"})
+    report = report.replace("## Sources", "Note x is $3 per lot [E001].\n\n## Sources")
+    (d / "report.md").write_text(report, encoding="utf-8")
+    later, _ = self._sample(d, "--n", "3")  # judged fix + later edit: back to the random draw
+    self.assertFalse(any(it.get("forced") and it["text"] == fixed_text for it in later["items"]))
+
+  def test_kept_items_do_not_count_toward_the_random_bound(self):
+    data = {"report_sha256": "x", "population": 40, "n": 1, "verdicts": {
+        "A01": {"verdict": "supported"}, "A02": {"verdict": "wrong_number"}}, "items": [
+        {"id": "A01", "line": 1, "text": "a"}, {"id": "A02", "line": 2, "text": "b", "forced": "unfixed error"}]}
+    s = audit.summary(data)
+    self.assertEqual((s["n"], s["errors"]), (2, 1))
+    self.assertEqual(s["upper_bound"], audit.hypergeom_upper(0, 1, 40))
+
+  def test_brief_shows_the_passage_and_its_periods(self):
+    d = _period_study()
+    self.assertEqual(_add_period(d, "--sample-period", "2004.1-2020.12")[0], 0)
+    eid = evidence.load_evidence(d)[-1]["id"]
+    (d / "report.md").write_text(
+        f"# T\n\n## Bottom line\n\nE-mini close-to-open returned 4.6% a year (2004.1-2020.12) [{eid}].\n",
+        encoding="utf-8")
+    self._sample(d)
+    brief = (d / "audit" / "brief.md").read_text(encoding="utf-8")
+    self.assertIn("In context (S002):", brief)
+    self.assertIn("⟪CTO 4.6% and OTC 4.2% per year⟫", brief)
+    self.assertIn("Periods named near it: 2004.1-2020.12 (above)", brief)
 
 
 if __name__ == "__main__":

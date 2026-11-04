@@ -5,6 +5,7 @@ pdfplumber>=0.11.0     # PDF snapshots with tables as quotable rows (parse_pdf.p
 pypdf>=4.0.0           # fallback PDF text extraction
 python-dotenv>=1.0.0   # science CLIs read optional keys from .env
 trafilatura>=2.0      # page metadata only (title, page date, author); snapshot text stays the full page
+lxml_html_clean>=0.4  # trafilatura -> justext needs it with lxml >= 5.2 (import fails without it)
 
 # Optional
 # langextract>=1.0     # extract_doc.py (long-document extraction)

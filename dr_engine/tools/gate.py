@@ -593,7 +593,7 @@ class Gate:
       for i in s["relevant_not_fetched"]:
         self.F("E9", f"screening item {i} was judged relevant but is not in sources/ - fetch it "
                      f"(evidence.py fetch) and record it with --source S###")
-      if not s["pending"] and s["cp_upper"] > 0.20:
+      if not s["pending"] and s["cp_upper"] > screening_mod.MAX_LOSS:
         self.W("E9", f"screening loss bound {s['cp_upper']:.0%} > 20%: up to ~{s['max_lost']:.0f} "
                      f"relevant source(s) may have been discarded unread - fetch more of the leads")
     elif strict:

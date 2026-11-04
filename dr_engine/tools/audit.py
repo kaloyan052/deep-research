@@ -20,13 +20,18 @@ Verdicts: supported | partial | unsupported | wrong_number | misattributed
   python dr_engine/tools/audit.py record --dir D --item A07 --verdict supported [--note "..."]
   python dr_engine/tools/audit.py bound  --dir D
 
+The brief shows each quote inside its passage in the saved page, with the periods the page
+names near it, so the verifier can check scope (period, population, units), not just wording.
+
 A sentence judged wrong blocks the report until it is fixed, whatever the bound says.
 After fixing, re-run `sample`: the new draw is seeded by the fixed report, verdicts carry
 over to sentences whose text and cited quotes are unchanged, and only fixed or new
-sentences go back to a verifier (so fixes are checked too). The previous round's errors
-stay in `history` and in audit/history/. Without a re-sample the gate still accepts a
-report whose `supported` sentences are unchanged and whose error sentences are gone, but
-then nobody has checked the replacement text. Stdlib only.
+sentences go back to a verifier. Two items are kept on purpose even when the new draw misses
+them: an error sentence still in the report (it keeps blocking; an edit elsewhere cannot hide
+it) and the sentence that replaced a fixed error (so the fix is checked). They count toward
+the verdicts but not toward the random-sample error bound. Re-running `sample` on an
+unchanged report keeps every verdict; `--fresh` drops carried `supported` verdicts but never
+an error. The previous round's errors stay in `history` and in audit/history/. Stdlib only.
 """
 
 from __future__ import annotations
@@ -42,7 +47,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import check_report as cr  # noqa: E402
-from evidence import _jsonl, load_evidence, study_dir_error  # noqa: E402
+from difflib import SequenceMatcher  # noqa: E402
+from evidence import (_jsonl, context_excerpt, load_evidence, periods_near,  # noqa: E402
+                      quote_span, study_dir_error)
 
 EID_RE = re.compile(r"\bE\d{3}\b")
 VERDICTS = ("supported", "partial", "unsupported", "wrong_number", "misattributed")
@@ -105,6 +112,22 @@ def _paths(d: Path) -> tuple[Path, Path]:
   return d / "audit" / "sample.json", d / "audit" / "brief.md"
 
 
+def _quote_info(d: Path, eid: str, evidence: dict, snaps: dict) -> dict:
+  """The cited quote with the passage around it in the saved page and the periods named near it:
+  a quote alone hides its scope (the trial's 'right number, wrong sample period' error)."""
+  rec = evidence.get(eid, {})
+  q = {"eid": eid, "url": rec.get("url", ""), "quote": rec.get("quote", "(missing)"),
+       "source": rec.get("source", "")}
+  path = d / "sources" / f"{q['source']}.txt"
+  if rec and q["source"] and path.exists():
+    if q["source"] not in snaps:
+      snaps[q["source"]] = path.read_text(encoding="utf-8")
+    text = snaps[q["source"]]
+    span = quote_span(q["quote"], text)
+    q["context"], q["periods"] = context_excerpt(text, span), periods_near(text, span)
+  return q
+
+
 def cmd_sample(args) -> int:
   d = Path(args.dir)
   report = Path(args.report) if args.report else d / "report.md"
@@ -118,41 +141,79 @@ def cmd_sample(args) -> int:
   picked = sorted(random.Random(int(sha[:12], 16)).sample(range(len(units)), n))
   evidence = {r["id"]: r for r in load_evidence(d)}
   calcs = {r["id"]: r for r in _jsonl(d / "calculations.jsonl") if "id" in r}
-  items = []
-  for i, idx in enumerate(picked, 1):
-    u = units[idx]
-    items.append({"id": f"A{i:02d}", "line": u["line"], "text": u["text"], "eids": u["eids"],
-                  "quotes": [{"eid": e, "url": evidence.get(e, {}).get("url", ""),
-                              "quote": evidence.get(e, {}).get("quote", "(missing)")}
-                             for e in u["eids"]],
-                  "calcs": [{"cid": c, "label": calcs[c].get("label", ""), "expr": calcs[c].get("expr", ""),
-                             "variables": calcs[c].get("variables", {}), "result": calcs[c].get("result"),
-                             "unit": calcs[c].get("unit", ""), "cites": calcs[c].get("cited_eids", [])}
-                            for c in dict.fromkeys(re.findall(r"\bC\d{3}\b", u["text"])) if c in calcs]})
+  snaps: dict[str, str] = {}
+
+  def make_item(u: dict, iid: str) -> dict:
+    return {"id": iid, "line": u["line"], "text": u["text"], "eids": u["eids"],
+            "quotes": [_quote_info(d, e, evidence, snaps) for e in u["eids"]],
+            "calcs": [{"cid": c, "label": calcs[c].get("label", ""), "expr": calcs[c].get("expr", ""),
+                       "variables": calcs[c].get("variables", {}), "result": calcs[c].get("result"),
+                       "unit": calcs[c].get("unit", ""), "cites": calcs[c].get("cited_eids", [])}
+                      for c in dict.fromkeys(re.findall(r"\bC\d{3}\b", u["text"])) if c in calcs]}
+
+  items = [make_item(units[idx], f"A{i:02d}") for i, idx in enumerate(picked, 1)]
   sample_path, brief_path = _paths(d)
   sample_path.parent.mkdir(exist_ok=True)
   data = {"report_sha256": sha, "population": len(units), "n": n, "items": items, "verdicts": {},
-          "history": []}
+          "history": [], "unit_hashes": sorted({_h(u["text"]) for u in units})}
   prev = load(d)
-  if prev and prev["report_sha256"] != sha:
-    # Re-audit after fixes: a verdict carries over only to a sentence whose text AND cited
-    # quotes are identical. Fixed or new sentences go back to a blind verifier, so a fix
-    # is checked, not just the removal of the error.
-    hist = sample_path.parent / "history"
-    hist.mkdir(exist_ok=True)
-    (hist / f"sample-{prev['report_sha256'][:8]}.json").write_text(
-        json.dumps(prev, ensure_ascii=False, indent=2), encoding="utf-8")
-    s = summary(prev)
-    data["history"] = prev.get("history", []) + [
-        {"report_sha256": prev["report_sha256"], "judged": s["n"], "errors": s["errors"],
-         "error_items": [f"{i}: {prev['verdicts'][i]['verdict']}" for i in s["error_items"]]}]
-    if not args.fresh:
-      judged = {_item_key(it): prev["verdicts"][it["id"]] for it in prev["items"]
-                if it["id"] in prev["verdicts"]}
-      for it in items:
-        v = judged.get(_item_key(it))
-        if v:
-          data["verdicts"][it["id"]] = dict(v, carried_from=prev["report_sha256"][:8])
+  if prev:
+    same = prev["report_sha256"] == sha
+    tag = {} if same else {"carried_from": prev["report_sha256"][:8]}
+    if same:  # re-running sample on the same report keeps what was already judged
+      data["history"] = prev.get("history", [])
+    else:
+      hist = sample_path.parent / "history"
+      hist.mkdir(exist_ok=True)
+      (hist / f"sample-{prev['report_sha256'][:8]}.json").write_text(
+          json.dumps(prev, ensure_ascii=False, indent=2), encoding="utf-8")
+      s = summary(prev)
+      data["history"] = prev.get("history", []) + [
+          {"report_sha256": prev["report_sha256"], "judged": s["n"], "errors": s["errors"],
+           "error_items": [f"{i}: {prev['verdicts'][i]['verdict']}" for i in s["error_items"]]}]
+    judged = {_item_key(it): (it, prev["verdicts"][it["id"]]) for it in prev["items"]
+              if it["id"] in prev["verdicts"]}
+    # 1. A verdict carries over only to a sentence whose text AND cited quotes are identical.
+    #    --fresh drops carried 'supported' verdicts (an independent second look), never an error.
+    for it in items:
+      hit = judged.get(_item_key(it))
+      if hit and (hit[1]["verdict"] != "supported" or not args.fresh):
+        data["verdicts"][it["id"]] = dict(hit[1], **tag)
+    current = {u["text"]: u for u in units}
+    drawn = {it["text"] for it in items}
+    # Items kept on purpose last round stay while they are in the report: all of them on an
+    # unchanged report, the ones nobody has judged yet after an edit (a pending fix stays pending).
+    for old in prev["items"]:
+      if (old.get("forced") and old["text"] in current and old["text"] not in drawn
+          and (same or old["id"] not in prev["verdicts"])):
+        it = dict(make_item(current[old["text"]], f"A{len(items) + 1:02d}"), forced=old["forced"])
+        items.append(it)
+        drawn.add(it["text"])
+        v = prev["verdicts"].get(old["id"])
+        if v and _item_key(it) == _item_key(old):
+          data["verdicts"][it["id"]] = dict(v, **tag)
+    for key, (old, v) in judged.items():
+      # 2. An error sentence still in the report stays in the audit even when the new draw misses
+      #    it: otherwise any edit elsewhere re-seeds the draw and hides the unfixed error.
+      if v["verdict"] != "supported" and old["text"] in current and old["text"] not in drawn:
+        it = dict(make_item(current[old["text"]], f"A{len(items) + 1:02d}"), forced="unfixed error")
+        items.append(it)
+        drawn.add(it["text"])
+        if _item_key(it) == key:  # same quotes: still wrong; changed quotes: judge it again
+          data["verdicts"][it["id"]] = dict(v, **tag)
+    # 3. The sentence that replaced a fixed error goes to the verifier even when the draw misses it,
+    #    so the fix itself is checked, not just the removal of the error.
+    before = set(prev.get("unit_hashes") or ())  # every sentence of the previous report version
+    old_texts = {it["text"] for it in prev["items"]}
+    new_units = [u for u in units if u["text"] not in drawn and
+                 (_h(u["text"]) not in before if before else u["text"] not in old_texts)]
+    for key, (old, v) in judged.items():
+      if v["verdict"] == "supported" or old["text"] in current or not new_units:
+        continue
+      best = max(new_units, key=lambda u: SequenceMatcher(None, old["text"], u["text"]).ratio())
+      if SequenceMatcher(None, old["text"], best["text"]).ratio() >= 0.5 and best["text"] not in drawn:
+        items.append(dict(make_item(best, f"A{len(items) + 1:02d}"), forced=f"replaces a sentence judged {v['verdict']}"))
+        drawn.add(best["text"])
   sample_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
   items = [it for it in items if it["id"] not in data["verdicts"]]
   lines = [
@@ -160,7 +221,10 @@ def cmd_sample(args) -> int:
       "You are a fact-checker who has NOT seen the research. For each item decide whether the",
       "cited quotes, read in context at their URLs, support the sentence exactly as written.",
       "Check numbers, units, scope (plan / population / jurisdiction), dates, and whether the",
-      "sentence says more than the quote ('some' -> 'all', 'may' -> 'will').", "",
+      "sentence says more than the quote ('some' -> 'all', 'may' -> 'will').",
+      "Each quote is shown inside its passage in the saved page (marked with ⟪ ⟫) with the periods",
+      "the page names near it: a number belongs to the period of its own table or paragraph, not",
+      "to the paper's headline period. The full saved pages are in sources/<S###>.txt.", "",
       "Verdict per item: supported | partial | unsupported | wrong_number | misattributed.",
       "Record each with: python dr_engine/tools/audit.py record --dir <dir> --item <ID> "
       "--verdict <v> --note \"<why>\"", ""]
@@ -168,17 +232,30 @@ def cmd_sample(args) -> int:
     lines += [f"## {it['id']}", "", f"> {it['text']}", ""]
     for q in it["quotes"]:
       lines += [f"- [{q['eid']}] {q['url']}", f"  \"{q['quote']}\""]
+      if q.get("context"):
+        lines.append(f"  In context ({q['source']}): \"{q['context']}\"")
+      elif q.get("source"):
+        lines.append(f"  (passage not located automatically: read sources/{q['source']}.txt)")
+      if q.get("periods"):
+        lines.append(f"  Periods named near it: {'; '.join(q['periods'])}")
     for c in it.get("calcs", []):
       inputs = ", ".join(f"{k}={v}" for k, v in c["variables"].items())
       lines.append(f"- [{c['cid']}] {c['label']}: {c['expr']} with {inputs} = {c['result']} "
                    f"{c['unit']} (inputs cited from {', '.join(c['cites']) or 'nothing'})")
     lines.append("")
   brief_path.write_text("\n".join(lines), encoding="utf-8")
-  print(f"Sampled {n} of {len(units)} claim units -> {sample_path}\nVerifier brief -> {brief_path}")
+  forced = sum(1 for it in data["items"] if it.get("forced"))
+  print(f"Sampled {n} of {len(units)} claim units"
+        + (f" + {forced} kept from the previous audit (unfixed errors / their fixes)" if forced else "")
+        + f" -> {sample_path}\nVerifier brief -> {brief_path}")
   if data["verdicts"]:
-    print(f"Carried {len(data['verdicts'])} verdict(s) from the previous audit (identical text and "
+    print(f"Kept {len(data['verdicts'])} verdict(s) from the previous audit (identical text and "
           f"quotes); {len(items)} item(s) in the brief need a fresh verifier")
   return 0
+
+
+def _h(text: str) -> str:
+  return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
 
 
 def _item_key(it: dict) -> tuple:
@@ -206,15 +283,19 @@ def cmd_record(args) -> int:
 
 
 def summary(data: dict, confidence: float = 0.95) -> dict:
+  """Counts over every judged item; the error bound only over the random draw (items kept on
+  purpose - unfixed errors and their fixes - are not a random sample, and block on their own)."""
   judged = data["verdicts"]
   errors = [i for i, v in judged.items() if v["verdict"] != "supported"]
-  n = len(judged)
+  drawn = {it["id"] for it in data["items"] if not it.get("forced")}
+  n = sum(1 for i in judged if i in drawn)
+  k = sum(1 for i in errors if i in drawn)
   population = data.get("population", 0)
   if n and population >= n:
-    bound, method = hypergeom_upper(len(errors), n, population, confidence), "hypergeometric"
+    bound, method = hypergeom_upper(k, n, population, confidence), "hypergeometric"
   else:
-    bound, method = (clopper_pearson_upper(len(errors), n, confidence) if n else 1.0), "clopper-pearson"
-  return {"n": n, "sampled": data["n"], "errors": len(errors), "error_items": errors,
+    bound, method = (clopper_pearson_upper(k, n, confidence) if n else 1.0), "clopper-pearson"
+  return {"n": len(judged), "sampled": len(data["items"]), "errors": len(errors), "error_items": errors,
           "pending": [it["id"] for it in data["items"] if it["id"] not in judged],
           "upper_bound": bound, "method": method, "confidence": confidence}
 
@@ -270,7 +351,8 @@ def main(argv: list[str] | None = None) -> int:
   p.add_argument("--n", type=int, default=30)
   p.add_argument("--report")
   p.add_argument("--fresh", action="store_true",
-                 help="do not carry verdicts from the previous audit of an earlier report version")
+                 help="send every unchanged 'supported' sentence back to a verifier too (error "
+                      "verdicts on sentences still in the report are always kept)")
   p.set_defaults(fn=cmd_sample)
   p = sub.add_parser("record")
   p.add_argument("--dir", required=True)

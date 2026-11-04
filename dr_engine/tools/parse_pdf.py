@@ -223,7 +223,7 @@ def pdf_snapshot(source: bytes | str | Path, clean: bool = True) -> tuple[str, D
         pages = [p.extract_text() or "" for p in reader.pages]
         blocks_by_page = [[] for _ in pages]
     else:
-        raise ImportError("no PDF library: .venv\\Scripts\\python.exe -m pip install pdfplumber")
+        raise ImportError("no PDF library: python -m pip install pdfplumber")
     if clean:
         pages = strip_headers_and_footers(pages)
     parts = []

@@ -43,7 +43,8 @@
 | Инструмент | Какво прави |
 | :-- | :-- |
 | `next_step.py` | Казва единственото следващо действие с точната команда (exit 0 = готово, 1 = има действие, 2 = грешна папка). Агентът го пуска след всяка стъпка — така и по-слаб модел не прескача стъпки |
-| `evidence.py` | `retract` (оттегля грешен запис, без ръчна редакция), `init`, `fetch` (snapshot), `import` (ръчно копие от браузър), `add` (отказва неточни цитати), `log-search`, `sources`, `show` |
+| `doctor.py` | Проверява дали машината е готова (Python, пакети, SQLite FTS5, файловете на работното място) и казва точната поправка за всеки проблем. Нищо не инсталира |
+| `evidence.py` | `retract` (оттегля грешен запис, без ръчна редакция), `init`, `fetch` (snapshot), `import` (ръчно копие от браузър), `add` (отказва неточни цитати; за емпирично число иска `--sample-period` на собствената му таблица, когато страницата назовава период близо до цитата), `log-search`, `sources`, `show` |
 | `gate.py` | Проверява целостта на snapshot-ите, цитатите, бюджета за убиващи хипотези, цитатите `[E###]`, числата срещу цитатите, адресирането на противоречия, липсата на самооценки; `--live N` изтегля N източника наново |
 | `corpus.py` | Индекс на всички изтеглени страници (SQLite FTS5): `build`, `query` (пасажи — точни откъси от страницата), `triage` (ред на четене, слепи петна, изненади, един и същ текст на различни сайтове), `numbers`, `stats` (покритие по Chapman между независими канали и крива на насищане) |
 | `discover.py` | Научни бази (OpenAlex, CrossRef, arXiv, EuropePMC) и `--snowball` по цитиранията в OpenAlex (назад: литературата на статията; напред: кой я цитира), с пауза ≥ 1 s между заявките |
@@ -52,7 +53,7 @@
 | `claims.py` | Регистър на твърденията: `add` (числото трябва да е в цитата), `conflicts` (конфликти и оси, вкл. конфликт на интереси и различна извадка), `table`, `keys` |
 | `units.py` | Единици: bp↔%, RT↔на страна, годишна ставка → разход за задържане, нетно финансиране на long/short, bp → R; същите функции работят в `calc.py` |
 | `aliases.json` | Речник на акроними и синоними (CySEC ↔ Cyprus Securities and Exchange Commission, КФН, БНБ, ...); всяко проучване може да има собствен |
-| `audit.py` | Сляп одит: `sample` (извадка, засята от доклада), `record` (присъда), `bound` (горна граница на грешките) |
+| `audit.py` | Сляп одит: `sample` (извадка, засята от доклада; брифът показва всеки цитат в пасажа му и периодите около него), `record` (присъда), `bound` (горна граница на грешките). Повторен `sample` пази присъдите, не изпуска непоправена грешка и винаги праща поправката за проверка |
 | `check_report.py` / `verify_citations.py` | За доклади извън процеса (напр. старите в `reports/`) |
 
 Дизайнът на v4 и измерванията зад него: [`docs/V4_ARCHITECTURE.md`](docs/V4_ARCHITECTURE.md).
@@ -83,8 +84,11 @@ git clone https://github.com/kaloyan052/deep-research.git deep-research
 cd deep-research
 python -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements.txt
+.venv/Scripts/python.exe dr_engine/tools/doctor.py
 .venv/Scripts/python.exe -m unittest tests.test_report_tools
 ```
+
+`doctor.py` трябва да отпечата `RESULT: READY`; ако нещо липсва, показва точната команда за поправка.
 
 (На macOS/Linux: `.venv/bin/python` вместо `.venv/Scripts/python.exe`.)
 
@@ -104,7 +108,9 @@ RUNBOOK-а в `SKILL.md` и след всяка стъпка пуска `next_st
 ## Структура на репото
 
 ```
-├── AGENTS.md / CLAUDE.md          # Входна точка за всеки AI агент
+├── AGENTS.md / CLAUDE.md / GEMINI.md  # Входна точка за всеки AI агент
+├── CHANGELOG.md                   # Какво се промени в протокола и инструментите
+├── .github/workflows/tests.yml    # CI: тестовете на Linux и Windows при всеки push
 ├── .agents/
 │   ├── rules/deep-research.md     # Кратки винаги-активни правила
 │   └── skills/
@@ -114,7 +120,7 @@ RUNBOOK-а в `SKILL.md` и след всяка стъпка пуска `next_st
 ├── .claude/skills/deep-research/  # Указател към протокола за Claude Code
 ├── dr_engine/
 │   ├── tools/                     # evidence, discover, corpus, claims, calc, units, audit,
-│   │                              # screening, formula, gate, next_step, parse_pdf, ...
+│   │                              # screening, formula, gate, next_step, doctor, parse_pdf, ...
 │   ├── science/                   # arXiv, OpenAlex, PubMed (Apache-2.0, google-deepmind/science-skills)
 │   ├── evals/                     # 32 епистемични теста за гейтовете
 │   └── quant/                     # alpha_miner.py

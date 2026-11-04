@@ -11,6 +11,9 @@ tax, medicine, science, software) → **read and follow `.agents/skills/deep-res
 end to end automatically and by default.** Do not answer from memory, and do not deliver a report
 that has not passed the quality gates below.
 
+First time on a machine: `python dr_engine/tools/doctor.py` must print `RESULT: READY` (it names
+the fix for anything missing; ask the user before installing packages).
+
 Workflow summary (details in the skill; its **RUNBOOK** table is the mandatory order). After every
 step run `python dr_engine/tools/next_step.py research/<dir>` and do exactly the one action it
 prints, until it prints `DONE` (exit 0). Never edit `*.jsonl`, `sources/` or `audit/*.json` by hand.
@@ -19,7 +22,7 @@ prints, until it prints `DONE` (exit 0). Never edit `*.jsonl`, `sources/` or `au
 2. Discover primary & peer-reviewed leads (`discover.py "<query>" --dir <dir> --purpose SQn|Kn`,
    citation snowballing `discover.py --snowball <W-id|DOI> --dir <dir> --purpose SQn`, web search +
    `evidence.py log-search --opened <result URLs> --channel web|registry`), `evidence.py fetch` each page you rely on, `evidence.py add --quote "<verbatim>"`
-   per fact — ≥ 30% of searches go to kills; ≥ 50% of evidence must be T1–T3 (no Wikipedia/forum inflation)
+   per fact (`--kind empirical` also needs `--sample-period` of the number's own table) — ≥ 30% of searches go to kills; ≥ 50% of evidence must be T1–T3 (no Wikipedia/forum inflation)
 3. Log all quantitative math & Base/Bear/Stress + breakeven flip thresholds via `calc.py eval` and
    `calc.py decision` (`calculations.jsonl` → `[C###]`). At > ~15 sources: `corpus.py build` +
    `corpus.py triage`, read ranked passages per SQ/K (`corpus.py query --log --purpose SQn|Kn`), not
@@ -53,7 +56,7 @@ Answer in the user's language (the user usually writes in Bulgarian).
 | :-- | :-- | :-- |
 | `.agents/skills/` | **Yes — Installed Skills** | Core protocols (`deep-research`, `doubt-driven-development`, `source-driven-development`; these are in the git repo), plus optional `skills.sh` ecosystem skills installed locally with `npx skills add` (not in the repo): `backtest-expert`, `macro-regime-detector`, `position-sizer`, `crypto-regime-analyzer`, `trader-memory-core`, `grounded-vault`, `session-guard`, `ai-debt-detector`, `paper-context-resolver`, `safe-debug`, `analyze-project`, `python-performance-optimization`, `python-testing-patterns`, `python-error-handling`, `async-python-patterns`, `mcp-builder`, `xlsx` |
 | `.agents/rules/deep-research.md` | Yes | Always-on short rules |
-| `dr_engine/tools/` | **Yes** | `evidence.py` (fetch → snapshot → verified quote), `discover.py` (OpenAlex/CrossRef/arXiv-HTML/EuropePMC discovery, OpenAlex forward/backward snowballing, polite rate-limited client; logs result sets + `candidates.jsonl`), `calc.py` (deterministic AST `[C###]` calculations & Base/Bear/Stress decision + breakeven matrix), `formula.py` (Epistemic Index EI/100 & mechanical confidence ceiling), `extract_doc.py` (LangExtract grounded extractor), `parse_pdf.py` (pdfplumber PDF → snapshot; tables as quotable self-describing rows `pN.tM rK:` with their units line), `corpus.py` (FTS5/BM25 passage index for 100–500 sources: triage, blind spots, syndication; `stats` = Chapman coverage + saturation curve), `claims.py` (claim ledger + contradiction axes incl. interest & sample), `units.py` (bp/%, RT/per-side, annual→holding cost, long/short financing, bp→R; also inside `calc.py`), `aliases.json` (acronym/synonym groups for corpus query expansion; per-study override), `audit.py` (seeded blind claim audit + error bound), `screening.py` (seeded sample of discarded leads + Clopper-Pearson loss bound), `next_step.py` (prints the single next action with its exact command), `gate.py` (full E1–E9 & R1–R13 audit), plus `check_report.py` / `verify_citations.py` |
+| `dr_engine/tools/` | **Yes** | `evidence.py` (fetch → snapshot → verified quote), `discover.py` (OpenAlex/CrossRef/arXiv-HTML/EuropePMC discovery, OpenAlex forward/backward snowballing, polite rate-limited client; logs result sets + `candidates.jsonl`), `calc.py` (deterministic AST `[C###]` calculations & Base/Bear/Stress decision + breakeven matrix), `formula.py` (Epistemic Index EI/100 & mechanical confidence ceiling), `extract_doc.py` (LangExtract grounded extractor), `parse_pdf.py` (pdfplumber PDF → snapshot; tables as quotable self-describing rows `pN.tM rK:` with their units line), `corpus.py` (FTS5/BM25 passage index for 100–500 sources: triage, blind spots, syndication; `stats` = Chapman coverage + saturation curve), `claims.py` (claim ledger + contradiction axes incl. interest & sample), `units.py` (bp/%, RT/per-side, annual→holding cost, long/short financing, bp→R; also inside `calc.py`), `aliases.json` (acronym/synonym groups for corpus query expansion; per-study override), `audit.py` (seeded blind claim audit + error bound), `screening.py` (seeded sample of discarded leads + Clopper-Pearson loss bound), `next_step.py` (prints the single next action with its exact command), `doctor.py` (is this machine ready: dependencies, FTS5, workspace; exact fix per problem), `gate.py` (full E1–E9 & R1–R13 audit), plus `check_report.py` / `verify_citations.py` |
 | `dr_engine/evals/` | **Yes** | `eval_runner.py` (openai/evals harness with 32-case epistemic benchmark covering E6–E8 and R3/R6–R10 with automated scorecards) |
 | `dr_engine/quant/` | **Yes** | `alpha_miner.py` (Symbolic formulaic alpha generator, turnover filter & cross-alpha orthogonality engine) |
 | `dr_engine/science/` | **Yes** | arXiv, OpenAlex, PubMed CLIs (working; stdlib HTTP fallback) |
@@ -61,9 +64,10 @@ Answer in the user's language (the user usually writes in Bulgarian).
 | `reports/` | Read for context | Final reports. Older ones (≤ 2026-10-28) predate the gates and are mostly uncited — do not treat their contents as verified facts |
 | `dr_engine/core/`, `dr_engine/cli.py` | **No (experimental; local only, not in the git repo)** | Autonomous engine. Audits in `docs/AUDIT_*.md` found the stance classifier and VoI gate unreliable. Do not run it in place of doing the research yourself, and never cite its output as evidence |
 | `docs/V4_ARCHITECTURE.md` | Read when changing the protocol | v4.0 design (Bulgarian): ingestion & triage, extraction, contradiction axes, three verification layers, EI critique & EI v2, roadmap |
-| `docs/AUDIT_*.md`, `docs/*BLUEPRINT.md` | Only if working on the engine | Engine design and audit history — large; skip for research tasks |
-| `references/` | Only if asked | Third-party repos kept for reference (~35 MB) |
-| `scratch/` | No | Old probe/patch scripts and intermediate files |
+| `docs/AUDIT_*.md`, `docs/*BLUEPRINT.md` | Only if working on the engine | Engine design and audit history — large; skip for research tasks. **Local only: not in the shared repo; skip if missing** |
+| `references/` | Only if asked | Third-party repos kept for reference (~35 MB). **Local only: skip if missing** |
+| `scratch/` | No | Old probe/patch scripts and intermediate files. **Local only: skip if missing** |
+| `CHANGELOG.md` | Read when updating | What changed in the protocol and tools, newest first |
 | `.venv/` | Run tools with it | Project Python environment |
 
 ## Agent Skills Management (`skills.sh`)
@@ -107,9 +111,14 @@ the workspace rules, skills, and reference files whenever new knowledge or tooli
 
 ## Working on the code
 
-- Python: `.venv\Scripts\python.exe` (Windows). Tests:
-  `.venv\Scripts\python.exe -m unittest discover -s tests -v`
-  (`tests/test_tier3_frontier.py` needs `pytest`, which is not in the venv yet.)
+- Python: `.venv\Scripts\python.exe` (Windows) / `.venv/bin/python`. Tests:
+  `python -m unittest tests.test_report_tools -v` (the shared repo's suite; CI runs it on Linux
+  and Windows for every push) and `python dr_engine/evals/eval_runner.py`. Local-only extra tests:
+  `python -m unittest discover -s tests -v` (`tests/test_tier3_frontier.py` needs `pytest`).
+- A new CLI must write UTF-8 (`sys.stdout.reconfigure(encoding="utf-8", errors="replace")` in its
+  `__main__` block — Windows pipes are cp1252) and print commands as `python dr_engine/...`, not
+  with a Windows-only venv path; a test enforces the first.
+- Record each change that alters what a study must do in `CHANGELOG.md`.
 - Keep `dr_engine/tools/` and `dr_engine/science/` dependency-light (stdlib + requests/bs4).
 - When changing the gates, run them on `reports/` to see the effect, and add a test in
   `tests/test_report_tools.py`.

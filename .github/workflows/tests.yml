@@ -1,0 +1,45 @@
+# The toolkit must work on a friend's fresh clone: install only requirements.txt, check the
+# machine, run the gate/tool tests and the epistemic benchmark, on Linux and Windows.
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: "3.10"
+          - os: ubuntu-latest
+            python: "3.13"
+          - os: windows-latest
+            python: "3.13"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: Install requirements
+        run: python -m pip install -r requirements.txt
+      - name: Doctor
+        run: python dr_engine/tools/doctor.py
+      - name: Tool and gate tests
+        run: python -m unittest tests.test_report_tools -v
+      - name: Epistemic evals
+        run: python dr_engine/evals/eval_runner.py

@@ -15,6 +15,8 @@ Commands (run from the project root):
   add         python dr_engine/tools/evidence.py add    --dir D --source S003 --sq K1 \
                   --tier T1 --kind de_jure --stance contradicts \
                   --quote "verbatim text" --claim "paraphrase" [--published YYYY-MM-DD]
+                  (empirical: --sample-period of the number's own table; refused without it
+                  when the page names a period near the quote)
   import      python dr_engine/tools/evidence.py import --dir D --url <url> --file captured.txt
               (page text copied from a browser tool when `fetch` is blocked; marked manual)
   log-search  python dr_engine/tools/evidence.py log-search --dir D --purpose K1 \
@@ -315,6 +317,98 @@ def cmd_import(args) -> int:
   return 0
 
 
+# ------------------------------------------------------- quote context & periods
+_MON = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+"
+_YM = rf"(?:{_MON})?(?:19|20)\d{{2}}(?:[./:-](?:0?[1-9]|1[0-2]|q[1-4])(?:[./-]\d{{1,2}})?)?"
+PERIOD_RE = re.compile(rf"\b({_YM})\s*(?:-|–|—|to|through|until|and|до|и)\s*({_YM})\b", re.I)
+SINCE_RE = re.compile(rf"\b(since|from|starting in|beginning in|от|след|от началото на)\s+({_YM})\b", re.I)
+YEAR4_RE = re.compile(r"\b(?:19|20)\d{2}\b")
+COPYRIGHT_RE = re.compile(r"©|\(c\)|copyright|авторск", re.I)
+PERIOD_BEFORE, PERIOD_AFTER = 1500, 500  # table headers sit above the row a number comes from
+
+
+def quote_span(quote: str, text: str) -> tuple[int, int] | None:
+  """(start, end) of a verified quote in the ORIGINAL snapshot: word by word, any whitespace or
+  punctuation between words, case-insensitive. The longest '...'-fragment is the anchor; the
+  others are looked for next to it."""
+  frags = [w for w in (re.findall(r"\w+", f) for f in re.split(r"\.\.\.|…", quote)) if w]
+  if not frags:
+    return None
+  pats = [re.compile(r"\W+".join(map(re.escape, w)), re.I) for w in frags]
+  k = max(range(len(frags)), key=lambda i: len(frags[i]))
+  m = pats[k].search(text)
+  if not m:
+    return None
+  start, end = m.start(), m.end()
+  for pat in pats[k + 1:]:
+    n = pat.search(text, end)
+    if n and n.start() - end < 5000:
+      end = n.end()
+  for pat in reversed(pats[:k]):
+    found = list(pat.finditer(text, max(0, start - 5000), start))
+    if found:
+      start = found[-1].start()
+  # punctuation the word match leaves out: "$400,000" -> "$", "4.2%" -> "%"
+  lead = re.match(r"\W*", quote).group().strip()
+  trail = re.search(r"\W*$", quote).group().strip()
+  if lead and text[max(0, start - len(lead)):start] == lead:
+    start -= len(lead)
+  if trail and text[end:end + len(trail)] == trail:
+    end += len(trail)
+  return start, end
+
+
+def _flat(s: str) -> str:
+  return re.sub(r"\s+", " ", s)
+
+
+def periods_near(text: str, span: tuple[int, int] | None,
+                 before: int = PERIOD_BEFORE, after: int = PERIOD_AFTER) -> list[str]:
+  """Year ranges ('2004.1-2020.12', 'January 2004 to 2020') and open starts ('since 1993') named
+  near the quote, nearest first, each tagged (above) / (below) / (in quote). A number belongs to
+  the period of its own table or paragraph, which is often not the paper's headline period."""
+  if not span:
+    return []
+  lo, hi = max(0, span[0] - before), span[1] + after
+  window = text[lo:hi]
+  s0, e0 = span[0] - lo, span[1] - lo
+
+  def tagged(m, label: str) -> tuple[float, str]:
+    where = "in quote" if m.start() < e0 and m.end() > s0 else ("above" if m.end() <= s0 else "below")
+    dist = 0 if where == "in quote" else (s0 - m.end() if where == "above" else m.start() - e0)
+    return dist, f"{label} ({where})"
+
+  found, ranges = [], []
+  for m in PERIOD_RE.finditer(window):
+    ranges.append((m.start(), m.end()))
+    if COPYRIGHT_RE.search(window[max(0, m.start() - 20):m.start()]):
+      continue  # "© 2010-2025 Firm" in a footer is not a sample period
+    found.append(tagged(m, f"{_flat(m.group(1))}-{_flat(m.group(2))}"))
+  for m in SINCE_RE.finditer(window):
+    if not any(m.start() < e and m.end() > s for s, e in ranges):  # 'from 2004 to 2020' is a range
+      found.append(tagged(m, f"{m.group(1).lower()} {_flat(m.group(2))}"))
+  out = []
+  for _, s in sorted(found):
+    if s not in out:
+      out.append(s)
+  return out[:6]
+
+
+def _year_span(s: str) -> tuple[int, int] | None:
+  ys = [int(y) for y in YEAR4_RE.findall(s or "")]
+  return (min(ys), max(ys)) if ys else None
+
+
+def context_excerpt(text: str, span: tuple[int, int] | None, width: int = 400) -> str:
+  """The passage around a quote, the quote marked with ⟪ ⟫, whitespace collapsed."""
+  if not span:
+    return ""
+  s, e = span
+  lo, hi = max(0, s - width), min(len(text), e + width)
+  return (("..." if lo else "") + _flat(text[lo:s]) + "⟪" + _flat(text[s:e]) + "⟫"
+          + _flat(text[e:hi]) + ("..." if hi < len(text) else ""))
+
+
 # ----------------------------------------------------------------------- add
 def _nearest(quote: str, text: str, width: int = 240) -> str:
   q, t = normalise(quote), normalise(text)
@@ -356,6 +450,18 @@ def cmd_add(args) -> int:
           f"Nearest passage in the snapshot:\n  {_nearest(args.quote, snap)}\n"
           f"Copy the exact words (join fragments with '...'), or drop the claim.")
     return 1
+  periods = periods_near(snap, quote_span(args.quote, snap))
+  given = (args.sample_period or "").strip()
+  if args.kind == "empirical" and periods and not given:
+    print(f"REFUSED: an empirical number belongs to a period, and {args.source} names "
+          f"{', '.join(periods)} near this quote (nearest first). Add --sample-period with the "
+          f"period of the exact table or paragraph the number comes from (not the paper's headline "
+          f"period), or --sample-period unknown if the page does not say.")
+    return 1
+  if given and periods and _year_span(given) and _year_span(given) not in {_year_span(x) for x in periods}:
+    print(f"NOTE: --sample-period {given} is not among the periods named near the quote "
+          f"({', '.join(periods)}). Fine if the period is defined elsewhere on the page; otherwise "
+          f"retract and re-add with the period of the table the number comes from.")
   evid_path = d / "evidence.jsonl"
   records = _jsonl(evid_path)
   q_norm = normalise(args.quote)
@@ -375,7 +481,8 @@ def cmd_add(args) -> int:
          "quote": args.quote, "claim": args.claim, "title": args.title or src.get("title", ""),
          "publisher": args.publisher or src.get("publisher", ""),
          "published": args.published or "", "page_date": src.get("page_date", ""),
-         "interest": args.interest or "", "sample_period": args.sample_period or "",
+         "interest": args.interest or "", "sample_period": given,
+         "context_periods": periods,
          "sample_type": args.sample_type or "",
          "accessed": src["fetched_at"][:10], "snapshot_sha256": src["sha256"]}
   _append(evid_path, rec)
@@ -519,7 +626,10 @@ def main(argv: list[str] | None = None) -> int:
                  help="academic (peer-reviewed) / regulator / independent, or with a stake: issuer "
                       "(the firm itself, broker PR) / affiliate (paid or affiliate review) / vendor "
                       "(whitepaper of a product seller)")
-  p.add_argument("--sample-period", help="period the evidence measures, e.g. 2000-2007")
+  p.add_argument("--sample-period",
+                 help="period the number measures, e.g. 2004.1-2020.12 (from its own table, not the "
+                      "paper's abstract); 'unknown' when the page does not say. Required for "
+                      "--kind empirical when the page names a period near the quote")
   p.add_argument("--sample-type", choices=SAMPLE_TYPES)
   p.set_defaults(fn=cmd_add)
   p = sub.add_parser("retract"); p.add_argument("--dir", required=True)

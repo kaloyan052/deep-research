@@ -31,7 +31,9 @@ from evidence import ROOT, _jsonl, load_evidence, study_dir_error  # noqa: E402
 T = "python dr_engine/tools/"
 EVIDENCE_ORDER = ("E3", "E4", "E1", "E2", "E6", "E5", "E7", "E8", "E9")
 COVERAGE_WORD_RE = re.compile(r"\b(coverage|saturat\w*|покрити\w*|насищ\w*)", re.I)
-REPORT_ORDER =("R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R10")
+SCREENING_WORD_RE = re.compile(r"\b(screening|скрининг\w*)", re.I)
+
+REPORT_ORDER = ("R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R10")
 HELP = {
     "E1": ("Restore the snapshot", T + "evidence.py fetch --dir {dir} --refresh <that source's URL>  "
            "(never edit sources/*.txt by hand)"),
@@ -169,13 +171,19 @@ def next_step(d: Path) -> dict:
       return _step("Re-measure coverage on the current corpus", f"{T}corpus.py stats --dir {dir_s} --save",
                    f"coverage.json counted {cov.get('sources')} sources, sources/ now has {len(index)}")
     report = d / "report.md"
-    if (cov.get("verdict") != "SATURATED" and report.exists()
-        and not COVERAGE_WORD_RE.search(report.read_text(encoding="utf-8"))):
-      return _step("Continue discovery, or state the coverage verdict in Limitations",
-                   f"follow the blind spots printed by {T}corpus.py stats --dir {dir_s} (back to discovery), "
-                   f"or add this line to report.md Limitations (no numbers in it, so it needs no citation): "
-                   f"'- Coverage: {cov.get('verdict')} (`corpus.py stats`, `screening.py bound`) - <why it "
-                   f"could not be reached, in words>'", "; ".join(cov.get("reasons", [])[:2]))
+    text = report.read_text(encoding="utf-8") if report.exists() else ""
+    need_cov = cov.get("verdict") != "SATURATED" and not COVERAGE_WORD_RE.search(text)
+    need_scr = s["cp_upper"] > screening_mod.MAX_LOSS and not SCREENING_WORD_RE.search(text)
+    if report.exists() and (need_cov or need_scr):
+      said = ([f"Coverage: {cov.get('verdict')}"] if need_cov else []) + (
+          ["the screening audit leaves a high bound on relevant leads discarded unread"] if need_scr else [])
+      why = ([f"coverage {cov.get('verdict')}: " + "; ".join(cov.get("reasons", [])[:2])] if need_cov else []) + (
+          [f"screening loss bound {s['cp_upper']:.0%} > {screening_mod.MAX_LOSS:.0%}"] if need_scr else [])
+      return _step("Continue discovery, or state the gap in Limitations",
+                   f"follow the blind spots printed by {T}corpus.py stats --dir {dir_s} and fetch more of the "
+                   f"discarded leads (back to discovery), or add this line to report.md Limitations (no numbers "
+                   f"in it, so it needs no citation): '- {', and '.join(said)} (`corpus.py stats`, "
+                   f"`screening.py bound`) - <why it could not be closed, in words>'", "; ".join(why))
 
   # 5. report draft
   report = d / "report.md"

@@ -44,6 +44,7 @@ from evidence import _jsonl, study_dir_error  # noqa: E402
 from verify_citations import _canon  # noqa: E402
 
 VERDICTS = ("relevant", "irrelevant", "duplicate", "unreachable")
+MAX_LOSS = 0.20  # loss bound above which gate.py warns (E9) and next_step.py asks for a Limitations line
 MIN_N, MAX_N = 20, 50
 PLAN_ROW_RE = re.compile(r"^\|\s*((?:SQ|K)\d+)\s*\|\s*([^|]+)\|")
 

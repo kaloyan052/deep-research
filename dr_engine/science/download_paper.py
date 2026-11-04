@@ -115,5 +115,7 @@ def download_paper(args: argparse.Namespace):
 
 
 if __name__ == "__main__":
+  if hasattr(sys.stdout, "reconfigure"):  # Windows pipes default to cp1252
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
   main_args = parse_args()
   download_paper(main_args)
