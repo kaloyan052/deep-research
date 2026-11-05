@@ -33,7 +33,7 @@ EVIDENCE_ORDER = ("E3", "E4", "E1", "E2", "E6", "E5", "E7", "E8", "E9", "E10")
 COVERAGE_WORD_RE = re.compile(r"\b(coverage|saturat\w*|покрити\w*|насищ\w*)", re.I)
 SCREENING_WORD_RE = re.compile(r"\b(screening|скрининг\w*)", re.I)
 
-REPORT_ORDER = ("R1", "R14", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R15", "R10")
+REPORT_ORDER = ("R1", "R14", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R15", "R16", "R10")
 HELP = {
     "E10": ("Build and verify the Structural Causal Model (DAG) and counterfactual simulation",
             T + "causal.py init --dir {dir}  ->  add >= 4 nodes (add-node), >= 3 edges incl. a confounder/collider "

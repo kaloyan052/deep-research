@@ -474,6 +474,7 @@ class Gate:
                    f"the kill budget is unverifiable; log searches with corpus.py --log, "
                    f"discover.py --dir, or evidence.py log-search --opened")
     self._discovery_check(d, strict)
+    self._frontier_evidence_check(d, len(searches))
     by_sq: dict[str, list[str]] = {}
     for eid, r in self.evidence.items():
       by_sq.setdefault(r.get("sq", ""), []).append(eid)
@@ -867,6 +868,29 @@ class Gate:
           self.F("L1", f"{r['id']}: quote no longer (or never) on the live page {url}")
 
 
+  # E11: v6.0 Frontier EVSI / Optimal-Stopping Gate
+  def _frontier_evidence_check(self, d: Path, n_searches: int) -> None:
+    import frontier as frontier_mod
+    q_path = d / "quotas.json"
+    quotas = {}
+    if q_path.exists():
+      try:
+        quotas = json.loads(q_path.read_text(encoding="utf-8"))
+      except json.JSONDecodeError:
+        pass
+    evsi_path = d / "evsi.json"
+    if not evsi_path.exists() and not quotas.get("require_v6_frontier"):
+      return
+    for ferr in frontier_mod.verify_frontier(d):
+      if ferr.startswith(("evsi.json", "tournament.json", "dynamics.json", "topology.json")):
+        self.F("E11", ferr)
+    if evsi_path.exists():
+      evsi = frontier_mod._load(d, "evsi.json")
+      if evsi and frontier_mod._hash_ok(d, "evsi.json", evsi):
+        if evsi.get("verdict") == frontier_mod.VERDICT_STOP and n_searches < 12:
+          self.F("E11", f"evsi.json says STOP_SATURATED after only {n_searches} searches (< 12 minimum) - "
+                       "the saturation verdict contradicts the E4 search floor")
+
   # E10: Structural Causal DAG & Backdoor Identifiability Gate (v5.0)
   def _causal_stage_check(self, d: Path) -> None:
     q_path = d / "quotas.json"
@@ -905,6 +929,20 @@ class Gate:
         dial_mod.build_dialectics(self.d)
       for derr in dial_mod.verify_dialectics(self.d):
         self.F("R15", derr)
+
+    # R16: v6.0 Frontier synthesis gate (tournament / dynamics / topology / EVSI in the report)
+    v6_present = any((self.d / n).exists() for n in
+                     ("tournament.json", "dynamics.json", "topology.json", "evsi.json"))
+    if v6_present or quotas.get("require_v6_frontier"):
+      import frontier as frontier_mod
+      for ferr in frontier_mod.verify_frontier(self.d):
+        self.F("R16", ferr)
+      if not re.search(r"\b(evsi|optimal stopping|value of information|tournament|nash|equilibrium|"
+                       r"tipping|eigenvalue|cascade|blind spot|topolog|manifold|saturat)\b",
+                       report_text, re.I):
+        self.F("R16", "report.md does not discuss the v6.0 frontier results - paste "
+                     "`frontier.py render --dir <dir>` and analyze EVSI verdict, tournament "
+                     "equilibrium, tipping point / dominant eigenvalue, and claim-space blind spots")
 
 def main(argv: list[str] | None = None) -> int:
   if hasattr(sys.stdout, "reconfigure"):

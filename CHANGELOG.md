@@ -3,6 +3,38 @@
 Newest first. **Study** lists what an agent must now do differently in a research folder;
 **Tools** lists everything else.
 
+## 2026-11-05 — Frontier Engine v6.0: EVSI Optimal Stopping, Epistemic Tournaments, Tipping Points, Claim-Space Topology
+
+Study:
+- **Bayesian EVSI / Optimal Stopping (`frontier.py evsi` / Gate E11):** Discovery now has a
+  mathematical stop rule. A Beta-Bernoulli posterior over P(thesis true) is updated by every
+  evidence record weighted by source-tier reliability; the analytic EVSI of the next source is
+  compared to a cost threshold — `STOP_SATURATED` when the information space is saturated,
+  `CONTINUE` otherwise. E11 rejects a saturation verdict that contradicts the E4 search floor.
+- **Adversarial Epistemic Tournament (`frontier.py tournament`):** PROPONENT vs SKEPTIC vs
+  RED_TEAM score the claim ledger deterministically with Kelly belief bets; convergence is an
+  exact Nash check (no profitable unilateral deviation).
+- **Non-Linear Dynamics & Tipping Points (`frontier.py dynamics`):** The causal DAG is
+  linearized into a Jacobian; the dominant eigenvalue (power iteration) detects critical slowing
+  down (|λ| ≥ 0.9), a Gaussian-elimination bifurcation scan locates the parameter flip point,
+  and a threshold cascade simulates contagion.
+- **Topological Claim Space (`frontier.py topology`):** Citation + conflict graph with Tarjan
+  articulation points/bridges, unchallenged-claim blind spots, and a spectral (power-iteration)
+  narrative-manifold layout — no external embedding models.
+- **Gate R16 / next_step.py:** When v6.0 artifacts exist (or `quotas.json` sets
+  `require_v6_frontier`), `gate.py` verifies their sha256 integrity and requires the report to
+  discuss the EVSI verdict, tournament equilibrium, tipping point/eigenvalue, and blind spots.
+
+Tools:
+- New `dr_engine/tools/frontier.py` (stdlib only, cp1252-safe stdout) with subcommands
+  `evsi | tournament | dynamics | topology | verify | render`, writing sha256-stamped
+  `evsi.json` / `tournament.json` / `dynamics.json` / `topology.json` into the study folder.
+- `gate.py` gains gates E11 (evidence stage) and R16 (report stage); `next_step.py` orders them
+  with exact fix commands. Full backward compatibility with E1–E10 / R1–R15 study folders.
+- `tests/test_v6_frontier.py`: 13 unit tests covering posterior math, EVSI/EVPI bounds, Nash
+  deviation sweep, eigenvalue/bifurcation/cascade correctness, Tarjan topology, tamper
+  detection, and gate E11/R16 integration. Blueprint: `docs/V6_ARCHITECTURE.md`.
+
 ## 2026-11-05 — Frontier Causal & Dialectical Engine (v5.0)
 
 Study:
