@@ -1,0 +1,9 @@
+{
+  "min_words": 10000,
+  "min_evidence": 50,
+  "min_calculations": 20,
+  "min_review_quotes_cited": 15,
+  "min_candidate_profiles": 5,
+  "require_causal_dag": true,
+  "require_dialectics": true
+}

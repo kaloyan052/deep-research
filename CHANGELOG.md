@@ -3,6 +3,28 @@
 Newest first. **Study** lists what an agent must now do differently in a research folder;
 **Tools** lists everything else.
 
+## 2026-11-05 — Frontier Causal & Dialectical Engine (v5.0)
+
+Study:
+- **Pearl Structural Causal Models & Counterfactuals (`causal.py` / Gate E10):** Studies define mechanism
+  DAGs in `causal_dag.json` with baseline metrics, sign, elasticity betas, physical mechanisms, and explicit
+  confounder forks or selection colliders. Pearl's d-separation verifies Backdoor Criterion identifiability
+  before simulating counterfactual `do(X = x')` shocks.
+- **Dialectical Conflict Synthesis & Heterogeneity (`dialectics.py` / Gate R15):** Contradictions from
+  `claims.py` undergo structured thesis/antithesis debate with automated 8-axis divergence classification.
+  DerSimonian–Laird random-effects meta-analysis and Cochran's Q / I² tests strictly prohibit naive
+  averaging/pooling when I² > 50%, enforcing non-empty regime-partitioning rules.
+- **Multi-Agent Swarm Orchestration (`swarm.py`):** 5-phase subagent dispatch (Planner -> Scouts ->
+  Extractor -> Synthesizers -> Blind Auditor) with file-lock sharding (`swarm/shards/*.jsonl`) preventing
+  write contention and context rot.
+- **Hierarchical Table Extraction (`parse_pdf.py`):** Academic regression tables with parenthesized
+  standard errors/t-stats and multi-level headers with forward-fill are flattened into quotable rows.
+- **Epistemic Index v5.0 (`formula.py`):** Triangulation T_D upgrades to an information-theoretic model
+  measuring Shingle Jaccard overlap, rare numeric syndication signatures, Inverse-HHI effective clusters N_eff,
+  and normalized Shannon entropy to penalize echo chambers.
+- **Protocol 5.0 Initialization:** `evidence.py init` now stamps `protocol: "5.0"` and automatically initializes
+  `quotas.json` requiring both Causal DAG and Dialectics verification.
+
 ## 2026-11-04 — Anti-Goodhart Architecture & Completeness Engine (v4.2)
 
 Study:

@@ -46,7 +46,7 @@ from traps import check_source_tier_inflation  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 TEMPLATES = ROOT / ".agents" / "skills" / "deep-research" / "templates"
-PROTOCOL = "4.1"  # written to study.json by init; gate.py enforces the rules of this version
+PROTOCOL = "5.0"  # written to study.json by init; gate.py enforces the rules of this version
 TIERS = ("T1", "T2", "T3", "T4", "T5")
 KINDS = ("de_jure", "de_facto", "empirical", "context", "review_pain")
 STANCES = ("supports", "contradicts", "context")
@@ -719,8 +719,8 @@ def cmd_init(args) -> int:
   slug = re.sub(r"[^a-z0-9-]+", "-", args.slug.lower()).strip("-")
   d = ROOT / "research" / f"{today()}-{slug}"
   (d / "sources").mkdir(parents=True, exist_ok=True)
-  for name in ("plan.md",):
-    if not (d / name).exists():
+  for name in ("plan.md", "quotas.json"):
+    if (TEMPLATES / name).exists() and not (d / name).exists():
       shutil.copy(TEMPLATES / name, d / name)
   for name in ("evidence.jsonl", "searches.jsonl", "notes.md"):
     (d / name).touch()

@@ -485,6 +485,7 @@ class Gate:
         self.F("E5", f"{k} is '{info['verdict']}' but has no evidence records with --sq {k}")
     if not any(r.get("stance") == "contradicts" for r in self.evidence.values()):
       self.W("E5", "no 'contradicts' evidence at all - was the red-team pass real?")
+    self._causal_stage_check(d)
 
   # -------------------------------------------------------------- report
   def report_stage(
@@ -637,6 +638,7 @@ class Gate:
     self._conflicts_check(units)
     self._audit_check(text, require_audit, max_error)
     self._completeness_check(text, units)
+    self._frontier_v5_report_check(text)
 
     # R10: Mechanical Confidence Cap Enforcement via formula.py
     self.scorecard = formula.compute_epistemic_score(self.d, report_path=report)
@@ -864,6 +866,45 @@ class Gate:
         if match_score(r["quote"], page["text"]) < 1.0:
           self.F("L1", f"{r['id']}: quote no longer (or never) on the live page {url}")
 
+
+  # E10: Structural Causal DAG & Backdoor Identifiability Gate (v5.0)
+  def _causal_stage_check(self, d: Path) -> None:
+    q_path = d / "quotas.json"
+    req_dag = False
+    if q_path.exists():
+      try:
+        req_dag = bool(json.loads(q_path.read_text(encoding="utf-8")).get("require_causal_dag"))
+      except json.JSONDecodeError:
+        pass
+    if (d / "causal_dag.json").exists() or req_dag:
+      import causal as causal_mod
+      for cerr in causal_mod.verify_dag(d):
+        self.F("E10", cerr)
+
+  # R15: Dialectical Heterogeneity & Causal Counterfactual Synthesis Gate (v5.0)
+  def _frontier_v5_report_check(self, report_text: str) -> None:
+    q_path = self.d / "quotas.json"
+    quotas = {}
+    if q_path.exists():
+      try:
+        quotas = json.loads(q_path.read_text(encoding="utf-8"))
+      except json.JSONDecodeError:
+        pass
+
+    if (self.d / "causal_dag.json").exists() or quotas.get("require_causal_dag"):
+      import causal as causal_mod
+      dag_errs = causal_mod.verify_dag(self.d)
+      for cerr in dag_errs:
+        self.F("R15", f"causal DAG — {cerr}")
+      if not re.search(r"\b(do\s*\(|counterfactual|контрафактич|confounder|колайдер|collider)\b", report_text, re.I):
+        self.F("R15", "report.md does not discuss the causal DAG confounders/colliders or counterfactual do(X) simulations (paste `causal.py render`)")
+
+    if (self.d / "dialectics.json").exists() or quotas.get("require_dialectics"):
+      import dialectics as dial_mod
+      if not (self.d / "dialectics.json").exists():
+        dial_mod.build_dialectics(self.d)
+      for derr in dial_mod.verify_dialectics(self.d):
+        self.F("R15", derr)
 
 def main(argv: list[str] | None = None) -> int:
   if hasattr(sys.stdout, "reconfigure"):

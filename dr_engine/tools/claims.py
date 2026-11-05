@@ -74,10 +74,13 @@ def key(c: dict) -> str:
   return f"{norm(c['subject'])} | {norm(c['attribute'])}"
 
 
-def numeric(value: str) -> float | None:
-  if not NUM_ONLY_RE.match(value or ""):
+def numeric(value: Any) -> float | None:
+  if isinstance(value, (int, float)):
+    return float(value)
+  s = str(value or "").strip()
+  if not NUM_ONLY_RE.match(s):
     return None
-  raw = re.sub(r"[$€£%\s]", "", value)
+  raw = re.sub(r"[$€£%\s]", "", s)
   raw = raw.replace(",", "") if re.fullmatch(r"[-+]?\d{1,3}(,\d{3})+(\.\d+)?", raw) else raw.replace(",", ".")
   try:
     return float(raw)

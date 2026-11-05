@@ -39,6 +39,7 @@
 !/tests/
 /tests/*
 !/tests/test_report_tools.py
+!/tests/test_v5_frontier.py
 
 # Design document of the protocol
 !/docs/

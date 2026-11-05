@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -155,6 +156,13 @@ def _host(url: str) -> str:
     return ""
 
 
+STOPWORDS_BG_EN = {
+    "the", "and", "for", "that", "with", "from", "this", "are", "was", "were", "have", "has",
+    "not", "but", "what", "all", "when", "can", "more", "than", "into", "only", "other",
+    "или", "при", "като", "това", "която", "които", "след", "през", "към", "със", "над", "под",
+}
+
+
 def _effective_tier(raw_tier: str, url: str, publisher: str = "") -> str:
   """Downgrades inflated source tiers to their true epistemic tier (T5 community, T4 encyclopedia)."""
   t = (raw_tier or "T5").upper()
@@ -165,8 +173,135 @@ def _effective_tier(raw_tier: str, url: str, publisher: str = "") -> str:
   return t if t in TIER_WEIGHTS else "T5"
 
 
+def _shingles(text: str, k: int = 3) -> set[tuple[str, ...]]:
+  words = [
+      w for w in re.findall(r"[a-zа-я0-9]{3,}", text.lower())
+      if w not in STOPWORDS_BG_EN
+  ]
+  if len(words) < k:
+    return {tuple(words)} if words else set()
+  return {tuple(words[i:i + k]) for i in range(len(words) - k + 1)}
+
+
+COMMON_ROUND_NUMS = {"0", "1", "2", "3", "4", "5", "10", "20", "50", "100", "500", "1000"}
+
+
+def _rare_numbers(text: str) -> set[str]:
+  """Extracts specific multi-digit numbers (e.g. '453691', '19.42', '7.8') acting as syndication fingerprints."""
+  cleaned = re.sub(r"\b(?:19|20)\d{2}\b", " ", text)  # ignore calendar years
+  nums = set()
+  for m in re.finditer(r"\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b|\b\d+\.\d+\b|\b\d{3,}\b", cleaned):
+    val = m.group(0).replace(",", "")
+    if val not in COMMON_ROUND_NUMS:
+      nums.add(val)
+  return nums
+
+
+def compute_entropy_and_independence(
+    evidence: dict[str, dict], index: dict[str, dict]
+) -> dict[str, Any]:
+  """Measures semantic entropy, echo-chamber syndication clusters, and effective source count N_eff."""
+  if not evidence:
+    return {
+        "raw_sources": 0,
+        "raw_domains": 0,
+        "independent_clusters": 0,
+        "effective_clusters_N_eff": 0.0,
+        "independence_ratio": 0.0,
+        "shannon_entropy_norm": 0.0,
+        "echo_chamber_multiplier": 1.0,
+        "syndicated_pairs": [],
+    }
+
+  by_src: dict[str, dict[str, Any]] = {}
+  for eid, r in evidence.items():
+    sid = r.get("source", eid)
+    src_meta = index.get(sid, {})
+    url = r.get("url") or src_meta.get("url", "")
+    host = _host(url) or sid
+    pub = (r.get("publisher") or src_meta.get("publisher") or host).lower().strip()
+    entry = by_src.setdefault(sid, {
+        "host": host, "pub": pub, "quotes": [], "shingles": set(), "nums": set(), "eids": [],
+        "max_words": 0,
+    })
+    q = r.get("quote", "")
+    entry["quotes"].append(q)
+    entry["shingles"] |= _shingles(q, k=3)
+    entry["nums"] |= _rare_numbers(q)
+    words = [w for w in re.findall(r"[a-zа-я0-9]{3,}", q.lower()) if w not in STOPWORDS_BG_EN]
+    entry["max_words"] = max(entry["max_words"], len(words))
+    entry["eids"].append(eid)
+
+  sids = sorted(by_src.keys())
+  parent = {s: s for s in sids}
+
+  def find(x: str) -> str:
+    while parent[x] != x:
+      parent[x] = parent[parent[x]]
+      x = parent[x]
+    return x
+
+  def union(a: str, b: str) -> None:
+    ra, rb = find(a), find(b)
+    if ra != rb:
+      parent[rb] = ra
+
+  syndicated_pairs: list[str] = []
+  for i in range(len(sids)):
+    for j in range(i + 1, len(sids)):
+      s1, s2 = sids[i], sids[j]
+      d1, d2 = by_src[s1], by_src[s2]
+      if d1["host"] == d2["host"] or (d1["pub"] and d1["pub"] == d2["pub"]):
+        union(s1, s2)
+        continue
+      sh1, sh2 = d1["shingles"], d2["shingles"]
+      jaccard = (len(sh1 & sh2) / len(sh1 | sh2)) if (sh1 and sh2) else 0.0
+      shared_rare = d1["nums"] & d2["nums"]
+      min_words = min(d1["max_words"], d2["max_words"])
+
+      is_synd = False
+      if len(shared_rare) >= 2 and jaccard >= 0.08:
+        is_synd = True
+      elif min_words >= 12 and jaccard >= 0.28:
+        is_synd = True
+
+      if is_synd:
+        union(s1, s2)
+        syndicated_pairs.append(f"{s1}({d1['host']})~{s2}({d2['host']})")
+
+  clusters: dict[str, int] = {}
+  for s in sids:
+    root = find(s)
+    clusters[root] = clusters.get(root, 0) + len(by_src[s]["eids"])
+
+  n_clusters = len(clusters)
+  total_eids = sum(clusters.values())
+  hhi = sum((cnt / total_eids) ** 2 for cnt in clusters.values()) if total_eids else 1.0
+  n_eff = round(1.0 / hhi, 2) if hhi > 0 else 0.0
+
+  entropy = -sum((cnt / total_eids) * math.log(cnt / total_eids) for cnt in clusters.values() if cnt > 0)
+  denom = math.log(max(n_clusters, 5))
+  h_norm = round(min(1.0, entropy / denom), 3) if denom > 0 else 0.0
+
+  raw_domains = len({by_src[s]["host"] for s in sids})
+  indep_ratio = round(n_clusters / max(1, raw_domains), 3)
+  penalty = round(0.60 + 0.40 * min(1.0, (0.5 * indep_ratio + 0.5 * h_norm)), 3)
+
+  return {
+      "raw_sources": len(sids),
+      "raw_domains": raw_domains,
+      "independent_clusters": n_clusters,
+      "effective_clusters_N_eff": n_eff,
+      "independence_ratio": indep_ratio,
+      "shannon_entropy_norm": h_norm,
+      "echo_chamber_multiplier": penalty,
+      "syndicated_pairs": syndicated_pairs,
+  }
+
+
 def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) -> dict[str, Any]:
-  """Computes the deterministic Epistemic Index (EI) and Mechanical Confidence Ceiling."""
+  """Computes the deterministic Epistemic Index (EI v5.0) and Mechanical Confidence Ceiling."""
+  import gate as gate_mod  # noqa: E402
   d = Path(study_dir)
   index = {r["id"]: r for r in _jsonl(d / "sources" / "index.jsonl") if "id" in r}
   evidence = {r["id"]: r for r in load_evidence(d) if "id" in r}
@@ -176,11 +311,7 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
   plan_path = d / "plan.md"
   sqs, kills = _parse_plan(plan_path.read_text(encoding="utf-8")) if plan_path.exists() else ([], {})
 
-  # 1. Authority Score (A_E) using inflation-corrected effective tiers
-  # Verified customer pain reviews (kind="review_pain" or marketplace reviews) are primary
-  # Voice-of-Customer (VoC) empirical observations in product research: they carry weight 0.85
-  # in A_E and do not dilute the core T1-T3 primary denominator.
-  import gate as gate_mod  # noqa: E402
+  # 1. Authority Score (A_E) with Voice-of-Customer (review_pain) awareness
   tier_counts = {t: 0 for t in ("T1", "T2", "T3", "T4", "T5")}
   eff_tiers: dict[str, str] = {}
   weighted_sum = 0.0
@@ -226,8 +357,9 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
     primary_share = (tier_counts["T1"] + tier_counts["T2"] + tier_counts["T3"]) / n_ev if n_ev > 0 else 0.0
   manual_share = (manual_count / n_ev) if n_ev > 0 else 0.0
 
-  # 2. Triangulation & Coverage Score (T_D)
-  domain_factor = min(1.0, len(non_t5_domains) / 5.0)
+  # 2. Triangulation, Semantic Entropy & Anti-Syndication Score (T_D v5.0)
+  ent = compute_entropy_and_independence(evidence, index)
+  cluster_factor = min(1.0, ent["effective_clusters_N_eff"] / 5.0)
   by_sq_records: dict[str, list[dict]] = {}
   for r in evidence.values():
     by_sq_records.setdefault(r.get("sq", ""), []).append(r)
@@ -235,7 +367,11 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
   if sqs:
     sq_primary = sum(
         1 for sq in sqs
-        if any(eff_tiers.get(r.get("id", "")) in ("T1", "T2", "T3") for r in by_sq_records.get(sq, []))
+        if any(
+            eff_tiers.get(r.get("id", "")) in ("T1", "T2", "T3")
+            or gate_mod.is_review_pain_evidence(r, index.get(r.get("source", ""), {}))
+            for r in by_sq_records.get(sq, [])
+        )
     ) / len(sqs)
     sq_multi = sum(
         1 for sq in sqs
@@ -244,9 +380,9 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
     ) / len(sqs)
   else:
     sq_primary = primary_share
-    sq_multi = 1.0 if len(non_t5_domains) >= 2 else 0.0
+    sq_multi = 1.0 if ent["independent_clusters"] >= 2 else 0.0
 
-  t_d = 0.45 * domain_factor + 0.35 * sq_primary + 0.20 * sq_multi
+  t_d = (0.45 * cluster_factor + 0.35 * sq_primary + 0.20 * sq_multi) * ent["echo_chamber_multiplier"]
 
   # 3. Disconfirmation & Kill-Survival Score (S_K)
   per_purpose_searches: dict[str, int] = {}
@@ -290,8 +426,6 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
   declared_conf, declared_line, declared_raw = None, None, ""
 
   if rep.exists():
-    # Lazy import gate.numbers / gate.material to avoid circular top-level import
-    import gate as gate_mod  # noqa: E402
     text = rep.read_text(encoding="utf-8", errors="replace")
     declared_conf, declared_line, declared_raw = extract_declared_confidence(text)
     units = cr._units(cr._strip_non_prose(text.splitlines()))
@@ -314,11 +448,11 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
         for ce in calcs[c].get("cited_eids", []):
           if ce in evidence and ce not in eids:
             eids.append(ce)
-      if not eids:
+      if not eids and not cids:
         continue
       bound: set = set()
       for e in eids:
-        bound |= gate_mod.numbers(quotes[e])
+        bound |= gate_mod.numbers(quotes[e], strip_structural=False)
       for c in cids:
         bound |= calc_nums[c]
       missing = gate_mod.material(gate_mod.numbers(u.text, strip_structural=True)) - bound
@@ -328,7 +462,7 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
       elif (
           FORMAL_CALC_RE.search(u.text)
           or (re.search(r"\b(Estimate|Оценка)\b", u.text, re.I) and SAMPLE_SIZE_RE.search(u.text))
-          or (has_inf_marker and (u.kind == "table_row" or bool(cids)))
+          or (has_inf_marker and (u.kind == "table_row" or bool(cids) or bool(eids)))
       ):
         inline_calc_units += 1
 
@@ -378,6 +512,10 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
   elif len(non_t5_domains) < 3:
     _cap_at("Medium", f"only {len(non_t5_domains)} independent non-community domain(s) (< 3 required for High)")
 
+  if ent["syndicated_pairs"] and ent["effective_clusters_N_eff"] < 2.2 and n_ev >= 5:
+    _cap_at("Medium", f"echo-chamber / syndication cluster risk: N_eff={ent['effective_clusters_N_eff']} "
+                      f"effective clusters across {ent['raw_domains']} domains")
+
   if manual_share > 0.25:
     _cap_at("Medium", f"manual snapshots account for {manual_share:.0%} of evidence (> 25%)")
 
@@ -414,6 +552,11 @@ def compute_epistemic_score(study_dir: Path, report_path: Path | None = None) ->
           "primary_t1_t3_share": round(primary_share, 3),
           "non_t5_domains": len(non_t5_domains),
           "all_domains": len(all_domains),
+          "independent_clusters": ent["independent_clusters"],
+          "effective_clusters_N_eff": ent["effective_clusters_N_eff"],
+          "shannon_entropy_norm": ent["shannon_entropy_norm"],
+          "echo_chamber_multiplier": ent["echo_chamber_multiplier"],
+          "syndicated_pairs": ent["syndicated_pairs"],
           "searches_count": len(searches),
           "calculations_count": len(calcs),
           "kills_total": n_kills,
@@ -441,7 +584,8 @@ def format_scorecard_markdown(score: dict[str, Any]) -> str:
       f"$S_K={c['kill_survival_S_K']:.2f}$, $V_Q={c['quant_grounding_V_Q']:.2f}$)",
       f"- **Mechanical Confidence Ceiling:** **{score['max_confidence']}**",
       f"- **Source Tier Distribution:** T1={tc['T1']}, T2={tc['T2']}, T3={tc['T3']}, T4={tc['T4']}, T5={tc['T5']} "
-      f"(Primary/Peer-Reviewed T1–T3 = {m['primary_t1_t3_share']:.0%} across {m['non_t5_domains']} independent domains)",
+      f"(Primary/Peer-Reviewed T1–T3 = {m['primary_t1_t3_share']:.0%} across {m['non_t5_domains']} independent domains; "
+      f"$N_{{\\text{{eff}}}}={m.get('effective_clusters_N_eff', 0):.2f}$, $H_{{\\text{{norm}}}}={m.get('shannon_entropy_norm', 0):.2f}$)",
       f"- **Verified Calculations (`[C###]`):** {m['calculations_count']} deterministic record(s); "
       f"direct quote/calc binding = {m['claim_units_direct_bound']}/{m['claim_units_total']} claim units",
       f"- **Limiting Factors:** {lim}",

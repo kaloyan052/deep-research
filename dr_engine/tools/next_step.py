@@ -29,12 +29,20 @@ import screening as screening_mod  # noqa: E402
 from evidence import ROOT, _jsonl, load_evidence, study_dir_error  # noqa: E402
 
 T = "python dr_engine/tools/"
-EVIDENCE_ORDER = ("E3", "E4", "E1", "E2", "E6", "E5", "E7", "E8", "E9")
+EVIDENCE_ORDER = ("E3", "E4", "E1", "E2", "E6", "E5", "E7", "E8", "E9", "E10")
 COVERAGE_WORD_RE = re.compile(r"\b(coverage|saturat\w*|покрити\w*|насищ\w*)", re.I)
 SCREENING_WORD_RE = re.compile(r"\b(screening|скрининг\w*)", re.I)
 
-REPORT_ORDER = ("R1", "R14", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R10")
+REPORT_ORDER = ("R1", "R14", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R15", "R10")
 HELP = {
+    "E10": ("Build and verify the Structural Causal Model (DAG) and counterfactual simulation",
+            T + "causal.py init --dir {dir}  ->  add >= 4 nodes (add-node), >= 3 edges incl. a confounder/collider "
+            "(add-edge), run " + T + "causal.py simulate --dir {dir} --intervene <node>=<val> --target <outcome>  "
+            "and verify with " + T + "causal.py verify --dir {dir}"),
+    "R15": ("Resolve dialectical conflicts and embed the Causal DAG / Dialectical Matrix in report.md",
+            T + "dialectics.py build --dir {dir}  ->  " + T + "dialectics.py resolve --dir {dir} --id D### "
+            "--synthesis \"...\" --partition-rule \"...\"  ->  paste " + T + "causal.py render --dir {dir} and "
+            + T + "dialectics.py render --dir {dir} into report.md"),
     "R14": ("Expand the report to meet all volume and table quotas in quotas.json",
             "do NOT delete or truncate sections; add the missing table rows, complaint clusters, "
             "verbatim quotes (" + T + "evidence.py add-batch), calculations (" + T + "calc.py eval), "
