@@ -40,11 +40,13 @@
 /tests/*
 !/tests/test_report_tools.py
 !/tests/test_v5_frontier.py
+!/tests/test_v6_frontier.py
 
 # Design document of the protocol
 !/docs/
 /docs/*
 !/docs/V4_ARCHITECTURE.md
+!/docs/V6_ARCHITECTURE.md
 
 # Empty working folders (studies and reports themselves are never committed)
 !/research/

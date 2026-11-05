@@ -29,12 +29,19 @@ import screening as screening_mod  # noqa: E402
 from evidence import ROOT, _jsonl, load_evidence, study_dir_error  # noqa: E402
 
 T = "python dr_engine/tools/"
-EVIDENCE_ORDER = ("E3", "E4", "E1", "E2", "E6", "E5", "E7", "E8", "E9", "E10")
+EVIDENCE_ORDER = ("E3", "E4", "E1", "E2", "E6", "E5", "E7", "E8", "E9", "E10", "E11")
 COVERAGE_WORD_RE = re.compile(r"\b(coverage|saturat\w*|покрити\w*|насищ\w*)", re.I)
 SCREENING_WORD_RE = re.compile(r"\b(screening|скрининг\w*)", re.I)
 
 REPORT_ORDER = ("R1", "R14", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R13", "R11", "R15", "R16", "R10")
 HELP = {
+    "E11": ("Compute and verify the v6.0 Frontier EVSI saturation and artifact integrity",
+            T + "frontier.py evsi --dir {dir} --cost 0.01  ->  " + T + "frontier.py tournament --dir {dir}  ->  "
+            + T + "frontier.py dynamics --dir {dir}  ->  " + T + "frontier.py topology --dir {dir}  ->  "
+            + T + "frontier.py verify --dir {dir}"),
+    "R16": ("Synthesize Frontier Engine v6.0 findings in report.md",
+            T + "frontier.py render --dir {dir}  ->  embed in report.md and analyze the EVSI saturation verdict, "
+            "adversarial tournament Nash equilibrium, tipping point / dominant eigenvalue, and claim-space blind spots"),
     "E10": ("Build and verify the Structural Causal Model (DAG) and counterfactual simulation",
             T + "causal.py init --dir {dir}  ->  add >= 4 nodes (add-node), >= 3 edges incl. a confounder/collider "
             "(add-edge), run " + T + "causal.py simulate --dir {dir} --intervene <node>=<val> --target <outcome>  "
