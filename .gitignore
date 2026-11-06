@@ -38,9 +38,7 @@
 # Tests for the tools
 !/tests/
 /tests/*
-!/tests/test_report_tools.py
-!/tests/test_v5_frontier.py
-!/tests/test_v6_frontier.py
+!/tests/test_*.py
 
 # Design document of the protocol
 !/docs/
@@ -48,13 +46,14 @@
 !/docs/V4_ARCHITECTURE.md
 !/docs/V6_ARCHITECTURE.md
 
-# Empty working folders (studies and reports themselves are never committed)
+# Empty working folders (studies themselves are never committed; audit reports tracked)
 !/research/
 /research/*
 !/research/.gitkeep
 !/reports/
 /reports/*
 !/reports/.gitkeep
+!/reports/ENGINE_AUDIT_*.md
 
 # Never, anywhere
 __pycache__/

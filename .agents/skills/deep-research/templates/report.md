@@ -20,6 +20,43 @@
 <2–5 sentences: the direct answer, the operational recommendation, and why alternatives lose.
 Every number, date, fee, clause, or statistic carries [E###] (and [C###] if computed).>
 
+## Epistemic Alpha Delta
+
+> Mandatory for every v12.0 study (Rule R18). A report that merely repeats the
+> first search-engine answer has **zero epistemic alpha**. The trench ground-truth
+> must cite a snapshot-verified `[E###]` that the consensus section does NOT cite,
+> and the two bodies must be genuinely different (shingle-Jaccard < 0.70).
+
+### Superficial Consensus
+
+<What a 5-second generic search or a standard LLM answers today: name the stale
+leader, the published record, the vendor claim or the "standard consensus". State
+it plainly so the delta is measurable.>
+
+### Trench Ground-Truth (The Alpha)
+
+<What our multilingual trench miners / O_dethrone / immutable snapshots actually
+proved: the silent breaking change, the 511 kg upset reported by an eyewitness,
+the unreleased flash preview, the undisclosed fee. Cite `[E###]` verbatim here —
+at least one evidence ID not used above.>
+
+### Delta Impact
+
+<Why acting on the superficial consensus would have caused a financial,
+operational or strategic loss. Quantify it with a measured number, `[E###]` or
+`[C###]`: e.g. "settling at 510 kg would have mispriced a 250000 USD sponsorship
+and cost the operator a full production incident [E007, C001]".>
+
+### Active Dethroning Log (Rule B11, only when a superlative is asserted)
+
+| Leader | Metric | 30/90-day vectors run | Status | Checked at | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| <leader> | <metric> | >= 8 | intact / dethroned | YYYY-MM-DD | [E###] |
+
+<Mirror this record into `manifest.dethroning[]`: `status`, `vectors_run`,
+`window_days` (30 or 90), `checked_at`, `recency_verified`, `evidence_ids`.
+If O_dethrone found an upset, name `superseded_by` in prose and above.>
+
 ## Key findings
 
 | # | Finding | Kind & Tier | Confidence | Evidence |

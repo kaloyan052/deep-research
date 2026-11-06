@@ -103,5 +103,18 @@
     "acknowledgment_patterns": [
       "(?:pillar\\s*1\\s*сравнение|baseline\\s*comparison|opportunity\\s*cost)"
     ]
+  },
+  {
+    "id": "TRAP_ACADEMIC_CITATION_LAG_FAST_FRONTIER",
+    "name": "Academic Citation Lag in Fast-Moving AI / Finance",
+    "status": "TRAP",
+    "patterns": [
+      "(?:bloomberggpt|fingpt)[^\\\\n]*?(?:най-добър|sota|state-of-the-art|водещ)",
+      "(?:най-добър|sota|state-of-the-art|водещ)[^\\\\n]*?(?:bloomberggpt|fingpt)"
+    ],
+    "refutation": "Academic registries (OpenAlex, arXiv) sorted by citations have a 2-3 year structural latency. Frontier AI evaluations require primary release feeds and institutional practitioner benchmarks (e.g. Claude Opus 5.5, Walleye Capital suite).",
+    "acknowledgment_patterns": [
+      "(?:citation\\\\s*lag|академично\\\\s*забавяне|claude\\\\s*opus\\\\s*5\\\\.5|walleye)"
+    ]
   }
 ]

@@ -2576,5 +2576,46 @@ class AssumptionCalculationAuditTest(unittest.TestCase):
     self.assertNotEqual(audit._item_key(a), audit._item_key(b))
 
 
+class V10EpistemicHardeningTest(unittest.TestCase):
+  """v10.0 gate invariants (see CHANGELOG 2026-11-06 and SKILL.md §9).
+
+  Kept in the shared suite so CI on Linux/Windows exercises the fail-closed
+  behaviour whenever the verification gates are touched.
+  """
+
+  def test_filter_crash_is_a_hard_failure_not_a_warning(self):
+    from dr_engine.tools import epistemic_guard
+    with unittest.mock.patch(
+        "dr_engine.tools.v9_bullshit_filters.run_v9_bullshit_filters",
+        side_effect=RuntimeError("simulated filter crash")):
+      fails, _ = epistemic_guard.run_filters_fail_closed(
+          "# Report", {"domain": "quant", "verdict": "GO"}, {})
+    self.assertTrue(any("B0 (Filter Integrity / FAIL-CLOSED)" in f for f in fails))
+
+  def test_global_disarm_keyword_no_longer_passes_b2(self):
+    from dr_engine.tools import v9_bullshit_filters
+    report = ("We will deploy a two-way real-time sync across channels. "
+              + "Unrelated filler sentence. " * 30 + " avoid")
+    fails, _ = v9_bullshit_filters.run_v9_bullshit_filters(
+        report,
+        {"domain": "saas", "verdict": "GO", "architecture_mode": "read_only_diff"},
+        {},
+    )
+    self.assertTrue(any("B2 (Operational Physics)" in f for f in fails))
+
+  def test_b9_fires_outside_tech_domains(self):
+    from dr_engine.tools import v9_bullshit_filters
+    fails, _ = v9_bullshit_filters.run_v9_bullshit_filters(
+        "The best AI model for this task is X.",
+        {"domain": "quant", "verdict": "GO", "evidence": []}, {},
+    )
+    self.assertTrue(any("B9 (Uncalibrated SOTA Claim)" in f for f in fails))
+
+  def test_bundled_benchmark_seed_is_marked_unverified(self):
+    from dr_engine.tools.benchmark_radar import BenchmarkRadar
+    self.assertFalse(BenchmarkRadar.provenance("finance")["verified"])
+    self.assertIn("NOT VERIFIED", BenchmarkRadar.render_snapshot("finance"))
+
+
 if __name__ == "__main__":
   unittest.main()
