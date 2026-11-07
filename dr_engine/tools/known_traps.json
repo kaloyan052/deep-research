@@ -155,5 +155,57 @@
     "acknowledgment_patterns": [
       "(?:\\$549|equity[- ]based|по\\s+equity|видео\\s+интервю|video\\s+interview|€399|грешни|refuted)"
     ]
+  },
+  {
+    "id": "KILLED_EDGE_GOLD_INTRADAY_ORB_LBMA",
+    "name": "Gold LBMA / London / Asian Intraday Breakouts & ORB",
+    "status": "KILLED",
+    "patterns": [
+      "(?:gold|xau(?:usd)?|gc)\\s*(?:london|lbma|asian|pm\\s*auction|10:30|15:00|tas)[^.\\n]*?(?:orb|breakout|sweep|reversal|momentum|alpha|strategy)",
+      "(?:orb|breakout|sweep|reversal|momentum|alpha|strategy)[^.\\n]*?(?:gold|xau(?:usd)?|gc)\\s*(?:london|lbma|asian|pm\\s*auction|10:30|15:00|tas)"
+    ],
+    "refutation": "Lab experiments on 20.5 years of 1m tick data empirically killed intraday gold breakouts/auctions: Asian Sweep (t_2x = -26.06), London ORB (net t = +0.32, 2xCOST = -3.92). MT5 CFD spread of $0.50/oz erases the gross edge.",
+    "acknowledgment_patterns": [
+      "(?:killed|refuted|dead|2xcost|t_2x\\s*=\\s*-(?:3\\.92|26\\.06)|spread\\s*\\$?0\\.50|erases\\s*the\\s*edge|отхвърлен|убит|не\\s*оцелява)"
+    ]
+  },
+  {
+    "id": "KILLED_EDGE_CRUDE_OIL_INTRADAY",
+    "name": "WTI Crude Oil Pit Open / EIA Drift / NY ORB",
+    "status": "KILLED",
+    "patterns": [
+      "(?:crude|oil|wti|usoil|cl)\\s*(?:pit\\s*open|ny\\s*orb|cash\\s*open|inventory|eia|drift|displacement)[^.\\n]*?(?:alpha|edge|strategy|momentum)",
+      "(?:alpha|edge|strategy|momentum)[^.\\n]*?(?:crude|oil|wti|usoil|cl)\\s*(?:pit\\s*open|ny\\s*orb|cash\\s*open|inventory|eia|drift|displacement)"
+    ],
+    "refutation": "Lab experiments empirically falsified intraday crude oil momentum/ORB: Crude NY Displacement (t_2x = -2.31), Post-EIA inventory release drift (WR 28.1%, t = -1.29). MT5 CFD spread of $0.04/barrel erases edge.",
+    "acknowledgment_patterns": [
+      "(?:killed|refuted|dead|t_2x\\s*=\\s*-2\\.31|spread\\s*\\$?0\\.04|erases\\s*the\\s*edge|отхвърлен|убит|не\\s*оцелява)"
+    ]
+  },
+  {
+    "id": "KILLED_EDGE_EUROPEAN_CASH_OPEN_ORB",
+    "name": "European Cash Open DAX / UK100 / EU50 ORB",
+    "status": "KILLED",
+    "patterns": [
+      "(?:dax|de30|de40|uk100|eu50|ftse)\\s*(?:european\\s*cash\\s*open|cash\\s*open\\s*orb|orb30|range\\s*breakout)[^.\\n]*?(?:alpha|edge|strategy)",
+      "(?:alpha|edge|strategy)[^.\\n]*?(?:dax|de30|de40|uk100|eu50|ftse)\\s*(?:european\\s*cash\\s*open|cash\\s*open\\s*orb|orb30|range\\s*breakout)"
+    ],
+    "refutation": "Lab battery A1–A7 on honest clocks empirically killed European index cash opens (DAX ORB mean net -0.0184R, 4.8x DD breach). CFD spreads of 0.064R to 0.098R destroy net returns.",
+    "acknowledgment_patterns": [
+      "(?:killed|refuted|dead|a1.a7|cost_r|отхвърлен|убит|не\\s*оцелява)"
+    ]
+  },
+  {
+    "id": "SYNTHETIC_REGULATORY_CITATION_BAN",
+    "name": "Synthetic Regulatory or Central Bank Citation Ban",
+    "status": "KILLED",
+    "patterns": [
+      "(?:bis|bank\\s*for\\s*international\\s*settlements|cftc|federal\\s*reserve|sec|ecb)[^.\\n]*?(?:\\b(?:ftmo|brightfunded|myfundedfutures|topstep|apex)\\b|\\b\\+?\\d+\\.\\d+r\\b|\\b1r\\b)",
+      "(?:\\b(?:ftmo|brightfunded|myfundedfutures|topstep|apex)\\b|\\b\\+?\\d+\\.\\d+r\\b|\\b1r\\b)[^.\\n]*?(?:bis|bank\\s*for\\s*international\\s*settlements|cftc|federal\\s*reserve|sec|ecb)"
+    ],
+    "refutation": "Macroeconomic and regulatory institutions (BIS, CFTC, Federal Reserve, SEC, ECB) do not write about retail prop trading firms (FTMO, BrightFunded) or calculate in trader R-multiples. Any such attribution is an ungrounded synthetic hallucination.",
+    "acknowledgment_patterns": [
+      "(?:synthetic|fabricated|hallucination|banned|измислен|фалшив)"
+    ]
   }
 ]

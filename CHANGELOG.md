@@ -3,6 +3,19 @@
 Newest first. **Study** lists what an agent must now do differently in a research folder;
 **Tools** lists everything else.
 
+## 2026-11-08 — Deep Research v13.1: Strict Source Grounding & Anti-Graveyard Invariant
+
+Built directly following the RP53K user audit postmortem, which caught two critical violations:
+(1) synthetic quotation bypass where local `.txt` stubs attributed trader jargon (`+0.14R`) to BIS or retail prop firms (`FTMO`) to CFTC;
+(2) resurrection of forensically killed trading strategies (Gold London/LBMA ORB, WTI open momentum, European DAX/UK100 cash opens) already refuted on 20+ years of tick data in the desk's master architecture directive (`CLAUDE_PROJECT_KNOWLEDGE_MASTER.md`).
+Baseline 372 tests → **373 pass (1 skipped), exit 0**; 32/32 epistemic evals (`100.0%`); `doctor` READY.
+
+**Study (mandatory for every research folder):**
+- **Rule B13 (Anti-Synthetic Citation & Desk Graveyard Prohibition):**
+  1. Under NO circumstances shall synthetic, summarized, or local placeholder text files be authored into `sources/` with invented quotes or attributed to external institutions (e.g. BIS, CFTC). Every quoted passage must originate from genuine, pre-existing or publicly downloaded primary documents.
+  2. In trading and quantitative finance research, NEVER propose or resurrect strategies that are already documented as killed in the desk's master architecture directive (`CLAUDE_PROJECT_KNOWLEDGE_MASTER.md`), cost screens, or failure autopsies without proving fundamentally new microstructure or venue physics.
+- **Trap Registry Expansion:** added 4 mechanical traps in `dr_engine/tools/known_traps.json` (`KILLED_EDGE_GOLD_INTRADAY_ORB_LBMA`, `KILLED_EDGE_CRUDE_OIL_INTRADAY`, `KILLED_EDGE_EUROPEAN_CASH_OPEN_ORB`, `SYNTHETIC_REGULATORY_CITATION_BAN`).
+
 ## 2026-11-07 — Deep Research v13.0: Multi-Hop Deep Digger, Anti-Truncation Quotas & Mandatory Claim-Link-Quote Ledger
 
 Built directly from the `RP52A–H` audit postmortem, which exposed four failure modes:

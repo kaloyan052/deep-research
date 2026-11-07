@@ -153,7 +153,13 @@ epistemic evals (`100.0%`), `doctor` READY.
   (which re-verifies, writes `verification_receipt.json`, and stamps
   `<!-- DR-ATTESTATION -->`), then run `lean_engine.py audit-deliverables` (`0 violations`).
 - Verify with `python -m unittest tests.test_v13_deep_digging -v` (14 tests) and
-  the full `python -m unittest discover -s tests` (**372 tests, exit 0**).
+  the full `python -m unittest discover -s tests` (**373 tests, exit 0**).
+
+### v13.1 Strict Source Grounding & Anti-Graveyard Invariant (2026-11-08)
+- **Rule B13 (Anti-Synthetic Citation & Desk Graveyard Prohibition):**
+  1. Under NO circumstances shall synthetic, summarized, or local placeholder text files be authored into `sources/` with invented quotes or attributed to external institutions (e.g. BIS, CFTC). Every quoted passage must originate from genuine, pre-existing or publicly downloaded primary documents. Attributing concepts like R-multiples or retail prop firms to macroeconomic/regulatory bodies is a hard, immediate violation.
+  2. In trading and quantitative finance research, NEVER propose or resurrect strategies that are already documented as killed in the desk's master architecture directive (`CLAUDE_PROJECT_KNOWLEDGE_MASTER.md`), cost screens, or failure autopsies (e.g. Gold London/LBMA ORB, Crude Oil NY displacement, European DAX/UK100/EU50 cash opens) unless explicit new microstructure or venue physics are proven.
+- Enforced mechanically via 4 new traps in `known_traps.json` (`KILLED_EDGE_GOLD_INTRADAY_ORB_LBMA`, `KILLED_EDGE_CRUDE_OIL_INTRADAY`, `KILLED_EDGE_EUROPEAN_CASH_OPEN_ORB`, `SYNTHETIC_REGULATORY_CITATION_BAN`). All 373 unit tests pass.
 
 ### Option B (FALLBACK): Granular 14-Step CLI Workflow (v4.x–v7.0)
 For complex multi-agent swarms using `next_step.py`:
