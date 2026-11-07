@@ -324,6 +324,14 @@ def render_ead_template(
     )
 
 
+def _version_at_least_12(val: Any) -> bool:
+    s = str(val or "").strip().lstrip("vV")
+    m = re.match(r"^(\d+)(?:\.(\d+))?$", s)
+    if not m:
+        return False
+    return (int(m.group(1)), int(m.group(2) or 0)) >= (12, 0)
+
+
 def is_v12_protocol(
     study_dir: Path | str | None,
     manifest: dict[str, Any] | None,
@@ -332,14 +340,14 @@ def is_v12_protocol(
 ) -> bool:
     """Decide whether the mandatory v12 gates apply to this study.
 
-    A study is v12 when its manifest or its ``study_spec.json`` declares
-    ``protocol_version: "12.0"``, or when the verifier is explicitly forced.
+    A study is v12+ when its manifest or its ``study_spec.json`` declares
+    ``protocol_version >= 12.0`` (including ``"13.0"``), or when forced.
     Pre-v12 studies stay on the v11 gate stack (no retroactive failure).
     """
     if force:
         return True
     if isinstance(manifest, dict):
-        if str(manifest.get("protocol_version", "")).strip() == PROTOCOL_VERSION:
+        if _version_at_least_12(manifest.get("protocol_version")):
             return True
         if isinstance(manifest.get("epistemic_alpha_delta"), dict):
             return True
@@ -350,7 +358,7 @@ def is_v12_protocol(
         try:
             if p.exists():
                 spec = json.loads(p.read_text(encoding="utf-8"))
-                if isinstance(spec, dict) and str(spec.get("protocol_version", "")).strip() == PROTOCOL_VERSION:
+                if isinstance(spec, dict) and _version_at_least_12(spec.get("protocol_version")):
                     return True
         except (OSError, ValueError, TypeError):
             # Unreadable spec must not silently disable the gate: callers that

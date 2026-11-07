@@ -299,22 +299,49 @@ def decode_bytes(raw: bytes, content_type: str = "") -> DecodedText:
     return DecodedText(raw.decode(fallback, errors="replace"), fallback, True, notes)
 
 
+HARD_BOT_WALL_RE = re.compile(
+    r"(just a moment|checking your browser|attention required|"
+    r"verify you are human|you have been blocked|unusual traffic|"
+    r"ddos protection|_cf_chl_opt|cf-browser-verification)",
+    re.I,
+)
+
 def detect_bot_wall(status: int | None, headers: dict[str, str], text: str) -> bool:
-    """Detect explicit block statuses, Cloudflare markers, and interstitial copy.
+    """Detect explicit block statuses, Cloudflare challenges, and interstitial copy.
 
     HTTP 429 is deliberately NOT a bot wall: it is a *retryable* rate limit
-    (in ``TRANSIENT_STATUSES``). Treating it as a hard block would discard the
-    Retry-After budget and turn a recoverable throttle into a silent gap.
+    (in ``TRANSIENT_STATUSES``). Normal ``HTTP 200`` pages served behind the
+    Cloudflare CDN (``Server: cloudflare``, ``Cf-Mitigated: None``, real HTML
+    content) are NOT bot walls unless an actual interstitial challenge appears.
     """
     if status in BLOCK_STATUSES:
         return True
+    hdrs = headers if isinstance(headers, dict) else {}
     server = " ".join(
-        str(headers.get(k, "")) for k in ("Server", "X-Powered-By", "Cf-Mitigated")
+        str(hdrs.get(k) or hdrs.get(k.lower()) or "")
+        for k in ("Server", "X-Powered-By", "Cf-Mitigated")
     ).lower()
-    if "cloudflare" in server or "challenge" in server:
+    if "challenge" in server:
         return True
-    if text and BOT_WALL_RE.search(text[:4000]):
+    body = text if isinstance(text, str) else ""
+    if "cloudflare" in server and not body.strip():
         return True
+    if not body:
+        return False
+
+    head = body[:6000]
+    if HARD_BOT_WALL_RE.search(head):
+        return True
+
+    # Strip <script>, <link>, and <noscript> boilerplate before checking soft
+    # markers ("cloudflare", "captcha", "enable javascript") so CDN beacons,
+    # reCAPTCHA widgets, and SPA <noscript> tags on large HTTP 200 pages never
+    # false-trigger a bot-wall rejection.
+    cleaned_head = re.sub(r"<(script|noscript|style)[^>]*>.*?</\1>", " ", head, flags=re.I | re.S)
+    cleaned_head = re.sub(r"<link[^>]*>", " ", cleaned_head, flags=re.I)
+    if BOT_WALL_RE.search(cleaned_head):
+        if (status is not None and status >= 400) or len(body.strip()) < 2500:
+            return True
     return False
 
 

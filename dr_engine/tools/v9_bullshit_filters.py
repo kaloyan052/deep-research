@@ -96,6 +96,7 @@ REFUTED_TEXTBOOK_ANOMALIES = {
     "london 4pm fix": "Lab P31/FXFIX01 (t = -11.09): Fix window widening killed reversal edge.",
     "naive turn of the month": "Front-run by T-5 to T-1 pension rebalance flows; classical T+1..T+3 decayed.",
     "unfiltered moving average crossover": "Negative net expectancy after spread and slippage.",
+    "funding dip rebound": "Lab RP52E: BTC 8h funding > 5 bp occurred 0 times in 2022/2025/2026; pre-2020 t = 0.61 << 3.43.",
 }
 
 # B4: Structural mechanisms that pass the ChatGPT Falsification Test

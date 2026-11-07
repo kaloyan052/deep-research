@@ -553,3 +553,66 @@ strings with an encoding declaration; unsafe targets never contact mirrors.
 | EAD validation / scaffold | `ead_gate.validate_ead_section` / `render_ead_template` |
 | Force v12 gates on a legacy study | `python dr_engine/tools/lean_engine.py verify --dir D --strict-v12` |
 | v12.0 regression suite | `python -m unittest tests.test_v12_golden_nugget -v` (36 tests) |
+
+## 12. v13.0 — Multi-Hop Deep Digger, Anti-Truncation Quotas & Mandatory Claim-Link-Quote Ledger
+
+Closes all four failure modes exposed by the `RP52A–H` postmortem (lazy 15–30 line
+summaries bypassing `lean_engine`, missing URL/quote ledgers, shallow 1-page
+skimming that missed Help Center/PDF T&Cs, and uncalculated hype labels like
+`MAXIMUM CONVICTION GO` / `11.8x` / `~100-150 occurrences/year`). 14 new
+adversarial tests; full suite **372 pass / 1 skipped, exit 0**; 32/32 epistemic
+evals (`100.0%`); `doctor` READY.
+
+### 12.1 Frontier 1 — Multi-Hop Deep Digger (`deep_digger.py` & `lean_engine.py ingest --deep`)
+- **4-Vector Open-Web Discovery (`discover_web_leads`):** `auto_spec.generate` runs
+  `deep_web_digger` alongside OpenAlex/arXiv/community/trench collectors across
+  four vectors (`official_primary`, `terms_and_rules`, `fine_print_limits`,
+  `adversarial_postmortem`) via `DDGS` + keyless DuckDuckGo HTML fallback.
+- **Table- & Schema-Preserving HTML Snapshots (`html_to_structured_snapshot`):**
+  renders HTML `<table>` pricing/rule matrices as pipe-delimited `Col1 | Col2 | Col3`
+  rows and extracts JSON-LD (`FAQPage`, `Product`/`Offer`, `Article`) plus Next.js
+  `__NEXT_DATA__` Q&A objects so collapsed accordion FAQs remain verbatim-quotable.
+- **Automatic Multi-Hop Spidering & PDF Clause Extraction (`deep_dig_urls`):**
+  follows internal `/terms`, `/faq`, `/rules`, `help.*`, Intercom/Zendesk helpdesks,
+  and linked `.pdf` schedules (`parse_pdf.pdf_snapshot`) up to `max_depth=2` hops
+  while skipping locale mirrors and login/cart noise. Enabled automatically for all
+  v13 specs during `lean_engine.py ingest`.
+
+### 12.2 Frontier 2 — Rule R19: Anti-Truncation & Deep-Digging Floor
+v11's `R17` (`IDI = 1000 / word_count * ... >= 100`) divided by `word_count` with
+no prose floor, creating a Goodhart loophole where a 20-line stub passed easily.
+`depth_and_ledger_gate.validate_depth_quotas` pairs `R17` with a hard lower floor:
+`>= 1,000` prose words, `>= 5` distinct snapshotted sources, `>= 8` verified
+`[E###]` quotes, `>= 2` Markdown tables, `>= 5` `## ` sections, and `>= 4` finite
+`python:model` variables. Reports can neither be truncated nor padded with fluff.
+
+### 12.3 Frontier 3 — Rule R20: Mandatory `Claim → URL → Verbatim Quote` Ledger
+Every v13 `report.md` MUST include an inline Markdown table (`Claim | Primary URL | Verbatim Quote | ID`
+in English or Bulgarian `Твърдение | Източник / Линк | Дословен цитат | ID`) with
+`>= 8` rows. Every row's `[E###]` must be snapshot-verified, its clickable URL's
+registrable domain must match `sources/index.jsonl`, and its quote cell must appear
+verbatim in `sources/S###.txt`.
+
+### 12.4 Frontier 4 — Rule B12 & Deliverable Attestation Guard (Rule R21)
+- **Rule B12 (`run_b12_anti_hallucination_filter`):** hard-fails marketing hype
+  verdicts (`MAXIMUM CONVICTION GO`, `GUARANTEED EDGE`), standalone numeric
+  multipliers (`11.8x`, `10.4x`) not computed in `python:model` or quoted in a
+  locally cited `[E###]`, and empirical frequency claims (`~100-150 occurrences/year`)
+  lacking a paragraph-local `[E###]` quote or `[C###]` dataset count variable.
+- **Rule R21 (`lean_engine.py export` & `audit-deliverables`):** `verify` writes a
+  tamper-evident `verification_receipt.json` (SHA-256 of `report.md` + `sources/index.jsonl`).
+  Deliverables enter `reports/` ONLY via `lean_engine.py export --dir <study> --out reports/<NAME>.md`,
+  which re-runs `verify --strict-v13` and stamps `<!-- DR-ATTESTATION -->`. Writing
+  raw `.md` files straight into `reports/` or editing numbers post-export fails
+  `lean_engine.py audit-deliverables`.
+
+### 12.5 v13.0 tools
+
+| Need | Command / module |
+| :-- | :-- |
+| Crawl seed URLs + T&C/FAQ/PDF subpages into a study | `python dr_engine/tools/deep_digger.py dig --dir research/<dir> --discover-web --query "<topic>"` |
+| Deep ingest (multi-hop + PDF + tables + BM25) | `python dr_engine/tools/lean_engine.py ingest --dir research/<dir> --deep` |
+| Verify study with full v13 R19/R20/B12 stack | `python dr_engine/tools/lean_engine.py verify --dir research/<dir> --strict-v13` |
+| Export verified & attested deliverable to `reports/` | `python dr_engine/tools/lean_engine.py export --dir research/<dir> --out reports/<NAME>.md --strict-v13` |
+| Scan `reports/` for unverified bypass files or tampering | `python dr_engine/tools/lean_engine.py audit-deliverables` |
+| v13.0 regression suite | `python -m unittest tests.test_v13_deep_digging -v` (14 offline tests) |

@@ -36,15 +36,21 @@ _workspace_root = Path(__file__).resolve().parent.parent.parent
 if str(_workspace_root) not in sys.path:
     sys.path.insert(0, str(_workspace_root))
 
+from dr_engine.tools.depth_and_ledger_gate import (  # noqa: E402
+    DEFAULT_V13_QUOTAS,
+    PROTOCOL_VERSION_V13,
+    render_claim_ledger_scaffold,
+)
 from dr_engine.tools.dethrone import (  # noqa: E402
     RECENCY_WINDOWS_DAYS,
     build_dethroning_vectors,
     detect_superlative_claims,
     extract_leader_value,
 )
-from dr_engine.tools.ead_gate import PROTOCOL_VERSION, render_ead_template  # noqa: E402
+from dr_engine.tools.ead_gate import render_ead_template  # noqa: E402
 
-USER_AGENT = "Mozilla/5.0 (compatible; DR-AutoSpec/12.0; +https://dr-engine.local/epistemic)"
+PROTOCOL_VERSION = PROTOCOL_VERSION_V13
+USER_AGENT = "Mozilla/5.0 (compatible; DR-AutoSpec/13.0; +https://dr-engine.local/epistemic)"
 
 # v10.0: fail-loud collector provenance. v9.0 swallowed every network error
 # with `except Exception: pass`, so a total blackout emitted a "complete"
@@ -565,7 +571,8 @@ def optimize_lead_diversity(
 def generate_autonomous_study_spec(
     prompt: str,
     offline_only: bool = False,
-    max_urls: int = 10,
+    max_urls: int = 18,
+    max_subpages: int = 12,
 ) -> dict[str, Any]:
     """End-to-end Turn 0 compiler with fail-loud collector provenance.
 
@@ -632,11 +639,41 @@ def generate_autonomous_study_spec(
         )
 
     if not offline_only:
-        # 1. Primary scientific discovery (OpenAlex + arXiv), recency-ranked.
-        candidates.extend(query_openalex_works(skeleton["search_vectors"]["primary_academic"], max_results=4))
-        candidates.extend(query_arxiv_preprints(skeleton["search_vectors"]["primary_academic"], max_results=2))
+        # 0. v13.0 Deep Multi-Vector Web & Official Docs / T&Cs / FAQ Discovery.
+        try:
+            from dr_engine.tools.deep_digger import discover_web_leads
+            web_leads, web_tel = discover_web_leads(
+                prompt,
+                entities=skeleton["entities"],
+                domain=skeleton["domain"],
+                max_per_vector=5,
+                max_total=16,
+            )
+            for wl in web_leads:
+                candidates.append(CandidateLead(
+                    title=str(wl.get("title") or wl["url"]),
+                    url=str(wl["url"]),
+                    host=str(wl.get("host") or "web"),
+                    source_type=f"web_{wl.get('vector', 'primary')}",
+                    inline_text="",
+                    score=float(wl.get("score") or 30.0),
+                    pub_year=0,
+                ))
+            _report(
+                "deep_web_digger",
+                len(web_leads) > 0,
+                f"{len(web_leads)} unique primary/T&C/FAQ web leads across 4 vectors",
+            )
+            for err in web_tel.get("errors", []):
+                _report("deep_web_digger_warn", False, err)
+        except Exception as exc:
+            _report("deep_web_digger", False, f"{type(exc).__name__}: {exc}")
+
+        # 1. Primary scientific discovery (OpenAlex + arXiv), recency-ranked (v13 expanded).
+        candidates.extend(query_openalex_works(skeleton["search_vectors"]["primary_academic"], max_results=8))
+        candidates.extend(query_arxiv_preprints(skeleton["search_vectors"]["primary_academic"], max_results=4))
         # 2. Adversarial Skeptic Swarm scientific query (K1 disconfirmation).
-        candidates.extend(query_openalex_works(skeleton["search_vectors"]["skeptic_k1"], max_results=2))
+        candidates.extend(query_openalex_works(skeleton["search_vectors"]["skeptic_k1"], max_results=4))
 
         # 3. Practitioner & Community discovery via `community_engine.py`.
         try:
@@ -644,12 +681,12 @@ def generate_autonomous_study_spec(
             pain_hits = search_community_discussions(
                 skeleton["core_focus"],
                 platforms=["reddit", "hn", "stackexchange"],
-                target_kind="review_pain", limit_per_platform=2,
+                target_kind="review_pain", limit_per_platform=4,
             )
             tech_hits = search_community_discussions(
                 skeleton["core_focus"],
                 platforms=["reddit", "hn", "stackexchange"],
-                target_kind="technical_lead", limit_per_platform=2,
+                target_kind="technical_lead", limit_per_platform=4,
             )
             for h in pain_hits + tech_hits:
                 url = str(h.get("url") or "")
@@ -701,10 +738,10 @@ def generate_autonomous_study_spec(
         except Exception as exc:
             _report("benchmark_radar", False, f"{type(exc).__name__}: {exc}")
 
-        # 5. Deep Trench & Obscure Practitioner Miner (v10.0 telemetry).
+        # 5. Deep Trench & Obscure Practitioner Miner (v10.0 telemetry, v13 expanded).
         try:
             from dr_engine.tools.trench_miner import mine_all_trenches, get_last_ledger_summary
-            trench_items = mine_all_trenches(prompt, domain=skeleton["domain"], max_total_items=4)
+            trench_items = mine_all_trenches(prompt, domain=skeleton["domain"], max_total_items=8)
             led = get_last_ledger_summary()
             _report(
                 "trench_miner", led.get("succeeded", 0) > 0,
@@ -762,7 +799,7 @@ def generate_autonomous_study_spec(
             "NOT research-ready; check collector_provenance and network access."
         )
 
-    selected, expected_neff = optimize_lead_diversity(candidates, max_per_host=2, max_total=max_urls)
+    selected, expected_neff = optimize_lead_diversity(candidates, max_per_host=3, max_total=max_urls)
     inline_sources: dict[str, str] = {}
     remote_urls: list[str] = []
     for lead in selected:
@@ -782,9 +819,16 @@ def generate_autonomous_study_spec(
         "sub_questions": skeleton["sub_questions"],
         "kill_hypotheses": skeleton["kill_hypotheses"],
         "adversarial_search_vectors": skeleton["search_vectors"],
-        # v12.0: this marker makes the EAD (R18) and dethroning (B11) gates
-        # MANDATORY at verification time for every study generated from v12.
+        # v13.0: enforces R18+B11 (v12) AND R19+R20+R21+B12 (v13 Deep-Digging & Claim Ledger).
         "protocol_version": PROTOCOL_VERSION,
+        "deep_digging": {
+            "enabled": True,
+            "max_depth": 2,
+            "max_subpages": max(0, int(max_subpages)),
+        },
+        "depth_quotas": dict(DEFAULT_V13_QUOTAS),
+        "claim_ledger_required": True,
+        "claim_ledger_scaffold": render_claim_ledger_scaffold(),
         "dethroning": dethroning,
         "ead_scaffold": render_ead_template(),
         "ead_required_sections": [
@@ -808,6 +852,7 @@ def cmd_generate(args: argparse.Namespace) -> int:
         args.prompt,
         offline_only=args.offline,
         max_urls=args.max_urls,
+        max_subpages=getattr(args, "max_subpages", 12),
     )
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -889,9 +934,13 @@ def cmd_selftest(_args: argparse.Namespace) -> int:
     assert build_adversarial_spec_skeleton("Which LLM is SOTA")["domain"] == "ai"
     assert len(build_adversarial_spec_skeleton("Which LLM is SOTA")["kill_hypotheses"]) == 3
 
-    # 5. v12.0: every spec is v12, and a superlative prompt spawns the
-    #    Active Dethroning Protocol with computed 30/90-day windows.
-    assert spec["protocol_version"] == "12.0"
+    # 5. v12.0 + v13.0: every spec is v13.0 (backward-compatible with v12 gates),
+    #    carries deep_digging + depth_quotas + claim_ledger_scaffold, and a superlative
+    #    prompt spawns the Active Dethroning Protocol with computed 30/90-day windows.
+    assert spec["protocol_version"] == "13.0"
+    assert spec["deep_digging"]["enabled"] is True and spec["deep_digging"]["max_subpages"] >= 8
+    assert spec["depth_quotas"]["min_words"] >= 1000 and spec["claim_ledger_required"] is True
+    assert "Claim-Link-Quote" in spec["claim_ledger_scaffold"]
     assert "ead_scaffold" in spec and len(spec["ead_required_sections"]) == 3
     record_spec = generate_autonomous_study_spec(
         "Who holds the deadlift world record of 510 kg and is still #1?",
@@ -915,7 +964,7 @@ def cmd_selftest(_args: argparse.Namespace) -> int:
 
     elapsed_ms = (time.perf_counter() - t0) * 1000.0
     assert elapsed_ms < 50.0, f"Selftest exceeded 50ms budget: {elapsed_ms:.2f}ms"
-    print(f"[SELFTEST PASS] auto_spec v12.0 (Turn 0 + O_dethrone + EAD + provenance) verified in {elapsed_ms:.2f} ms (< 50.0 ms).")
+    print(f"[SELFTEST PASS] auto_spec v13.0 (Turn 0 + DeepDigger + ClaimLedger + O_dethrone + EAD) verified in {elapsed_ms:.2f} ms (< 50.0 ms).")
     return 0
 
 
@@ -928,7 +977,8 @@ def main(argv: list[str] | None = None) -> int:
     p_gen = sub.add_parser("generate", help="Generate study_spec.json from a 1-sentence prompt")
     p_gen.add_argument("--prompt", required=True, help="1-sentence research objective")
     p_gen.add_argument("--out", required=True, help="Output path for study_spec.json")
-    p_gen.add_argument("--max-urls", type=int, default=10)
+    p_gen.add_argument("--max-urls", type=int, default=18)
+    p_gen.add_argument("--max-subpages", type=int, default=12, help="Max subpages/PDFs to spider during ingest")
     p_gen.add_argument("--offline", action="store_true", help="Build spec skeleton without network calls")
     p_gen.set_defaults(fn=cmd_generate)
 

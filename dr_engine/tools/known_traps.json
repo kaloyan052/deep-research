@@ -116,5 +116,44 @@
     "acknowledgment_patterns": [
       "(?:citation\\\\s*lag|академично\\\\s*забавяне|claude\\\\s*opus\\\\s*5\\\\.5|walleye)"
     ]
+  },
+  {
+    "id": "KILLED_EDGE_BTC_FUNDING_DIP_REBOUND",
+    "name": "BTC 08:00/16:00 UTC Pre-Funding Dip Rebound (>5 bp)",
+    "status": "KILLED",
+    "patterns": [
+      "(?:funding\\s+dip\\s+rebound|buy\\s+btc[^\\n]*?before\\s+funding)[^\\n]*?(?:100[-–]150\\s+occurrences|conditional[ _]go)",
+      "(?:08:00|16:00)\\s*utc[^\\n]*?funding\\s*>\\s*(?:0\\.05%|5\\s*bps?)[^\\n]*?(?:100[-–]150|go\\b)"
+    ],
+    "refutation": "Empirical lab audit (RP52E): Binance 8h BTC funding > 5 bp occurred 0 times in 2022, 2025, and 2026 (not 100-150/yr). Pre-2020 (n=75) yielded +7.1 bp with t=0.61 << 3.43. BrightFunded measured max spread at 00:00 UTC is 4.8 bp, not 15-50 bp.",
+    "acknowledgment_patterns": [
+      "(?:0\\s+times|0\\s+пъти|t\\s*=\\s*0\\.61|killed|убито|refuted|4\\.8\\s*bp)"
+    ]
+  },
+  {
+    "id": "TRAP_PILLAR1_FALSE_SECONDARY_WINDOW",
+    "name": "Fabricated Pillar 1 Secondary 10:00-10:15 Entry Window",
+    "status": "TRAP",
+    "patterns": [
+      "pillar\\s*1[^\\n]*?(?:secondary\\s+entry\\s+window|втори\\s+прозорец)[^\\n]*?10:00"
+    ],
+    "refutation": "Pillar 1 (US100 M15 3-bar displacement, max 1 trade/day, flat 15:45 ET) has NO separate 10:00-10:15 secondary entry window.",
+    "acknowledgment_patterns": [
+      "(?:няма\\s+втори\\s+прозорец|no\\s+secondary\\s+(?:entry\\s+)?window|false|грешен\\s+факт)"
+    ]
+  },
+  {
+    "id": "TRAP_PROP_FIRM_UNVERIFIED_RULES",
+    "name": "Unverified Prop Firm Fee / Drawdown / EA / Country Hallucinations",
+    "status": "TRAP",
+    "patterns": [
+      "fintokei[^\\n]*?(?:€549|5%\\s+eod|11\\.8x)",
+      "the5ers[^\\n]*?permitted\\s+with\\s+notification",
+      "ftmo[^\\n]*?1-step\\s+100k[^\\n]*?€540"
+    ],
+    "refutation": "RP52H audit: Fintokei ProTrader 100K fee is $549 (or €499 EUR account), daily loss is 5% equity-based (not EOD balance-only); The5ers requires written approval + video interview for EAs; Alpha Capital forbids bots on 100K; FTMO 100K is €399 (not €540); BrightFunded is UAE/Saint Lucia-structured, not Dutch.",
+    "acknowledgment_patterns": [
+      "(?:\\$549|equity[- ]based|по\\s+equity|видео\\s+интервю|video\\s+interview|€399|грешни|refuted)"
+    ]
   }
 ]

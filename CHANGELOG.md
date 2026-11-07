@@ -3,6 +3,61 @@
 Newest first. **Study** lists what an agent must now do differently in a research folder;
 **Tools** lists everything else.
 
+## 2026-11-07 — Deep Research v13.0: Multi-Hop Deep Digger, Anti-Truncation Quotas & Mandatory Claim-Link-Quote Ledger
+
+Built directly from the `RP52A–H` audit postmortem, which exposed four failure modes:
+(1) subagents writing 15–30 line unverified `.md` stubs straight into `reports/`
+bypassing `lean_engine.py`; (2) missing `Claim → URL → Verbatim Quote` ledgers;
+(3) shallow 1-page skimming that missed Help Center subpages (`help.fintokei.com`),
+collapsed JSON-LD FAQs, and PDF Terms & Conditions; and (4) uncalculated marketing
+hype (`MAXIMUM CONVICTION GO`, `11.8x`, `~100-150 occurrences/year`). Baseline 358
+tests → **372 pass (1 skipped), exit 0**; 32/32 epistemic evals (`100.0%`);
+`doctor` READY.
+
+**Study (mandatory for every v13.0 research folder):**
+- **Rule R19 (Anti-Truncation Floor):** closes the R17 (`IDI = 1000/word_count`)
+  denominator Goodhart loophole. Every v13 `report.md` must satisfy `>= 1,000`
+  prose words, `>= 5` distinct snapshotted sources, `>= 8` verbatim-verified
+  `[E###]` quotes, `>= 2` Markdown tables, `>= 5` `## ` sections, and `>= 4`
+  finite `python:model` variables while still meeting R17 (`IDI >= 100`, `>= 3.0`
+  verified entities/100w).
+- **Rule R20 (Claim-Link-Quote Evidence Ledger):** every v13 `report.md` must
+  contain an inline Markdown table (`Claim | Primary URL | Verbatim Quote | ID`
+  or Bulgarian `Твърдение | Източник / Линк | Дословен цитат | ID`) with `>= 8`
+  rows verified against `sources/index.jsonl` (domain match) and `sources/S###.txt`
+  (verbatim substring match).
+- **Rule B12 (Anti-Hallucination Multiplier & Frequency Gate):** bans hyperbolic
+  verdicts (`MAXIMUM CONVICTION GO`, `GUARANTEED EDGE`), standalone multipliers
+  (`11.8x`) absent from `python:model` and verified `[E###]` quotes, and
+  paragraph-unbound frequency guesses (`~100-150 occurrences/year`).
+- **Rule R21 (Deliverable Export & Anti-Bypass):** never write raw `.md` files
+  directly to `reports/`. Export via `python dr_engine/tools/lean_engine.py export --dir research/<dir> --out reports/<NAME>.md --strict-v13`
+  and verify `reports/` integrity with `python dr_engine/tools/lean_engine.py audit-deliverables`.
+
+**Tools:**
+- New `dr_engine/tools/deep_digger.py`: 4-vector open-web discovery (`DDGS` +
+  keyless DDG HTML fallback), `html_to_structured_snapshot` (preserves HTML
+  `<table>` columns as ` | `, JSON-LD `FAQPage`/`Product`/`Article` & Next.js
+  `__NEXT_DATA__`), PDF auto-detection via `parse_pdf.pdf_snapshot`, and
+  multi-hop subpage spidering (`deep_dig_urls`, `dig` CLI).
+- New `dr_engine/tools/depth_and_ledger_gate.py`: implements R19, R20, R21, B12,
+  `verification_receipt.json`, `DR-ATTESTATION` stamps, and `run_v13_gates_fail_closed`
+  (Rule B0 fail-closed).
+- `dr_engine/tools/auto_spec.py`: bumped `PROTOCOL_VERSION = "13.0"`, integrated
+  `deep_web_digger`, doubled academic/community/trench lead budgets (`max_urls=18`),
+  and emitted `deep_digging`, `depth_quotas`, and `claim_ledger_scaffold`.
+- `dr_engine/tools/lean_engine.py`: added multi-hop `--deep` ingestion, URL
+  numeric-ID exemption in `EXEMPT_TOKEN_PATTERNS`, URL column exemption in
+  `EXEMPT_COL_HEADER_RE`, `--strict-v13`, `export`, and `audit-deliverables`.
+- `dr_engine/tools/ead_gate.py` & `dethrone.py`: `protocol_version >= 12.0`
+  compatibility (`13.0` inherits R18 + B11); masked ATX heading hashes (`## 1.`)
+  in `detect_superlative_claims` so numbered Markdown headings never false-trigger
+  `#1` (`number_one`).
+- `dr_engine/tools/known_traps.json` & `v9_bullshit_filters.py`: registered
+  `KILLED_EDGE_BTC_FUNDING_DIP_REBOUND`, `TRAP_PILLAR1_FALSE_SECONDARY_WINDOW`,
+  and `TRAP_PROP_FIRM_UNVERIFIED_RULES`.
+- New `tests/test_v13_deep_digging.py` (14 offline tests).
+
 ## 2026-11-06 — Deep Research v12.0: Omniscient Golden Nugget & Zero-Lag Intelligence
 
 Closes the two failure modes an adversarial live probe exposed: **premature

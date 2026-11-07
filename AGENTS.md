@@ -115,6 +115,46 @@ enforced; **358 tests pass (1 skipped), exit 0**, `doctor` READY.
 - Verify with `python -m unittest tests.test_v12_golden_nugget -v` (36 tests)
   and the full `python -m unittest discover -s tests` (**358 tests, exit 0**).
 
+### v13.0 Deep Digger, Anti-Truncation Quotas & Mandatory Claim-Link-Quote Ledger (2026-11-07)
+See `.agents/skills/deep-research/SKILL.md` §12, `CHANGELOG.md` and
+`reports/ENGINE_AUDIT_v13_2026-11-07.md`. Built after the `RP52A–H` audit exposed
+lazy 15–30 line unverified stubs, missing quote ledgers, 1-page surface skimming,
+and uncalculated hype multipliers; **372 tests pass (1 skipped), exit 0**, 32/32
+epistemic evals (`100.0%`), `doctor` READY.
+
+- **Multi-Hop Deep Digger (`deep_digger.py` + `lean_engine.py ingest --deep`).**
+  `auto_spec.generate` emits `protocol_version: "13.0"` and queries 4 open-web
+  vectors (`official_primary`, `terms_and_rules`, `fine_print_limits`,
+  `adversarial_postmortem`) via `DDGS` + keyless DDG HTML fallback alongside
+  doubled OpenAlex/arXiv/community/trench budgets. `ingest` preserves HTML
+  `<table>` columns as `Col1 | Col2 | Col3`, extracts JSON-LD `FAQPage`/`Product`
+  + Next.js `__NEXT_DATA__` Q&As, parses `.pdf` T&Cs (`parse_pdf.pdf_snapshot`),
+  and recursively crawls internal `/terms`, `/faq`, `/rules` and `help.*`
+  subpages up to `max_depth=2` hops.
+- **Rule R19 — Anti-Truncation & Deep-Digging Floor.** Closes the R17
+  (`IDI = 1000/word_count`) truncation Goodhart loophole: every v13 report MUST
+  contain `>= 1,000` prose words, `>= 5` distinct snapshotted sources, `>= 8`
+  verified verbatim `[E###]` quotes, `>= 2` Markdown tables, `>= 5` `## `
+  sections, and `>= 4` finite `python:model` variables — while simultaneously
+  passing R17 (`IDI >= 100`, `>= 3.0` verified entities/100w, zero boilerplate).
+- **Rule R20 — Mandatory `Claim → URL → Verbatim Quote` Ledger.** Every v13
+  report MUST include a human-auditable Markdown table (`Твърдение | Източник / Линк | Дословен цитат | ID`)
+  with `>= 8` rows where each `[E###]`, registrable domain URL, and verbatim
+  quote are mechanically verified against `sources/index.jsonl` and `sources/S###.txt`.
+- **Rule B12 — Hyperbolic Verdict, Fake Multiplier & Frequency Guess Ban.**
+  Hard-fails hype labels (`MAXIMUM CONVICTION GO`), standalone multipliers
+  (`11.8x`, `10.4x`) missing from `python:model` or verified `[E###]` quotes,
+  and unbacked rate guesses (`~100-150 occurrences/year`), plus new lab traps in
+  `known_traps.json` (`funding dip rebound` dead anomaly, false Pillar 1
+  secondary window, unverified prop rules).
+- **Rule R21 — Deliverable Attestation & `reports/` Anti-Bypass Guard.** NEVER
+  write raw `.md` files directly into `reports/`. Export ONLY via
+  `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py export --dir research\<dir> --out reports\<NAME>.md --strict-v13`
+  (which re-verifies, writes `verification_receipt.json`, and stamps
+  `<!-- DR-ATTESTATION -->`), then run `lean_engine.py audit-deliverables` (`0 violations`).
+- Verify with `python -m unittest tests.test_v13_deep_digging -v` (14 tests) and
+  the full `python -m unittest discover -s tests` (**372 tests, exit 0**).
+
 ### Option B (FALLBACK): Granular 14-Step CLI Workflow (v4.x–v7.0)
 For complex multi-agent swarms using `next_step.py`:
 1. `evidence.py init <slug>` → `research/<date>-<slug>/`; fill `plan.md`

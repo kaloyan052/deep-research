@@ -298,7 +298,7 @@ class TestDethroningProtocol(unittest.TestCase):
         spec = auto_spec.generate_autonomous_study_spec(
             "Who holds the deadlift world record of 510 kg and is still #1?",
             offline_only=True)
-        self.assertEqual(spec["protocol_version"], "12.0")
+        self.assertIn(spec["protocol_version"], ("12.0", "13.0"))
         self.assertTrue(spec["dethroning"]["protocol_active"])
         self.assertGreaterEqual(spec["dethroning"]["vector_count"], 16)
         self.assertEqual(spec["dethroning"]["leader_value"], 510.0)

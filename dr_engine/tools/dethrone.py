@@ -219,10 +219,14 @@ def detect_superlative_claims(text: Any) -> list[LeaderClaim]:
     raw = text if isinstance(text, str) else str(text or "")
     if not raw:
         return []
+    # Mask Markdown ATX section prefixes (`## 1. Heading`) with equal-length
+    # spaces so `## 1.` does not false-trigger `#\s*1\b` (`number_one`) while
+    # preserving exact character positions for genuine `#1` claims.
+    scan_text = re.sub(r"(?m)^#{1,6}[ \t]+", lambda m: " " * len(m.group(0)), raw)
     claims: list[LeaderClaim] = []
     seen: set[str] = set()
     for kind, rx in SUPERLATIVE_PATTERNS:
-        m = rx.search(raw)
+        m = rx.search(scan_text)
         if not m or kind in seen:
             continue
         seen.add(kind)

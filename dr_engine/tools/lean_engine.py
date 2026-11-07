@@ -77,6 +77,23 @@ if str(_workspace_root) not in sys.path:
 
 # v10.0: polyglot ranking, resilient transport, fail-closed epistemic gate.
 from dr_engine.tools.context_ranker import rank_passages as _v10_rank_passages  # noqa: E402
+# v13.0: Multi-hop deep digging, anti-truncation R19, Claim-Link-Quote R20, R21 & B12.
+from dr_engine.tools.deep_digger import (  # noqa: E402
+  canonicalize_crawl_url,
+  extract_high_value_sublinks,
+  fetch_document_snapshot,
+  html_to_structured_snapshot,
+)
+from dr_engine.tools.depth_and_ledger_gate import (  # noqa: E402
+  ATTESTATION_MARKER_RE,
+  audit_deliverables_directory,
+  export_verified_report,
+  is_v13_protocol,
+  render_claim_ledger_scaffold,
+  run_v13_gates_fail_closed,
+  version_at_least,
+  write_verification_receipt,
+)
 # v12.0: Epistemic Alpha Delta (R18), Active Dethroning (B11), fail-closed wrapper.
 from dr_engine.tools.ead_gate import (  # noqa: E402
   PROTOCOL_VERSION as V12_PROTOCOL_VERSION, is_v12_protocol,
@@ -117,6 +134,8 @@ DECAYED_TEXTBOOK_TRAPS = {
 # Structural, calendar, timeframe, and statistical tokens exempt from empirical quote binding
 
 EXEMPT_TOKEN_PATTERNS = (
+
+    re.compile(r"https?://[^\s)>\]\"'|]+", re.I),  # URLs (verified independently by R20)
 
     re.compile(r"\b(?:19|20)\d{2}-\d{2}-\d{2}\b"),  # ISO dates 2026-11-05
 
@@ -160,7 +179,9 @@ EXEMPT_COL_HEADER_RE = re.compile(
 
     r"^(?:#|id|rank|tier|kind|status|verdict|sq|kill|parameter|param|horizon|window|"
 
-    r"timeframe|scenario|score|weight|assumption|spec|code|variable|axis|role)\b",
+    r"timeframe|scenario|score|weight|assumption|spec|code|variable|axis|role|"
+
+    r"url|link|source|източник|линк|връзка)\b",
 
     re.I,
 
@@ -913,23 +934,7 @@ def dersimonian_laird_pool(claims: list[dict[str, Any]]) -> list[dict[str, Any]]
 # ---------------------------------------------------------------------------
 
 def _strip_html(raw_html: str) -> str:
-
-  text = re.sub(r"(?is)<(script|style|noscript|svg|footer|nav)[^>]*>.*?</\1>", " ", raw_html)
-
-  text = re.sub(r"(?is)<(br|p|div|tr|li|h[1-6])[^>]*>", "\n", text)
-
-  text = re.sub(r"(?is)<td[^>]*>|</th>", " | ", text)
-
-  text = re.sub(r"(?is)<[^>]+>", " ", text)
-
-  text = html.unescape(text)
-
-  text = re.sub(r"[ \t]+", " ", text)
-
-  return re.sub(r"\n\s*\n+", "\n\n", text).strip()
-
-
-
+  return html_to_structured_snapshot(raw_html)
 
 
 def _fetch_single_url(
@@ -938,17 +943,7 @@ def _fetch_single_url(
     community_kind: str = "all",
     min_score: int = 1,
 ) -> dict[str, Any]:
-  """v10.0 community-aware, resilient, provenance-carrying source fetch.
-
-  Attempt order:
-    1. keyless structured community parser (Reddit / HN / StackExchange /
-       Discourse / GitHub) for comment streams;
-    2. :func:`http_resilience.resilient_fetch` -- charset/BOM/gzip detection,
-       bounded retry with Retry-After, bot-wall detection, byte cap, and an
-       opt-in reader fallback;
-    3. never a silent ``except: pass``. Every outcome carries ``via``,
-       ``charset``, ``sha256``, ``bot_wall``, ``warnings`` and ``error``.
-  """
+  """v13.0 community-, PDF-, and table-aware provenance-carrying source fetch."""
   community_error = ""
   try:
     from dr_engine.tools.community_engine import detect_community_platform, fetch_community_url
@@ -959,7 +954,7 @@ def _fetch_single_url(
       if comm_res.get("ok"):
         text = str(comm_res.get("text") or "")
         return {
-            "ok": len(text) >= 200, "url": url, "text": text,
+            "ok": len(text) >= 200, "url": url, "text": text, "raw_html": "",
             "status": comm_res.get("status"), "error": str(comm_res.get("error") or ""),
             "via": "community_engine", "charset": "utf-8",
             "sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
@@ -969,12 +964,40 @@ def _fetch_single_url(
     # Fail-loud: record the parser failure, then fall through to direct HTTP.
     community_error = f"community parser failed: {type(exc).__name__}: {exc}"[:200]
 
-  result = resilient_fetch(url, timeout=timeout, max_bytes=2_000_000, retries=2)
+  # v13.0: handle linked PDF documents (e.g. General Terms & Conditions PDFs, papers)
+  if str(url or "").lower().split("?")[0].endswith(".pdf"):
+    pdf_doc = fetch_document_snapshot(url, timeout=timeout)
+    if pdf_doc.ok and pdf_doc.text:
+      warns = list(pdf_doc.warnings)
+      if community_error:
+        warns.append(community_error)
+      return {
+          "ok": True, "url": url, "text": pdf_doc.text, "raw_html": "",
+          "status": pdf_doc.status, "error": "", "via": pdf_doc.via,
+          "charset": "utf-8", "sha256": pdf_doc.sha256, "bot_wall": False,
+          "warnings": warns, "evidence_class": pdf_doc.evidence_class,
+          "source_url": url, "fallback_chain": [],
+      }
+
+  result = resilient_fetch(url, timeout=timeout, max_bytes=2_500_000, retries=2)
+  raw_body = result.text if result.ok else ""
+  structured_text = html_to_structured_snapshot(raw_body) if raw_body else ""
+  final_text = structured_text if len(structured_text) >= 40 else raw_body
   payload = {
-      "ok": result.ok, "url": url, "text": result.text, "status": result.status,
-      "error": result.error, "via": result.via, "charset": result.charset,
-      "sha256": result.sha256, "bot_wall": result.bot_wall,
+      "ok": bool(result.ok and final_text.strip()),
+      "url": url,
+      "text": final_text,
+      "raw_html": raw_body if ("<" in raw_body and ">" in raw_body) else "",
+      "status": result.status,
+      "error": result.error,
+      "via": result.via,
+      "charset": result.charset,
+      "sha256": hashlib.sha256(final_text.encode("utf-8")).hexdigest() if final_text else result.sha256,
+      "bot_wall": result.bot_wall,
       "warnings": list(result.warnings),
+      "evidence_class": result.evidence_class,
+      "source_url": result.source_url or url,
+      "fallback_chain": list(result.fallback_chain),
   }
   if community_error:
     payload["warnings"].append(community_error)
@@ -1067,10 +1090,14 @@ def cmd_ingest(args: argparse.Namespace) -> int:
 
 
 
-  # 2. Fetch remote URLs concurrently (up to 16 workers)
+  # 2. Fetch remote URLs concurrently (up to 16 workers) + v13 Multi-Hop Subpage Digging
   if urls:
     comm_kind = str(spec.get("community_kind", "all"))
     comm_min_score = int(spec.get("community_min_score", 1))
+    seen_canon = {canonicalize_crawl_url(r["url"]) for r in index if r.get("url")}
+    seen_shas = {str(r["sha256"]) for r in index if r.get("sha256")}
+    frontier_html: list[tuple[str, str]] = []
+
     workers = min(16, len(urls))
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
       futs = {
@@ -1079,46 +1106,103 @@ def cmd_ingest(args: argparse.Namespace) -> int:
       }
 
       for fut in concurrent.futures.as_completed(futs):
-
         res = fut.result()
-
         if not res["ok"]:
-
           print(f"  WARN  Failed fetch {res['url']}: {res['error']}")
-
           continue
+        sha = sha256_text(res["text"])
+        c_url = canonicalize_crawl_url(res["url"])
+        if sha in seen_shas:
+          continue
+        seen_shas.add(sha)
+        if c_url:
+          seen_canon.add(c_url)
 
         sid = f"S{len(index) + 1:03d}"
-
         (src_dir / f"{sid}.txt").write_text(res["text"], encoding="utf-8")
-
         rec = {
-
             "id": sid, "url": res["url"], "fetched_at": dt.date.today().isoformat(),
-
-            "chars": len(res["text"]), "sha256": sha256_text(res["text"]),
-
+            "chars": len(res["text"]), "sha256": sha,
             "via": res.get("via", "unknown"), "charset": res.get("charset", ""),
-
             "bot_wall": bool(res.get("bot_wall", False)),
-
             "fetch_warnings": list(res.get("warnings", [])),
-
-            # v11.0: mirror-recovered bodies are SECONDARY transcriptions.
-            # They must never be counted as primary T1 triangulation.
             "evidence_class": res.get("evidence_class", "primary_fetched"),
-
             "secondary_transcription": res.get("evidence_class", "primary_fetched") != "primary_fetched",
-
             "source_url": res.get("source_url", res["url"]),
-
             "fallback_chain": list(res.get("fallback_chain", [])),
-
+            "hop_depth": 0,
         }
-
         index.append(rec)
-
         snap_texts[sid] = res["text"]
+        if res.get("raw_html"):
+          frontier_html.append((res["url"], str(res["raw_html"])))
+
+    # v13.0 Multi-Hop Subpage / Help-Center / Legal / PDF Spider
+    dig_cfg = spec.get("deep_digging") if isinstance(spec.get("deep_digging"), dict) else {}
+    deep_enabled = bool(getattr(args, "deep", False)) or bool(dig_cfg.get("enabled", False))
+    arg_subpages = getattr(args, "max_subpages", None)
+    subpage_budget = int(arg_subpages if arg_subpages is not None else dig_cfg.get("max_subpages", 12))
+    max_depth = int(dig_cfg.get("max_depth", 2))
+    focus_q = str(spec.get("study_title") or " ".join(spec.get("entities") or []))
+
+    hop = 1
+    while deep_enabled and subpage_budget > 0 and hop <= max_depth and frontier_html:
+      cand_by_url: dict[str, Any] = {}
+      for parent_url, raw_h in frontier_html:
+        for cand in extract_high_value_sublinks(raw_h, parent_url, focus_query=focus_q, max_links=max(8, subpage_budget)):
+          if cand.url in seen_canon:
+            continue
+          prev = cand_by_url.get(cand.url)
+          if prev is None or cand.score > prev.score:
+            cand_by_url[cand.url] = cand
+
+      if not cand_by_url:
+        break
+
+      batch = sorted(cand_by_url.values(), key=lambda c: (-c.score, c.url))[:subpage_budget]
+      for c in batch:
+        seen_canon.add(c.url)
+
+      next_frontier: list[tuple[str, str]] = []
+      with concurrent.futures.ThreadPoolExecutor(max_workers=min(8, len(batch))) as ex:
+        sub_futs = {
+            ex.submit(_fetch_single_url, c.url, 16.0, comm_kind, comm_min_score): c
+            for c in batch
+        }
+        for sfut in concurrent.futures.as_completed(sub_futs):
+          cand = sub_futs[sfut]
+          sres = sfut.result()
+          if not sres.get("ok") or not sres.get("text"):
+            continue
+          ssha = sha256_text(sres["text"])
+          if ssha in seen_shas:
+            continue
+          seen_shas.add(ssha)
+          sid = f"S{len(index) + 1:03d}"
+          (src_dir / f"{sid}.txt").write_text(sres["text"], encoding="utf-8")
+          srec = {
+              "id": sid, "url": sres["url"], "fetched_at": dt.date.today().isoformat(),
+              "chars": len(sres["text"]), "sha256": ssha,
+              "via": sres.get("via", "unknown"), "charset": sres.get("charset", ""),
+              "bot_wall": bool(sres.get("bot_wall", False)),
+              "fetch_warnings": list(sres.get("warnings", [])),
+              "evidence_class": sres.get("evidence_class", "primary_fetched"),
+              "secondary_transcription": sres.get("evidence_class", "primary_fetched") != "primary_fetched",
+              "source_url": sres.get("source_url", sres["url"]),
+              "fallback_chain": list(sres.get("fallback_chain", [])),
+              "hop_depth": hop,
+              "parent_url": cand.parent_url,
+              "link_reason": cand.reason,
+          }
+          index.append(srec)
+          snap_texts[sid] = sres["text"]
+          subpage_budget -= 1
+          if sres.get("raw_html"):
+            next_frontier.append((sres["url"], str(sres["raw_html"])))
+          if subpage_budget <= 0:
+            break
+      frontier_html = next_frontier
+      hop += 1
 
 
 
@@ -1156,7 +1240,8 @@ def cmd_ingest(args: argparse.Namespace) -> int:
       if qtext:
         queries[vid] = qtext
 
-  ranked = rank_bm25_passages(snap_texts, queries, top_k_per_query=5)
+  is_v13 = version_at_least(spec.get("protocol_version"), 13, 0)
+  ranked = rank_bm25_passages(snap_texts, queries, top_k_per_query=(10 if is_v13 else 5))
 
   pack_lines = [
 
@@ -1198,9 +1283,9 @@ def cmd_ingest(args: argparse.Namespace) -> int:
 
     pack_lines.append(f"> {item['quote_span']}\n")
 
-  # v12.0 Frontier 3: put the mandatory EAD scaffold directly in the pack the
+  # v12.0+ Frontier 3: put the mandatory EAD scaffold directly in the pack the
   # synthesis step reads, so the report author cannot forget the alpha delta.
-  if str(spec.get("protocol_version", "")).strip() == V12_PROTOCOL_VERSION:
+  if version_at_least(spec.get("protocol_version"), 12, 0):
     pack_lines.append("\n## Mandatory Report Section (Rule R18)")
     pack_lines.append(
         "The final report.md MUST contain a `## Epistemic Alpha Delta` section "
@@ -1223,6 +1308,25 @@ def cmd_ingest(args: argparse.Namespace) -> int:
           "recency_verified=true, snapshot-verified evidence_ids) before any "
           "world-record / leading-model claim can be certified."
       )
+
+  # v13.0: Anti-Truncation Depth (R19), Claim-Link-Quote Ledger (R20) & B12 Checklist
+  if is_v13:
+    quotas = spec.get("depth_quotas") or {}
+    pack_lines.append("\n## Mandatory v13.0 Deep-Digging & Claim-Link-Quote Gates (R19 / R20 / R21 / B12)")
+    pack_lines.append(
+        f"- **R19 (Anti-Truncation):** >= {quotas.get('min_words', 1000)} prose words, "
+        f">= {quotas.get('min_sources', 5)} snapshotted sources, "
+        f">= {quotas.get('min_evidence', 8)} verified `[E###]` quotes, "
+        f">= {quotas.get('min_tables', 2)} structured Markdown tables, "
+        f">= {quotas.get('min_sections', 5)} `## ` sections, "
+        f">= {quotas.get('min_model_vars', 4)} `python:model` variables.\n"
+        "- **R20 (Claim-Link-Quote Ledger):** Include the table below with >= "
+        f"{quotas.get('min_ledger_rows', 8)} rows mapping Claim -> Primary URL -> Verbatim Quote -> `[E###]`.\n"
+        "- **B12 (Anti-Hallucination):** NEVER write `MAXIMUM CONVICTION GO`, uncalculated `Nx` multipliers, "
+        "or unbacked `~N occurrences/year` guesses.\n"
+        "- **R21 (Deliverable Guard):** Export ONLY via `python dr_engine/tools/lean_engine.py export --dir <study> --out reports/<NAME>.md`.\n"
+    )
+    pack_lines.append(str(spec.get("claim_ledger_scaffold") or render_claim_ledger_scaffold()))
 
   (d / "context_pack.md").write_text("\n".join(pack_lines) + "\n", encoding="utf-8")
 
@@ -1282,6 +1386,13 @@ class VerificationReport:
 
   dethroning_diagnostics: dict[str, Any] = field(default_factory=dict)
 
+  # v13.0: Deep-Digging R19, Claim-Link-Quote Ledger R20 & B12 diagnostics.
+  v13_protocol_active: bool = False
+
+  depth_diagnostics: dict[str, Any] = field(default_factory=dict)
+
+  ledger_diagnostics: dict[str, Any] = field(default_factory=dict)
+
   failures: list[str] = field(default_factory=list)
 
   warnings: list[str] = field(default_factory=list)
@@ -1316,9 +1427,10 @@ def _extract_embedded_blocks(report_text: str) -> tuple[dict[str, Any], list[tup
 
 
 
-  # Strip all fenced code blocks and math blocks from prose before auditing sentences
+  # Strip attestation footers, fenced code blocks, and math blocks from prose before auditing sentences
+  clean_rep = ATTESTATION_MARKER_RE.sub("", report_text)
 
-  prose = re.sub(r"```.*?```", "\n", report_text, flags=re.S)
+  prose = re.sub(r"```.*?```", "\n", clean_rep, flags=re.S)
 
   prose = re.sub(r"\$\$.*?\$\$", "\n", prose, flags=re.S)
 
@@ -1328,10 +1440,10 @@ def _extract_embedded_blocks(report_text: str) -> tuple[dict[str, Any], list[tup
 
 
 
-def verify_study(d: Path, force_v12: bool = False) -> VerificationReport:
+def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> VerificationReport:
 
-  """Verify one study. ``force_v12`` activates the mandatory EAD / B11 gates
-  even for a study whose spec predates v12 (``verify --strict-v12``)."""
+  """Verify one study. ``force_v12`` / ``force_v13`` activate v12/v13 gates
+  even on legacy specs (``verify --strict-v12`` / ``--strict-v13``)."""
 
   res = VerificationReport(study_dir=str(d))
 
@@ -1852,7 +1964,7 @@ def verify_study(d: Path, force_v12: bool = False) -> VerificationReport:
   # studies stay on the v11 gate stack and get an explicit legacy warning,
   # which keeps the 322-test regression invariant intact without letting any
   # NEW study skip the alpha gate.
-  v12_active = is_v12_protocol(d, manifest, force=bool(force_v12))
+  v12_active = is_v12_protocol(d, manifest, force=bool(force_v12 or force_v13))
   v12_fail, v12_warn, v12_diag = run_v12_gates_fail_closed(
       prose_text, manifest, trusted_evidence_ids,
       protocol_active=v12_active,
@@ -1869,6 +1981,26 @@ def verify_study(d: Path, force_v12: bool = False) -> VerificationReport:
         f"trench evidence={res.ead_diagnostics.get('verified_trench_evidence')}); "
         f"O_dethrone claims={res.dethroning_diagnostics.get('claims_detected', 0)}"
     )
+
+  # 6.7. v13.0 FRONTIERS — Rule R19 (Anti-Truncation Depth), Rule R20
+  # (Mandatory Claim -> URL -> Verbatim Quote Ledger) & Rule B12
+  # (Hyperbolic Verdict, Fake Multiplier & Frequency Guess Ban), fail-closed.
+  v13_active = is_v13_protocol(d, manifest, force=bool(force_v13))
+  v13_fail, v13_warn, v13_diag = run_v13_gates_fail_closed(
+      raw_report,
+      study_dir=d,
+      manifest=manifest,
+      sources_index=sources,
+      source_texts=snaps,
+      verified_evidence_ids=trusted_evidence_ids,
+      model_env=global_model_env,
+      protocol_active=v13_active,
+  )
+  res.v13_protocol_active = bool(v13_active)
+  res.depth_diagnostics = dict(v13_diag.get("depth") or {})
+  res.ledger_diagnostics = dict(v13_diag.get("ledger") or {})
+  res.failures.extend(v13_fail)
+  res.warnings.extend(v13_warn)
 
   # 7. Epistemic Index (EI) & Information Density Index (IDI)
 
@@ -1894,21 +2026,41 @@ def verify_study(d: Path, force_v12: bool = False) -> VerificationReport:
 
 
 
-  word_count = max(1, len(re.findall(r"\S+", prose_text)))
+  from dr_engine.tools.density_gate import evaluate_r17_gate, strip_fenced_code
+  prose_no_code = strip_fenced_code(prose_text)
+  # Exclude R20 evidence-ledger table rows (already counted via n_evidence) and Markdown pipe borders
+  # so quoting complete primary clauses in the ledger never artificially dilutes prose density.
+  narrative_lines = [
+      ln for ln in prose_no_code.splitlines()
+      if not (
+          ln.lstrip().startswith("|")
+          and (
+              re.fullmatch(r"[\s|:\-]+", ln.strip())
+              or ("http" in ln.lower() and re.search(r"\bE\d{3}\b", ln))
+          )
+      )
+  ]
+  narrative_prose = re.sub(r"(?:https?://\S+|\|+)", " ", "\n".join(narrative_lines))
+  word_count = max(1, len(re.findall(r"\S+", narrative_prose)))
 
   code_funcs = len(re.findall(r"\bdef\s+\w+\s*\(", raw_report))
 
   res.information_density_index = round(
-
-      (1000.0 / word_count) * (2.0 * res.n_evidence + 5.0 * res.n_models + 8.0 * code_funcs), 1
-
+      (1000.0 / word_count)
+      * (
+          2.0 * res.n_evidence
+          + 5.0 * res.n_models
+          + 2.5 * len(global_model_env)
+          + 2.0 * res.bound_units
+          + 8.0 * code_funcs
+      ),
+      1,
   )
 
   # 8. v11.0 R17: Anti-Fluff Information Density Gate (mechanical, hard).
   # v10.0 computed IDI but never enforced it, and had no boilerplate defence.
-  from dr_engine.tools.density_gate import evaluate_r17_gate
   r17_failures, r17_diag = evaluate_r17_gate(
-      prose_text,
+      narrative_prose,
       idi=res.information_density_index,
       n_evidence=res.n_evidence,
       n_models=res.n_models,
@@ -1952,6 +2104,24 @@ def verify_study(d: Path, force_v12: bool = False) -> VerificationReport:
 
 
   res.passed = len(res.failures) == 0
+  if res.passed:
+    try:
+      write_verification_receipt(
+          d,
+          raw_report,
+          {
+              "passed": True,
+              "protocol_version": "13.0" if res.v13_protocol_active else ("12.0" if res.v12_protocol_active else "legacy"),
+              "ei_score": res.epistemic_index,
+              "idi_score": res.information_density_index,
+              "max_confidence": res.max_confidence,
+              "n_sources": res.n_sources,
+              "n_evidence": res.n_evidence,
+              "neff": res.n_eff_clusters,
+          },
+      )
+    except OSError:
+      pass
 
   return res
 
@@ -1963,7 +2133,11 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
   d = Path(args.dir)
 
-  rep = verify_study(d, force_v12=bool(getattr(args, "strict_v12", False)))
+  rep = verify_study(
+      d,
+      force_v12=bool(getattr(args, "strict_v12", False)),
+      force_v13=bool(getattr(args, "strict_v13", False)),
+  )
 
   if args.json:
 
@@ -1985,7 +2159,9 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
         f"B10_conflicts={rep.dialectical_arbitration.get('conflicts_detected', 0)} | "
         f"v12={'ON' if rep.v12_protocol_active else 'legacy'} | "
+        f"v13={'ON' if rep.v13_protocol_active else 'legacy'} | "
         f"EAD={'PASS' if rep.ead_diagnostics.get('passed') else 'n/a'} | "
+        f"Ledger={'PASS' if rep.ledger_diagnostics.get('passed') else 'n/a'} | "
         f"O_dethrone_claims={rep.dethroning_diagnostics.get('claims_detected', 0)}"
 
     )
@@ -1999,6 +2175,43 @@ def cmd_verify(args: argparse.Namespace) -> int:
       print(f"  WARN  {w}")
 
   return 0 if rep.passed else 1
+
+
+def cmd_export(args: argparse.Namespace) -> int:
+  """Rule R21 gated deliverable exporter: verifies study before writing to `reports/`."""
+  strict13 = bool(getattr(args, "strict_v13", False))
+  strict12 = bool(getattr(args, "strict_v12", False))
+  ok, fails, dest = export_verified_report(
+      args.dir,
+      args.out,
+      verify_fn=lambda p: verify_study(p, force_v12=strict12, force_v13=strict13),
+  )
+  if not ok:
+    print(f"[EXPORT REFUSED] Study `{args.dir}` failed verification ({len(fails)} error(s)):")
+    for f in fails:
+      print(f"  FAIL  {f}")
+    return 1
+  print(f"[EXPORT OK] Verified & attested deliverable written -> {dest}")
+  return 0
+
+
+def cmd_audit_deliverables(args: argparse.Namespace) -> int:
+  """Rule R21 scanner: reject unverified standalone `.md` files in `reports/`."""
+  res = audit_deliverables_directory(
+      args.reports_dir,
+      args.research_root,
+      since_date=args.since,
+      check_all=bool(args.all),
+  )
+  status = "PASS" if res["passed"] else "FAIL"
+  print(
+      f"[DELIVERABLES AUDIT {status}] checked={res['checked']} | "
+      f"verified={len(res['verified'])} | violations={len(res['violations'])} | "
+      f"skipped_legacy={len(res['skipped_legacy'])}"
+  )
+  for v in res["violations"]:
+    print(f"  FAIL  {v['file']}: {v['reason']}")
+  return 0 if res["passed"] else 1
 
 def cmd_selftest(_args: argparse.Namespace) -> int:
     with tempfile.TemporaryDirectory() as tmp:
@@ -2137,6 +2350,8 @@ def main(argv: list[str] | None = None) -> int:
     p_ing = sub.add_parser("ingest")
     p_ing.add_argument("--dir", required=True)
     p_ing.add_argument("--spec", help="Path to study_spec.json (default: <dir>/study_spec.json)")
+    p_ing.add_argument("--deep", action="store_true", help="Spider high-value T&C/FAQ/Rules/PDF subpages")
+    p_ing.add_argument("--max-subpages", type=int, default=None, help="Override max subpages to spider")
     p_ing.set_defaults(fn=cmd_ingest)
 
     p_ver = sub.add_parser("verify")
@@ -2145,7 +2360,24 @@ def main(argv: list[str] | None = None) -> int:
     p_ver.add_argument("--strict-v12", action="store_true",
                         help="Force the mandatory EAD (R18) and dethroning (B11) "
                              "gates even on a study whose spec predates v12")
+    p_ver.add_argument("--strict-v13", action="store_true",
+                        help="Force v13 Deep-Digging (R19), Claim-Link-Quote Ledger (R20) "
+                             "& Anti-Hallucination (B12) gates on any study")
     p_ver.set_defaults(fn=cmd_verify)
+
+    p_exp = sub.add_parser("export", help="Verify study and export attested report to reports/")
+    p_exp.add_argument("--dir", required=True, help="Verified research/<slug> directory")
+    p_exp.add_argument("--out", required=True, help="Destination path in reports/<NAME>.md")
+    p_exp.add_argument("--strict-v12", action="store_true")
+    p_exp.add_argument("--strict-v13", action="store_true")
+    p_exp.set_defaults(fn=cmd_export)
+
+    p_aud = sub.add_parser("audit-deliverables", help="Audit reports/ against unverified standalone stubs")
+    p_aud.add_argument("--reports-dir", default="reports")
+    p_aud.add_argument("--research-root", default="research")
+    p_aud.add_argument("--since", default="2026-11-07", help="ISO cutoff date for mandatory R21 attestation")
+    p_aud.add_argument("--all", action="store_true", help="Audit all historical reports regardless of mtime")
+    p_aud.set_defaults(fn=cmd_audit_deliverables)
 
     p_st = sub.add_parser("selftest")
     p_st.set_defaults(fn=cmd_selftest)

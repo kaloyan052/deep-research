@@ -57,6 +57,19 @@ and cost the operator a full production incident [E007, C001]".>
 `window_days` (30 or 90), `checked_at`, `recency_verified`, `evidence_ids`.
 If O_dethrone found an upset, name `superseded_by` in prose and above.>
 
+## Claim-Link-Quote Evidence Ledger
+
+> Mandatory for every v13.0 study (Rule R20, >= 8 rows). Every core quantitative,
+> contractual, statutory, or empirical claim MUST map directly to its primary URL,
+> an exact verbatim substring from `sources/S###.txt`, and its verified `[E###]` ID.
+> R19 additionally enforces >= 1,000 prose words, >= 5 snapshotted sources, >= 8 `[E###]`
+> quotes, >= 2 tables, >= 5 `## ` sections, and >= 4 `python:model` variables.
+
+| Твърдение (Claim) | Източник / Линк (Primary URL) | Дословен цитат (Verbatim Quote) | ID |
+| :-- | :-- | :-- | :-- |
+| <конкретно твърдение с точните числа> | https://official-domain.example/rules | "<точен дословен цитат от S###.txt>" | [E001] |
+| <второ твърдение / клауза от T&Cs или таблица> | https://help.official-domain.example/faq | "<точен дословен цитат от S###.txt>" | [E002] |
+
 ## Key findings
 
 | # | Finding | Kind & Tier | Confidence | Evidence |
