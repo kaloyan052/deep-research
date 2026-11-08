@@ -106,5 +106,100 @@ class TestV14EpistemicPipeline(unittest.TestCase):
             self.assertEqual(data["nbformat"], 4)
 
 
+
+    def test_quote_matches_snapshot_rejects_degenerate_and_punctuation(self):
+        from dr_engine.tools.lean_engine import quote_matches_snapshot
+        snap = "This is a legitimate snapshot containing text and numbers like 26 and punctuation ---."
+        for degen in [".", "a", "!!!", ". . .", "---", "26", "...!!!...", "   "]:
+            self.assertFalse(quote_matches_snapshot(degen, snap), f"Failed to reject degenerate quote: {degen!r}")
+
+    def test_quote_matches_snapshot_enforces_ellipsis_gap(self):
+        from dr_engine.tools.lean_engine import quote_matches_snapshot
+        snap = "word1 " + ("filler " * 300) + "word2"
+        quote = "word1 ... word2"
+        self.assertFalse(quote_matches_snapshot(quote, snap))
+
+    def test_evidence_locker_strict_id_and_tier_ceiling(self):
+        from dr_engine.tools.evidence_locker import lock_evidence
+        with tempfile.TemporaryDirectory() as tmpdir:
+            td = Path(tmpdir)
+            sources = td / "sources"
+            sources.mkdir()
+            (sources / "index.jsonl").write_text(
+                json.dumps({"id": "S001", "url": "https://example.com/blog", "tier": "T3"}) + "\n",
+                encoding="utf-8"
+            )
+            (sources / "S001.txt").write_text(
+                "This is a legitimate empirical observation with sufficient characters for testing.",
+                encoding="utf-8"
+            )
+            # 1. Invalid ID format
+            bad_id = [{"id": "HACKED", "source": "S001", "quote": "legitimate empirical observation with sufficient", "tier": "T3"}]
+            _, errs = lock_evidence(td, bad_id)
+            self.assertTrue(any("id must match" in e for e in errs))
+
+            # 2. Too short quote
+            bad_short = [{"id": "E001", "source": "S001", "quote": "Too short", "tier": "T3"}]
+            _, errs2 = lock_evidence(td, bad_short)
+            self.assertTrue(any("too short" in e for e in errs2))
+
+            # 3. Tier ceiling: source is T3, claiming T1 -> capped at T3
+            good_item = [{"id": "E001", "source": "S001", "quote": "legitimate empirical observation with sufficient", "tier": "T1"}]
+            locked, errs3 = lock_evidence(td, good_item)
+            self.assertEqual(len(errs3), 0)
+            self.assertEqual(locked[0]["tier"], "T3")
+
+    def test_evidence_ledger_sha256_sidecar_and_tampering(self):
+        from dr_engine.tools.evidence_locker import lock_evidence, verify_report_against_ledger
+        with tempfile.TemporaryDirectory() as tmpdir:
+            td = Path(tmpdir)
+            sources = td / "sources"
+            sources.mkdir()
+            (sources / "index.jsonl").write_text(
+                json.dumps({"id": "S001", "url": "https://nber.org/w123", "tier": "T1"}) + "\n",
+                encoding="utf-8"
+            )
+            (sources / "S001.txt").write_text(
+                "Empirical asset pricing factor replication yields significant statistical decay.",
+                encoding="utf-8"
+            )
+            items = [{"id": "E001", "source": "S001", "quote": "Empirical asset pricing factor replication yields significant", "tier": "T1"}]
+            locked, errs = lock_evidence(td, items)
+            self.assertEqual(len(errs), 0)
+            self.assertTrue((td / "evidence_ledger.json.sha256").exists())
+
+            # Verified against untampered ledger
+            manifest = {"evidence": locked}
+            report = "The factor replication test [E001] proves the decay."
+            verr = verify_report_against_ledger(td, manifest, report)
+            self.assertEqual(len(verr), 0)
+
+            # Tamper the sidecar
+            (td / "evidence_ledger.json.sha256").write_text("corrupted_digest", encoding="utf-8")
+            verr_tampered = verify_report_against_ledger(td, manifest, report)
+            self.assertTrue(any("SHA-256 digest mismatch" in e for e in verr_tampered))
+
+    def test_desk_graveyard_local_refutation_isolation(self):
+        text = "We trade Gold London ORB breakouts for profit.\n\nSome other ideas were killed in previous audits."
+        violations = scan_text_against_desk_graveyard(text)
+        self.assertTrue(any(v["rule_id"] == "GRAVEYARD_GOLD_INTRADAY" for v in violations))
+
+    def test_desk_graveyard_multiline_synthetic_regulatory(self):
+        text = "BIS Working Paper 1190 discusses liquidity.\n" + ("\n" * 50) + "Retail traders on FTMO face loss limits."
+        violations = scan_text_against_desk_graveyard(text)
+        self.assertTrue(any(v["rule_id"] == "GRAVEYARD_SYNTHETIC_REGULATORY_CITATIONS" for v in violations))
+
+    def test_desk_graveyard_zero_width_and_homoglyphs(self):
+        # Zero-width character inside gold
+        text1 = "We trade G\u200bold London ORB breakouts for profit."
+        v1 = scan_text_against_desk_graveyard(text1)
+        self.assertTrue(any(v["rule_id"] == "GRAVEYARD_GOLD_INTRADAY" for v in v1))
+
+        # Cyrillic homoglyph in Dax
+        text2 = "Strategy targets D\u0430x cash open breakout."
+        v2 = scan_text_against_desk_graveyard(text2)
+        self.assertTrue(any(v["rule_id"] == "GRAVEYARD_EUROPEAN_CASH_OPEN" for v in v2))
+
+
 if __name__ == "__main__":
     unittest.main()

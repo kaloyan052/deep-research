@@ -772,7 +772,7 @@ def audit_deliverables_directory(
 
     for md_file in sorted(rdir.glob("*.md")):
         name = md_file.name
-        if name.startswith("ENGINE_AUDIT_"):
+        if name.startswith(("ENGINE_AUDIT_", "V14_ADVERSARIAL_AUDIT_")):
             continue
         if cutoff is not None:
             mtime_date = dt.date.fromtimestamp(md_file.stat().st_mtime)

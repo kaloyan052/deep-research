@@ -204,6 +204,13 @@ SPEC_LINE_RE = re.compile(
 # Max characters an `...` ellipsis may span inside a verbatim quote.
 MAX_ELLIPSIS_GAP = 2000
 
+# v14.1 — hard floors for an admissible verbatim quote (fail-closed).
+MIN_QUOTE_CHARS = 20
+MIN_QUOTE_WORDS = 4
+MIN_FRAGMENT_CHARS = 8
+MIN_FRAGMENT_WORDS = 2
+MAX_ELLIPSIS_FRAGMENTS = 6
+
 EID_RE = re.compile(r"\bE\d{3}\b")
 
 CID_RE = re.compile(r"\bC\d{3}\b")
@@ -657,56 +664,56 @@ def is_number_bound(target: float, closure: set[float], rel_tol: float = 0.005) 
 # ---------------------------------------------------------------------------
 
 def quote_matches_snapshot(quote: str, snapshot: str) -> bool:
+  """Verify `quote` verbatim against `snapshot`, allowing bounded `...` gaps.
 
-  """Verifies that `quote` (allowing '...' ellipsis gaps) exists verbatim in `snapshot`."""
+  v14.1: a quote is admissible only if it is a non-empty string with a
+  minimum character/word count; every ellipsis fragment is independently
+  admissible; the fragment count is bounded; and **every** gap — including
+  the punctuation-tolerant fallback branch — is bounded by
+  MAX_ELLIPSIS_GAP in the coordinate system of the NORMALISED snapshot.
+  """
+  if not isinstance(quote, str) or not isinstance(snapshot, str):
+    return False
 
-  snap_norm = normalise_ws(snapshot).lower()
+  q = normalise_ws(quote).casefold()
+  if len(q) < MIN_QUOTE_CHARS:
+    return False
+  if len(re.findall(r"\w+", q)) < MIN_QUOTE_WORDS:
+    return False
 
-  fragments = [normalise_ws(f).lower() for f in re.split(r"\.\.\.|\u2026", quote) if normalise_ws(f)]
+  fragments = [f.strip() for f in re.split(r"\.\.\.|\u2026", q) if f.strip()]
+  if not fragments or len(fragments) > MAX_ELLIPSIS_FRAGMENTS:
+    return False
+  for frag in fragments:
+    words = re.findall(r"\w+", frag)
+    if (len(frag) < MIN_FRAGMENT_CHARS
+        or len(words) < MIN_FRAGMENT_WORDS
+        or not any(ch.isalnum() for ch in frag)):
+      return False
 
-  if not fragments:
-
+  snap_norm = normalise_ws(snapshot).casefold()
+  if not snap_norm:
     return False
 
   pos = 0
-
   for frag in fragments:
-
-    # Also allow word-sequence match ignoring minor punctuation differences
-
     idx = snap_norm.find(frag, pos)
-
-    if idx < 0:
-
-      words = re.findall(r"\w+", frag)
-
-      if not words:
-
-        continue
-
-      pat = re.compile(r"\W+".join(map(re.escape, words)), re.I)
-
-      # v10.0: `pos` is an index into the NORMALISED snapshot, so the
-      # fallback regex must search that same string (v9.0 searched the
-      # raw snapshot with normalised offsets -- a silent coordinate bug).
-      m = pat.search(snap_norm, pos if pos < len(snap_norm) else 0)
-
-      if not m:
-
-        return False
-
-      pos = m.end()
-
-    else:
-
-      # v10.0: an ellipsis may bridge a sentence, not splice two
-      # unrelated sections of a long page into a fabricated quote.
+    if idx >= 0:
       if len(fragments) > 1 and idx - pos > MAX_ELLIPSIS_GAP:
-
         return False
-
       pos = idx + len(frag)
+      continue
 
+    # Punctuation-tolerant fallback. Restrict the separator class: `\\W+`
+    # previously allowed arbitrary characters (including newlines) to be
+    # spliced between words, and skipped the gap check entirely.
+    pat = re.compile(r"[\s\-,;:]{0,4}".join(map(re.escape, re.findall(r"\w+", frag))))
+    m = pat.search(snap_norm, min(pos, len(snap_norm)))
+    if not m:
+      return False
+    if len(fragments) > 1 and m.start() - pos > MAX_ELLIPSIS_GAP:
+      return False
+    pos = m.end()
   return True
 
 
@@ -1538,6 +1545,9 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
 
 
   evidence_list: list[dict[str, Any]] = manifest.get("evidence", [])
+  if not isinstance(evidence_list, list):
+    res.failures.append("M1: manifest.evidence must be a list")
+    evidence_list = []
 
   kill_list: list[dict[str, Any]] = manifest.get("kills", [])
 
@@ -1569,6 +1579,12 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
           break
 
     quote = ev.get("quote", "")
+    if not isinstance(quote, str):
+      res.failures.append(f"E2: {eid} quote is not a string ({type(quote).__name__})")
+      continue
+    if len(normalise_ws(quote)) < 20:
+      res.failures.append(f"E2: {eid} quote is too short to be a verbatim excerpt")
+      continue
 
     if sid not in snaps:
 
@@ -1597,6 +1613,15 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
   if res.n_evidence < 3:
 
     res.failures.append(f"E2: only {res.n_evidence} verified evidence records; need >= 3")
+
+  # v14.1 Rule B14: bind report.md to the pre-synthesis evidence locker.
+  # Enforced whenever a ledger exists or the manifest declares >= 14.1,
+  # so legacy (< 14.0) studies without a ledger remain unaffected.
+  _v = str(manifest.get("protocol_version", "")).split(".")
+  v14plus = len(_v) >= 1 and _v[0].isdigit() and int(_v[0]) >= 14
+  if v14plus or (d / "evidence_ledger.json").exists():
+    from dr_engine.tools.evidence_locker import verify_report_against_ledger
+    res.failures.extend(verify_report_against_ledger(d, manifest, raw_report))
 
 
 
@@ -1696,24 +1721,23 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
 
       )
 
-  # v14.0 Rule B13: Master Desk Memory & Known Traps Audit
+  # v14.1 Rule B13 — fail-closed (AGENTS.md Rule B0).
+  from dr_engine.tools.desk_memory import scan_text_against_desk_graveyard
+  from dr_engine.tools.traps import check_known_traps_in_text
   try:
-    from dr_engine.tools.desk_memory import scan_text_against_desk_graveyard
-    from dr_engine.tools.traps import check_known_traps_in_text
-
     desk_violations = scan_text_against_desk_graveyard(raw_report)
+    trap_violations = check_known_traps_in_text(raw_report)
+  except Exception as e:
+    res.failures.append(f"FAIL B13 (Gate Error, fail-closed): {type(e).__name__}: {e}")
+  else:
     for dv in desk_violations:
       res.failures.append(
-          f"FAIL B13 (Desk Graveyard): proposes killed edge '{dv['name']}' without refutation. {dv['description']}"
-      )
-
-    trap_violations = check_known_traps_in_text(raw_report)
+          f"FAIL B13 (Desk Graveyard): proposes killed edge '{dv['name']}' "
+          f"without refutation. {dv['description']}")
     for tv in trap_violations:
       res.failures.append(
-          f"FAIL B13 (Known Trap): violates {tv.get('id', 'TRAP')} ({tv.get('name', '')}). {tv.get('description', '')}"
-      )
-  except Exception as e:
-    res.warnings.append(f"W_B13_CHECK_ERROR: {e}")
+          f"FAIL B13 (Known Trap): violates {tv.get('id', 'TRAP')} "
+          f"({tv.get('name', '')}). {tv.get('description', '')}")
 
 
 
@@ -2199,16 +2223,20 @@ def cmd_verify(args: argparse.Namespace) -> int:
 def cmd_preflight(args: argparse.Namespace) -> int:
     """Pre-flight check against desk memory graveyard and basic invariants."""
     from dr_engine.tools.desk_memory import scan_text_against_desk_graveyard
+    from dr_engine.tools.traps import check_known_traps_in_text
     study_path = Path(args.dir)
-    
+
     # If a prompt is explicitly provided, evaluate it independently first
     if getattr(args, "prompt", None):
         prompt_violations = scan_text_against_desk_graveyard(args.prompt)
-        if prompt_violations:
-            print(f"[PREFLIGHT BLOCKED] {len(prompt_violations)} desk graveyard violation(s) in prompt:")
+        prompt_traps = check_known_traps_in_text(args.prompt)
+        if prompt_violations or prompt_traps:
+            print(f"[PREFLIGHT BLOCKED] Violations detected in prompt:")
             for v in prompt_violations:
-                print(f"  ❌ {v['name']}: {v['description']}")
+                print(f"  [GRAVEYARD] {v['name']}: {v['description']}")
                 print(f"     Matched snippet: {v['matched_snippet']!r}")
+            for t in prompt_traps:
+                print(f"  [KNOWN TRAP] {t.get('id', 'TRAP')} ({t.get('name', '')}): {t.get('description', '')}")
             print("\nDo not proceed with research until these refuted hypotheses are removed or explicitly framed as refutations.")
             return 1
 
@@ -2221,11 +2249,14 @@ def cmd_preflight(args: argparse.Namespace) -> int:
         text_to_check += (study_path / "report.md").read_text(encoding="utf-8") + "\n"
 
     violations = scan_text_against_desk_graveyard(text_to_check)
-    if violations:
-        print(f"[PREFLIGHT BLOCKED] {len(violations)} desk graveyard violation(s) detected in study files:")
+    traps = check_known_traps_in_text(text_to_check)
+    if violations or traps:
+        print(f"[PREFLIGHT BLOCKED] Violations detected in study files:")
         for v in violations:
-            print(f"  ❌ {v['name']}: {v['description']}")
+            print(f"  [GRAVEYARD] {v['name']}: {v['description']}")
             print(f"     Matched snippet: {v['matched_snippet']!r}")
+        for t in traps:
+            print(f"  [KNOWN TRAP] {t.get('id', 'TRAP')} ({t.get('name', '')}): {t.get('description', '')}")
         print("\nDo not proceed with research until these refuted hypotheses are removed or explicitly framed as refutations.")
         return 1
 
