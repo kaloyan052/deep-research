@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision Card — RP53K: Произход на устойчивите пазарни предимства, методология на валидация и калибриране на статистическата батерия</title>
+<style>
+  :root {
+    --bg: #0b0f19; --panel: #111827; --border: #1f2937; --text: #f3f4f6;
+    --muted: #9ca3af; --accent: #38bdf8; --ok: #10b981; --danger: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+    line-height: 1.5;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 20px;
+  }
+  .kpi-strip {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px; margin-bottom: 20px;
+  }
+  .kpi {
+    background: var(--panel); border: 1px solid var(--border); padding: 14px;
+    border-radius: 8px;
+  }
+  .kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; }
+  .kpi .val { font-size: 22px; font-weight: 700; color: var(--accent); margin-top: 4px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border); padding: 20px;
+    border-radius: 8px;
+  }
+  .slider-row { margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .slider-head { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--border); padding: 10px; text-align: left; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px;
+    background: #1e293b; color: var(--accent);
+  }
+  a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <div style="font-size:12px;color:var(--muted);">DR_ENGINE v9.0 EXECUTABLE DECISION CARD</div>
+      <h1 style="margin:4px 0 0 0;font-size:22px;">RP53K: Произход на устойчивите пазарни предимства, методология на валидация и калибриране на статистическата батерия</h1>
+    </div>
+    <div style="background:#10b981;color:#000;font-weight:800;padding:8px 16px;border-radius:6px;">
+      GATE: PASS (High Conf)
+    </div>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi"><div class="label">Epistemic Index (EI)</div><div class="val">100.0/100</div></div>
+    <div class="kpi"><div class="label">Info Density (IDI)</div><div class="val">140.6</div></div>
+    <div class="kpi"><div class="label">Independent N_eff</div><div class="val">7.11</div></div>
+    <div class="kpi"><div class="label">Algebraic Closure</div><div class="val">27/27</div></div>
+    <div class="kpi"><div class="label">Verified Quotes</div><div class="val">16</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h2 style="margin-top:0;font-size:16px;">Exogenous Stress-Test Sliders (<code>python:model</code> Inputs)</h2>
+      <div id="sliders-root"></div>
+      <button onclick="resetSliders()" style="margin-top:8px;padding:6px 12px;background:#1e293b;color:#fff;border:1px solid var(--border);border-radius:4px;cursor:pointer;">
+        Reset to Baseline
+      </button>
+    </div>
+    <div class="panel">
+      <h2 style="margin-top:0;font-size:16px;">Reactive Model Outputs &amp; Jacobian Tipping Points</h2>
+      <table>
+        <thead>
+          <tr><th>Metric</th><th>Live Value</th><th>Baseline</th><th>Top Elasticity / Break-Even</th></tr>
+        </thead>
+        <tbody id="metrics-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-bottom:20px;">
+    <h2 style="margin-top:0;font-size:16px;">Monte Carlo Distribution &amp; Exact Tipping Points (v10.0)</h2>
+    <p style="color:var(--muted);font-size:12px;margin-top:0;">0 seeded draws | sigma=±0% per input | seed=0 | model sha256=</p>
+    <p style="color:var(--muted);font-size:12px;">All exogenous inputs are shocked <strong>jointly</strong> by a seeded truncated Gaussian. This is a sensitivity measurement, not a subjective Expected Value scenario (Rule B1). "P(value &lt; 0)" is the observed breach frequency; "Tipping" is the exact zero-crossing solved by bisection on the executed model.</p>
+    <table>
+      <thead><tr><th>Metric</th><th>Distribution</th><th>P5 / P50 / P95</th><th>P(value &lt; 0)</th><th>Break-even x*</th></tr></thead>
+      <tbody><tr><td colspan='5'>No executable model metrics found.</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="panel" style="margin-bottom:20px;">
+    <h2 style="margin-top:0;font-size:16px;">Deterministic Joint Stress Presets</h2>
+    <table>
+      <thead><tr><th>Deterministic joint shock</th></tr><tr><td><strong>Baseline</strong></td></tr><tr><td><strong>Adverse (-1s)</strong></td></tr><tr><td><strong>Severe (-2s)</strong></td></tr><tr><td><strong>Upside (+1s)</strong></td></tr></thead>
+    </table>
+  </div>
+
+  <div class="panel" style="margin-bottom:20px;">
+    <h2 style="margin-top:0;font-size:16px;">Correlated Regime Stress &amp; Empirical Tail Risk (v11.0)</h2>
+    <p style="color:var(--muted);font-size:12px;margin-top:0;">Stress regime: <strong>Liquidity Crunch</strong> | declared correlated shocks on 0 inputs (<code>none</code>) | sigma x- | Cholesky repair=none (shrinkage=0.0) | 0 correlated draws</p>
+    <p style="color:var(--muted);font-size:12px;">Shocks are drawn jointly via Cholesky <code>z_c = L z + mu_r</code>, not independently. VaR99 = &#8722;Q0.01(Y) and CVaR99 = &#8722;E[Y | Y &#8804; Q0.01(Y)] are measured empirically from the simulated distribution. A negative VaR means even the 1% worst case is still a gain. Regimes carry <strong>no</strong> subjective probability weight (Rule B1).</p>
+    <table>
+      <thead><tr><th>Metric</th><th>Empirical distribution + VaR/CVaR markers</th><th>Baseline tail</th><th>Stress-regime tail</th><th>Delta</th></tr></thead>
+      <tbody><tr><td colspan='5'>No executable model metrics found.</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="panel" style="margin-bottom:20px;">
+    <h2 style="margin-top:0;font-size:16px;">Declared Macro Stress Regimes</h2>
+    <table>
+      <thead><tr><th>Declared macro regime (no probability weight)</th></tr><tr><td><strong>Baseline</strong><br><small style='color:var(--muted)'>rho=0.0, sigma x1.0<br>shocked: none (no name match)</small></td></tr><tr><td><strong>Liquidity Crunch</strong><br><small style='color:var(--muted)'>rho=0.85, sigma x1.8<br>shocked: us100_spread_points, us100_spread_R, spx500_spread_points, spx500_spread_R, dax40_spread_p</small></td></tr><tr><td><strong>High-Inflation Squeeze</strong><br><small style='color:var(--muted)'>rho=0.75, sigma x1.5<br>shocked: none (no name match)</small></td></tr><tr><td><strong>Latency Breakdown</strong><br><small style='color:var(--muted)'>rho=0.8, sigma x1.7<br>shocked: none (no name match)</small></td></tr></thead>
+    </table>
+  </div>
+
+  <div class="panel" style="margin-bottom:20px;">
+    <h2 style="margin-top:0;font-size:16px;">Popperian Disconfirmation Ledger (Pre-Registered Kill Hypotheses)</h2>
+    <table>
+      <thead><tr><th>Kill ID</th><th>Verdict</th><th>Grounding Evidence IDs</th></tr></thead>
+      <tbody><tr><td><code>K1</code></td><td><strong>REFUTED</strong></td><td><code>E001, E002, E008</code></td></tr><tr><td><code>K2</code></td><td><strong>REFUTED</strong></td><td><code>E003, E004, E005, E013, E014</code></td></tr><tr><td><code>K3</code></td><td><strong>REFUTED</strong></td><td><code>E009, E016</code></td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2 style="margin-top:0;font-size:16px;">Cryptographic Evidence Audit Trail (SHA-256 Grounded)</h2>
+    <table>
+      <thead><tr><th>EID</th><th>Tier</th><th>Source &amp; SHA-256</th><th>Verbatim Snapshot Span</th></tr></thead>
+      <tbody><tr><td><code>E001</code></td><td><span class='badge'>T1</span></td><td><a href='https://tevgeniou.github.io/EquityRiskFactors/bibliography/AcademicReviewFactor.pdf' target='_blank' rel='noopener'>S034</a><br><small>sha256: <code>cc4a550068ce</code></small></td><td>&ldquo;Portfolio returns are 26% lower out-of-sample and 58% lower post-publication.&rdquo;</td></tr><tr><td><code>E002</code></td><td><span class='badge'>T1</span></td><td><a href='https://tevgeniou.github.io/EquityRiskFactors/bibliography/AcademicReviewFactor.pdf' target='_blank' rel='noopener'>S034</a><br><small>sha256: <code>cc4a550068ce</code></small></td><td>&ldquo;average predictor&#x27;s long-short return shrinks 58% post-publication.&rdquo;</td></tr><tr><td><code>E003</code></td><td><span class='badge'>T1</span></td><td><a href='https://faculty.fuqua.duke.edu/~charvey/Research/Published_Papers/P118_and_the_cross.pdf' target='_blank' rel='noopener'>S031</a><br><small>sha256: <code>9bd681d59fd8</code></small></td><td>&ldquo;with a t-statistic greater than 3.0.We argue that most claimed research findings in financial economicsarelikelyfalse.&rdquo;</td></tr><tr><td><code>E004</code></td><td><span class='badge'>T1</span></td><td><a href='https://www.nber.org/papers/w23394.pdf' target='_blank' rel='noopener'>S032</a><br><small>sha256: <code>d38830cf594b</code></small></td><td>&ldquo;286 anomalies (64%) including 95 out of 102 liquidity variables (93%) are insignificant at the conventional 5% level.&rdquo;</td></tr><tr><td><code>E005</code></td><td><span class='badge'>T1</span></td><td><a href='https://www.nber.org/papers/w23394.pdf' target='_blank' rel='noopener'>S032</a><br><small>sha256: <code>d38830cf594b</code></small></td><td>&ldquo;number of insignificance to 380 (85%). Even for the 161 significant anomalies, their magnitudes are often much lower than originally reported.&rdquo;</td></tr><tr><td><code>E006</code></td><td><span class='badge'>T1</span></td><td><a href='https://www.federalreserve.gov/econres/feds/files/2021-037pap.pdf' target='_blank' rel='noopener'>S042</a><br><small>sha256: <code>96cafee635d8</code></small></td><td>&ldquo;massive replication themselves using our code at https://github.com/OpenSourceAP/CrossSection.&rdquo;</td></tr><tr><td><code>E007</code></td><td><span class='badge'>T1</span></td><td><a href='https://www.federalreserve.gov/econres/feds/files/2021-037pap.pdf' target='_blank' rel='noopener'>S042</a><br><small>sha256: <code>96cafee635d8</code></small></td><td>&ldquo;A regression of reproduced t-stats on original long- short t-stats finds a slope of 0.90 and anR2 of 83%.&rdquo;</td></tr><tr><td><code>E008</code></td><td><span class='badge'>T1</span></td><td><a href='https://www.nber.org/papers/w28432.pdf' target='_blank' rel='noopener'>S033</a><br><small>sha256: <code>ac98f2d8f2e4</code></small></td><td>&ldquo;USfactorreturns&quot;are26%lowerout-of-sampleand58% lower post-publication&rdquo;</td></tr><tr><td><code>E009</code></td><td><span class='badge'>T1</span></td><td><a href='https://www.nber.org/system/files/working_papers/w20721/w20721.pdf' target='_blank' rel='noopener'>S044</a><br><small>sha256: <code>cf7c94994d8b</code></small></td><td>&ldquo;transaction costs reduce the strategies&#x27; profitability and its associated statistical significance&rdquo;</td></tr><tr><td><code>E010</code></td><td><span class='badge'>T1</span></td><td><a href='https://pages.stern.nyu.edu/~lpederse/papers/TimeSeriesMomentum.pdf' target='_blank' rel='noopener'>S043</a><br><small>sha256: <code>f23426234755</code></small></td><td>&ldquo;58 liquid instruments we consider&rdquo;</td></tr><tr><td><code>E011</code></td><td><span class='badge'>T1</span></td><td><a href='https://warwick.ac.uk/fac/soc/wbs/subjects/finance/events/recentevents/pastevents/behaviouralfinance1day/uppal_paper_06.pdf' target='_blank' rel='noopener'>S045</a><br><small>sha256: <code>4ad6178cad16</code></small></td><td>&ldquo;higher Sharpe ratio and lower turnover than the policies suggested by both the static and the dynamic models&rdquo;</td></tr><tr><td><code>E012</code></td><td><span class='badge'>T1</span></td><td><a href='https://people.duke.edu/~charvey/Research/Published_Papers/P131_The_scientific_outlook.pdf' target='_blank' rel='noopener'>S046</a><br><small>sha256: <code>bd40ad06a1fb</code></small></td><td>&ldquo;prior beliefs in financial eco- nomics than in other scientific fields where priors are diffuse&rdquo;</td></tr><tr><td><code>E013</code></td><td><span class='badge'>T1</span></td><td><a href='https://abfer.org/media/abfer-events-2018/annual-conference/investment-finance/21-1-P-tarun-chordia.pdf' target='_blank' rel='noopener'>S047</a><br><small>sha256: <code>892cd08dacaf</code></small></td><td>&ldquo;Evidence from Two Million Strategies&rdquo;</td></tr><tr><td><code>E014</code></td><td><span class='badge'>T1</span></td><td><a href='https://abfer.org/media/abfer-events-2018/annual-conference/investment-finance/21-1-P-tarun-chordia.pdf' target='_blank' rel='noopener'>S047</a><br><small>sha256: <code>892cd08dacaf</code></small></td><td>&ldquo;Recommend a t-statistic hurdle of 3&rdquo;</td></tr><tr><td><code>E015</code></td><td><span class='badge'>T1</span></td><td><a href='https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf' target='_blank' rel='noopener'>S037</a><br><small>sha256: <code>5e4fc027f835</code></small></td><td>&ldquo;The Deflated Sharpe Ratio (DSR) corrects for two leading sources of performance inflation: Selection bias under multiple testing and non-Normally distributed returns.&rdquo;</td></tr><tr><td><code>E016</code></td><td><span class='badge'>T1</span></td><td><a href='https://www.davidhbailey.com/dhbpapers/overfit-tools.pdf' target='_blank' rel='noopener'>S036</a><br><small>sha256: <code>3507a71639f4</code></small></td><td>&ldquo;Backtest overfitting is now thought to be a primary reason why quantitativeinvestmentmodelsandstrategiesthatlookgoodonpaperoftendisappointinpractice.&rdquo;</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const MODEL_INPUTS = [{"name": "trades_per_year_base", "default_val": 100.0, "min_val": 10.0, "max_val": 250.0, "step_val": 1, "model_id": "C001"}, {"name": "true_edge_r", "default_val": 0.1, "min_val": 0.01, "max_val": 0.25, "step_val": 0.001, "model_id": "C001"}, {"name": "discovery_years", "default_val": 6.0, "min_val": 0.6, "max_val": 15.0, "step_val": 0.01, "model_id": "C001"}, {"name": "n_trades_discovery", "default_val": 600.0, "min_val": 60.0, "max_val": 1500.0, "step_val": 1, "model_id": "C001"}, {"name": "se_discovery", "default_val": 0.040825, "min_val": 0.004083, "max_val": 0.102063, "step_val": 0.0001, "model_id": "C001"}, {"name": "z_discovery", "default_val": 2.4495, "min_val": 0.24495, "max_val": 6.12375, "step_val": 0.01, "model_id": "C001"}, {"name": "p_pass_discovery", "default_val": 0.708, "min_val": 0.0708, "max_val": 1.77, "step_val": 0.001, "model_id": "C001"}, {"name": "holdout_years", "default_val": 2.0, "min_val": 0.2, "max_val": 5.0, "step_val": 0.01, "model_id": "C001"}, {"name": "n_trades_holdout", "default_val": 200.0, "min_val": 20.0, "max_val": 500.0, "step_val": 1, "model_id": "C001"}, {"name": "se_holdout", "default_val": 0.07071, "min_val": 0.007071, "max_val": 0.176775, "step_val": 0.0001, "model_id": "C001"}, {"name": "z_holdout", "default_val": 1.4142, "min_val": 0.14142, "max_val": 3.5355, "step_val": 0.01, "model_id": "C001"}, {"name": "p_pass_holdout", "default_val": 0.512, "min_val": 0.0512, "max_val": 1.28, "step_val": 0.001, "model_id": "C001"}, {"name": "joint_power_100tr", "default_val": 0.362, "min_val": 0.0362, "max_val": 0.905, "step_val": 0.001, "model_id": "C001"}, {"name": "joint_power_50tr", "default_val": 0.051, "min_val": 0.0051, "max_val": 0.1275, "step_val": 0.0001, "model_id": "C001"}, {"name": "hurdle_t_hlz", "default_val": 3.0, "min_val": 0.3, "max_val": 7.5, "step_val": 0.01, "model_id": "C001"}, {"name": "hurdle_t_chordia", "default_val": 3.77, "min_val": 0.377, "max_val": 9.425, "step_val": 0.01, "model_id": "C001"}, {"name": "us100_spread_points", "default_val": 1.1, "min_val": 0.11, "max_val": 2.75, "step_val": 0.01, "model_id": "C001"}, {"name": "us100_stop_points", "default_val": 50.0, "min_val": 5.0, "max_val": 125.0, "step_val": 0.1, "model_id": "C001"}, {"name": "us100_spread_R", "default_val": 0.022, "min_val": 0.0022, "max_val": 0.055, "step_val": 0.0001, "model_id": "C001"}, {"name": "us100_net_edge_R", "default_val": 0.078, "min_val": 0.0078, "max_val": 0.195, "step_val": 0.0001, "model_id": "C001"}, {"name": "spx500_spread_points", "default_val": 0.38, "min_val": 0.038, "max_val": 0.95, "step_val": 0.001, "model_id": "C001"}, {"name": "spx500_stop_points", "default_val": 10.0, "min_val": 1.0, "max_val": 25.0, "step_val": 0.1, "model_id": "C001"}, {"name": "spx500_spread_R", "default_val": 0.038, "min_val": 0.0038, "max_val": 0.095, "step_val": 0.0001, "model_id": "C001"}, {"name": "spx500_net_edge_R", "default_val": 0.062, "min_val": 0.0062, "max_val": 0.155, "step_val": 0.0001, "model_id": "C001"}, {"name": "dax40_spread_points", "default_val": 1.6, "min_val": 0.16, "max_val": 4.0, "step_val": 0.01, "model_id": "C001"}, {"name": "dax40_stop_points", "default_val": 25.0, "min_val": 2.5, "max_val": 62.5, "step_val": 0.1, "model_id": "C001"}, {"name": "dax40_spread_R", "default_val": 0.064, "min_val": 0.0064, "max_val": 0.16, "step_val": 0.0001, "model_id": "C001"}, {"name": "dax40_net_edge_R", "default_val": 0.036, "min_val": 0.0036, "max_val": 0.09, "step_val": 0.0001, "model_id": "C001"}, {"name": "breakeven_edge_R", "default_val": 0.05, "min_val": 0.005, "max_val": 0.125, "step_val": 0.0001, "model_id": "C001"}, {"name": "expected_pnl_eur", "default_val": 38000.0, "min_val": 3800.0, "max_val": 95000.0, "step_val": 10.0, "model_id": "C001"}, {"name": "capital_loss_prevented", "default_val": 15000.0, "min_val": 1500.0, "max_val": 37500.0, "step_val": 10.0, "model_id": "C001"}, {"name": "n_signals", "default_val": 4.0, "min_val": 0.4, "max_val": 10.0, "step_val": 0.01, "model_id": "C002"}, {"name": "signal_individual_t", "default_val": 1.75, "min_val": 0.175, "max_val": 4.375, "step_val": 0.01, "model_id": "C002"}, {"name": "signal_individual_r", "default_val": 0.05, "min_val": 0.005, "max_val": 0.125, "step_val": 0.0001, "model_id": "C002"}, {"name": "cross_correlation", "default_val": 0.0, "min_val": -10.0, "max_val": 10.0, "step_val": 0.1, "model_id": "C002"}, {"name": "portfolio_sharpe_multiplier", "default_val": 2.0, "min_val": 0.2, "max_val": 5.0, "step_val": 0.01, "model_id": "C002"}, {"name": "portfolio_t_combined", "default_val": 3.5, "min_val": 0.35, "max_val": 8.75, "step_val": 0.01, "model_id": "C002"}, {"name": "portfolio_net_r", "default_val": 0.1, "min_val": 0.01, "max_val": 0.25, "step_val": 0.001, "model_id": "C002"}, {"name": "min_required_signals_zero_corr", "default_val": 4.0, "min_val": 0.4, "max_val": 10.0, "step_val": 0.01, "model_id": "C002"}, {"name": "min_required_signals_corr_20", "default_val": 6.0, "min_val": 0.6, "max_val": 15.0, "step_val": 0.01, "model_id": "C002"}, {"name": "diversification_ratio", "default_val": 2.0, "min_val": 0.2, "max_val": 5.0, "step_val": 0.01, "model_id": "C002"}];
+const MODEL_METRICS = [];
+
+// Built-in quantitative & epistemic helper functions matching `lean_engine.py` SAFE_FUNCS
+function dr_round(val, digits=4) {
+  const f = Math.pow(10, digits);
+  return Math.round(val * f) / f;
+}
+function dr_sum(arr) { return arr.reduce((a, b) => a + b, 0); }
+function hold_cost_bp(spread_bp, nights, annual_swap_bp) {
+  return spread_bp + nights * (annual_swap_bp / 365.0);
+}
+function net_edge_bp(gross_bp, spread_bp, slippage_bp, comm_bp=0.0) {
+  return gross_bp - (spread_bp + slippage_bp + comm_bp);
+}
+function sharpe_annual(mean_ret, std_ret, periods=252.0) {
+  return std_ret > 0 ? (mean_ret / std_ret) * Math.sqrt(periods) : 0.0;
+}
+function kelly_half(win_prob, payoff_ratio) {
+  return payoff_ratio > 0 ? 0.5 * (win_prob - (1.0 - win_prob) / payoff_ratio) : 0.0;
+}
+function wilson_lower_95(k, n) {
+  if (n <= 0) return 0.0;
+  const p = k / n, z2 = 1.96 * 1.96;
+  return (p + z2 / (2 * n) - 1.96 * Math.sqrt((p * (1 - p) + z2 / (4 * n)) / n)) / (1 + z2 / n);
+}
+
+const state = {};
+MODEL_INPUTS.forEach(inp => { state[inp.name] = inp.default_val; });
+
+function initUI() {
+  const root = document.getElementById("sliders-root");
+  root.innerHTML = "";
+  MODEL_INPUTS.forEach(inp => {
+    const row = document.createElement("div");
+    row.className = "slider-row";
+    row.innerHTML = `
+      <div class="slider-head">
+        <span><code>${inp.name}</code> <small style="color:var(--muted)">(${inp.model_id})</small></span>
+        <strong id="lbl-${inp.name}">${state[inp.name]}</strong>
+      </div>
+      <input type="range" id="rng-${inp.name}" min="${inp.min_val}" max="${inp.max_val}" step="${inp.step_val}" value="${state[inp.name]}">
+    `;
+    root.appendChild(row);
+    const rng = row.querySelector("input");
+    rng.addEventListener("input", (e) => {
+      state[inp.name] = parseFloat(e.target.value);
+      document.getElementById("lbl-" + inp.name).textContent = state[inp.name];
+      recomputeModel();
+    });
+  });
+  recomputeModel();
+}
+
+function recomputeModel() {
+  const env = Object.assign({}, state);
+  const tbody = document.getElementById("metrics-body");
+  tbody.innerHTML = "";
+  MODEL_METRICS.forEach(m => {
+    let val = 0.0;
+    try {
+      val = Function("env", "dr_round", "dr_sum", "hold_cost_bp", "net_edge_bp", "sharpe_annual", "kelly_half", "wilson_lower_95",
+        "return " + m.js_expr)(env, dr_round, dr_sum, hold_cost_bp, net_edge_bp, sharpe_annual, kelly_half, wilson_lower_95);
+    } catch (err) {
+      val = NaN;
+    }
+    env[m.name] = val;
+    const color = val < 0 ? "var(--danger)" : "var(--ok)";
+    const elastEntries = Object.entries(m.elasticities || {}).sort((a,b) => Math.abs(b[1]) - Math.abs(a[1]));
+    let sensInfo = "—";
+    if (elastEntries.length > 0) {
+      const [topVar, topEl] = elastEntries[0];
+      const beVal = (m.breakeven_bounds || {})[topVar];
+      sensInfo = `E(${topVar})=${topEl}x` + (beVal !== undefined ? ` | Tipping=${beVal}` : "");
+    }
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><code>${m.name}</code><br><small style="color:var(--muted)">${m.py_expr}</small></td>
+      <td style="font-weight:700;color:${color}">${Number.isFinite(val) ? val.toFixed(4) : "ERR"}</td>
+      <td style="color:var(--muted)">${m.baseline_val}</td>
+      <td><small>${sensInfo}</small></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function resetSliders() {
+  MODEL_INPUTS.forEach(inp => {
+    state[inp.name] = inp.default_val;
+    const rng = document.getElementById("rng-" + inp.name);
+    if (rng) rng.value = inp.default_val;
+    const lbl = document.getElementById("lbl-" + inp.name);
+    if (lbl) lbl.textContent = inp.default_val;
+  });
+  recomputeModel();
+}
+
+initUI();
+</script>
+</body>
+</html>

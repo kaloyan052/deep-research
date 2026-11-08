@@ -1,0 +1,255 @@
+
+--- PAGE 1 ---
+Anomalies and Multiple Hypothesis Testing: 
+Evidence from Two Million Strategies
+Tarun Chordia
+Amit Goyal
+Alessio Saretto
+May 2018
+--- PAGE 2 ---
+A zoo of factors/anomalies
+Many factors
+• Fama and French (2015) five-factor/ Hou, Xue, and 
+Zhang (2015) four-factor/ Stambaugh and Yuan 
+(2016) four-factor
+– Plus the Carhart (1997) momentum factor
+Many anomalies
+• Hou, Xue, and Zhang (2015) – 80
+• McLean and Pontiff (2016) - 97
+• Linnainmaa and Roberts (2016) – 38
+• Harvey, Liu, and Zhu (2016) - 316 
+• Hou, Xue, and Zhang (2017) – 447
+2
+--- PAGE 3 ---
+Are these reliable?
+McLean and Pontiff (2016) look at performance AFTER
+publication
+• Maybe academics make anomalies go away
+• Chordia, Subra, Tong (2014) – hedge fund AUM
+Linnainmaa and Roberts (2016) look at performance 
+BEFORE time-period studied in publication
+• Maybe anomalies did not exist before the time they were 
+studied
+Hou, Xue, and Zhang (2017) look at performance 
+DURING the time-period
+• Maybe there are no anomalies to begin with
+3
+--- PAGE 4 ---
+P-hacking
+Harvey, Liu, Zhu (2016) – “... most claimed 
+research findings in financial economics are 
+likely false.”
+• Recommend a t-statistic hurdle of 3  - MHT
+Harvey (2017) – AFA Presidential address
+• Usually, only significant results have a path to publication
+• Try many variables until the significant one is found
+• Try different sample periods, Different data choices
+• Different test procedures
+• Focus on microcap firms
+Lo and MacKinlay (1990) – Data Snooping
+4
+--- PAGE 5 ---
+What we do
+Construct a laboratory experiment to analyze many 
+trading strategies including:
+• Strategies that have been studied and published
+• Strategies that have been studied and not published 
+(because not significant)
+• Strategies that have not been studied (maybe 
+because we cannot describe an intuitive story behind 
+why they would work or not work)
+5
+--- PAGE 6 ---
+What we do
+Carefully construct a multiple hypothesis test
+• Extend methods described by Harvey, Liu, and Zhu 
+(2016) 
+• Use a stationary bootstrap that allows control for 
+cross-correlation in strategy
+Check which strategies survive and which do not
+• Take into account statistical thresholds and impose 
+economic thresholds
+6
+--- PAGE 7 ---
+What we do 
+We conduct a deliberate large-scale data mining 
+exercise
+Not interested in promoting any particular strategy
+• Not a fishing expedition but data mining in Leamer
+(1978) sense
+No a priori idea of what will work or not
+• Not a data snooping exercise
+One can also think of our exercise as a UBER test of 
+market efficiency
+7
+--- PAGE 8 ---
+Generating strategies
+Construct trading signals based on COMPUSTAT and 
+CRSP data
+• Select all items of COMPUSTAT that are sufficiently 
+populated (at least 300 firms each year for at least 
+30 years)
+• Trading signals based on CRSP: price, size, total 
+volatility, previous returns (1 to 12 months), 
+turnover, volume
+– Obtain 168 variables
+• construct signals: levels and growth rates, ratios of 
+two levels or growth rates, x1/x2, and all 
+permutations of three variables, (x1 − x2)/x3
+• Total of 2,385,778 signals
+8
+--- PAGE 9 ---
+Generating strategies
+Require very stringent filters to avoid generating 
+strategies that would not be tradable
+• At least 6 months between portfolio formation (June 
+30) and timestamp on COMPUSTAT data
+• Remove all stocks with price less than $3 on June 30
+• Remove all stocks in the bottom quintile of NYSE 
+market cap distribution
+Sample period is 1972 to 2015
+• Increase in number of firms due to Nasdaq
+9
+--- PAGE 10 ---
+Strategy evaluation (alpha and lambda)
+10−1 decile portfolio alphas from FF5+MOM
+RRpppp = αα + ββ′FFpp + eepppp
+FM coefficients
+RRiipp − �ββiiFFpp = λλ0pp + λλ1ppXXiipp−1 + λλ2ppZZiipp−1 + uuiipp
+• Risk-adjusted returns on LHS (Brennan, Chordia, and 
+Subrahmanyam, 1998)
+• Z’s are control variables (R1, R212, Sz, B/M, 
+Profitability, Investment)
+10
+--- PAGE 11 ---
+Summary statistics
+11
+
+--- PAGE 12 ---
+Summary statistics
+12
+
+--- PAGE 13 ---
+Summary statistics
+13
+
+--- PAGE 14 ---
+Empirical Distributions
+14
+
+--- PAGE 15 ---
+Cross-correlation
+Problem
+ Strategies rely on variables that are related
+ There is cross-correlation in returns and residuals
+Solution
+ Implement a bootstrap
+• Kosowski, Timmermann, Wermers, and White (2006), 
+Fama and French (2010), Yan and Zheng (2016)
+• Impose the null of alpha (or FM-delta) equal to zero
+• Bootstrap with replacement all returns and factors 
+simultaneously to preserve cross-correlation
+• Stationary bootstrap – draw random blocks of 6 months
+• Similarly draw FM coefficients after subtracting the mean
+• Tabulate the statistics in 1,000 bootstrap iterations
+15
+--- PAGE 16 ---
+Bootstrap results
+16
+
+--- PAGE 17 ---
+Multiple hypothesis testing
+If one tests many null hypothesis, even if the 
+experiments are independent, they cannot be 
+evaluated using classical cutoffs
+• Multiple testing means that some of them will be 
+rejected by luck even if null is true
+Example:
+• Type I error for one test = 1 − 0.95 = 5%
+• Type I error for ten tests = 1 − 0.9510 = 40%
+• Type I error for 100 tests = 1 − 0.95100 = 99%
+17
+--- PAGE 18 ---
+MHT approaches
+Family-wise error rate, FWER
+• FWER = Prob(Reject even one true null hypothesis)
+• Control FWER ≤ a (significance level)
+False discovery proportion, FDP
+• FDP = #False rejections / #Total rejections
+• Specify tolerance for FDP, γ (say 5%)
+• Control Probability(FDP ≥ γ) ≤ α (say 5%)
+• If FDP tolerance is 5%, we are willing to accept that at 
+most 5% of ‘discovered’ anomalies may not be ‘real’
+False discovery rate, FDR
+• FDR = E(FDP)
+• Control FDR ≤ g
+– No significance level
+18
+--- PAGE 19 ---
+MHT approaches
+FWER
+• Bonferroni: Independence assumption
+• Holm: Independence assumption
+• StepM: Arbitrary cross-correlation (based on bootstrap, 
+same as Harvey and Liu, 2016)
+FDR
+• BH: Limited cross-correlation
+• BHY: Even more limited cross-correlation
+FDP
+• FDP-StepM
+19
+--- PAGE 20 ---
+FWER
+Bonferroni
+• Reject null hypothesis, Hm at level αα if ppmm ≤ ααMM
+• M represents number of strategies being tested
+Holm
+• Rank p-values pp1 ≤ pp2 ≤ ... ≤ ppMM
+• Reject Hi at level αα if ppii ≤ αα(MM−ii+1) for i=1 ... M
+20
+--- PAGE 21 ---
+FWER
+StepM method: Romano and Wolf (2005)
+• Bootstrap data while maintaining correlations
+• For each bootstrap iteration compute maximum t-stat
+• ttmmmmmm(1) , ttmmmmmm(2) , ... , ttmmmmmmBB , where B=1000
+• Critical value c1 is the (1- αα) empirical percentile
+• If for M1 strategies, ttmm ≥ cc1 then M1 are rejected
+• Repeat bootstrap for M – M1 strategies
+• Repeat until no further strategies are rejected
+21
+--- PAGE 22 ---
+FDR
+BHY: Benjamini, Hochberg (1995), Benjamini, Yekutieli (2001)
+• Rank p-values pp1 ≤ pp2 ≤ ... ≤ ppMM
+• Reject null hypotheses, H1, H2, ..., Hj*
+Represents number of false rejections we are willing to tolerate
+BH: Benjamini, Hochberg (1995)
+22
+
+--- PAGE 23 ---
+FDP
+Romano and Wolf (2007):
+Control FDP at proportion γγ and level αα
+Prob FFFFFF > γγ ≤ αα
+FDP-StepM method: 
+• Apply the kj-StepM method
+23
+--- PAGE 24 ---
+Monte Carlo Simulations
+Return generating process
+Draw factors and betas from MVN distributions with means and 
+covariance matrix matched to cross-sectional distribution in 
+data. Diagonal values of residuals also from MVN with mean 
+zero and standard deviation matched to empirical distribution.
+T = 500
+Simulations = 1000
+Strategies, N=10,000
+Bootstraps = 1,000
+Choose fraction f of non-zero alphas and correlation between the 
+residuals.
+24
+
+--- PAGE 25 ---
+Simulations: Yan and Zheng (2017)
+25

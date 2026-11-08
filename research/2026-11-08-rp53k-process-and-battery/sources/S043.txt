@@ -1,0 +1,1394 @@
+
+--- PAGE 1 ---
+Time series momentum $
+Tobias J. Moskowitz a,n, Yao Hua Ooi b, Lasse Heje Pedersen b,c
+a University of Chicago Booth School of Business and NBER, United States
+b AQR Capital Management, United States
+c New York University, Copenhagen Business School, NBER, CEPR, United States
+article info
+Article history:
+Received 16 August 2010
+Received in revised form
+11 July 2011
+Accepted 12 August 2011
+Available online 11 December 2011
+JEL classification:
+G12
+G13
+G15
+F37
+Keywords:
+Asset pricing
+Trading volume
+Futures pricing
+International financial markets
+Market efficiency
+abstract
+We document significant ‘‘time series momentum’’ in equity index, currency, commod-
+ity, and bond futures for each of the 58 liquid instruments we consider. We find
+persistence in returns for one to 12 months that partially reverses over longer horizons,
+consistent with sentiment theories of initial under-reaction and delayed over-reaction.
+A diversified portfolio of time series momentum strategies across all asset classes
+delivers substantial abnormal returns with little exposure to standard asset pricing
+factors and performs best during extreme markets. Examining the trading activities of
+speculators and hedgers, we find that speculators profit from time series momentum at
+the expense of hedgers.
+& 2011 Elsevier B.V. All rights reserved.
+1. Introduction: a trending walk down Wall Street
+We document an asset pricing anomaly we term ‘‘time
+series momentum,’’ which is remarkably consistent across
+very different asset classes and markets. Specifically, we
+find strong positive predictability from a security’s own
+past returns for almost five dozen diverse futures and
+forward contracts that include country equity indexes,
+currencies, commodities, and sovereign bonds over more
+than 25 years of data. We find that the past 12-month
+excess return of each instrument is a positive predictor of
+its future return. This time series momentum or ‘‘trend’’
+effect persists for about a year and then partially reverses
+over longer horizons. These findings are robust across a
+number of subsamples, look-back periods, and holding
+periods. We find that 12-month time series momentum
+profits are positive, not just on average across these assets,
+but for every asset contract we examine (58 in total).
+Time series momentum is related to, but different
+from, the phenomenon known as ‘‘momentum’’ in the
+finance literature, which is primarily cross-sectional in
+nature. The momentum literature focuses on the relative
+performance of securities in the cross-section, finding that
+securities that recently outperformed their peers over the
+past three to 12 months continue to outperform their
+Contents lists available at SciVerse ScienceDirect
+journal homepage: www.elsevier.com/locate/jfec
+Journal of Financial Economics
+0304-405X/$ - see front matter & 2011 Elsevier B.V. All rights reserved.
+doi:10.1016/j.jfineco.2011.11.003
+$ We thank Cliff Asness, Nick Barberis, Gene Fama, John Heaton,
+Ludger Hentschel, Brian Hurst, Andrew Karolyi, John Liew, Matt Richard-
+son, Richard Thaler, Adrien Verdelhan, Robert Vishny, Robert Whitelaw,
+Jeff Wurgler, and seminar participants at NYU and the 2011 AFA
+meetings in Denver, CO for useful suggestions and discussions, and Ari
+Levine and Haibo Lu for excellent research assistance. Moskowitz thanks
+the Initiative on Global Markets at the University of Chicago Booth
+School of Business and CRSP for financial support.
+n Corresponding author.
+E-mail address:
+tobias.moskowitz@chicagobooth.edu (T.J. Moskowitz).
+Journal of Financial Economics 104 (2012) 228–250
+--- PAGE 2 ---
+peers on average over the next month. 1 Rather than focus
+on the relative returns of securities in the cross-section,
+time series momentum focuses purely on a security’s own
+past return.
+We argue that time series momentum directly
+matches the predictions of many prominent behavioral
+and rational asset pricing theories. Barberis, Shleifer, and
+Vishny (1998) , Daniel, Hirshleifer, and Subrahmanyam
+(1998), and Hong and Stein (1999) all focus on a single
+risky asset, therefore having direct implications for time
+series, rather than cross-sectional, predictability. Like-
+wise, rational theories of momentum ( Berk, Green, and
+Naik, 1999 ; Johnson, 2002 ; Ahn, Conrad, and Dittmar,
+2003; Liu and Zhang, 2008 ; Sagi and Seasholes, 2007 ) also
+pertain to a single risky asset.
+Our finding of positive time series momentum that
+partially reverse over the long-term may be consistent
+with initial under-reaction and delayed over-reaction,
+which theories of sentiment suggest can produce these
+return patterns. 2 However, our results also pose several
+challenges to these theories. First, we find that the
+correlations of time series momentum strategies across
+asset classes are larger than the correlations of the asset
+classes themselves. This suggests a stronger common
+component to time series momentum across different
+assets than is present among the assets themselves. Such
+a correlation structure is not addressed by existing beha-
+vioral models. Second, very different types of investors in
+different asset markets are producing the same patterns
+at the same time. Third, we fail to find a link between
+time series momentum and measures of investor senti-
+ment used in the literature ( Baker and Wurgler, 2006 ; Qiu
+and Welch, 2006 ).
+To understand the relationship between time series
+and cross-sectional momentum, their underlying drivers,
+and relation to theory, we decompose the returns to a
+time series and cross-sectional momentum strategy fol-
+lowing the framework of Lo and Mackinlay (1990) and
+Lewellen (2002). This decomposition allows us to identify
+the properties of returns that contribute to these patterns,
+and what features are common and unique to the two
+strategies. We find that positive auto-covariance in
+futures contracts’ returns drives most of the time series
+and cross-sectional momentum effects we find in the
+data. The contribution of the other two return
+components—serial cross-correlations and variation in
+mean returns —is small. In fact, negative serial cross-
+correlations (i.e., lead-lag effects across securities), which
+affect cross-sectional momentum, are negligible and of
+the ‘‘wrong’’ sign among our instruments to explain time
+series momentum. Our finding that time series and cross-
+sectional momentum profits arise due to auto-covar-
+iances is consistent with the theories mentioned above. 3
+In addition, we find that time series momentum captures
+the returns associated with individual stock (cross-sec-
+tional) momentum, most notably Fama and French’s UMD
+factor, despite time series momentum being constructed
+from a completely different set of securities. This finding
+indicates strong correlation structure between time series
+momentum and cross-sectional momentum even when
+applied to different assets and suggests that our time
+series momentum portfolio captures individual stock
+momentum.
+To better understand what might be driving time
+series momentum, we examine the trading activity of
+speculators and hedgers around these return patterns
+using weekly position data from the Commodity Futures
+Trading Commission (CFTC). We find that speculators
+trade with time series momentum, being positioned, on
+average, to take advantage of the positive trend in returns
+for the first 12 months and reducing their positions when
+the trend begins to reverse. Consequently, speculators
+appear to be profiting from time series momentum at the
+expense of hedgers. Using a vector auto-regression (VAR),
+we confirm that speculators trade in the same direction as
+a return shock and reduce their positions as the shock
+dissipates, whereas hedgers take the opposite side of
+these trades.
+Finally, we decompose time series momentum into the
+component coming from spot price predictability versus
+the ‘‘roll yield’’ stemming from the shape of the futures
+curve. While spot price changes are mostly driven by
+information shocks, the roll yield can be driven by
+liquidity and price pressure effects in futures markets
+that affect the return to holding futures without necessa-
+rily changing the spot price. Hence, this decomposition
+may be a way to distinguish the effects of information
+dissemination from hedging pressure. We find that both
+of these effects contribute to time series momentum, but
+1 Cross-sectional momentum has been documented in US equities
+(Jegadeesh and Titman, 1993 ; Asness, 1994 ), other equity markets
+(Rouwenhorst, 1998 ), industries ( Moskowitz and Grinblatt, 1999 ),
+equity indexes ( Asness, Liew, and Stevens, 1997 ; Bhojraj and
+Swaminathan, 2006 ), currencies ( Shleifer and Summers, 1990 ), com-
+modities ( Erb and Harvey, 2006 ; Gorton, Hayashi, and Rouwenhorst,
+2008), and global bond futures ( Asness, Moskowitz, and Pedersen, 2010 ).
+Garleanu and Pedersen (2009) show how to trade optimally on momen-
+tum and reversal in light of transaction costs, and DeMiguel, Nogales,
+and Uppal (2010) show how to construct an optimal portfolio based on
+stocks’ serial dependence and find outperformance out-of-sample. Our
+study is related to but different from Asness, Moskowitz, and Pedersen
+(2010) who study cross-sectional momentum and value strategies
+across several asset classes including individual stocks. We complement
+their study by examining time series momentum and its relation to
+cross-sectional momentum and hedging pressure in some of the same
+asset classes.
+2 Under-reaction can result from the slow diffusion of news ( Hong
+and Stein, 1999 ), conservativeness and anchoring biases ( Barberis,
+Shleifer, and Vishny, 1998 ; Edwards, 1968 ), or the disposition effect to
+sell winners too early and hold on to losers too long ( Shefrin and
+Statman, 1985 ; Frazzini, 2006 ). Over-reaction can be caused by positive
+feedback trading ( De Long, Shleifer, Summers, and Waldmann, 1990 ;
+Hong and Stein, 1999 ), over-confidence and self-attribution confirma-
+tion biases ( Daniel, Hirshleifer, and Subrahmanyam, 1998 ), the repre-
+sentativeness heuristic ( Barberis, Shleifer, and Vishny, 1998 ; Tversky
+and Kahneman, 1974 ), herding ( Bikhchandani, Hirshleifer, and Welch,
+1992), or general sentiment ( Baker and Wurgler, 2006 , 2007).
+3 However, this result differs from Lewellen’s (2002) finding for
+equity portfolio returns that temporal lead-lag effects, rather than
+auto-covariances, appear to be the most significant contributor to
+cross-sectional momentum. Chen and Hong (2002) provide a different
+interpretation and decomposition of the Lewellen (2002) portfolios that
+is consistent with auto-covariance being the primary driver of stock
+momentum.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250 229
+--- PAGE 3 ---
+only spot price changes are associated with long-term
+reversals, consistent with the idea that investors may be
+over-reacting to information in the spot market but that
+hedging pressure is more long-lived and not affected by
+over-reaction.
+Our finding of time series momentum in virtually
+every instrument we examine seems to challenge the
+‘‘random walk’’ hypothesis, which in its most basic form
+implies that knowing whether a price went up or down in
+the past should not be informative about whether it will
+go up or down in the future. While rejection of the
+random walk hypothesis does not necessarily imply a
+rejection of a more sophisticated notion of market effi-
+ciency with time-varying risk premiums, we further show
+that a diversified portfolio of time series momentum
+across all assets is remarkably stable and robust, yielding
+a Sharpe ratio greater than one on an annual basis, or
+roughly 2.5 times the Sharpe ratio for the equity market
+portfolio, with little correlation to passive benchmarks in
+each asset class or a host of standard asset pricing factors.
+The abnormal returns to time series momentum also do
+not appear to be compensation for crash risk or tail
+events. Rather, the return to time series momentum tends
+to be largest when the stock market’s returns are most
+extreme—performing best when the market experiences
+large up and down moves. Hence, time series momentum
+may be a hedge for extreme events, making its large
+return premium even more puzzling from a risk-based
+perspective. The robustness of time series momentum for
+very different asset classes and markets suggest that our
+results are not likely spurious, and the relatively short
+duration of the predictability (less than a year) and the
+magnitude of the return premium associated with time
+series momentum present significant challenges to the
+random walk hypothesis and perhaps also to the efficient
+market hypothesis, though we cannot rule out the exis-
+tence of a rational theory that can explain these findings.
+Our study relates to the literature on return autocorrela-
+tion and variance ratios that also finds deviations from the
+random walk hypothesis ( Fama and French, 1988 ; Lo and
+Mackinlay, 1988; Poterba and Summers, 1988 ). While this
+literature is largely focused on US and global equities,
+Cutler, Poterba, and Summers (1991) study a variety of
+assets including housing and c ollectibles. The literature
+finds positive return autocorrelations at daily, weekly, and
+monthly horizons and negative autocorrelations at annual
+and multi-year frequencies. We complement this literature
+in several ways. The studies of autocorrelation examine, by
+definition, return predictability where the length of the
+‘‘look-back period’’ is the same as the ‘‘holding period’’ over
+which returns are predicted. This restriction masks signifi-
+cant predictability that is uncovered once look-back periods
+are allowed to differ from predicted or holding periods. In
+particular, our result that the past 12 months of returns
+strongly predicts returns over the next one month is missed
+by looking at one-year autocorrelations. While return con-
+tinuation can also be detected implicitly from variance
+ratios, we complement the literature by explicitly docu-
+menting the extent of return continuation and by construct-
+ing a time series momentum factor that can help explain
+existing asset pricing phenom ena, such as cross-sectional
+momentum premiums and hedge fund macro and managed
+futures returns. Also, a significant component of the higher
+frequency findings in equities is contaminated by market
+microstructure effects such as stale prices ( Richardson,
+1993; Ahn, Boudoukh, Richardson, and Whitelaw, 2002 ).
+Focusing on liquid futures instead of individual stocks and
+looking at lower frequency data mitigates many of these
+issues. Finally, unique to this literature, we link time series
+predictability to the dynamics of hedger and speculator
+positions and decompose returns into price changes and roll
+yields.
+Our paper is also related to the literature on hedging
+pressure in commodity futures ( Keynes, 1923 ; Fama and
+French, 1987 ; Bessembinder, 1992 ; de Roon, Nijman, and
+Veld, 2000 ). We complement this literature by showing
+how hedger and speculator positions relate to past futures
+returns (and not just in commodities), finding that
+speculators’ positions load positively on time series
+momentum, while hedger positions load negatively on
+it. Also, we consider the relative return predictability of
+positions, past price changes, and past roll yields. Gorton,
+Hayashi, and Rouwenhorst (2008) also link commodity
+momentum and speculator positions to the commodities’
+inventories.
+The rest of the paper is organized as follows. Section 2
+describes our data on futures returns and the positioning
+of hedgers and speculators. Section 3 documents time
+series momentum at horizons less than a year and
+reversals beyond that. Section 4 defines a time series
+momentum factor, studying its relation to other known
+return factors, its performance during extreme markets,
+and correlations within and across asset classes. Section 5
+examines the relation between time series and cross-
+sectional momentum, showing how time series momen-
+tum is a central driver of cross-sectional momentum as
+well as macro and managed futures hedge fund returns.
+Section 6 studies the evolution of time series momentum
+and its relation to investor speculative and hedging
+positions. Section 7 concludes.
+2. Data and preliminaries
+We describe briefly the various data sources we use in
+our analysis.
+2.1. Futures returns
+Our data consist of futures prices for 24 commodities,
+12 cross-currency pairs (from nine underlying currencies),
+nine developed equity indexes, and 13 developed govern-
+ment bond futures, from January 1965 through December
+2009. These instruments are among the most liquid
+futures contracts in the world. 4 We focus on the most
+liquid instruments to avoid returns being contaminated
+by illiquidity or stale price issues and to match more
+4 We also confirm the time series momentum returns are robust
+among more illiquid instruments such as illiquid commodities (feeder
+cattle, Kansas wheat, lumber, orange juice, rubber, tin), emerging market
+currencies and equities, and more illiquid fixed income futures (not
+reported).
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250230
+--- PAGE 4 ---
+closely an implementable strategy at a significant trade
+size. Appendix A provides details on each instrument and
+their data sources, which are mainly Datastream, Bloom-
+berg, and various exchanges.
+We construct a return series for each instrument as
+follows. Each day, we compute the daily excess return of
+the most liquid futures contract (typically the nearest or
+next nearest-to-delivery contract), and then compound
+the daily returns to a cumulative return index from which
+we can compute returns at any horizon. For the equity
+indexes, our return series are almost perfectly correlated
+with the corresponding returns of the underlying cash
+indexes in excess of the Treasury bill rate. 5
+As a robustness test, we also use the ‘‘far’’ futures
+contract (the next maturity after the most liquid one). For
+the commodity futures, time series momentum profits are
+in fact slightly stronger for the far contract, and, for the
+financial futures, time series momentum returns hardly
+change if we use far futures.
+Table 1 presents summary statistics of the excess
+returns on our futures contracts. The first column reports
+when the time series of returns for each asset starts, and
+the next two columns report the time series mean
+(arithmetic) and standard deviation (annualized) of
+each contract by asset class: commodities, equity indexes,
+bonds, and currencies. As Table 1 highlights, there is
+significant variation in sample mean returns across
+the different contracts. Equity index, bonds, and curren-
+cies yield predominantly positive excess returns, while
+various commodity contracts yield positive, zero, and
+even negative excess average returns over the sample
+period. Only the equity and bond futures exhibit statisti-
+cally significant and consistent positive excess average
+returns.
+More striking are the differences in volatilities across
+the contracts. Not surprisingly, commodities and equities
+have much larger volatilities than bond futures or cur-
+rency forward contracts. But, even among commodities,
+there is substantial cross-sectional variation in volatilities.
+Making comparisons across instruments with vastly dif-
+ferent volatilities or combining various instruments into a
+diversified portfolio when they have wide-ranging vola-
+tilities is challenging. For example, the volatility of natural
+gas futures is about 50 times larger than that of 2-year US
+bond futures. We discuss below how we deal with this
+issue in our analysis.
+2.2. Positions of traders
+We also use data on the positions of speculators and
+hedgers from the Commodity Futures Trading Commission
+(CFTC) as detailed inAppendix A. The CFTC requires all large
+traders to identify themselves as commercial or non-com-
+mercial which we, and the previous literature (e.g.,
+Bessembinder, 1992; d eR o o n ,N i j m a n ,a n dV e l d ,2 0 0 0), refer
+to as hedgers and speculators, respectively. For each futures
+contract, the long and short open interest held by these
+traders on Tuesday are reported on a weekly basis.6
+Using the positions of speculators and hedgers as
+defined by the CFTC, we define the Net speculator position
+for each asset as follows:
+Net speculator position
+1⁄4 Speculator long positions/C0Speculator short positionsOpen interest :
+This signed measure shows whether speculators are
+net long or short in aggregate, and scales their net
+position by the open interest or total number of contracts
+outstanding in that futures market. Since speculators and
+hedgers approximately add up to zero (except for a small
+difference denoted ‘‘non-reported’’ due to measurement
+issues of very small traders), we focus our attention on
+speculators. Of course, this means that net hedger posi-
+tions constitute the opposite side (i.e., the negative of Net
+speculator position).
+The CFTC positions data do not cover all of the futures
+contracts we have returns for and consider in our analysis.
+Most commodity and foreign exchange contracts are
+covered, but only the US instruments among the stock
+and bond futures contracts are covered. The third and
+fourth columns of Table 1 report summary statistics on
+the sample of futures contracts with Net speculator
+positions in each contract over time. Speculators are net
+long, on average, and hence hedgers are net short, for
+most of the contracts, a result consistent with
+Bessembinder (1992) and de Roon, Nijman, and Veld
+(2000) for a smaller set of contracts over a shorter time
+period. All but two of the commodities (natural gas and
+cotton) have net long speculator positions over the
+sample period, with silver exhibiting the largest average
+net long speculator position. This is consistent with
+Keynes’ (1923) conjecture that producers of commodities
+are the primary hedgers in markets and are on the short
+side of these contracts as a result. For the other asset
+classes, other than the S&P 500, the 30-year US Treasury
+bond, and the $US/Japanese and $US/Swiss exchange
+rates, speculators exhibit net long positions, on average.
+Table 1 also highlights that there is substantial variation
+over time in Net speculator positions per contract and
+across contracts. Not surprisingly, the standard deviation
+of Net speculator positions is positively related to the
+volatility of the futures contract itself.
+2.3. Asset pricing benchmarks
+We evaluate the returns of our strategies relative to
+standard asset pricing benchmarks, namely the MSCI
+World equity index, Barclay’s Aggregate Bond Index, S&P
+GSCI Index, all of which we obtain from Datastream, the
+long-short factors SMB, HML, and UMD from Ken French’s
+Web site, and the long-short value and cross-sectional
+5 Bessembinder (1992)and d eR o o n ,N i j m a n ,a n dV e l d( 2 0 0 0 )compute
+returns on futures contracts similarly and also find that futures returns are
+highly correlated with spot returns on the same underlying asset.
+6 While commercial traders likely predominantly include hedgers,
+some may also be speculating, which introduces some noise into the
+analysis in terms of our classification of speculative and hedging trades.
+However, the potential attenuation bias associated with such misclassi-
+fication may only weaken our results.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250 231
+--- PAGE 5 ---
+Table 1
+Summary statistics on futures contracts.Reported are the annualized mean return and volatility (standard deviation) of the futures contracts in ou r
+sample from January 1965 to December 2009 as well as the mean and standard deviation of the Net speculator long positions in each contract as a
+percentage of open interest, covered and defined by the CFTC data, which are available over the period January 1986 to December 2009. For a detailed
+description of our sample of futures contracts, see Appendix A .
+Data start date Annualized mean Annualized volatility Average net speculator
+long positions
+Std. dev. net speculator
+long positions
+Commodity futures
+ALUMINUM Jan-79 0.97% 23.50%
+BRENTOIL Apr-89 13.87% 32.51%
+CATTLE Jan-65 4.52% 17.14% 8.1% 9.6%
+COCOA Jan-65 5.61% 32.38% 4.9% 14.0%
+COFFEE Mar-74 5.72% 38.62% 7.5% 13.6%
+COPPER Jan-77 8.90% 27.39%
+CORN Jan-65 /C03.19% 24.37% 7.1% 11.0%
+COTTON Aug-67 1.41% 24.35% /C00.1% 19.4%
+CRUDE Mar-83 11.61% 34.72% 1.0% 5.9%
+GASOIL Oct-84 11.95% 33.18%
+GOLD Dec-69 5.36% 21.37% 6.7% 23.0%
+HEATOIL Dec-78 9.79% 33.78% 2.4% 6.4%
+HOGS Feb-66 3.39% 26.01% 5.1% 14.5%
+NATGAS Apr-90 /C09.74% 53.30% /C01.6% 8.9%
+NICKEL Jan-93 12.69% 35.76%
+PLATINUM Jan-92 13.15% 20.95%
+SILVER Jan-65 3.17% 31.11% 20.6% 14.3%
+SOYBEANS Jan-65 5.57% 27.26% 8.2% 12.8%
+SOYMEAL Sep-83 6.14% 24.59% 6.7% 11.2%
+SOYOIL Oct-90 1.07% 25.39% 5.7% 12.8%
+SUGAR Jan-65 4.44% 42.87% 10.0% 14.2%
+UNLEADED Dec-84 15.92% 37.36% 7.8% 9.6%
+WHEAT Jan-65 /C01.84% 25.11% 4.3% 12.1%
+ZINC Jan-91 1.98% 24.76%
+Equity index futures
+ASX SPI 200 (AUS) Jan-77 7.25% 18.33%
+DAX (GER) Jan-75 6.33% 20.41%
+IBEX 35 (ESP) Jan-80 9.37% 21.84%
+CAC 40 10 (FR) Jan-75 6.73% 20.87%
+FTSE/MIB (IT) Jun-78 6.13% 24.59%
+TOPIX (JP) Jul-76 2.29% 18.66%
+AEX (NL) Jan-75 7.72% 19.18%
+FTSE 100 (UK) Jan-75 6.97% 17.77%
+S&P 500 (US) Jan-65 3.47% 15.45% /C04.6% 5.4%
+Bond futures
+3-year AUS Jan-92 1.34% 2.57%
+10-year AUS Dec-85 3.83% 8.53%
+2-year EURO Mar-97 1.02% 1.53%
+5-year EURO Jan-93 2.56% 3.22%
+10-year EURO Dec-79 2.40% 5.74%
+30-year EURO Dec-98 4.71% 11.70%
+10-year CAN Dec-84 4.04% 7.36%
+10-year JP Dec-81 3.66% 5.40%
+10-year UK Dec-79 3.00% 9.12%
+2-year US Apr-96 1.65% 1.86% 1.9% 11.3%
+5-year US Jan-90 3.17% 4.25% 3.0% 9.2%
+10-year US Dec-79 3.80% 9.30% 0.4% 8.0%
+30-year US Jan-90 9.50% 18.56% /C01.4% 6.2%
+Currency forwards
+AUD/USD Mar-72 1.85% 10.86% 12.4% 28.8%
+EUR/USD Sep-71 1.57% 11.21% 12.1% 18.7%
+CAD/USD Mar-72 0.60% 6.29% 4.7% 24.1%
+JPY/USD Sep-71 1.35% 11.66% /C06.0% 23.8%
+NOK/USD Feb-78 1.37% 10.56%
+NZD/USD Feb-78 2.31% 12.01% 38.8% 33.8%
+SEK/USD Feb-78 /C00.05% 11.06%
+CHF/USD Sep-71 1.34% 12.33% /C05.2% 26.8%
+GBP/USD Sep-71 1.39% 10.32% 2.7% 25.4%
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250232
+--- PAGE 6 ---
+momentum factors across asset classes from Asness,
+Moskowitz, and Pedersen (2010) .
+2.4. Ex ante volatility estimate
+Since volatility varies dramatically across our assets
+(illustrated in Table 1 ), we scale the returns by their
+volatilities in order to make meaningful comparisons
+across assets. We estimate each instrument’s ex ante
+volatility st at each point in time using an extremely
+simple model: the exponentially weighted lagged squared
+daily returns (i.e., similar to a simple univariate GARCH
+model). Specifically, the ex ante annualized variance st
+2
+for each instrument is calculated as follows:
+s2t 1⁄4 261X1
+i 1⁄4 0
+ð1/C0dÞdiðrt/C01/C0i/C0rt Þ2 , ð1Þ
+where the scalar 261 scales the variance to be annual, the
+weights ð1/C0dÞdi add up to one, and rt is the exponentially
+weighted average return computed similarly. The para-
+meter d is chosen so that the center of mass of the
+weights is P1i 1⁄4 0ð1/C0dÞdii 1⁄4 d=ð1/C0dÞ1⁄4 60 days. The volati-
+lity model is the same for all assets at all times. While all
+of the results in the paper are robust to more sophisti-
+cated volatility models, we chose this model due to its
+simplicity and lack of look-ahead bias in the volatility
+estimate. To ensure no look-ahead bias contaminates our
+results, we use the volatility estimates at time t/C0 1
+applied to time- t returns throughout the analysis.
+3. Time series momentum: Regression analysis and
+trading strategies
+We start by examining the time series predictability of
+futures returns across different time horizons.
+3.1. Regression analysis: Predicting price continuation and
+reversal
+We regress the excess return rst for instrument s in
+month t on its return lagged h months, where both
+returns are scaled by their ex ante volatilities sst/C01
+(defined above in Section 2.4 ):
+rst =sst/C01 1⁄4 aþbhrst/C0h=sst/C0h/C01 þest : ð2Þ
+Given the vast differences in volatilities (as shown in
+Table 1 ), we divide all returns by their volatility to put
+them on the same scale. This is similar to using General-
+ized Least Squares instead of Ordinary Least Squares
+(OLS).7 Stacking all futures contracts and dates, we run a
+pooled panel regression and compute t-statistics that
+account for group-wise clustering by time (at the monthly
+level). The regressions are run using lags of h1⁄41, 2, y,6 0
+months.
+Panel A of Fig. 1 plots the t-statistics from the pooled
+regressions by month lag h. The positive t-statistics for the
+first 12 months indicate significant return continuation or
+trends. The negative signs for the longer horizons indicate
+reversals, the most significant of which occur in the year
+immediately following the positive trend.
+Another way to look at time series predictability is to
+simply focus only on the sign of the past excess return.
+This even simpler way of looking at time series momen-
+tum underlies the trading strategies we consider in the
+next section. In a regression setting, this strategy can be
+captured using the following specification:
+rst =sst/C01 1⁄4 aþbhsignðrst/C0hÞþ est : ð3Þ
+We again make the left-hand side of the regression
+independent of volatility (the right-hand side is too since
+sign is either þ 1o r /C0 1), so that the parameter estimates
+are comparable across instruments. We report the t-
+statistics from a pooled regression with standard errors
+clustered by time (i.e., month) in Panel B of Fig. 1 .
+The results are similar across the two regression specifi-
+cations: strong return continuation for the first year and
+weaker reversals for the next 4 years. In both cases, the data
+exhibit a clear pattern, with all of the most recent 12-month
+lag returns positive (and nine statistically significant) and the
+majority of the remaining lags negative. Repeating the panel
+regressions for each asset cla ss separately, we obtain the
+same patterns: one to 12-month positive time series momen-
+tum followed by smaller reversals over the next 4 years as
+seen in Panel C of Fig. 1.
+3.2. Time series momentum trading strategies
+We next investigate the profitability of a number of
+trading strategies based on time series momentum. We
+vary both the number of months we lag returns to define
+the signal used to form the portfolio (the ‘‘look-back
+period’’) and the number of months we hold each portfo-
+lio after it has been formed (the ‘‘holding period’’).
+For each instrument s and month t, we consider
+whether the excess return over the past k months is
+positive or negative and go long the contract if positive
+and short if negative, holding the position for h months.
+We set the position size to be inversely proportional to
+the instrument’s ex ante volatility, 1 =sst/C01, each month.
+Sizing each position in each strategy to have constant
+ex ante volatility is helpful for two reasons. First, it makes
+it easier to aggregate strategies across instruments with
+very different volatility levels. Second, it is helpful econ-
+ometrically to have a time series with relatively stable
+volatility so that the strategy is not dominated by a few
+volatile periods.
+For each trading strategy ( k,h), we derive a single time
+series of monthly returns even if the holding period h is
+more than one month. Hence, we do not have overlapping
+observations. We derive this single time series of returns
+following the methodology used by Jegadeesh and Titman
+(1993): The return at time t represents the average return
+across all portfolios at that time, namely the return on the
+portfolio that was constructed last month, the month
+before that (and still held if the holding period h is greater
+than two), and so on for all currently ‘‘active’’ portfolios.
+Specifically, for each instrument, we compute the
+time-t return based on the sign of the past return from
+7 The regression results are qualitatively similar if we run OLS
+without adjusting for each security’s volatility.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250 233
+--- PAGE 7 ---
+time t /C0k /C0 1t o t /C0 1. We then compute the time- t
+return based on the sign of the past return from t/C0 k /C02
+to t /C02, and so on until we compute the time- t return
+based on the final past return that is still being used from
+t /C0k /C0 h to t/C0 h. For each ( k,h), we get a single time series
+of monthly returns by computing the average return of all
+of these h currently ‘‘active’’ portfolios (i.e., the portfolio
+that was just bought and those that were bought in the
+past and are still held). We average the returns across all
+instruments (or all instruments within an asset class), to
+obtain our time series momentum strategy returns,
+rTSMOM ðk,hÞt .
+To evaluate the abnormal performance of these
+strategies, we compute their alphas from the following
+-5
+-4
+-3
+-2
+-1
+0
+1
+2
+3
+4
+5
+6
+Month lag
+t-statistic by month, all asset classes
+-3
+-2
+-1
+0
+1
+2
+3
+4
+5
+6
+7
+Month lag
+t-statistic by month, all asset classes
+-3
+-2
+-1
+0
+1
+2
+3
+4
+5
+t-Statistic t-Statistict-Statistic
+t-Statistict-Statistict-Statistic
+Month lag
+Commodity futures
+-4
+-3
+-2
+-1
+0
+1
+2
+3
+Month lag
+Equity index futures
+-3
+-2
+-1
+0
+1
+2
+3
+4
+Month lag
+Government bond futures
+-4
+-3
+-2
+-1
+0
+1
+2
+3
+4
+5
+Month lag
+Currencies
+Fig. 1. Time series predictability across all asset classes. We regress the monthly excess return of each contract on its own lagged excess return over various
+horizons. Panel A uses the size of the lagged excess return as a predictor, where returns are scaled by their ex ante volatility to make them comparable across
+assets, Panel B uses the sign of the lagged excess return as a predictor, where the dependent variable is scaled by its ex ante volatility to make the regr ession
+coefficients comparable across different assets, and Panel C reports the results of the sign regression by asset class. Reported are the pooled regres sion
+estimates across all instruments with t-statistics computed using standard errors that are clustered by time (month). Sample period is January 1985 to
+December 2009. (A) Panel A: rst =sst/C01 1⁄4 aþbh rst/C0h =sst/C0h/C01 þest ;( B ) Panel B: rst =sst/C01 1⁄4 aþbh signðrst/C0hÞþ est ;( C ) Panel C: Results by asset class.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250234
+--- PAGE 8 ---
+regression:
+rTSMOM ðk,hÞt 1⁄4 aþb1MKT t þb2BONDt þ b3GSCIt þ sSMBt
+þ hHMLt þ mUMDt þ et , ð4Þ
+where we control for passive exposures to the three major
+asset classes—the stock market MKT, proxied by the excess
+return on the MSCI World Index, the bond market BOND,
+proxied by the Barclays Aggregate Bond Index, the
+Table 2
+t-statistics of the alphas of time series momentum strategies with different look-back and holding periods.
+Reported are the t-statistics of the alphas (intercepts) from time series regressions of the returns of time series momentum strategies over various
+look-back and holding periods on the following factor portfolios: MSCI World Index, Lehman Brothers/Barclays Bond Index, S&P GSCI Index, and HML,
+SMB, and UMD Fama and French factors from Ken French’s Web site. Panel A reports results for all asset classes, Panel B for commodity futures, Panel C
+for equity index futures, Panel D for bond futures, and Panel E for currency forwards.
+Holding period (months)
+1 3 6 9 12 24 36 48
+Panel A : All assets
+Lookback period (months) 1 4.34 4.68 3.83 4.29 5.12 3.02 2.74 1.90
+3 5.35 4.42 3.54 4.73 4.50 2.60 1.97 1.52
+6 5.03 4.54 4.93 5.32 4.43 2.79 1.89 1.42
+9 6.06 6.13 5.78 5.07 4.10 2.57 1.45 1.19
+12 6.61 5.60 4.44 3.69 2.85 1.68 0.66 0.46
+24 3.95 3.19 2.44 1.95 1.50 0.20 /C00.09 /C00.33
+36 2.70 2.20 1.44 0.96 0.62 0.28 0.07 0.20
+48 1.84 1.55 1.16 1.00 0.86 0.38 0.46 0.74
+Panel B : Commodity futures
+Lookback period (months) 1 2.44 2.89 2.81 2.16 3.26 1.81 1.56 1.94
+3 4.54 3.79 3.20 3.12 3.29 1.51 1.28 1.62
+6 3.86 3.53 3.34 3.43 2.74 1.59 1.25 1.48
+9 3.77 4.05 3.89 3.06 2.31 1.27 0.71 1.04
+12 4.66 4.08 2.64 1.85 1.46 0.58 0.14 0.57
+24 2.83 2.15 1.24 0.58 0.18 /C00.60 /C00.33 /C00.14
+36 1.28 0.74 0.07 /C00.25 /C00.34 /C00.03 0.34 0.65
+48 1.19 1.17 1.04 1.01 0.92 0.75 1.16 1.29
+Panel C : Equity index futures
+Lookback period (months) 1 1.05 2.36 2.89 3.08 3.24 2.28 1.93 1.28
+3 1.48 2.23 2.21 2.81 2.78 2.00 1.57 1.14
+6 3.50 3.18 3.49 3.52 3.03 2.08 1.36 0.88
+9 4.21 3.94 3.79 3.30 2.64 1.96 1.21 0.75
+12 3.77 3.55 3.03 2.58 2.02 1.57 0.78 0.33
+24 2.04 2.22 1.96 1.70 1.49 0.87 0.43 0.13
+36 1.86 1.66 1.26 0.90 0.66 0.34 0.02 0.08
+48 0.81 0.84 0.58 0.44 0.36 0.12 0.01 0.23
+Panel D : Bond futures
+Lookback period (months) 1 3.31 2.66 1.84 2.65 2.88 1.76 1.60 1.40
+3 2.45 1.52 1.10 1.99 1.80 1.27 1.05 1.00
+6 2.16 2.04 2.18 2.53 2.24 1.71 1.36 1.37
+9 2.93 2.61 2.68 2.55 2.43 1.83 1.17 1.40
+12 3.53 2.82 2.57 2.42 2.18 1.47 1.12 0.96
+24 1.87 1.55 1.62 1.66 1.58 1.01 0.90 0.64
+36 1.97 1.83 1.70 1.62 1.73 1.13 0.75 0.91
+48 2.21 1.80 1.53 1.43 1.26 0.72 0.73 1.22
+Panel E : Currency forwards
+Lookback period (months) 1 3.16 3.20 1.46 2.43 2.77 1.22 0.83 /C00.42
+3 3.90 2.75 1.54 3.05 2.55 1.02 0.10 /C00.84
+6 2.59 1.86 2.32 2.82 2.08 0.62 /C00.16 /C01.14
+9 3.40 3.16 2.65 2.35 1.72 0.20 /C00.38 /C01.17
+12 3.41 2.40 1.65 1.25 0.71 /C00.29 /C01.01 /C01.67
+24 1.78 0.99 0.53 0.27 /C00.05 /C01.15 /C01.88 /C02.27
+36 0.73 0.42 /C00.04 /C00.42 /C00.96 /C01.67 /C02.04 /C0 2.42
+48 /C00.55 /C01.05 /C01.41 /C01.62 /C01.79 /C02.02 /C02.34 /C02.32
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250 235
+--- PAGE 9 ---
+commodity marketGSCI, proxied by the S&P GSCI Index—as
+well as the standard Fama-French stock market factorsSMB,
+HML, and UMD for the size, value, a nd (cross-sectional)
+momentum premiums. For the evaluation of time series
+momentum strategies, we rely on the sample starting in
+1985 to ensure that a comprehensive set of instruments have
+data (see Table 1 ) and that the markets had significant
+liquidity. We obtain similar (and generally more significant)
+results if older data are included going back to 1965, but
+given the more limited breadth and liquidity of the instru-
+ments during this time, we report results post-1985.
+Table 2 shows the t-statistics of the estimated alphas
+for each asset class and across all assets. The existence
+and significance of time series momentum is robust
+across horizons and asset classes, particularly when the
+look-back and holding periods are 12 months or less. In
+addition, we confirm that the time series momentum
+results are almost identical if we use the cash indexes
+for the stock index futures. The other asset classes do not
+have cash indexes.
+4. Time series momentum factor
+For a more in-depth analysis of time series momen-
+tum, we focus our attention on a single time series
+momentum strategy. Following the convention used in
+the cross-sectional momentum literature (and based on
+the results from Fig. 1 and Table 2 ), we focus on the
+properties of the 12-month time series momentum strat-
+egy with a 1-month holding period (e.g., k1⁄412 and h 1⁄41),
+which we refer to simply as TSMOM.
+4.1. TSMOM by security and the diversified TSMOM factor
+We start by looking at each instrument and asset
+separately and then pool all the assets together in a
+diversified TSMOM portfolio. We size each position (long
+or short) so that it has an ex ante annualized volatility of
+40%. That is, the position size is chosen to be 40%/ st/C0 1,
+where st/C0 1 is the estimate of the ex ante volatility of the
+contract as described above. The choice of 40% is incon-
+sequential, but it makes it easier to intuitively compare
+our portfolios to others in the literature. The 40% annual
+volatility is chosen because it is similar to the risk of an
+average individual stock, and when we average the return
+across all securities (equal-weighted) to form the portfo-
+lio of securities which represent our TSMOM factor, it has
+an annualized volatility of 12% per year over the sample
+period 1985–2009, which is roughly the level of volatility
+exhibited by other factors such as those of Fama and
+French (1993) and Asness, Moskowitz, and Pedersen
+(2010).8 The TSMOM return for any instrument s at time
+t is therefore:
+rTSMOM ,st,t þ 1 1⁄4 signðrst/C012,t Þ 40%sst rst,t þ 1: ð5Þ
+We compute this return for each instrument and each
+available month from January 1985 to December 2009.
+The top of Fig. 2 plots the annualized Sharpe ratios of
+these strategies for each futures contract. As the figure
+shows, every single futures contract exhibits positive
+predictability from past one-year returns. All 58 futures
+contracts exhibit positive time series momentum returns
+and 52 are statistically different from zero at the 5%
+significance level.
+If we regress the TSMOM strategy for each security on the
+strategy of always being long (i.e., replacing ‘‘sign’’ with a 1 in
+Eq. (5)), then we get a positive alpha in 90% of the cases (of
+which 26% are statistically significant; none of the few
+negative ones are significant). Thus, a time series momentum
+strategy provides additionalreturns over and above a passive
+long position for most instruments.
+The overall return of the strategy that diversifies across
+all the St securities that are available at time t is
+rTSMOMt,t þ 1 1⁄4 1St XSts 1⁄4 1 signðrst/C012,t Þ 40%sst rst,t þ 1:
+We analyze the risk and return of this factor in detail
+next. We also consider TSMOM strategies by asset class
+constructed analogously.
+4.2. Alpha and loadings on risk factors
+Table 3 examines the risk-adjusted performance of a
+diversified TSMOM strategy and its factor exposures.
+Panel A of Table 3 regresses the excess return of the
+TSMOM strategy on the returns of the MSCI World stock
+market index and the standard Fama-French factors SMB,
+HML, and UMD, representing the size, value, and cross-
+sectional momentum premium among individual stocks.
+The first row reports monthly time series regression
+results and the second row uses quarterly non-overlap-
+ping returns (to account for any non-synchronous trading
+effects across markets). In both cases, TSMOM delivers a
+large and significant alpha or intercept with respect to
+these factors of about 1.58% per month or 4.75% per
+quarter. The TSMOM strategy does not exhibit significant
+betas on the market, SMB,o r HML but loads significantly
+positively on UMD, the cross-sectional momentum factor.
+We explore the connection between cross-sectional and
+time series momentum more fully in the next section, but
+given the large and significant alpha, it appears that time
+series momentum is not fully explained by cross-sectional
+momentum in individual stocks.
+Panel B of Table 3 repeats the regressions using the
+Asness, Moskowitz, and Pedersen (2010) value and
+momentum ‘‘everywhere’’ factors (i.e., factors diversified
+across asset classes) in place of the Fama and French
+factors. Asness, Moskowitz, and Pedersen (2010) form
+long-short portfolios of value and momentum across
+individual equities from four international markets, stock
+index futures, bond futures, currencies, and commodities.
+Similar to the Fama and French factors, these are cross-
+sectional factors. Once again, we find no significant
+loading on the market index or the value everywhere
+factor, but significant loading on the cross-sectional
+8 Also, this portfolio construction implies a use of margin capital of
+about 5–20%, which is well within what is feasible to implement in a
+real-world portfolio.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250236
+--- PAGE 10 ---
+momentum everywhere factor. However, the returns to
+TSMOM are not fully captured by the cross-sectional
+everywhere factor —the alpha is still an impressive
+1.09% per month with a t-stat of 5.40 or 2.93% per quarter
+with a t-stat of 4.12.
+4.3. Performance over time and in extreme markets
+Fig. 3 plots the cumulative excess return to the
+diversified time series momentum strategy over time
+(on a log scale). For comparison, we also plot the cumu-
+lative excess returns of a diversified passive long position
+in all instruments, with an equal amount of risk in each
+instrument. (Since each instrument is scaled by the same
+constant volatility, both portfolios have the same ex ante
+volatility except for differences in correlations among
+time series momentum strategies and passive long stra-
+tegies.) As Fig. 3 shows, the performance over time of the
+diversified time series momentum strategy provides a
+relatively steady stream of positive returns that outper-
+forms a diversified portfolio of passive long positions in
+all futures contracts (at the same ex ante volatility).
+We can also compute the return of the time series
+momentum factor from 1966 to 1985, despite the limited
+number of instruments with available data. Over this
+earlier sample, time series momentum has a statistically
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+1.2
+Gross sharpe ratio 
+Sharpe ratio of 12-month trend strategy
+Commodities Currencies E quities Fixed Income
+-2.0
+-1.5
+-1.0
+-0.5
+0.0
+0.5
+1.0
+1.5
+2.0
+Zinc
+AEX
+Illiquidity (Normalized rank based
+on daily trading volume)
+Commodities Currencies Equities Fixed Income
+Illiquidity of futures contracts
+Correlation (Sharperatio, Illiquidity) = -0.16
+Fig. 2. Sharpe ratio of 12-month time series momentum by instrument. Reported are the annualized gross Sharpe ratio of the 12-month time series
+momentum or trend strategy for each futures contract/instrument. For each instrument in every month, the trend strategy goes long (short) the contra ct
+if the excess return over the past 12 months of being long the instrument is positive (negative), and scales the size of the bet to be inversely proportio nal
+to the ex ante volatility of the instrument to maintain constant volatility over the entire sample period from January 1985 to December 2009. The secon d
+figure plots a normalized value of the illiquidity of each futures contract measured by ranking contracts within each asset class by their daily tradin g
+volume (from highest to lowest) and reporting the standard normalized rank for each contract within each asset class. Positive (negative) values imp ly
+the contract is more (less) illiquid than the median contract for that asset class.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250 237
+--- PAGE 11 ---
+significant return and an annualized Sharpe ratio of 1.1,
+providing strong out-of-sample evidence of time series
+momentum.9
+Fig. 3 highlights that time series momentum profits
+are large in October, November, and December of 2008,
+which was at the height of the Global Financial Crisis
+when commodity and equity prices dropped sharply,
+bond prices rose, and currency rates moved dramatically.
+Leading into this period, time series momentum suffers
+losses in the third quarter of 2008, where the associated
+price moves caused the TSMOM strategy to be short in
+many contracts, setting up large profits that were earned
+in the fourth quarter of 2008 as markets in all these asset
+classes fell further. Fig. 3 also shows that TSMOM suffers
+sharp losses when the crisis ends in March, April, and May
+of 2009. The ending of a crisis constitutes a sharp trend
+reversal that generates losses on a trend following strat-
+egy such as TSMOM.
+More generally, Fig. 4 plots the TSMOM returns against
+the S&P 500 returns. The returns to TSMOM are largest
+during the biggest up and down market movements. To
+test the statistical significance of this finding, the first row
+of Panel C of Table 3 reports coefficients from a regression
+of TSMOM returns on the market index return and
+squared market index return. While the beta on the
+market itself is insignificant, the coefficient on the market
+return squared is significantly positive, indicating that
+TSMOM delivers its highest profits during the most
+extreme market episodes. TSMOM, therefore, has payoffs
+similar to an option straddle on the market. Fung and
+Hsieh (2001) discuss why trend following has straddle-
+like payoffs and apply this insight to describe the perfor-
+mance of hedge funds. Our TSMOM strategy generates
+this payoff structure because it tends to go long when the
+Table 3
+Performance of the diversified time series momentum strategy.
+Panel A reports results from time series regressions of monthly and non-overlapping quarterly returns on the diversified time series momentum
+strategy that takes an equal-weighted average of the time series momentum strategies across all futures contracts in all asset classes, on the return so f
+the MSCI World Index and the Fama and French factors SMB, HML, and UMD, representing the size, value, and cross-sectional momentum premiums in
+US stocks. Panel B reports results using the Asness, Moskowitz, and Pedersen (2010) value and momentum ‘‘everywhere‘‘ factors instead of the Fama and
+French factors, which capture the premiums to value and cross-sectional momentum globally across asset classes. Panel C reports results from
+regressions of the time series momentum returns on the market (MSCI World Index), volatility (VIX), funding liquidity (TED spread), and sentiment
+variables from Baker and Wurgler (2006 , 2007), as well as their extremes.
+Panel A : Fama and French factors
+MSCI
+World
+SMB HML UMD Intercept R2
+Monthly
+Coefficient 0.09 /C00.05 /C00.01 0.28 1.58% 14%
+(t-Stat) (1.89) ( /C00.84) ( /C00.21) (6.78) (7.99)
+Coefficient 0.07 /C00.18 0.01 0.32 4.75% 23%
+Quarterly ( t-Stat) (1.00) ( /C01.44) (0.11) (4.44) (7.73)
+Panel B : Asness, Moskowitz, and Pedersen (2010) factors
+MSCI
+World
+VAL Everywhere MOM
+Everywhere
+Intercept R2
+Monthly
+Coefficient 0.11 0.14 0.66 1.09% 30%
+(t-Stat) (2.67) (2.02) (9.74) (5.40)
+Coefficient 0.12 0.26 0.71 2.93% 34%
+Quarterly (t-Stat) (1.81) (2.45) (6.47) (4.12)
+Panel C : Market, volatility, liquidity, and sentiment extremes
+MSCI
+World
+MSCI World
+squared
+TED spread TED spread top
+20%
+VIX VIX top 20%
+Quarterly
+Coefficient /C00.01 1.99
+(t-Stat) ( /C00.17) (3.88)
+Quarterly
+Coefficient /C00.001 /C00.008
+(t-Stat) ( /C00.06) ( /C0 0.29)
+Quarterly
+Coefficient 0.001 /C00.003
+(t-Stat) (0.92) ( /C00.10)
+Sentiment Sentiment top20% Sentiment bottom20% Change insentiment Change in sentiment top20% Change in sentimentbottom 20%
+Quarterly
+Coefficient 0.03 /C00.01 /C00.01
+(t-Stat) (0.73) ( /C00.27) ( /C00.12)
+Quarterly
+Coefficient /C0 0.01 0.02 0.01
+(t-Stat) ( /C0 1.08) (1.25) (0.66)
+9 We thank the referee for asking for this out-of-sample study of old
+data.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250238
+--- PAGE 12 ---
+market has a major upswing and short when the market
+crashes.
+These results suggest that the positive average TSMOM
+returns are not likely to be compensation for crash risk.
+Historically, TSMOM does well during ‘‘crashes’’ because
+crises often happen when the economy goes from normal
+to bad (making TSMOM go short risky assets), and then
+from bad to worse (leading to TSMOM profits), with the
+recent financial crisis of 2008 being a prime example.
+4.4. Liquidity and sentiment
+We test whether TSMOM returns might be driven or
+exaggerated by illiquidity. We first test whether TSMOM
+performs better for more illiquid assets in the cross-section,
+and then we test whether the performance of the diversified
+TSMOM factor depends on liquidity indicators in the time
+series. For the former, we m easure the illiquidity of each
+futures contract using the daily dollar trading volume
+obtained from Reuters and broker feeds. We do not have
+historical time series of daily volume on these contracts, but
+use a snapshot of their daily volume in June 2010 to
+examine cross-sectional differences in liquidity across the
+assets. Since assets are vastly different across many dimen-
+sions, we first rank each contract within an asset class by
+their daily trading volume (from highest to lowest) and
+compute the standard normalized rank of each contract by
+demeaning each rank and dividing by its standard deviation,
+i.e., ( rank-mean(rank))/std(rank). Positive (negative) values
+imply a contract is more (less) illiquid than the median
+contract for that asset class. As shown in the bottom of
+Figure 2, we find little relation between the magnitude of
+the Sharpe ratio of TSMOM for a particular contract and its
+illiquidity, as proxied by daily dollar trading volume. The
+correlation between illiquidity and Sharpe ratio of a time
+series momentum strategy by contract is /C0 0.16 averaged
+across all contracts, suggesting that, if anything, moreliquid
+contracts exhibit greater time series momentum profits.
+We next consider how TSMOM returns co-vary in
+aggregate with the time series of liquidity. The second row
+of Panel C of Table 3 reports results using the Treasury
+Eurodollar (TED) spread, a proxy for funding liquidity as
+suggested by Brunnermeier and Pedersen (2009) , Asness,
+Moskowitz, and Pedersen (2010) ,a n d Garleanu and
+Pedersen (2011), and the top 20% most extreme realizations
+of the TED spread to capture the most illiquid funding
+environments. As the table s hows, there is no significant
+relation between the TED spread and TSMOM returns,
+suggesting little relationship with funding liquidity. The
+third row of Panel C of Table 3 repeats the analysis using
+$100
+$1,000
+$10,000
+$100,000
+1985
+1987
+1989
+1991
+1993
+1995
+1997
+1999
+2001
+2003
+2005
+2007
+2009
+Growth of $100 (log scale)
+Date
+Time Series Momentum Passive Long
+Fig. 3. Cumulative excess return of time series momentum and diversified passive long strategy, January 1985 to December 2009. Plotted are the
+cumulative excess returns of the diversified TSMOM portfolio and a diversified portfolio of the possible long position in every futures contract we stu dy.
+The TSMOM portfolio is defined in Eq. (5) and across all futures contracts summed. Sample period is January 1985 to December 2009.
+-15%
+-10%
+-5%
+0%
+5%
+10%
+15%
+20%
+25%
+30%
+-25%
+Time-series momentum returns
+S&P 500 returns
+25%15%5%-5%-15%
+Fig. 4. The time series momentum smile. The non-overlapping quarterly returns on the diversified (equally weighted across all contracts) 12-month time
+series momentum or trend strategy are plotted against the contemporaneous returns on the S&P 500.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250 239
+--- PAGE 13 ---
+the VIX index to capture the level of market volatility and
+the most extreme market volatility environments, which
+also seem to correspond with illiquid episodes. There is no
+significant relationship between TSMOM profitability and
+market volatility either.
+At the bottom of Panel C of Table 3 , we also examine
+the relationship between TSMOM returns and the senti-
+ment index measures used by Baker and Wurgler (2006 ,
+2007). We examine both the level of sentiment and its
+monthly changes (first differences) and examine the top
+and bottom extremes (20%) of these variables. As the
+regressions indicate, we find no significant relationship
+between TSMOM profitability and sentiment measures,
+even at the extremes.
+4.5. Correlation structure
+Table 4 examines the correlation structure of the time
+series momentum strategies and compares them to the
+correlation structure of passive long positions in the
+contracts. The first row of Panel A of Table 4 reports the
+average pair-wise correlation of time series momentum
+returns among contracts within the same asset class. The
+correlations are positive within each asset class, ranging
+from 0.37 to 0.38 for equities and fixed income futures to
+0.10 and 0.07 for commodities and currencies. Part of this
+correlation structure reflects the comovement of the
+returns to simply being passive long (or short) in each
+instrument at the same time. The second row of Panel A of
+Table 4 reports the average pair-wise correlation of
+passive long positions within each asset class and, except
+for currencies, passive long strategies exhibit higher
+correlations than time series momentum strategies
+within an asset class.
+Panel B of Table 4 shows the average correlation of
+time series momentum strategies across asset classes.
+Here, we first compute the return of a diversified portfolio
+of time series momentum strategies within each asset
+class and then estimate the correlation of returns for
+TSMOM portfolios across asset classes. All of the correla-
+tions are positive, ranging from 0.05 to 0.21. For compar-
+ison, the table also shows the correlations across asset
+classes of diversified passive long positions. For every
+asset class comparison, the correlation of time series
+momentum strategies across asset classes is larger than
+the corresponding correlation of passive long strategies,
+many of which are negative.
+Summing up the results from both panels, time series
+momentum strategies are positively correlated within an
+asset class, but less so than passive long strategies. However,
+across asset classes, time series momentum strategies
+exhibit positive correlation with each other, while passive
+long strategies exhibit zero or negative correlation across
+asset classes. This last result suggests that there is a
+common component affecting time series momentum stra-
+tegies across asset classes simultaneously that is not present
+in the underlying assets themselves, similar to the findings
+of A s n e s s ,M o s k o w i t z ,a n dP e d e r s e n( 2 0 1 0 )who find
+common structure among cross-sectional momentum stra-
+tegies across different asset classes.
+5. Time series vs. cross-sectional momentum
+Our previous results show a significant relationship
+between time series momentum and cross-sectional
+momentum. In this section, we explore that relationship
+further and determine how much overlap and difference
+exist between our time series momentum strategies and
+the cross-sectional momentum strategies commonly used
+in the literature.
+5.1. Time series momentum regressed on cross-sectional
+momentum
+Panel A of Table 5 provides further evidence on the
+relationship between time series momentum (TSMOM)
+and cross-sectional momentum (XSMOM) by regressing
+the returns to our time series momentum strategies —
+diversified across all instruments and within each asset
+class—on the returns of cross-sectional momentum stra-
+tegies applied to the same assets. Specifically, following
+Asness, Moskowitz, and Pedersen (2010) , we apply a
+cross-sectional momentum strategy based on the relative
+ranking of each asset’s past 12-month returns and form
+portfolios that go long or short the assets in proportion to
+their ranks relative to the median rank. 10
+Table 4
+Correlations of time series momentum strategy returns within and
+across asset classes.
+Panel A reports within each asset class the average pair-wise correla-
+tion of each instruments’ 12-month time series momentum strategy
+returns, as well as a passive long position in each instrument. Panel B
+reports the correlation of time series momentum strategies and passive
+long positions across asset classes, where an equal-weighted average of
+the instruments within each asset class is first formed and then the
+correlations between the equal-weighted strategies across asset classes
+are calculated. Correlations are calculated from monthly returns over the
+period January 1985–December 2009.
+Panel A : Average pair-wise correlation within asset class
+Commodities Equities Fixed
+income
+Currencies
+TSMOM strategies 0.07 0.37 0.38 0.10
+Passive long
+positions
+0.19 0.60 0.63 /C00.04
+Panel B : Average correlation across asset classes
+Correlations of TSMOM strategies
+Commodities 1
+Equities 0.20 1
+Fixed income 0.07 0.21 1
+Currencies 0.13 0.20 0.05 1
+Correlations of passive long positions
+Commodities 1
+Equities 0.17 1
+Fixed income /C00.12 /C00.03 1
+Currencies /C00.12 /C00.20 0.02 1
+10 Asness, Moskowitz, and Pedersen (2010) exclude the most recent
+month when computing 12-month cross-sectional momentum. For
+consistency, we follow that convention here, but our results do not
+depend on whether the most recent month is excluded or not.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250240
+--- PAGE 14 ---
+The first row of Panel A of Table 5 reports results
+from the TSMOM strategy diversified across all assets
+regressed on the XSMOM strategy that is diversified
+across those same assets. As before, time series momen-
+tum and cross-sectional momentum are significantly
+related, with the beta of TSMOM on XSMOM equal to
+0.66 with a t-statistic of 15.17 and R-square of 44%.
+However, as the intercept indicates, TSMOM is not fully
+captured by XSMOM, exhibiting a positive and significant
+alpha of 76 basis points per month with a t-statistic of
+5.90. So, TSMOM and XSMOM are related, but are not
+the same.
+The second row of Panel A of Table 5 repeats the
+regression using XSMOM strategies for each asset class,
+including individual stocks. TSMOM is related to XSMOM
+across all of the different asset classes, including indivi-
+dual equity momentum, which is not even included in the
+TSMOM strategy, and this is after controlling for exposure
+to XSMOM from the other four asset classes. TSMOM still
+exhibits a significant alpha, however, and is therefore not
+fully captured by cross-sectional momentum strategies in
+these asset classes.
+Repeating these regressions using the TSMOM returns
+for each asset class separately, we find a consistent
+pattern. TSMOM is related to XSMOM within each asset
+class, with R-squares ranging from 56% in currencies (FX)
+to 14% in fixed income, but TSMOM is not captured by
+XSMOM. The alphas of TSMOM remain significantly
+positive for every asset class. We also see some interest-
+ing cross-asset relationships among TSMOM and XSMOM.
+For instance, not only is TSMOM for commodities corre-
+lated with XSMOM for commodities, but also with
+XSMOM for currencies. Likewise, TSMOM among equity
+index futures is not only correlated with XSMOM among
+those equity indexes but also with XSMOM among indi-
+vidual stocks. And, TSMOM for fixed income is correlated
+with XSMOM for fixed income and XSMOM for equity
+indexes. These results indicate significant correlation
+structure in time series and cross-sectional momentum
+across different asset classes, consistent with our earlier
+results and those of Asness, Moskowitz, and Pedersen
+(2010).
+5.2. A simple, formal decomposition
+We can more formally write down the relationship
+between time series (TSMOM) and cross-sectional
+(XSMOM) momentum. Following Lo and Mackinlay
+(1990) and Lewellen (2002) , we can describe a simple
+cross-sectional and time series momentum strategy on
+the same assets as follows. For cross-sectional momen-
+tum, we let the portfolio weight of instrument i be wXS,it 1⁄4
+ð1=NÞðrit/C012,t /C0rEWt/C012,t Þ, that is, the past 12-month excess
+return over the equal-weighted average return,
+rEWt/C012,t 1⁄4ð 1=NÞPNi 1⁄4 1 rit/C012,t . The return to the portfolio is
+therefore
+rXSt,t þ 1 1⁄4 XN
+i 1⁄4 1
+wXS,it rit,t þ 1:
+Next, assuming that the monthly expected return is 11
+mi 1⁄4 Eðrit,t þ 1Þ1⁄4 Eðrit/C012,t Þ=12 and letting m 1⁄41⁄2 m1,... ,mN /C1380,
+Rt,s 1⁄41⁄2 r1t,s,... ,rNt,s/C1380, and O 1⁄4 E1⁄2ðRt/C012,t /C012mÞðRt,t þ 1/C0mÞ0/C138, the
+expected return to cross-sectional momentum (XSMOM)
+can be decomposed as
+Er XSt,t þ 1/C2/C3 1⁄4 trðOÞN /C0 10O1N2 þ12s2m
+1⁄4 N/C01
+N2 trðOÞ/C0 1N2 10O1/C0trðOÞ/C2/C3 þ 12s2m , ð6Þ
+where tr is the trace of a matrix, 1 is an ( N /C2 1) vector of
+ones, and s2m is the cross-sectional variance of the mean
+monthly returns mi.
+Eq. (6) shows that cross-sectional momentum profits can
+be decomposed into an auto-covariance component
+between lagged 1-year returns and future 1-month returns
+(the diagonal elements of O c a p t u r e db yt h efi r s tt e r m ) ,a
+cross-covariance component capturing the temporal leads
+and lags across stocks (the off-diagonal elements of O
+captured by the second term), and the cross-sectional
+variation in unconditional mean returns (the third term).
+As emphasized by Lewellen (2002), cross-sectional momen-
+tum profits need not be generated by positive autocorrela-
+tion in returns (i.e., time series predictability). If cross-serial
+covariances across stocks are negative, implying that high
+past returns of an asset predict lower future returns of other
+assets, this, too, can lead to momentum profits. Likewise,
+large cross-sectional variation in mean returns can also lead
+to momentum profits since, on average, assets with the
+highest mean returns will have the highest realized returns.
+The returns to time series momentum can be decom-
+posed similarly if we let the portfolio weights be wTS,it 1⁄4
+ð1=NÞrit/C012,t . Then the expected return is
+EðrTSt,t þ 1Þ1⁄4 E XN
+i 1⁄4 1
+wTS,it rit,t þ 1
+ !
+1⁄4 trðOÞN þ 12 m0mN : ð7Þ
+As these equations highlight, time series momentum
+profits are primarily driven by time series predictability
+(i.e., positive auto-covariance in returns) if the average
+squared mean returns of the assets is small. Comparing
+Eqs. (6) and (7), we see that time series momentum
+profits can be decomposed into the auto-covariance term
+that also underlies cross-sectional momentum (plus the
+average squared mean excess return). The equations thus
+provide a link between time series and cross-sectional
+momentum profitability, which we can measure in the
+data to determine how related these two phenomena are.
+Panel B of Table 5 computes each of the components of
+the diversified 12-month cross-sectional and time series
+momentum strategies across all assets and within each
+asset class according to the equations above. We report
+the three components of the cross-sectional momentum
+strategy: ‘‘Auto’’ refers to the auto-covariance or time
+series momentum component, ‘‘Cross’’ refers to the cross-
+serial covariance or lead-lag component, and ‘‘Mean’’
+11 This relation between mean returns is exact if annual returns are
+computed by summing over monthly returns. If returns are com-
+pounded, this relation is approximate, but an exact relation is straight-
+forward to derive, e.g., using the separate means of monthly and annual
+returns.
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250 241
+--- PAGE 15 ---
+Table 5
+Time series momentum vs. cross-sectional momentum.
+Panel A reports results from regressions of the 12-month time series momentum strategies by asset class (TSMOM) on 12-month cross-sectional momentu m strategies (XSMOM) of Asness, Moskowitz, and
+Pedersen (2010) . Panel B reports results from the decomposition of cross-sectional momentum and time series momentum strategies according to Section 4.2 , where Auto is the component of profits coming
+from the auto-covariance of returns, Cross is the component coming from cross-serial correlations or lead-lag effects across the asset returns, Mea n is the component coming from cross-sectional variation in
+unconditional mean returns, and Mean squared is the component coming from squared mean returns. Panel C reports results from regressions of several X SMOM strategies in different asset classes, the Fama-
+French momentum, value, and size factors, and two hedge fund indexes obtained from Dow Jones/Credit Suisse on our benchmark TSMOM factor.
+Panel A: Regression of TSMOM on XSMOM
+Independent variables
+XSMOM ALL XSMOM COM XSMOM EQ XSMOM FI XSMOM FX XSMOM US stocks Intercept R2
+Dependent variable TSMOM ALL 0.66 0.76% 44%
+(15.17) (5.90)
+TSMOM ALL 0.31 0.20 0.17 0.37 0.12 0.73% 46%
+(7.09) (4.25) (3.84) (8.11) (2.66) (5.74)
+TSMOM COM 0.65 0.57% 42%
+(14.61) (4.43)
+TSMOM COM 0.62 0.05 0.02 0.14 0.05 0.51% 45%
+(13.84) (1.01) (0.50) (3.08) (1.06) (3.96)
+TSMOM EQ 0.39 0.47% 15%
+(7.32) (3.00)
+TSMOM EQ 0.07 0.28 0.04 0.06 0.24 0.43% 22%
+(1.29) (5.07) (0.67) (1.11) (4.26) (2.79)
+TSMOM FI 0.37 0.59% 14%
+(6.83) (3.77)
+TSMOM FI /C00.03 0.18 0.34 0.01 0.03 0.50% 17%
+( /C00.62) (3.05) (6.19) (0.20) (0.48) (3.15)
+TSMOM FX 0.75 0.42% 56%
+(19.52) (3.75)
+TSMOM FX 0.04 0.00 /C00.01 0.75 /C00.01 0.40% 56%
+(1.07) ( /C00.04) ( /C00.17) (18.89) ( /C00.24) (3.49)
+T.J. Moskowitz et al. / Journal of Financial Economics 104 (2012) 228–250242

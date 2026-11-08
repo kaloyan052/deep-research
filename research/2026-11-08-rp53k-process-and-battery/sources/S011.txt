@@ -1,0 +1,5 @@
+=== ARXIV PREPRINT SNAPSHOT ===
+Title: Provable circuit-level thresholds for non-abelian topological phases
+Published: 2026-11-05 | URL: http://arxiv.org/abs/2611.08488v1
+
+Abstract: We provide an explicit scheme to realize a quantum memory in any 2D non-chiral topological order. For this, we construct syndrome extraction circuits based on the Turaev-Viro path integral as well as a classical algorithm for decoding on the fly. We prove that our scheme has a threshold under a local stochastic circuit-level noise model and discuss how to generalize it to implement topological logical gates.

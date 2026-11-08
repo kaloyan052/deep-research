@@ -9,6 +9,7 @@
 !/README.md
 !/CHANGELOG.md
 !/requirements.txt
+!/requirements-engine.txt
 
 # CI: the test suite on Linux and Windows
 !/.github/
@@ -50,10 +51,14 @@
 !/research/
 /research/*
 !/research/.gitkeep
+!/research/2026-11-08-rp53k-process-and-battery/
 !/reports/
 /reports/*
 !/reports/.gitkeep
 !/reports/ENGINE_AUDIT_*.md
+!/reports/V14_ADVERSARIAL_AUDIT_*.md
+!/reports/RP53K_*
+!/reports/notebook_execution_receipt.json
 
 # Never, anywhere
 __pycache__/

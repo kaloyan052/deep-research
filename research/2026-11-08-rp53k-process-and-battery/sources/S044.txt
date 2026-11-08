@@ -1,0 +1,386 @@
+
+--- PAGE 1 ---
+NBER WORKING PAPER SERIES
+A TAXONOMY OF ANOMALIES AND THEIR TRADING COSTS
+Robert Novy-Marx
+Mihail Velikov
+Working Paper 20721
+http://www.nber.org/papers/w20721
+NATIONAL BUREAU OF ECONOMIC RESEARCH
+1050 Massachusetts Avenue
+Cambridge, MA 02138
+December 2014
+Professor Novy-Marx currently consults with Dimensional Fund Advisors, an investment firm headquartered
+in Austin, Texas. The views expressed herein are those of the authors and do not necessarily reflect
+the views of the National Bureau of Economic Research.
+NBER working papers are circulated for discussion and comment purposes. They have not been peer-
+reviewed or been subject to the review by the NBER Board of Directors that accompanies official
+NBER publications.
+© 2014 by Robert Novy-Marx and Mihail Velikov. All rights reserved. Short sections of text, not to
+exceed two paragraphs, may be quoted without explicit permission provided that full credit, including
+© notice, is given to the source.
+
+--- PAGE 2 ---
+A Taxonomy of Anomalies and their Trading Costs
+Robert Novy-Marx and Mihail Velikov
+NBER Working Paper No. 20721
+December 2014
+JEL No. G12,G14
+ ABSTRACT
+This paper studies the performance of a large number of anomalies after accounting for transaction
+costs, and the effectiveness of several transaction cost mitigation strategies. It finds that introducing
+a buy/hold spread, which allows investors to continue to hold stocks that they would not actively trade
+into, is the single most effective simple cost mitigation strategy. Most of the anomalies that we consider
+with one-sided monthly turnover lower than 50% continue to generate statistically significant net spreads,
+at least when designed to mitigate transaction costs. Few of the strategies with higher turnover do.
+In all cases transaction costs reduce the strategies’ profitability and its associated statistical significance,
+increasing concerns related to data snooping.
+Robert Novy-Marx
+Simon Graduate School of Business
+University of Rochester
+305 Schlegel Hall
+Rochester, NY  14627
+and NBER
+Robert.Novy-Marx@Simon.Rochester.edu
+Mihail Velikov
+Simon Graduate School of Business
+University of Rochester
+305 Schlegel Hall
+Rochester, NY 14627
+mihail.velikov@simon.rochester.edu
+
+--- PAGE 3 ---
+1. Introduction
+This paper provides a taxonomy of the most important anomalies, and calculates the
+cost of trading each strategy. It also studies several simple transaction cost mitigation
+techniques, and shows that while transaction costs dramatically reduce the profitabil-
+ity of many anomalies, especially those with high turnover, designing strategies to
+minimize transaction costs significantly reduces these costs. It also shows that equal-
+weighted portfolio results, popular in the academic literature because they frequently
+provide stronger results than value-weighted results, are misleading and should be
+viewed skeptically. Because equal-weighted strategies are more expensive to trade,
+equal-weighting often results in a deterioration of net performance.
+Over the last 30 years academic researchers have documented hundreds of cross-
+sectional “anomalies," a term which has come to mean size, value, momentum, and
+any other strategy that generates a significant positive alpha relative to a four-factor
+model that accounts for these first three. The incentives to find these strategies are
+high both within academia (publications and tenure) and on the street (a marketable
+story and a bigger paycheck). This raises significant data snooping concerns. Harvey
+et al. (2014) argue on econometric grounds that three should be the new two for t-stats,
+and conclude that “most claimed research findings in financial economics are likely
+false.” This paper ignores transaction costs, however, meaning that even the spreads
+reported in the literature often dramatically overstate the profitability of attempting
+to trade these strategies.
+McLean and Pontiff (2014) study the post-publication performance of 82 anoma-
+lies and find average post-publication performance decay of 35%. They attribute less
+than a third of this decay to statistical bias, and the rest to price pressure by newly
+aware investors, arguing that their results are “consistent with costly (limited) arbi-
+trage,” because post-publication return declines are more pronounced for strategies
+that disproportionately take positions in stocks that are easier to trade.
+Limits to arbitrage are important for addressing questions related to market effi-
+1
+--- PAGE 4 ---
+ciency. Market anomalies are often used as potential evidence against efficiency. We
+generally believe that markets should be fairly efficient because of the forces of ar-
+bitrage, however, and these so called anomalies do not test market efficiency if they
+should not attract arbitrage capital because they are not actually profitable to trade.
+In this case they may indicate suboptimal behavior on the part of some individual
+traders, but they are not suggestive of aggregate mispricing.
+Several authors have studied the limits trading costs impose when implementing
+momentum strategies. Lesmond et al. (2004) argue that while the large gross spreads
+observed on momentum trades create an “illusion of profit opportunity when, in fact,
+none exists.” Korajczyk and Sadka (2004) consider the price impact of trading momen-
+tum, and conclude that it would only be profitable to trade on a very small scale. These
+papers do not, however, study momentum strategies designed to minimize transac-
+tion costs. More recently Frazzini et al. (2014) have argued that “actual trading costs
+are less than a tenth as large as, and therefore the potential scale of these strategies is
+more than an order of magnitude larger than, previous studies suggest," and conclude
+that the strategy is “robust [and] implementable,” but their study is conducted using
+proprietary data that covers a relatively short time-series, limited to larger stocks. No
+studies provide a comprehensive analysis of the cost of trading more than a few of the
+known anomalies, especially over longer horizons or using the entire cross-section of
+stocks.
+We consider a large array of well known anomalies, evaluating their after transac-
+tion cost performance over long horizons and across different types of stocks. In order
+to do this we develop a new performance metric. This measure agrees with common
+notions of alpha when trading is frictionless, but provides unambiguous information
+about the extent to which an asset improves the investment opportunity set, some-
+thing about which the common notion of alpha can be misleading in the presence of
+trading frictions.
+We also evaluate three simple strategies for reducing transaction costs: limiting
+2
+--- PAGE 5 ---
+trading to low expected transaction costs stocks, reduced rebalancing frequencies, and
+the use of a buy/hold spread that lowers turnover by introducing trading hysteresis.
+We find that for most of the anomalies we consider the buy/hold spread is the most
+effective cost mitigation technique, though for very high turnover strategies, for which
+transaction cost mitigation is most important, a combination of all three techniques
+yields greater performance enhancements.
+Round trip transaction costs for typical value-weighted strategies average in ex-
+cess of 50 bps, and though these have fallen over the last decade they can be signifi-
+cantly higher for strategies that take disproportionately in high transaction cost stocks
+such as the anomalies based on idiosyncratic volatility or distress. Transaction costs
+consequently generally reduce realized spreads by more than 1% of the monthly one-
+sided turnover, i.e., if the long side of a strategy turns over 20% per month, the real-
+ized long/short spread will be at least 20 bps per month lower than the gross spread,
+and the statistical significance of the spread will be reduced proportionately. Trans-
+action costs for equal-weighted strategies are generally two to three times as high,
+and often less profitable to actually implement. While many of the strategies that we
+study remain significantly profitable after accounting for transaction costs, only two
+of the strategies that have more than 50% one-sided monthly turnover have significant
+net spreads, even when these strategies are designed with trading costs mitigation in
+mind. In all cases transaction costs significantly reduce the anomalies profitability,
+and its significance. This greatly increases concerns related to data snooping, as while
+many of the strategies’ net excess returns remain significant at the t-stat greater than
+two level, far fewer of the strategies generate net excess spreads with t-stats greater
+than three.
+The rest of the paper is organized as follows. Section 2 describes our trading cost
+model. Section 3 describes our generalized alpha performance metric. Section 4 pro-
+vides our taxonomy of anomalies, and the cost of trading these. Section 5 considers
+three simple techniques for transaction cost mitigation, and shows that these can sig-
+3
+--- PAGE 6 ---
+nificantly reduce trading costs. Section 6 considers an alternative mitigation technique
+available to an investor already trading one anomaly: using the turnover generated by
+that strategy to opportunistically take small positions in another anomaly at negative
+effective transaction costs. Section 7 investigates anomaly trading costs in different
+segments of the market by capitalization. Section 8 concludes.
+2. Trading Cost Model
+When evaluating anomaly performance we calculate transactions costs using the ef-
+fective bid-ask spread measure proposed by Hasbrouck (2009). These costs are esti-
+mated using a Bayesian Gibbs sampler on a generalized Roll (1984) model of stock
+price dynamics. Roll’s model can be formally defined as:
+Vt = Vt−1 + εt
+Pt = Vt + cQt
+where Vt is the underlying “efficient value” (the log quote midpoint prevailing prior
+to trade t), Pt is the observed trade price, Qt is a random indicator for the direction of
+the trade that takes the value one (minus one) if the trade took place at the ask (bid),
+εt is a random disturbance reflecting public information about the stock, and c is the
+effective cost of trading. The previous equations imply that
+∆Pt = c∆Qt + εt,
+which yields c =
+√
+−Cov(∆Pt, ∆Pt+1). Earlier empirical studies used the sample au-
+tocovariances of daily price changes to estimate transactions costs but, as noted by
+Hasbrouck (2009) and discussed in detail by Harris (1990), such an estimation is infea-
+sible due to the relatively high proportion of positive autocoviarances between daily
+changes in stock prices in the data. Hasbrouck (2009) instead advocates a Bayesian
+4
+--- PAGE 7 ---
+approach to estimating the cost measure. He generalizes the previous equation to
+include a market return factor,
+∆Pt = c∆Qt + βmrmt + εt,
+and assumes εt∼ i.i.d.N(0, σ2ε ). Then, given the history of price data and additional
+assumptions about initial values and prior distributions for the unknowns{c, σ2ε , Q1, ...,
+QT}, he draws sequentially the parameter estimates using a Gibbs sampler to charac-
+terize the posterior densities. Hasbrouck (2009) shows that effective spreads estimated
+using this procedure have a 96.5% correlation with the ones estimated from actual
+trades from the trade and quote (TAQ) dataset.
+The effective bid/ask spread has limitations. It does not account for the price im-
+pact of large trades, and should thus be interpreted as the costs faced by a small liquid-
+ity demander. While it ignores this important concern for large institutional traders it
+is nevertheless conservative, because it assumes market orders. It is also the appropri-
+ate measure for questions related to market efficiency, which depend on the marginal
+profitability of a strategy for an arbitrageur considering directing capital to the trade.
+This measure has other significant advantages. It is easy to estimate for all stocks
+over the entire sample using publicly available information. 1 This contrasts with es-
+timates from the TAQ data or proprietary trade execution datasets, which are limited
+in their coverage, difficult to extrapolate due to the nonlinear and time varying nature
+of transaction costs, and harder to obtain.2
+Figure 1 shows cross-sectional and time-series variation in trading costs, by look-
+ing at the estimated median effective spreads of the largest 2,000 firms by decade. Not
+surprisingly it shows that smaller cap stock are more expensive to trade. It also shows
+1Hasbrouck provides SAS code for estimating effective spreads using the procedure at
+http://people.stern.nyu.edu/jhasbrou/.
+2Korajczyk and Sadka (2004), Lesmond et al. (2004), and Chen et al. (2005) use TAQ data to estimate
+spreads and price impacts. Keim and Madhavan (1997), Engle et al. (2012), and Frazzini et al. (2014)
+use proprietary trade datasets.
+5
+--- PAGE 8 ---
+Figure 1: Median effective spreads across market capitalization ranks
+a general trend towards lower costs over time, and a dramatic reduction in the cost of
+trading stocks outside the mega-cap universe over the last decade.
+Table 1 examines the transaction cost estimates in greater detail. It reports Fama-
+MacBeth cross-sectional regressions of the trading costs estimates on firm characteris-
+tics. We can see that the trading costs are persistent and significantly positively asso-
+ciated with idiosyncratic volatility. As expected, size is strongly negatively correlated
+with transaction costs in the cross section, but the effect is non-linear. The coefficient
+on the squared market cap variable is positive and significant, implying a convex re-
+lation between trading costs and size. More generally, nonlinearities make it difficult
+to parametrically estimate costs accurately using directly observable firm characteris-
+tics. Table 14 in Appendix A.2 highlights the danger of extrapolating transaction costs
+estimated on large, relatively liquid stocks to small stocks using a linear model. It
+reports results from similar regressions performed on firms with above (panel A) and
+below (panel B) NYSE median market capitalization, and shows dissimilar parameter
+estimates for the two groups.
+The Bayesian/Gibbs estimation technique requires relatively long strings of re-
+6
+--- PAGE 9 ---
+Table 1: Determinants of transaction costs
+The table reports results from Fama-MacBeth regressions of trading cost estimates on lagged trading
+costs, market capitalization, and idiosyncratic volatility. The trading costs consist of the effective bid-
+ask spread measure proposed by Hasbrouck (2009). Idiosyncratic volatility is measured as the standard
+deviation of residuals of past three months’ daily returns on the daily excess market return. Both market
+capitalization and idiosyncratic volatility use end of July values. The regressions are estimated on an
+annual frequency and cover 1963 through 2013.
+Lagged T-costs 0.96 0.47
+[25.7] [21.1]
+log(ME)/100 -0.41 -1.40 -0.86 -0.59
+[-12.2] [-12.4] [-12.6] [-10.8]
+[log(ME)]2/100 0.10 0.07 0.05
+[12.2] [13.0] [10.9]
+Idiosyncratic Volatility 0.62 0.43 0.25
+[16.8] [13.8] [10.0]
+Average ˆR2 (%) 62.7 38.3 50.4 55.0 65.0 72.2
+7
+--- PAGE 10 ---
+ported daily returns, which results, especially in the early part of our sample, in a
+substantial number of missing monthly and annual observations, the rebalance fre-
+quency for most of the trading strategies we consider. We are interested in the cost of
+trading anomalies, and cannot know ex ante at the time of portfolio formation if the
+trading cost estimate for any given stock will be missing ex post, and thus cannot limit
+our trading to stocks for which the direct estimates of trading costs are available. We
+consequently need a method for estimating trading costs when the direct estimates
+from the Baysian-Gibbs sampler is unavailable. Because of the the difficulties asso-
+ciated with fitting transaction costs to a linear model observed in Table 1, we use a
+non-parametric matching method. The high observed cross sectional correlations be-
+tween transaction costs and size and idiosyncratic volatility lead us to match on these
+characteristics. Specifically, in each month we rank all firms on market equity and
+estimated idiosyncratic volatility. Each missing transaction cost observation is then
+replaced with the estimated cost of trading the nearest match stock for which a direct
+trading cost estimate is available. The closest match is defined by the shortest Eu-
+clidean distance in size and idiosyncratic volatility rank space, i.e., where the distance
+between firms i and j equals
+√(
+rankMEi− rankMEj
+)2 +(rankIVOLi− rankIVOLj)2.
+This methodology adds a time series average of 29% to the total number of observa-
+tions, though these additional observations account on average for less than 4% of
+market capitalization.
+Figure 2 shows the estimated monthly 12-month moving average cost of trad-
+ing momentum and post earnings announcement drift (PEAD) strategies, using di-
+rectly estimated transaction costs (solid lines) and transaction costs estimates obtained
+through the matching procedure (dashed lines), on the sample for which we have di-
+rect trading costs estimates. 3 Strategies are long and short the highest and lowest
+deciles, using NYSE breaks, of sorts on stock market performance over the first eleven
+3 These strategies are not actually implementable, as the direct trading cost estimates require data
+that are not available at the time of portfolio formation. We restricted the sample here to stocks for
+which we have direct trading costs estimates in order to facilitate the comparison of the estimates
+obtained through the matching procedure to those estimated directly.
+8
+--- PAGE 11 ---
+months of the year prior to portfolio formation (momentum) and the change in earn-
+ings per share between the last quarterly earnings announcement and the the earnings
+announcement one year earlier, scaled by the standard deviation in earnings per share
+over the last eight quarters (PEAD).
+The figure shows that the matching procedure yields similar costs of trading mo-
+mentum and PEAD as the direct estimates, with no obvious biases in either direction.
+Both strategies show similar time-series variation in trading costs using estimates ob-
+tained through the two different procedures, and in both cases the difference in the
+estimated monthly transaction costs averages less than one basis point per month. For
+the remainder of the paper we consequently use the trading costs estimates obtained
+through the matching procedure to fill the 4% of market capitalization for which we
+are missing direct estimates.
+3. Performance evaluation
+We are interested in whether anomalies documented in the literature are “real,” both
+in the sense that they generate significant excess returns after accounting for trans-
+action costs, and that they are distinct from the most studied anomalies, value and
+momentum. Indeed, anomalies other than value or momentum are essentially de-
+fined as those strategies that have generated significant abnormal returns relative to
+the Fama-French four-factor model.
+In the presence of transaction costs evaluating performance against the standard
+four-factor model is complicated by two issues. First, the Fama-French factors are
+gross factors, i.e., do not themselves account for transactions costs. They consequently
+overstate the returns an investor could have realized, especially in the case of the
+momentum factor UMD.
+The second issue is more subtle, and related to the very notion of performance
+evaluation. Evaluating anomaly performance against the four-factor pricing model
+9
+--- PAGE 12 ---
+(a)
+(b)
+Figure 2: Comparison of transaction cost estimates: direct versus matched
+The figure reports estimated monthly 12-month moving average cost of trading momentum and post
+earnings announcement drift (PEAD) strategies, using directly estimated transaction costs (solid lines)
+and transaction costs estimates obtained through a matching procedure (dashed lines). For the match-
+ing procedure, each trading cost estimate is replaced by its closest match, defined as the shortest Eu-
+clidean distance in size and idiosyncratic volatility rank space, i.e., where the distance between firms
+i and j equals
+√(
+rankMEi− rankMEj
+)2 +(rankIVOLi− rankIVOLj)2. The sample covers stocks for
+which we have direct trading costs estimates.
+10
+--- PAGE 13 ---
+requires a metric of performance. The metric most commonly employed is “alpha,”
+an asset’s abnormal returns relative to a set of potential explanatory assets. Alpha
+is defined as the average return to the part of a test strategy not spanned by the ex-
+planatory assets, i.e., the average active return benchmarked against the replicating
+portfolio of explanatory assets. Alpha, and in particular its significance, is important
+because it answers, at least in a frictionless world, the question “would the test as-
+set have improved the investment opportunity set of an investor already trading the
+explanatory assets?”
+In the presence of trading costs, however, alpha does not unambiguously answer
+this question. A strategy can have a significant positive alpha relative to the explana-
+tory assets without significantly improving the investment opportunity set. This is
+most easily seen by example. Suppose an investor has access to a strategy that gen-
+erates insignificant excess returns. Now suppose the investor gains access to a new
+highly correlated strategy that generates slightly higher returns. This new strategy
+itself generates insignificant excess returns, but will nevertheless have a highly sig-
+nificant alpha relative to the original set strategy. In fact, in a frictionless world the
+introduction of this asset could theoretically improve the Sharpe ratio available to the
+investor by a factor of ten, or a hundred–a long position in the higher return asset
+hedged with a short position in the highly correlated lower return asset could have an
+extremely high Sharpe ratio. In the real world, however, the introduction of this asset
+may hardly improve the investment opportunity set. Trading costs can easily exceed
+the small spread generated by pairs trading the two assets, in which case the investor
+would just switch out of the old strategy into the new, with essentially no impact on
+the available Sharpe ratio.
+These issues are important here. We are evaluating anomaly performance explic-
+itly accounting for the cost of trading, and many of the anomalies we consider have
+high correlations with the explanatory factors we employ, particularly with HML and
+UMD, the Fama and French (1993) value factor and their version of the Carhart (1997)
+11
+--- PAGE 14 ---
+momentum factor. We consequently prefer a generalized notion of alpha, which both
+agrees with the common notion of alpha when trading is frictionless and unambigu-
+ously answers the question “does the test asset improve the investment opportunity
+set of an investor with access to the explanatory assets?”
+3.1. Factor trading costs
+Figure 3 shows the estimated 12-month moving average cost of trading the Fama/French
+size, value and momentum factors (SMB, HML and UMD, respectively) each month,
+over the period spanning July 1963 through December 2013. SMB and HML incur
+similar trading costs, because they are constructed using the same two-way cut on
+size (NYSE median market capitalization) and three-way cut on book-to-market (30
+and 70 percentiles using NYSE break points). These factors’ underlying portfolios are
+only rebalanced annually, and both size and book-to-market are fairly persistent, so
+turnover is fairly low and transaction costs are modest. Over the sample SMB and
+HML on average only turn over 2.32% and 1.99% and per year. The time-series av-
+erage cost of trading these factors is 5.66 and 5.45 basis points per month, and the
+12-month moving averages are constant over one year periods because the strategies
+are only rebalanced annually. UMD, which is constructed using the same two-way
+cut on size and a tertile sort of stock performance over the first eleven months of the
+prior year, is rebalanced monthly and incurs much higher transaction costs. Over the
+sample UMD turns over 24.64% per year, and its time-series average cost of trading is
+48.39 basis points per month. The figure shows the Sharpe downward trend in trading
+costs after 2000, and spikes in trading cost over periods of market stress (e.g., OPEC
+oil crisis in 1973, Nasdaq deflation in 2001, and the great recession in 2008).
+12
+--- PAGE 15 ---
+Figure 3: Transactions Costs for Fama-French Factors over Time
+The figure reports the estimated 12-month moving average cost of trading the Fama and French (1993)
+size, value and momentum factors (SMB, HML and UMD, respectively) each month, over the period
+spanning July 1963 through December 2013.
+3.2. Performance metric: a generalized alpha
+Our generalized notion of alpha is simplified by lettingy⊥ X≡ y− X(X′X)−1X′y de-
+note the part of the test assety not spanned by the explanatory assetsX, MVEX denote
+the ex post mean variance efficient portfolio of the assets X, wy,MVE{X,y} be the weight
+on y in MVE{X,y}, and temporarily ignoring transaction costs. Then MVE {X,y⊥X} =
+MVE{X,y}, so
+MVE{X,y}⊥ MVEX = MVE{X,y⊥X}⊥ MVEX
+= MVE{X,y⊥X}⊥ X
+= MVE{X,y}⊥ X
+= wy,MVE{X,y} y⊥ X.
+The first and third equalities follow from the equivalence of MVE{X,y} and MVE{X,y⊥X}.
+The second equality holds because MVE{X,y⊥X} is a convex combination of MVEX and
+13

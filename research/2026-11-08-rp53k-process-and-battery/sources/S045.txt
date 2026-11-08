@@ -1,0 +1,1011 @@
+
+--- PAGE 1 ---
+How Inefficient is the 1/N Asset-Allocation Strategy? ∗
+Victor DeMiguel † Lorenzo Garlappi ‡ Raman Uppal §
+December 1, 2005
+∗We wish to thank John Campbell and Luis Viceira for their suggestions and for making available their
+data and computer code and Roberto Wessels for making available data on the ten industry sectors of
+the S&P500 index. We also gratefully acknowledge comments from Suleyman Basak, Michael Brennan,
+Ian Cooper, Bernard Dumas, Bruno Gerard, Francisco Gomes, Eric Jacquier, Chris Malloy, Narayan Naik,
+ˇLuboˇ s P ́ astor, Anna Pavlova, Sheridan Titman, Rossen Valkanov, Tan Wang, Yihong Xia, Pradeep Yadav,
+Zhenyu Wang and seminar participants at BI Norwegian School of Management, HEC Lausanne, HEC
+Montr ́ eal, London Business School, University of Mannheim, University of Texas, University of Vienna, the
+International Symposium on Asset Allocation and Pension Management at Copenhagen Business School,
+the conference on Developments in Quantitative Finance at the Isaac Newton Institute for Mathematical
+Sciences at Cambridge University, Second McGill Conference on Global Asset Management, and the 2005
+meetings of the Western Finance Association.
+†London Business School, 6 Sussex Place, Regent’s Park, London, United Kingdom NW1 4SA; Email:
+avmiguel@london.edu.
+‡McCombs School of Business, The University of Texas at Austin, Austin TX, 78712; Email:
+lorenzo.garlappi@mccombs.utexas.edu. Corresponding author.
+§London Business School and CEPR; IF A, 6 Sussex Place, Regent’s Park, London, United Kingdom NW1
+4SA; Email: ruppal@london.edu.
+--- PAGE 2 ---
+How Inefficient is the 1/N Asset-Allocation Strategy?
+Abstract
+In this paper, we compare the out-of-sample performance of the rule allocating 1 /N to each of
+the N available assets to several static and dynamic models of optimal asset-allocation for ten
+datasets. We devote particular attention to models the literature has proposed to account for
+estimation and model error. We find that the 1 /N asset-allocation rule typically has a higher out-
+of-sample Sharpe ratio, a higher certainty-equivalent return, and a lower turnover than optimal
+asset allocation policies. The intuition for the poor performance of the policies from the optimizing
+models is that the gain from optimal diversification relative to na  ̈ ıve diversification under the 1 /N
+rule is typically smaller than the loss arising from having to use as inputs for the optimizing models
+parameters that are estimated with error rather than known precisely. Simulations show that
+the performance of optimal strategies relative to the 1 /N rule improves with the length of the
+estimation window, which reduces estimation error. For instance, for the case where wealth can
+be allocated across four risky assets with an average cross-sectional annual idiosyncratic volatility
+of 20%, it takes an estimation window of 50 years in order for the classical mean-variance policy
+implemented using maximum-likelihood estimates of the moments to outperform 1 /N. But if the
+average idiosyncratic volatility drops to 10%, the length of the required estimation window increases
+to 500 years; and, when the number of assets increases to 100 while average idiosyncratic volatility
+is 20%, the length of the required estimation window is more than 1,000 years.
+Keywords: Portfolio choice, asset allocation, investment management.
+JEL Classification : G11.
+--- PAGE 3 ---
+Contents
+1 Introduction 1
+2 Description of asset-allocation models considered 4
+2.1 The 1 /N strategy for asset allocation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2.2 Optimal strategies for myopic asset allocation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2.3 Optimal strategies for dynamic asset allocation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3 Description of methodology , performance measures & datasets 10
+3.1 Methodology: The steps in comparing portfolio performance . . . . . . . . . . . . . . . . . . . . . . . . 10
+3.2 Summary statistics reported for each asset-allocation strategy . . . . . . . . . . . . . . . . . . . . . . . 11
+3.3 Details of the various datasets considered . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+4 Insights from the nine empirical datasets considered 17
+4.1 Overall summary of findings across all datasets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+4.2 Results for ten sector portfolios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+4.3 Results for ten industry portfolios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+4.4 Results for nine international equity indexes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+4.5 Results for US market, SMB, and HML portfolios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+4.6 Results for US Market, HML, SMB and Twenty Size- and Book-to-Market-sorted portfolios assuming
+a single-factor model . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+4.7 Results for US Market, HML, SMB, and Twenty Size- and Book-to-Market-sorted portfolio assuming
+a three-factor model . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+4.8 Results for US Market, HML, SMB, MOM, and Twenty Size- and Book-to-Market-sorted portfolio . . 23
+4.9 Results for US Market and 10-year nominal bond with stochastic interest rates . . . . . . . . . . . . . 24
+4.10 Results for 5-year bond and US Market with time-varying expected returns . . . . . . . . . . . . . . . 25
+5 Simulations 26
+5.1 Details of data simulations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+5.2 Results for the base case . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+5.3 Increasing the estimation window length . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+5.4 Varying the magnitude of idiosyncratic volatility . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+5.5 Increasing the number of risky assets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+5.6 Summary of insights from simulations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+6 Robustness checks: Results for other specifications 30
+6.1 Results for different levels of risk aversion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+6.2 Results for different lengths of the estimation window . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+6.3 Results for different holding periods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+6.4 Results for Sharpe ratio computed over the full holding period . . . . . . . . . . . . . . . . . . . . . . 31
+6.5 Results for all assets, not the portfolio with just risky assets . . . . . . . . . . . . . . . . . . . . . . . . 31
+6.6 Results for other asset classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+7 Conclusions 31
+A Details for myopic asset allocation strategies 33
+A.1 Bayesian “Data-and-Model” portfolios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+A.2 Optimal “Three-Fund” portfolios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+B Details for dynamic asset allocation strategies 35
+B.1 Optimal portfolios with stochastic interest rates . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+B.2 Optimal portfolios with time-varying expected returns . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+T ables 40
+References 55
+--- PAGE 4 ---
+List of Tables
+1 List of asset-allocation models considered . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 40
+2 List of datasets considered . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 40
+3 Ten S&P sector portfolios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+4 Ten industry portfolios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+5 Nine international equity indexes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+6 Market, HML and SMB portfolios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+7 Market, HML, SMB, and twenty size- and B/M-sorted portfolios . . . . . . . . . . . . . . . . 48
+8 Market, HML, SMB, MOM, and twenty size- and B/M-sorted portfolios . . . . . . . . . . . . 49
+9 Market portfolio and 10-year bond with stochastic interest rates: Risk aversion = 3 . . . . . 50
+10 Market portfolio and 5-year bond with time-varying expected returns: Risk aversion = 3 . . 51
+11 Simulated data: Estimation window of 10 years and 4 risky assets . . . . . . . . . . . . . . . 52
+12 Simulated data: Estimation window of 100 years and 4 risky assets . . . . . . . . . . . . . . 53
+13 Simulated data: Estimation window of 100 years and 100 risky assets . . . . . . . . . . . . . 54
+--- PAGE 5 ---
+1 Introduction
+In about the 4th century, Rabbi Issac bar Aha proposed the following rule for asset allocation: 1
+“One should always divide his wealth into three parts: a third in land, a third in merchandise,
+and a third ready to hand.” After a brief lull in the literature on asset allocation, there have been
+considerable advances in the last fifty years. 2 Markowitz (1952) identified the optimal rule for
+allocating wealth across risky assets in a static setting. Tobin (1958) showed how the optimal
+portfolio would consist of only two funds if the investor could hold a riskfree asset in addition to
+risky assets, while Sharpe (1964) and Lintner (1965) explained that in equilibrium the risky-asset
+portfolio would be the market portfolio. Samuelson (1969) and Merton (1969) showed that these
+portfolio rules would be optimal even in a multiperiod setting if the investment opportunity set is
+constant. Merton (1971) determined the optimal portfolio policies when the investment opportunity
+set is stochastic.
+Implementing empirically the portfolio policies suggested by the theoretical models described
+above requires one to first estimate the parameters of the model 3 for a particular set of asset
+returns and then solve for the optimal portfolio weights. 4 Traditionally, this estimation has been
+done using methods from classical statistics such as maximum likelihood, ordinary least squares, and
+generalized methods of moments. But portfolios constructed using point estimates from classical
+econometric methods have extreme weights that fluctuate substantially over time. 5 One approach
+adopted in the literature to deal with these problems has been to use Bayesian “shrinkage” estima-
+tors that incorporate a prior. 6 A second approach, proposed by Black and Litterman (1990, 1992),
+combines two sets of priors—one based on an equilibrium asset pricing model and the other based
+on the subjective views of the investor. A third approach imposes portfolio constraints prohibiting
+shortsales (Frost and Savarino (1988) and Chopra (1993)), which Jagannathan and Ma (2003) show
+can be interpreted as shrinking the extreme elements of the covariance matrix. Recently, Michaud
+(1998) has advocated the use of resampling methods. 7
+Our objective in this paper is to evaluate how inefficient it is to use the na  ̈ ıve1/N asset-
+allocation rule, where 1/N is allocated to each of the N assets available for investment, rather than
+static and dynamic models of optimal asset allocation. We consider two versions of the 1 /N rule:
+(i) the investor constantly rebalances the portfolio in order to maintain the 1 /N allocation over
+1Babylonian Talmud: Tractate Baba Mezi’a, folio 42a.
+2For a detailed survey of this literature, see Campbell and Viceira (2002) and Brandt (2004).
+3The parameters to be estimated in the case of static portfolio models are the expected returns vector and
+the variance-covariance of returns matrix, while for models of dynamic portfolio choice one needs to estimate the
+parameters for the processes driving the riskfree interest rate, expected returns on the risky assets, and the volatilities
+and correlations of the risky asset returns.
+4Recent work has focused on either deriving explicit analytic expressions for the optimal portfolio policies for
+particular specifications of the stochastic investment environment opportunity set, as in Brennan and Xia (2000,
+2002) Campbell and Viceira (1999, 2001), Campbell, Chan, and Viceira (2003), Campbell, Cocco, Gomes, and
+Viceira (2001), Chacko and Viceira (2004), Kim and Omberg (1996), Liu (2001), Skiadas and Schroder (1999),
+Wachter (2002), and Xia (2001) or using numerical methods to solve these models, as in Balduzzi and Lynch (1999),
+Bansal, Dahlquist, and Harvey (2004), Brennan, Schwartz, and Lagnado (1997), Lynch (2001), and Lynch and
+Balduzzi (2000).
+5For a discussion of the problems entailed in implementing mean-variance optimal portfolios, see Hodges and
+Brealey (1978), Michaud (1989), Best and Grauer (1991), and Litterman (2003).
+6A detailed description of the Bayesian models is provided in Sections 2.2.3 and 2.2.4.
+7Scherer (2002) describes the resampling approach in detail and discusses some of its limitations, while Harvey,
+Liechty, Liechty, and M ̈ uller (2003) discuss other limitations and provide an estimate of the loss incurred by an
+investor who chooses a portfolio based on this approach.
+--- PAGE 6 ---
+time; and, (ii) the investor allocates 1 /N at the initial date and then holds this portfolio until the
+terminal date (“buy-and-hold”).
+There are several reasons for studying the 1 /N asset-allocation rule. One, it is easy to imple-
+ment because it does not require any estimation or optimization. Two, despite the sophisticated
+theoretical models developed in the last fifty years and the advances in methods for estimating the
+parameters for these models, investors continue to use such simple allocation rules for allocating
+their wealth across assets. For instance, Benartzi and Thaler (2001) and Liang and Weisbenner
+(2002) document that investors allocate their wealth across assets using the na  ̈ ıve 1/N-rule.8 There
+is evidence also that investors often take the “path of least resistance” and exhibit inertia when
+making investment and rebalancing decisions. For instance, in allocating their wealth in pension
+schemes, employees often accept the default asset allocation decision made by employers (Madrian
+and Shea (2000) and Choi, Laibson, Madrian, and Metrick (2001)), and in contrast to what opti-
+mal asset-allocation models would suggest, many employees never rebalance these initial allocations
+(Choi, Laibson, Madrian, and Metrick (2004)). Finally, MacKinlay and Pastor (2000) show that
+when a risk factor is missing from an asset pricing model, the resulting mispricing affects the co-
+variance matrix of residuals, and if one exploits this, then under the assumption that all assets
+have the same expected return, one gets the 1 /N rule.9
+We compare the out-of-sample performance of the 1 /N rule to that of strategies from about ten
+models of static and dynamic asset allocation across ten datasets using three performance criteria.
+These three criteria are: (i) the out-of-sample Sharpe ratio of each asset-allocation strategy; (ii) the
+certainty equivalent (CEQ), which for the static models is obtained from the expected utility for a
+mean-variance investor and for the dynamic models is obtained from the lifetime expected utility
+of an investor with Epstein and Zin (1989) utility; 10 and, (iii) the turnover (trading volume) for
+each portfolio strategy.
+In order to do a comprehensive study that analyzes the out-of sample performance of a wide
+class of asset allocation strategies accounting for both changes in the opportunity set (dynamic
+strategies) as well as model and estimation error (Bayesian and shrinkage methods), we consider
+over ten asset-allocation models. 11 The various models we consider are listed in Table 1. The
+static models of optimal asset allocation that we study include the Markowitz (1952) mean-variance
+optimal portfolio where the expected returns and variance-covariance matrix are estimated by their
+sample counterparts, the minimum-variance portfolio, the Bayes-Stein shrinkage portfolio studied
+by Jorion (1985, 1986), the “Data-and-Model” approach in P ́ astor (2000), P ́ astor and Stambaugh
+8Huberman and Jiang (2004) find, based on a study of half a million participants in more than six hundred 401(k)
+pension plans, that participants tend to invest in only a small number of funds of the total funds offered to them,
+and that participants tend to allocate their contributions evenly across the funds that they use, with the tendency
+weakening with the number of funds used.
+9Another reason to consider the 1 /N strategy is that in their study of an evolutionary market to examine which
+rules dominate the market in the long run, that is, which rules are evolutionary stable, Evstigneev, Hens, and
+Schenk-Hopp (2004) find that the 1 /N strategy does quite well.
+10The CEQ and the Sharpe ratio differ because the CEQ for the static models is a linear function of variance,
+whereas the Sharpe ratio is a nonlinear function of standard deviation. For dynamic models, where agents maximize
+the expected utility of lifetime consumption, the CEQ depends also on higher moments of the return distribution,
+and so that is another reason for the two measures to differ.
+11In earlier work, Bloomfield, Leftwich, and Long (1977) show that mean-variance optimal portfolios do not out-
+perform an equally-weighted portfolio and Jorion (1991) finds that the equally-weighted and value-weighted indices
+have an out-of-sample performance similar to that of the minimum-variance portfolio and to the tangency portfolio
+obtained with shrinkage methods. More recently, Carlson, Chapman, Kaniel, and Yan (2004), using a general equi-
+librium model with heterogeneous agents, analyze the role of predictability in asset returns and conclude that simple
+unconditional consumption and portfolio rules outperform, in terms of utility cost, conditional optimal policies.
+2
+--- PAGE 7 ---
+(2000) and Wang (2004), the “Three-Fund” approach of Kan and Zhou (2005), and the short-
+sale-constrained portfolios of Frost and Savarino (1988), Chopra (1993), and Jagannathan and Ma
+(2003). The two models of dynamic asset allocation that we consider allow for stochastic interest
+rates (Campbell and Viceira, 2001) and for time-varying expected returns on assets (Campbell and
+Viceira, 1999; Campbell, Chan, and Viceira, 2003). 12
+The ten datasets for which we evaluate the performance of the different asset allocation models
+are listed in Table 2. There are several reasons why we decided to consider more than a single
+dataset. One, we did not want our results to be limited to a particular dataset; this was specially
+important given the nature of our findings. Two, when comparing the performance of the 1 /N
+strategy to that of strategies from the various optimal asset allocation models developed in other
+papers, we wished to use the same dataset as that used in the original paper proposing a particular
+asset-allocation model. Finally, to understand better the results that we find based on the empirical
+datasets we also perform our analysis on simulated data.
+Our main finding is that the 1 /N allocation rule (with or without rebalancing at each trading
+date) is far from inefficient. In fact, the 1 /N strategy performs quite well out-of-sample: it often
+has a higher Sharpe ratio and lower turnover than the policies suggested by both the static and
+the dynamic models of optimal asset allocation. The reason for this result is that the gain from
+optimal diversification relative to na  ̈ ıve diversification under the 1/N rule is typically smaller than
+the loss arising from using inputs for the optimizing models that have been estimated with error.
+That is, the optimizing models do have a higher Sharpe ratio than the 1 /N rule in-sample, but
+out-of-sample the significant estimation error offsets the gains from using a model that delivers
+optimal diversification as opposed to the na  ̈ ıve diversification offered by the 1 /N rule. Dynamic
+asset allocation strategies, which are optimal when the investment opportunity set is stochastic,
+also do not out-perform the 1/N policy because of the difficulty in estimating precisely the processes
+driving returns. Moreover, the 1 /N strategy has several other attractive properties. For instance, it
+is a balanced strategy that always has a positive amount invested in each asset. This is in contrast
+(a) to unconstrained strategies that often entail very large short positions that may be difficult and
+costly to implement, and (b) to constrained strategies, which typically entail a zero investment in
+some of the assets.
+Our simulations for the static models indicate that if one knew the true value of the moments,
+then obviously the strategy with the highest out-of-sample Sharpe ratio would be the one sug-
+gested by the mean-variance model. But if the moments have to be estimated, then the relative
+performance of the 1 /N and the optimal asset-allocation strategies depends on the length of the
+estimation window. As expected, the longer the estimation window, the better the performance
+of optimal asset-allocation strategies. Moreover, the estimation window length necessary for the
+optimal strategies to outperform the 1 /N strategy increases with: (a) a decrease in the idiosyn-
+cratic volatility or (b) an increase in the number of assets. For instance, if wealth can be allocated
+across four risky assets with an average cross sectional annual idiosyncratic volatility of 20%, we
+need an estimation window of 50 years in order for the classical mean-variance policy implemented
+using maximum-likelihood estimates of the moments to outperform 1 /N. But with four assets and
+12Several models of optimal dynamic asset allocation have been studied in the literature; a partial list is provided
+in Footnote 4. In order to limit the length of this paper, we restrict attention to two models considered in the book by
+Campbell and Viceira (2002). These two models allow for stochastic interest rates and time-varying expected returns.
+The key reason for choosing these two models is that they cover the two important factors of the opportunity set
+that could be stochastic—the interest rate and expected stock returns. The third factor that could be stochastic, the
+volatility, has been found to have a much smaller impact on dynamic asset allocation (Chacko and Viceira, 2004).
+3
+--- PAGE 8 ---
+a lower idiosyncratic volatility of 10%, we need 500 years, and with an increase in assets to 100 and
+with an average idiosyncratic volatility of 20%, we need more than 1000 years. Finally, we also find
+that for longer estimation windows, because the estimation problem is less severe, the turnover of
+the optimal strategies decreases and the imposition of constraints has a smaller effect in improving
+performance.
+To understand the intuition for our findings, observe that the vector of optimal weights under
+the mean-variance model is given by the product of three terms: the risk tolerance of the investor,
+the inverse of the variance-covariance matrix of returns, and the vector of expected excess returns
+over the riskfree rate. To implement this portfolio, one needs to estimate both the variance-
+covariance matrix and also the vector of expected returns. It is well known (see Merton (1980)
+and the simulation results described above) that a very long time series of data is required in order
+to estimate expected returns precisely. Similarly, the estimate of the variance-covariance matrix is
+poorly behaved (see Green and Hollifield (1992) and Jagannathan and Ma (2003)). So, in computing
+the mean-variance optimal portfolio weights using the sample moments, one ends up multiplying
+the poorly estimated expected returns by the inverse of the sample covariance matrix, which also
+contains estimation error. The resulting portfolio weights often consist of extreme positive and
+negative positions that are far from optimal. Extensions of the mean-variance model are designed
+to reduce the error in estimating expected returns and to improve the behavior of the variance-
+covariance matrix (by shrinking the extreme observations). But, the effect of the estimation error is
+so large that the level of shrinkage proposed by the various optimizing models is not sufficient. The
+1/N rule performs well because by ignoring the data, it essentially shrinks all moments completely,
+and this level of shrinkage turns out to be superior. 13 A second reason why the 1 /N rule performs
+well in the datasets we consider is that we are using it to allocate wealth across portfolios of assets
+rather than individual stocks, and these portfolios already contain a certain level of diversification.
+Thus, the loss from na  ̈ ıve as opposed to optimal diversification is much smaller in the context of
+asset allocation than it would be for allocating wealth across individual assets.
+The rest of the paper is organized as follows. We describe the 1 /N and optimal asset-allocation
+strategies (both static and dynamic) in Section 2. Our methodology for comparing the performance
+of different asset-allocation policies and the datasets for which this comparison is made are described
+in Section 3. The results from the comparison of the performance of 1 /N strategy to those from the
+optimizing models are given in Section 4. Insights from the analysis of simulated data are reported
+in Section 5. Robustness checks and details of other experiments that we carried out but do not
+report in the paper are listed in Section 6. We conclude in Section 7. Detailed descriptions of the
+optimal static and dynamic asset-allocation strategies we considered are contained in Appendix A
+and B, respectively.
+2 Description of asset-allocation models considered
+In this section, we describe the three kinds of “models” that we consider: (i) 1 /N asset-allocation
+rule; (ii) static or myopic models for optimal asset allocation; and, (iii) dynamic models for optimal
+asset allocation. These strategies are listed in Table 1, and readers familiar with the literature on
+static and dynamic models of optimal asset allocation can skip Sections 2.2 and 2.3.
+13Another reason why the 1/N strategy does well, at least for domestic data, is that it implicitly loads on small size
+and momentum stocks, which have been shown by Brandt, Santa-Clara, and Valkanov (2005) to improve performance.
+4
+--- PAGE 9 ---
+2.1 The 1/N strategy for asset allocation
+Suppose that there are N risky assets and one riskless asset. The na  ̈ ıve 1 /N diversification rule
+allocates 1/N to each of the N risky assets available for investment. This is the equally-weighted
+portfolio, where the weight in each risky asset is set equal to w j = 1/N.14
+We consider two versions of the 1 /N asset-allocation strategy – with and without rebalancing.
+In the case with rebalancing, at each trading date the asset allocation is revised so that after
+rebalancing the weights are such that the amount invested in each of the assets is again 1 /N. In
+the case without rebalancing, the strategy is a “buy-and-hold” portfolio where the 1 /N allocation
+is made at the beginning of the investment horizon and this position is never rebalanced thereafter.
+While these two trading strategies are quite simple, they are less na  ̈ ıve than they may appear.
+First, they do embody some diversification because wealth is invested across all N assets. So, while
+they may not be diversified optimally, they do enjoy the benefits of (suboptimal) diversification.
+Second, the two strategies can be interpreted as ones where the investor actually has a view about
+future returns. In the case without rebalancing, the portfolio over time assigns higher weight to
+assets that have done well in the past; so, this can be interpreted as a “momentum” strategy. On
+the other hand, the strategy with rebalancing requires a reallocation of wealth away from past
+winners and toward past losers; hence, this can be interpreted as a “contrarian” strategy.
+In addition to these two na  ̈ ıve strategies, we also consider the strategy of investing in the
+value-weighted market portfolio, which we label as the “single-asset strategy.”
+2.2 Optimal strategies for myopic asset allocation
+In order to understand the relation between the various myopic (static) strategies discussed below,
+we can think of the mean-variance portfolios obtained with sample moments as being at one extreme,
+where estimation error is ignored all together. On the other extreme is the 1 /N strategy, which
+ignores the data all together and “shrinks” all expected returns, variances and covariances on
+all risky assets to common values. The empirical Bayes-Stein strategy is in-between these two
+extremes because it shrinks only the expected returns, as shown in equation (7) below. The
+unconstrained minimum-variance strategy is one that shrinks completely the expected returns to
+a common value while not adjusting at all the variance-covariance matrix. Imposing constraints
+on shortselling is equivalent to shrinking partially the variance-covariance matrix, as shown by
+Jagannathan and Ma (2003); thus, imposing shortselling constraints on the minimum-variance
+portfolio is equivalent to shrinking the variance-covariance matrix while setting all the expected
+returns equal to a common value. And, the Bayesian “Data-and-Model” approach of P ́ astor (2000)
+shrinks both the expected returns and the variance-covariance matrix, as demonstrated in Wang
+(2004), and shown in equations (A5) and (A6) in Appendix A. Finally, Kan and Zhou (2005)
+propose a “three-fund” portfolio rule to deal with estimation error. Their rule belongs to the class
+of shrinkage rules with a particular choice of shrinkage estimators for means and variances.
+14One could choose to evaluate the performance of the portfolio of all assets, including the investment in the
+riskfree asset, or one could evaluate the performance of the fund with only risky assets. We considered both cases
+but report the results for only the fund with just risky assets. The main reason for doing so is that the performance
+of the fund of just risky assets depends only on the asset-allocation decision, while the performance of the portfolio
+with all assets depends also on market-timing ability. However, the qualitative results for the two cases are similar
+and the results for the case with investment in all assets are discussed in Section 6.5.
+5
+--- PAGE 10 ---
+In what follows, we use Rt to denote the N vector of excess returns (over the risk free asset) on
+the N risky assets at date t and 1N to denote a N vector of ones.
+2.2.1 Sample-based mean-variance optimal portfolios
+Mean-variance optimal portfolios are typically derived by assuming that investors have preferences
+over only the mean and variance of the returns from a chosen portfolio. At each time t, the investor
+chooses a portfolio w t to maximize the following
+w⊤t μt − γ2 w⊤t Σtwt, (1)
+whereμt is the N vector of expected excess returns over the risk-free asset, Σ t is the corresponding
+N ×N variance-covariance matrix, and γ is the investor’s risk aversion.
+The moments μt and Σt are estimated through the following sample analogues, where M is
+used to denote the length of the sample:
+ˆμt = 1M t∑s=t−M +1Rs, and (2)
+ˆΣt = 1M −N − 2 t∑s=t−M +1(Rs − ˆμt)(Rs − ˆμt)⊤. (3)
+The choice of the estimator ˆΣt is motivated by the fact that ˆΣ−1t is an unbiased estimator of Σ −1t .
+The optimal mean-variance (MV) portfolio chosen at each time t is given by:
+ˆ wMVt = 1γ ˆΣ−1t ˆμt. (4)
+In the presence of a constraint on short selling, the investor solves the same problem as in (1), but
+with the addition of a constraint that prohibits short sales and/or borrowing.
+In the rest of the paper, we refer to the sample-based mean-variance strategy as the “mean-
+variance” strategy.
+2.2.2 Minimum-variance portfolios
+Even though the minimum-variance portfolio is not an optimal asset-allocation strategy (except in
+the limit where the expected returns on all risky assets are assumed to be equal), we consider this
+strategy because of the attention it has received in Chan, Karceski, and Lakonishok (1999) and
+Jagannathan and Ma (2003).
+The weights allocated to the risky assets at any time t in the minimum-variance portfolio are
+obtained by minimizing the variance of the portfolio:
+w⊤t Σtwt, (5)
+subject to w ⊤t 1N = 1, and implementing the solution to the above minimization problem in the
+data leads to a portfolio given by:
+ˆ wMINt = 11⊤N ˆΣ−1t 1N × ˆΣ−1t 1N. (6)
+6
+--- PAGE 11 ---
+In the presence of short-sale constraints, one minimizes the expression in (5) while imposing a
+short-sale constraint. Jagannathan and Ma (2003) show that constraining short sales is equivalent
+to “shrinking” the extreme values in the variance-covariance matrix. They also find that with
+a constraint on short-sales, “the sample covariance matrix performs as well as covariance matrix
+estimates based on factor models, shrinkage estimators and daily data” (p. 1651). Because of this
+finding, we do not include in our comparison the analysis of the performance of other models, such
+as Best and Grauer (1992), Ledoit (1996), Chan, Karceski, and Lakonishok (1999), and Ledoit
+and Wolf (2003), that have been developed to deal explicitly with the problems in estimating the
+covariance matrix in the context of portfolio optimization. 15
+2.2.3 Bayes-Stein portfolios
+In the literature, the Bayesian approach to estimation error has been implemented in different
+ways. Barry (1974), and Bawa, Brown, and Klein (1979), use either a non-informative diffuse
+prior or a predictive distribution obtained by integrating over the unknown parameter. In a second
+implementation, Jobson and Korkie (1980), Jorion (1985, 1986), Frost and Savarino (1986), and
+Dumas and Jacquillat (1990), use empirical Bayes estimators, which shrink estimated returns closer
+to a common value and move the portfolio weights closer to the global minimum-variance portfolio.
+In a third implementation, P ́ astor (2000), and P ́ astor and Stambaugh (2000) use the equilibrium
+implications of an asset pricing model to establish a prior; thus, in the case where one uses the
+CAPM to establish the prior, the resulting weights move closer to those for a value-weighted
+portfolio.16 We do not report the performance of the Bayes-diffuse-prior portfolio because it is
+virtually indistinguishable from the mean-variance case. 17 We discuss below the empirical Bayes-
+Stein approach for dealing with estimation error, and in Section 2.2.4, the approach where the data
+is supplemented with a belief that returns are generated by a particular asset-pricing model.
+The Bayes-Stein (BS) portfolio is obtained by solving the problem in (1), but where instead of
+the sample estimates for μ and Σ in (2) and (3), the investor uses shrinkage estimators, defined as
+a convex combination of the sample mean ˆ μ and a common (global) mean μ.18
+In our implementation of shrinkage estimation, we rely on the Bayesian interpretation of the
+shrinkage estimator (hence the name “Bayes-Stein” portfolios) and take the grand mean μ to be
+the mean of the minimum-variance portfolio, μMIN. More specifically, following Jorion (1986), we
+use the following shrinkage estimator for the expected return and covariance matrix
+ˆμBSt = (1 − ˆφ) ˆμt + ˆφ ˆμMINt , (7)
+ˆΣBSt = ˆΣt
+(
+1 + 1
+M + ˆλ
+)
++
+ˆλ
+M (M + 1 + ˆλ)
+1N 1⊤N
+1⊤N ˆΣ−1t 1N, (8)
+15See Sections III.B and III.C of Jagannathan and Ma (2003) for an extensive discussion of the performance of
+other models of estimating the sample covariance matrix.
+16The models discussed above use Bayesian estimation methods in the context of static asset allocation. Bayesian
+methods have also been used in the context of dynamic asset allocation, where the investment opportunity set is
+stochastic; see, for instance, Avramov (2004), Barberis (2000), Johannes, Polson, and Stroud (2002), and Kandel and
+Stambaugh (1996).
+17The reason for this is that for the case of the Bayesian diffuse-prior portfolio, parameter uncertainty is incorporated
+by inflating the variance-covariance matrix by the factor 1 + 1M (see Bawa, Brown, and Klein (1979)), while still using
+the historical mean as a predictor of expected returns. For large enough M , 120 in our case, this correction to the
+variance-covariance matrix has only a negligible effect on performance of the mean-variance portfolio.
+18The concept of shrinkage estimation was developed by James and Stein (1961).
+7
+--- PAGE 12 ---
+where ˆΣt is defined in (3), ˆμMINt is the average excess return on the sample global minimum-variance
+portfolio, ˆμMINt = ˆμt ˆΣ−1t 1N1⊤N ˆΣ−1t 1N , ˆφ = ˆλM +ˆλ , and ˆλ = N +2(ˆμ−μMIN)⊤ ˆΣ−1(ˆμ−μMIN).
+Under the Bayes-Stein approach, the portfolio weights at each date t are given by
+ˆ wBSt = 1γ( ˆΣBSt )−1 ˆμBSt . (9)
+In the presence of a constraint on short selling, the investor solves the same problem as in (1), where
+the expected returns and variance-covariance matrix are given by the Bayes-Stein estimators, ˆ μBSt
+and ˆΣBSt , and with the additional constraint that prohibits short sales and/or borrowing.
+2.2.4 Bayesian “Data-and-Model” portfolios
+Under the “Data-and-Model” (DM) approach developed in P ́ astor (2000), and P ́ astor and Stam-
+baugh (2000), estimation of the moments of asset returns is done using not just the data but
+also using the belief that the asset returns are generated by a particular asset-pricing model. We
+describe the main features of this approach in Appendix A.1.
+Under the Bayesian “Data-and-Model” approach, the resulting portfolio weights at each time t
+are, given by
+ˆ wDMt = 1γ( ˆΣDMt )−1 ˆμDMt , (10)
+where ˆμDMt and ˆΣDMt are estimators of the expected return and variance covariance matrix that
+incorporate the belief of a Bayesian investor about the validity of a particular asset pricing model;
+the expressions for these estimators are given in equations (A5) and (A6) of the appendix, and
+in our empirical analysis, we consider the case where the investor believes in the model with a
+subjective probability of 50%. The equations for the estimators, derived in Wang (2004), show
+that the Bayesian “Data-and-Model” approach implies a linear shrinkage for expected returns and
+a quadratic shrinkage for the variance-covariance matrix.
+2.2.5 Optimal “Three-F und” portfolios
+To improve on the models that use Bayesian shrinkage estimators, Kan and Zhou (2005) propose
+a “three-fund” portfolio rule, where the role of the third fund is to minimize “estimation risk.”
+The intuition underlying their result is that, because estimation risk cannot be diversified away
+by holding just a combination of the tangency portfolio and of the risk-free asset, an investor will
+benefit from holding also some other risky-asset portfolio, that is, a third fund. Kan and Zhou
+search for this optimal three-fund portfolio rule in the class of portfolios that can be expressed as
+a combination of the sample tangency portfolio and the minimum-variance portfolio; that is,
+ˆ wKZt = 1γ (c ˆΣ−1t ˆμt +d ˆΣ−1t 1N ), (11)
+wherec andd are chosen optimally to maximize the expected utility of a mean-variance investor. 19
+19The expression for the optimal portfolio weight, with the optimal expressions for c and d substituted in, is
+reported in equation (A14) of Appendix A.2.
+8
+--- PAGE 13 ---
+2.3 Optimal strategies for dynamic asset allocation
+In this section, we describe optimal dynamic asset allocation policies that allow for changes in the
+investment opportunity set. In particular, we consider two cases: the first allows for time-variation
+in the short-term real interest rate (keeping fixed the moments of the excess returns on the remaining
+risky assets) and the second allows for time variation in the risk-premia demanded by risky assets.
+We rely on the approach in Campbell and Viceira (1999, 2001, 2002) and Campbell, Chan, and
+Viceira (2003) to estimate the parameters of the model and to obtain the optimal consumption
+and portfolio policies. Below we summarize the structure of the optimal consumption and portfolio
+rules for the two cases we consider, with the details of their derivation provided in Appendix B.
+2.3.1 Stochastic interest rates
+Campbell and Viceira (2001) study intertemporal asset allocation in the presence of stochastic real
+interest rates. Their goal is to develop a theory of long-term portfolio choice when the investment
+opportunity set is changing over time because of changes in only the short-term real interest rate; all
+the moments of excess returns (over the short-rate) on all risky assets are assumed to be constant. 20
+In order to obtain bond returns that allow empirically reasonable predictions about an investor’s
+holding of short-term bonds, long-term bonds and equities, Campbell and Viceira (2001) develop
+a two-factor model of the term structure, where the two factors are (i) the expected log return on
+the short-term indexed bond and (ii) the expected log rate of inflation. For this model, Campbell
+and Viceira (2001) obtain the following linear specification of the portfolio policy
+ˆ wCVt = 1γ ˆΣ−1t ˆa, (12)
+where ˆΣt is the time t estimate of the variance-covariance matrix for excess returns over the
+reference (short-term) asset and ˆa is a vector containing the mean excess return over the reference
+asset ( myopic component ) and conditional covariances with the consumption-wealth ratio ( hedging
+component). The optimal log-consumption-wealth ratio ( ct −wt) is shown to be a linear function
+of the expected log return xt on the one-period indexed bond,
+ct −wt =b0 +b1xt, (13)
+where the quantities b0 andb1 along with other details about the model are given in Appendix B.1.
+In our implementation, we use equations (12) and (13) as the optimal portfolio and consumption
+rules in the presence of stochastic interest rates.
+2.3.2 Time-varying expected returns
+Campbell, Chan, and Viceira (2003) study dynamic asset allocation with time-varying expected
+returns. To model the predictability of asset returns, they use a vector autoregressive (V AR) system
+of the form
+zt+1 = Φ0 + Φ1zt + vt+1, (14)
+where zt is a vector containing both the returns on the assets and the state variables chosen to
+describe their dynamics, Φ0 and Φ1 are coefficients and vt+1 a vector of normal i.i.d. shocks.
+20This assumption of constant risk premium implies that the expected returns on risky assets can change over time
+but only in parallel with the riskless interest rate.
+9
+--- PAGE 14 ---
+Campbell, Chan, and Viceira (2003) then show that the optimal portfolio, ˆ w CCVt , can be ex-
+pressed as a linear function of the state variables zt
+ˆ wCCVt = ˆA0 + ˆA1 zt, (15)
+where the definitions of ˆA0 and ˆA1, along with other details of the model, are given in Appendix B.2.
+They also show that the optimal log consumption-wealth ratio ( ct −wt) can be expressed as a
+quadratic function of the state variables zt
+ct −wt =b0 + B⊤1 zt + z⊤t B2zt, (16)
+where b0, B1 and B2 are defined in Appendix B.2. In our implementation, we use equations (15)
+and (16) as the optimal portfolio and consumption rules when expected returns are time-varying.
+3 Description of methodology, performance measures & datasets
+This section is divided into three parts. In the first part, we explain our methodology for comparing
+the performance of the 1 /N asset-allocation rule to the performance of strategies from various
+optimizing models. In the second part, we describe the various measures used to evaluate and
+compare the performance of the different asset-allocation strategies. In the third part, we describe
+the various datasets that we use to compare the performance of the 1/N and optimal asset-allocation
+strategies. The results of this comparison are reported in Section 4, and the results based on
+simulated data are given in Section 5.
+3.1 Methodology: The steps in comparing portfolio performance
+Below, we provide the details of each step in our comparison of the performance of the 1 /N
+asset-allocation rule to that of strategies from the various static and dynamic models of optimal
+asset allocation. There were many choices one could have made in undertaking each step of this
+comparison. We considered several alternatives for each step, but below we report the results
+for only one set of choices. The main reason for this is that the qualitative results are not very
+different for the different alternatives we considered. The results we report are the ones that are
+typically least favorable for the 1/N strategy; for instance, we considered different lengths for the
+estimation windows, but report the case only for the longest estimation window for which the effect
+of estimation error is the smallest. The results for the others specifications we considered but
+decided not to report are summarized in Section 6.
+The analysis of each optimal strategy consists of the following six steps. One, we choose a
+window over which to estimate the parameters. We denote the length of the estimation window
+by M ≤ T , where T denotes the total number of observations. We choose an estimation window
+of M = 120 data points; for monthly datasets, this corresponds to ten years, while for quarterly
+data this corresponds to thirty years. 21 Two, we estimate the parameter values over the estimation
+window for the particular asset-allocation model being considered. Three, using these estimated
+parameters to form forecasts of future moments of returns (expected returns, variances, etc.), we
+solve the model for the optimal portfolio weights. Four, we measure the return from holding the
+21To check the robustness of our results we also considered an estimation window of M = 60, which corresponds
+to five years for monthly data and fifteen years for quarterly data. For the simulated data, we consider estimation
+windows of 10, 100, 250, and 500 years.
+10
+--- PAGE 15 ---
+portfolio with these weights over the next period, that is, out-of-sample. For monthly data, the
+out-of-sample holding period is one month, while for quarterly data it is one quarter. 22 Five, we
+repeat this “rolling-window” procedure for the next period, by including the data for the new date
+and dropping the data for the earliest period. We continue doing this until the end of the dataset
+is reached. Finally, for each portfolio strategy we compute the quantities we wish to report. As
+explained in Footnote 14, we report these quantities for the fund with investment in just the risky
+assets.
+In the section below, we describe each of the quantities that is reported and explain how this
+quantity is computed.
+3.2 Summary statistics reported for each asset-allocation strategy
+In the context of the experiment we are considering, in-sample refers to the case where the statistics
+are based on the entire time-series of excess returns; that is, the estimation window is equal to the
+length of the data series: M =T . In contrast, the out-of-sample statistics refer to the case where
+the window for estimating the parameters of the model and the resulting portfolio weights at each
+date is limited to the last M = 120 <T data points, and the return on this portfolio depends on the
+returns on each asset in the next period. The model parameters and weights are then re-estimated
+using a rolling-window approach.
+3.2.1 In-sample mean, variance, and Sharpe ratio of returns
+Letk denote a particular asset-allocation model and w k denote the portfolio weights recommended
+by such a model. In general, these weights will be a function of the moments of asset returns
+estimated according to the methodology suggested by approach k (for instance, maximum-likelihood
+for the classical mean-variance approach, and Bayesian estimation for the Bayes-Stein approach).
+Let ˆμk and ˆΣk denote the estimate of such moments obtained by using the entire time series of
+excess returns. Then, for a particular strategy k, the in-sample mean return of the portfolio is
+ˆμk⊤ ˆ wk, the in-sample variance of the portfolio is ˆ w k⊤ ˆΣk ˆ wk, and the in-sample estimate of the
+Sharpe ratio, ˆSRIS, is
+ˆSRkIS = ˆμk⊤ ˆ wk√
+ˆ wk⊤ ˆΣk ˆ wk. (17)
+3.2.2 Out-of-sample mean, variance and Sharpe ratio of returns
+To compute the out-of-sample returns on the portfolio, we follow the “rolling window” scheme
+described above to estimate the moments for each individual asset at each date t, and determine
+the vector of portfolio weights ˆ wkt for the asset-allocation model k. Holding the portfolio ˆ w kt for
+one period gives the following out-of-sample excess return at time t + 1: ˆRkt+1 = ˆ wk⊤t Rt+1, where
+Rt+1 denotes the returns in excess of the benchmark (risk-free) rate at time t + 1. After collecting
+the time series of T −M excess returns Rkt , the out-of-sample mean, variance, and Sharpe ratio of
+22As one of the robustness checks, we considered also a holding period of one year; this does not have a qualitative
+effect on the results.
+11
+--- PAGE 16 ---
+returns are,
+ˆμk = 1T −M T −M∑s=1 ˆRks, (18)
+(ˆσk)2 = 1T −M − 1 T −M∑s=1 ( ˆRks − ˆμk)2, (19)
+ˆSRkOS = ˆμkˆσk. (20)
+In order to measure the statistical significance of the difference in the Sharpe ratio of a par-
+ticular strategy from that of the two 1 /N strategies (one with rebalancing and the other without
+rebalancing) that serve as benchmarks, we also report the P-value for the Sharpe ratio of each
+strategy relative to these two strategies. These P-values are computed using the same approach as
+in Jobson and Korkie (1981), with the correction pointed out in Memmel (2003). 23
+3.2.3 Certainty Equivalent (CEQ) for static models
+Each point of the time series of excess returns Rkt generated by implementing strategy k can also
+be interpreted as an independent realization of a random variable. Following this logic, which is
+typical of the literature on static models of optimal asset allocation, we can define the concept
+of certainty equivalent return (CEQ) for a given strategy k. The CEQ is hence the return that
+makes an investor indifferent between getting CEQ for sure or a gamble with random realization
+ ̃X. Formally:
+u(CEQ) = E[u(  ̃X)], (21)
+where u(·) is the utility function. If the investor’s preferences can be summarized by the first two
+moments of the distribution of  ̃x, then, the CEQ is typically defined as
+CEQkstatic = ˆμk − γ2 (ˆσk)2, (22)
+where ˆμk and (ˆσk)2 refer to the first two moments of the realized excess returns under strategy k
+as given in equations (18) and (19), and γ is the risk aversion of the investor. 24
+Just as we did for the Sharpe ratios, in order to measure the statistical significance of the
+difference in the CEQ of a particular strategy from that of the two 1 /N strategies that serve
+as benchmarks (with and without rebalancing), we also report the P-value for the CEQ of each
+strategy relative to these two strategies. These P-values are computed by relying on the asymptotic
+properties of functional forms of the estimators of means and variance. 25
+23Specifically, consider two portfolios i and n, with ˆμi, ˆμn, ˆσi, ˆσn, ˆσi,n being their respective estimated means,
+variances and covariances over a sample of size T −M . We wish to test the hypothesis that the Sharpe ratios of
+these two portfolios are identical, i.e., H 0 : ˆμiˆσi − ˆμnˆσn = 0. The Jobson and Korkie test statistic is defined as follows,
+ˆzJK = ˆσn ˆμi−ˆσi ˆμn√ ˆθ , where ˆθ = 1T −M (2ˆσ2i ˆσ2n − 2ˆσi ˆσn ˆσi,n + 12 ˆμ2i ˆσ2n + 12 ˆμ2n ˆσ2i − ˆμi ˆμnˆσi ˆσn ˆσ2i,n). The test statistic ˆzJK is
+asymptotically distributed as a standard normal.
+24To be precise, the definition in equation (22) refers to the level of expected utility of a mean-variance investor,
+and it can be shown that this is approximately the CEQ of an investor with quadratic utility. Notwithstanding this
+caveat, and following common practice, we interpret it as the certainty equivalent for strategy k.
+25If we define v to be the vector of moments v = (μi,μn,σi,σn), and ˆv its empirical counterpart obtained from a
+sample of size T −M , and f (·) is the expression for the difference in the certainty equivalent of the two strategies i
+12
+--- PAGE 17 ---
+3.2.4 Certainty Equivalent (CEQ) for dynamic models
+For dynamic models of asset allocation, we define the certainty equivalent as the level of initial
+wealth that would generate the same utility level as that under the optimal consumption and
+portfolio rules. Formally, if we assume an investor starts at t = 0 with one dollar of wealth and
+follows the optimal consumption and investment strategy ( Ckt, wkt ), the dynamics of wealth under
+this strategy are given by
+Wkt+1 = (Wkt −Ckt )Rkp, (24)
+where Rkp is the gross return on the optimal portfolio under strategy k. Denoting by U (·) the
+investor’s utility function and by Jk0 the indirect utility derived by using the consumption strategy
+Ck, the certainty equivalent at time t = 0 for strategy k is given by, 26
+CEQkdynamic =U −1(Jk0 ). (25)
+When comparing dynamic models of asset allocation to static models (including 1 /N), we need
+to decide what consumption policy to use for the static models. To isolate the effect of portfolio
+choice, we assume that the finite-horizon static models (1 /N and also the strategies from the
+optimizing models) have the same consumption-wealth ratio as that under the optimal dynamic
+strategy. However, because the portfolio policies are different, the level of wealth at each date
+will be different under the static and dynamic models (see equation (24)), leading to differences
+in consumption, and therefore, differences in lifetime utility. In addition, note that the dynamic
+portfolio policies we consider are optimal for infinite horizon but the experiment that we consider is
+by its very nature for a finite horizon. We have implicitly assumed that the optimal infinite-horizon
+dynamic policies provide a good approximation to the optimal finite-horizon dynamic policies.
+3.2.5 Portfolio turnover
+To get a sense of the trading volume, we also compute the portfolio turnover for each asset allocation
+strategy. This measure is related to the level of transactions costs incurred in the implementation
+of the portfolio strategy, but it is important to realize that in the presence of transactions costs
+it would no longer be optimal to implement the same portfolio strategy as that from the model
+without transactions costs. In order to define turnover, let ˆ w kj,t denote the portfolio weight in asset
+j chosen at time t under strategy k, ˆ wkj,t+ the portfolio weight before rebalancing but at t + 1, and
+ˆ wkj,t+1 the desired portfolio weight at time t + 1 (after rebalancing). Then, turnover is defined as
+the sum of the absolute value of the rebalancing trades across the N available assets and over the
+andn,f (v) = (μi − γ2σ2i ) − (μn − γ2σ2n), then (from, for example, Greene (2002)) the asymptotic distribution of f (v)
+is
+√
+T (f (ˆv) −f (v)) → N
+“
+0, ∂f∂v ⊤Θ ∂f∂v ”, where
+Θ =
+0
+BB@
+σ2i σi,n 0 0
+σin σ2n 0 0
+0 0 2 σ4i 2σ2i,n
+0 0 2 σ2i,n 2σ4n
+1
+CCA. (23)
+26In all our applications we use the Epstein and Zin (1989) preferences described in equation (B1) of Appendix B
+with elasticity of intertemporal substitution ψ = 1.
+13
+--- PAGE 18 ---
+T −M trading dates, normalized by the total number of trading dates, T −M :
+Turnover = 1T −M T −M∑t=1 N∑j=1(⏐⏐⏐ ˆ wkj,t+1 − ˆ wkj,t+⏐⏐⏐). (26)
+For example, in the case of the 1 /N strategy, wkj,t = wkj,t+1 = 1/N but wkj,t+ is different, because
+of the change in asset prices between t and t + 1, which causes a change in the relative weights in
+the portfolio. 27 The turnover quantity defined above can be interpreted as the average percentage
+of wealth traded in each period. 28
+3.2.6 Min, max, average and standard deviation of portfolio weights
+So far, all the measures we have considered are at the level of the overall portfolio. To get a sense
+of the holding in each particular asset over time, we also provide some summary statistics for the
+weight invested in each asset under the different portfolio strategies. These summary statistics are
+the time-series minimum, maximum, average, and the standard deviation of the portfolio weight
+allocated to each asset in the portfolio.
+3.3 Details of the various datasets considered
+We considered nine empirical datasets of returns. To understand how our results depend on the
+properties of the data, we also considered a tenth dataset, where the data is generated via simula-
+tions; results based on this simulated data are described in Section 5.
+A list of the datasets considered is given in Table 2. Note that in addition to the returns on
+the risky assets described in the datasets, each dataset also includes the rate of return on the
+90-day T-bill, obtained from Kenneth French’s website, which is used as a benchmark asset (that
+is, returns are expressed in excess of this short rate). Observe also that Datasets #8 and 9 are
+quarterly, while the rest are all monthly. Details of each dataset and the motivation for considering
+it are provided below.
+3.3.1 T en sector portfolios
+This dataset consists of monthly excess returns on ten portfolios tracking the sectors composing
+the S&P500 index. 29 The data span from January, 1981 to December, 2002. The choice of this
+dataset was motivated by the fact that if one wished to consider an allocation across just domestic
+equities, then one logical class of assets to consider would be sector portfolios.
+27Note that we denote the weights for the 1 /N strategy using w rather than ˆ w because for the 1 /N strategy the
+weights do not depend on estimated moments.
+28Our measure of turnover is different from the one commonly used in the mutual fund industry because, instead
+of considering the minimum between the amount sold or purchased, we consider the sum of the purchases and sales
+in each period. If there are no inflows or outflows from the portfolio (that is, the portfolio is self-financing), then
+the amount sold must be equal to the amount purchased; in this case, our measure of turnover would be exactly
+double that of the industry definition. Because one is interested in the relative turnover across different strategies,
+this difference in definition does not affect any inference about relative magnitudes.
+29We are grateful to Roberto Wessels for creating this dataset and for making it available to us.
+14
+--- PAGE 19 ---
+3.3.2 T en industry portfolios
+In the second dataset we consider, the risky assets that the investor can hold are ten industry
+portfolios in the US. The ten industries are: Consumer-Discretionary, Consumer-Staples, Manufac-
+turing, Energy, High-Tech, Telecommunication, Wholesale and Retail, Health, Utilities, and Other.
+The monthly returns range from July 1963 to November 2004 and were obtained from Kenneth
+French’s website. The motivation for considering this dataset is similar to that for the dataset
+considered above: if one wished to consider an allocation across domestic equities only, then one
+way to classify assets would be by industry.
+3.3.3 Nine international equity indexes
+The next dataset we consider consists of nine international equity indexes whose returns are com-
+puted from the month-end US-dollar value of the country equity index for the period January 1970
+to July 2001. The equity indices are for Canada, France, Germany, Italy, Japan, Switzerland,
+United Kingdom, United States and the World. Data are from MSCI (Morgan Stanley Capital
+International).
+There are two motivations for considering this data. One, it does not limit the investor to just
+domestic assets. Two, this data is similar to that used in Jorion (1985, 1986), where the Bayes-Stein
+shrinkage model is proposed.
+3.3.4 US market, SMB and HML portfolios
+We consider an updated version of the dataset used by P ́ astor (2000) in the paper describing
+the Bayesian “Data-and-Model” approach to asset allocation. To implement this approach, it is
+assumed that a factor model dominates the structure of asset returns. The factor is represented
+by the excess return on the market, defined as the value-weighted return on all NYSE, AMEX and
+NASDAQ stocks (from CRSP) minus the one-month Treasury bill rate. The other risky assets
+considered are the Fama-French portfolios, HML and SMB. The former is a zero-cost portfolio
+that is long in high book-to-market stocks and short in low book-to-market stocks. The latter is a
+zero-cost portfolio that is long in small stocks and short in big stocks. The data consists of monthly
+returns from July 1963 to November 2004. The data are taken from Kenneth French’s website.
+3.3.5 US Market, HML, SMB and Size- and Book-to-Market-sorted portfolio assum-
+ing a single-factor model
+The next dataset is the one used by Wang (2004) to study the Data-and-Model approach of P ́ astor
+(2000) and P ́ astor and Stambaugh (2000). The data consist of returns on the twenty Fama and
+French portfolios of firms sorted by size and book to market, in addition to the Fama-French
+portfolios HML and SMB, and also the market portfolio for a total of 23 risky assets. 30 Returns
+are monthly and the data span from July 1926 to December 2002. In our first use of this data, we
+assume that returns are generated by a single-factor model, and we assume the market to be this
+factor; that is, we assume that the CAPM holds.
+30As in Wang (2004), we exclude the five portfolio containing the largest firm since the market, SMB and HML
+are almost a linear combination of the 25 Fama-French portfolios.
+15
+--- PAGE 20 ---
+3.3.6 US Market, HML, SMB, and Size- and Book-to-Market-sorted portfolio as-
+suming a three-factor model
+In this specification, we use the same data just described above, but instead of assuming a single-
+factor return-generating model, we assume a three-factor model for the return-generating process.
+The three factors are the market, HML and SMB portfolios (essentially, this is an APT setting).
+The motivation for considering this dataset is the finding that the CAPM, which is based on the
+market portfolio, is not a very good pricing model, and that HML and SMB are factor portfolios
+that are useful for pricing assets. Thus, it is possible that when we use these additional factor
+portfolios the Data-and-Model approach will perform better.
+3.3.7 US Market, HML, SMB, MOM, and Size- and Book-to-Market-sorted portfolio
+In this specification, we use data similar to that described above, but with the addition of a fourth
+factor portfolio, where the fourth factor is a momentum (MOM) portfolio. We use the methodology
+of P ́ astor (2000) to construct Bayesian portfolios, and here the market, HML, SMB, and MOM
+portfolios serve as the four factor portfolios. There are a total of 497 monthly observations from
+July 1963 to November 2004. The data are taken from Kenneth French’s website.
+The motivation for considering this dataset, and in particular, the Data-and-Model strategy
+based on a return-generating model where the MOM portfolio is one of the factors, is because
+the empirical literature on asset returns finds some evidence of momentum (see, for instance,
+Jegadeesh and Titman (1993)). Recall that the 1 /N rule (without rebalancing) can be viewed
+as a momentum portfolio. Hence, considering this dataset allows us to examine whether the 1 /N
+strategy outperforms the Data-and-Model strategy when the latter explicitly allows for a momentum
+factor.
+3.3.8 Market portfolio and 10-year nominal bond with stochastic interest rates
+The motivation for considering this dataset is that it is the one that is used in Campbell and Viceira
+(2001) to examine the performance of a dynamic model of asset allocation with stochastic interest
+rates. The assets available for investment are the equity market portfolio, a three-month nominal
+bond, and a 10-year nominal bond. The two-factor term structure model is estimated by applying
+a Kalman filter to data on US nominal interest rates, equities, and inflation. In particular, we use
+nominal zero-coupon yields at maturities three months, one year, three years, and ten years. For
+equity, we use the value-weighted return, including dividends, on the NYSE, AMEX, and NASDAQ
+markets. For inflation, we use a consumer price index. The data is quarterly from January 1954 to
+September 1996.
+3.3.9 Market portfolio and 5-year bond with time-varying expected returns
+The motivation for considering this dataset is that it is the one used in Campbell and Viceira
+(1999) and Campbell, Chan, and Viceira (2003) to study a dynamic model for asset allocation with
+predictability in stock returns. The data consists of returns on three assets, two of which are risky
+and one is riskless. The riskless rate is represented by the real Treasury bill rate, constructed as
+the difference between the yield on a 90-day T-bill and log inflation. The two risky assets are,
+16
+--- PAGE 21 ---
+respectively, the value-weighted excess return (including dividends) on the market, which includes
+all stocks on NYSE, NASDAQ and AMEX, and the excess return on the 5-year bond. The data
+are quarterly and span from September 1952 to September 1999. This data is obtained from
+Campbell, Chan, and Viceira (2003) and further details about the data construction are available
+in their paper.
+4 Insights from the nine empirical datasets considered
+In this section, we compare the performance of the 1 /N, myopic, and dynamic asset-allocation
+strategies that are explained in Section 2, using the methodology described in Sections 3.1 and
+3.2, for the nine datasets that are described in Section 3.3. Results based on simulated data are
+described in Section 5.
+For each dataset, the results are reported in a separate table. Only the myopic (that is, static)
+asset-allocation strategies are considered in Tables 3–8, while both static and dynamic strategies
+are considered in Tables 9 and 10. The format of each table is similar. Column 1 of each table
+lists the particular statistic that is being reported for each strategy. The rest of the columns
+report the performance for the various asset-allocation strategies being considered; in order to
+highlight the statistics for the 1 /N strategy with rebalancing (in Column 4), these are italicized.
+The statistics for each strategy are reported in three panels: Panel A gives statistics about the in-
+sample performance; Panel B gives statistics about the out-of-sample performance; and, Panel C,
+gives statistics about the out-of-sample portfolio weights for each risky asset.
+Observe that the difference between the in-sample Sharpe ratio of the mean-variance strategy
+and the 1/N strategy gives us a measure of the loss from na  ̈ ıve rather than optimal diversification.
+This also gives us a measure of how inefficient the 1 /N portfolio is relative to the mean-variance
+optimal portfolio, which is on the efficiency frontier. Similarly, the difference between the in-sample
+and out-of-sample Sharpe ratio for the mean-variance strategy gives us a measure of the effect of
+estimation error.
+Before discussing the results for each particular dataset, we present an overall summary of the
+findings from the nine empirical datasets we examine.
+4.1 Overall summary of findings across all datasets
+We find that in-sample of all the static models it is the classical mean-variance strategy that has the
+highest Sharpe ratio, as one would expect by construction. But, out-of-sample, the Sharpe ratio is
+typically lowest for the classical mean-variance strategy because this strategy makes no adjustment
+at all for estimation risk. The strategies that typically do well in terms of the out-of-sample Sharpe
+ratio and CEQ are the 1 /N policies. Of the strategies from the optimizing models, there is no
+single strategy that always dominates the others: sometimes, it is the Bayes-Stein-constrained
+strategy that has the highest Sharpe ratio, sometimes it is the minimum-variance strategy without
+constraints, and sometimes it is the minimum-variance-constrained strategy. Comparing the 1 /N
+policy (with or without rebalancing) to the minimum-variance-constrained strategy, which is the
+focus of a recent paper by Jagannathan and Ma (2003), we find that the Sharpe ratio of the
+minimum-variance-constrained strategy is significantly superior to that of the 1 /N strategy for
+only one dataset, and even in this case the minimum-variance-constrained strategy has a lower
+CEQ, its turnover is 2-6 times higher, and it has zero investment in several assets leading to an
+17
+--- PAGE 22 ---
+unbalanced portfolio. Dynamic asset allocation strategies, which are optimal when the investment
+opportunity set is stochastic, also do not out-perform the 1 /N policy; moreover, the dynamic
+policies often entail taking very extreme short and large positions in assets.
+4.2 Results for ten sector portfolios
+The results for the fist dataset, consisting of returns on 10 sector portfolios of the S&P500, are
+reported in Table 3. Panel A of this tables gives the in-sample Sharpe ratio for different static
+allocation strategies. From this panel, we see that in-sample it is the mean-variance portfolio that
+has the highest Sharpe ratio of 0.38481. The Sharpe ratio for the 1 /N strategies is only 0.18762. 31
+Panel B of Table 3 reports the out-of-sample statistics about the performance of different static
+allocation strategies. From this panel we see that the strategies with the highest Sharpe ratio
+are the two 1 /N strategies: the Sharpe ratio for the case with rebalancing is 0.18762—just as it
+was in-sample. The Sharpe ratio for the case without rebalancing is 0.17245. The single-asset
+strategy where one invests entirely in the S&P 500 also performs quite well; it has the third-
+highest Sharpe ratio, which is 0.14436. The strategy with the lowest Sharpe ratio is the three-
+fund strategy, followed by the mean-variance strategy. The strategies with constraints perform
+better than the unconstrained strategies. The Data-and-Model approach in which the investor
+places 50% confidence in the CAPM ( ω = 0.5) also does better than the unconstrained strategies.
+Looking at the P-values with respect to the 1 /N rule with rebalancing, we see that out-of-sample its
+performance is not significantly different from that of the 1 /N rule without rebalancing (P-value of
+0.29), but the P-value for the Data-and-Model strategy is 0.11, for the mean-variance-constrained
+strategy is 0.09, and for the minimum-variance-constrained strategy is 0.01.
+The CEQ of each strategy is also reported in Panel B of Table 3. The ranking of the strategies
+by CEQ is very similar to that by Sharpe ratios: The 1 /N strategy with rebalancing has the
+highest CEQ followed by the 1 /N strategy without rebalancing, and then the single-asset strategy
+of holding the market portfolio.
+The turnover of each strategy is reported in Panel B of Table 3. The single-asset strategy
+and the 1/N strategy with no rebalancing have zero turnover. The 1 /N strategy with rebalancing
+has a turnover of 0.03051 (that is, on average 3.051% of wealth is traded every month), while the
+turnover of the minimum-variance-constrained strategy is 0.07526. The unconstrained strategies,
+such as the mean-variance, minimum-variance, Data-and-Model, and three-fund, have much higher
+turnover than the constrained strategies; for instance, the minimum-variance strategy has a turnover
+of 0.19964, while the mean-variance strategy has a turnover of 1.1894, which is the highest of all
+strategies considered.
+Panel C of Table 3 gives statistics about the time-series of the weights allocated to each asset un-
+der each strategy. From this panel we see that the 1/N strategy (with rebalancing) has 1/11 invested
+in the eleven risky assets available (the 10 sector portfolios and the S&P500) with zero variation,
+which is measured by the standard deviation. The unconstrained policies have substantial variation
+in the portfolio weights. The constrained strategies, on the other hand, have lower variation, but
+typically do not invest at all in some of the assets. For example, the mean-variance-constrained
+strategy never invests in Energy, Material, Industrials, Consumer-Discretionary, Telecom, Utilities
+and the S&P500.
+31In-sample, there is no rebalancing and so the two versions of the 1 /N strategy are identical.
+18
+--- PAGE 23 ---
+4.3 Results for ten industry portfolios
+The results of this dataset are reported in Table 4. Because the results are very similar to those
+for the dataset on ten sector portfolios described above, we only discuss the differences.
+Panel A of Table 4 shows that in-sample the Sharpe ratio is highest for the mean-variance
+strategy, 0.21239, which is substantially higher than that for the 1 /N strategies (without or with
+rebalancing) that have a Sharpe ratio of only 0.13531. From Panel B, which gives the out-of-sample
+performance measures, we see that the Sharpe ratio for the mean-variance strategy has dropped
+to −0.03634 from its in-sample value of 0.21239. A similar drop in performance is noticed for all
+the other unconstrained strategies: the Sharpe ratio of the three-fund and Bayes-Stein strategies is
+also negative, while that for the Data-and-Model strategy is 0.01881. The presence of constraints
+raises the Sharpe ratio substantially relative to that of the unconstrained policies; for instance,
+the Sharpe ratio for the minimum-variance constrained strategy is 0.14253. The highest Sharpe,
+however, is for the unconstrained minimum-variance strategy, 0.15536. The Sharpe ratio for the
+1/N policy with rebalancing, of course, is the same as it was in sample, 0.13531, and the difference
+with the Sharpe ratio of the minimum-variance strategy has a P-value of 0.29. Even the 1 /N
+policy without rebalancing has a Sharpe ratio whose difference from that of the Sharpe ratio for
+the minimum-variance strategy has a P-value of 0.24. Thus, even though the minimum-variance
+portfolio has the highest Sharpe ratio, the difference between this and the Sharpe ratio for the 1 /N
+strategies is not statistically significant. Similarly, the CEQ of the minimum-variance-constrained
+strategy is 0.00517, while the CEQ for the 1 /N policy with rebalancing is 0 .00498 and for 1 /N
+without rebalancing is 0.00466. Again, these differences are not significant: the P-value is 0.39 for
+the case with rebalancing and 0.49 for the case without rebalancing.
+Turnover for each strategy is reported in the last row of Panel B of Table 4 and is 0.02162
+for the 1 /N-with-rebalancing strategy, while the turnover for the strategies from the optimizing
+models is much higher: for instance, the turnover for the minimum-variance-constrained strategy
+is 0.0557, for the minimum-variance strategy is 0.46800, and for the Bayes-Stein, Data-and-Model,
+and mean-variance strategies is more than 100.
+Panel C of Table 4 shows that the unconstrained policies, such as the mean-variance, minimum-
+variance, Bayes-Stein, three-fund, and Data-and-Model, all entail very unreasonable positions that
+vary from very large negative to very large positive holdings. The constrained policies, on the other
+hand, have much more reasonable positions.
+4.4 Results for nine international equity indexes
+The results for asset allocation across international equity indices are presented in Table 5. The
+in-sample Sharpe ratio for the mean-variance strategy is 0.20902, while that for the 1 /N strategies
+is 0.12767 and for the single-asset-strategy (investing in the World index) is 0.12392. From Panel B,
+we see that out-of-sample it is the minimum-variance portfolio that has the highest Sharpe ratio,
+but now it is the constrained minimum-variance strategy that has the higher Sharpe ratio of 0.15014
+while the unconstrained policy has a Sharpe ratio of 0.14896. The minimum-variance strategies are
+followed by the 1 /N-with-rebalancing strategy, which has a Sharpe ratio of 0.12767. The P-value
+for the difference in the Sharpe ratio of the minimum-variance-constrained and the 1 /N-with-
+rebalancing strategy is 0.15, while the P-value relative to the 1 /N-without-rebalancing strategy is
+0.07. The highest CEQ is also for the unconstrained minimum-variance strategy, 0.00543, with the
+CEQ of the constrained minimum-variance strategy being slightly lower, 0.00537. The CEQ for
+19
+--- PAGE 24 ---
+the 1/N-with-rebalancing strategy is 0.00461 and for the case without rebalancing is 0.00401; their
+difference with the CEQ of the minimum-variance strategy is statistically insignificant (P-values
+are 0.23 and 0.12).
+Again, turnover is substantially different for the 1 /N strategies and the strategies from the opti-
+mization models. The single-asset and the 1 /N-without-rebalancing strategies have zero turnover,
+while that of the 1/N-with-rebalancing strategy is 0.02931. The turnover of the minimum-variance-
+constrained strategy is 0.06647, with the other strategies having still higher turnover; for instance,
+the turnover of the unconstrained minimum-variance strategy is 0.214, the three-fund strategy
+is 24.01, the Data-and-Model is 40.89, the Bayes-Stein strategy is 51.59, and the mean-variance
+strategy is 124.14.
+The insights from Panel C of Table 5, which summarizes the behavior of the weights in each
+asset over time for the different strategies, are similar to those for the earlier datasets: the weights
+for the unconstrained strategies, with the exception of the minimum-variance portfolio, range from
+very large negative to very large positive positions.
+4.5 Results for US market, SMB, and HML portfolios
+Results for this dataset are contained in Table 6. As before, Panel A shows that in-sample the
+mean-variance strategy has the highest Sharpe ratio, 0.28507. The Sharpe ratio for the three-fund
+strategy is 0.27123. The 1 /N strategies have a Sharpe ratio of 0.22403, and the only strategy with
+an even lower in-sample Sharpe ratio is the single-asset strategy of holding the market portfolio,
+which has a Sharpe ratio of 0.11377.
+From Panel B, we see that the strategy with the highest out-of-sample Sharpe ratio of 0.25462
+is the three-fund strategy of Kan and Zhou (2005). Quite close to this are the Sharpe ratios for
+the Bayes-Stein strategy, 0.25363 and the minimum-variance strategies (both with and without
+constraints), 0.24925. The Sharpe-ratio for the 1 /N-with-rebalancing strategy is, of course, the
+same as it was in-sample, 0.22403, while that of the 1 /N-without-rebalancing strategy is 0.22711.
+Again, the difference between the Sharpe ratio of the best strategy from the optimizing asset-
+allocation models and the 1/N strategies is not statistically significant; the P-value of the three-fund
+strategy against the 1/N-with-rebalancing strategy is 0.22 and against the 1/N-without-rebalancing
+strategy is 0.17.
+Panel B of Table 6 also gives the CEQ for the different strategies. The strategy with the
+highest CEQ is the mean-variance strategy (0.00448) followed by the Data-and-Model strategy
+(0.00438), the three-fund strategy (0.00437), the Bayes-Stein model (0.00430) and the single-asset
+strategy (0.00423). The CEQ for the 1 /N-with-rebalancing strategy is 0.00394 (with a P-value of
+0.30 against the mean-variance strategy) and the CEQ for the 1 /N-without-rebalancing strategy
+is 0.00381 (with a P-value of 0.21 against the mean-variance strategy).
+Turnover for the different strategies is reported in the last row of Panel B of Table 6. The
+turnover for the 1 /N-with-rebalancing strategy is 0.0237, while that of the three-fund strategy
+(which has the highest Sharpe ratio) is 0.06175 and that of the mean-variance strategy (which has
+the highest CEQ) is 0.06720.
+Panel C of Table 6 provides statistics about the evolution of the portfolio weights over time for
+the different strategies. We see that both the three-fund strategy and the mean-variance strategy
+entail taking short positions in the SMB portfolio, with the mean-variance portfolio also taking
+20
+--- PAGE 25 ---
+short positions in the market portfolio. Compared to the other datasets studied above, the weights
+in each asset show substantially less variation for this dataset. This is not surprising, given that
+the investable assets in this experiments are represented by broad portfolio of stocks.
+The reason why the strategies from the Bayes-Stein, minimum-variance, and mean-variance
+models perform quite well for this dataset, even in the absence of constraints, is that the three
+factor portfolios (SMB, HML, and MKT) are almost statistically independent from each other.
+Consequently, the variance-covariance matrix is well-conditioned (nonsingular), and hence, the
+policies obtained from the optimizing models are less extreme and fluctuate less over time because
+the error in estimating expected returns is not magnified when the vector of mean excess returns
+is multiplied by the inverse of the well-conditioned covariance matrix. 32
+4.6 Results for US Market, HML, SMB and Twenty Size- and Book-to-Market-
+sorted portfolios assuming a single-factor model
+Results for this dataset are presented in Table 7. Panel A of this table shows that in-sample the
+mean-variance strategy has the highest Sharpe ratio (0.50882), while the Sharpe ratio for the 1 /N
+strategy is only 0.16744, and the Sharpe ratio for the single-asset strategy of holding the market
+portfolio is 0.11377.
+Panel B shows that the out-of-sample Sharpe ratio of the mean-variance strategy drops steeply to
+−0.00467. Now, it is the minimum-variance-constrained strategy that has the highest out-of-sample
+Sharpe ratio, 0.25574, followed by the other constrained strategies (Bayes-Stein-constrained and
+mean-variance-constrained). The 1/N-without-rebalancing strategy has a Sharpe ratio of 0.18906,
+while the 1 /N-with-rebalancing strategy has a Sharpe ratio of 0.16744. The Sharpe ratio for the
+single-asset strategy (investing in the market portfolio) is only 0.11377, but even this is higher than
+that of the unconstrained strategies (Data-and-Model, mean-variance, Bayes-Stein, three-fund, and
+minimum-variance). In contrast to all the other datasets, in this dataset the difference in the Sharpe
+ratio for the best-performing strategy (minimum-variance-constrained) and the 1 /N strategies is
+statistically significant: the P-value for the 1 /N-without-rebalancing strategy is 0.07 and that for
+the 1/N-with-rebalancing strategy is 0.04. The reason why the minimum-variance-constrained
+strategy performs so well is that the investable assets are large portfolios whose second-moments
+can be estimated with higher precision, and as a consequence the portfolio weights under this
+strategy do not fluctuate as much (see Panel C).
+Studying the CEQ of the different strategies, we see that it is the 1 /N strategy (without
+rebalancing) that has the highest CEQ, 0.008, followed by the mean-variance constrained that has
+a CEQ of 0.00745. The CEQ of the 1 /N-with-rebalancing strategy is 0.00705. The minimum-
+variance-constrained strategy has a CEQ that is much lower, only 0.00398; the difference in this
+CEQ and that for the 1 /N-without-rebalancing strategy has a P-value of 0.03 and the difference
+with that for the 1/N-with-rebalancing strategy has a P-value of 0.08. So even though the minimum-
+32The condition number of a symmetric positive definite matrix is the ratio of its largest to its smallest eigenvalue.
+The larger the condition number of a covariance matrix, the closer it is to being singular. Moreover, when computing
+portfolio policies as w = 1γ ˆΣ−1 ˆμ, the impact of the estimation error in ˆμ and ˆΣ on the quality of the computed policy
+w is proportional to the condition number. See Golub and Loan (1996, Chapter 2). For the SMB, HML, and MKT
+dataset, the condition number of the sample covariance matrix ranges between 3.6 and 8. This is a much smaller
+condition number than those we have observed for the other empirical datasets, which range between 8 and 378,235.
+21

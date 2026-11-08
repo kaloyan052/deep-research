@@ -86,6 +86,8 @@ def build_colab_notebook(study_dir: Path) -> dict[str, Any]:
     header_md = [
         f"# {title}",
         "",
+        "[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/)",
+        "",
         "**Deep Research Protocol v14.1 — Executable Verification Notebook**  ",
         f"**Study Directory:** `{sname}`  ",
         "**Runtime:** Google Colab / Jupyter Kernel  ",

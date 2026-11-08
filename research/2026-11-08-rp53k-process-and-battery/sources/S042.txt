@@ -1,0 +1,700 @@
+
+--- PAGE 1 ---
+Finance and Economics Discussion Series
+Divisions of Research & Statistics and Monetary Affairs
+Federal Reserve Board, Washington, D.C.
+Open Source Cross-Sectional Asset Pricing
+Andrew Y. Chen and Tom Zimmermann
+2021-037
+Please cite this paper as:
+Chen, Andrew Y., and Tom Zimmermann (2021). “Open Source Cross-Sectional Asset Pric-
+ing,” Finance and Economics Discussion Series 2021-037. Washington: Board of Governors
+of the Federal Reserve System, https://doi.org/10.17016/FEDS.2021.037.
+NOTE: Staff working papers in the Finance and Economics Discussion Series (FEDS) are preliminary
+materials circulated to stimulate discussion and critical comment. The analysis and conclusions set forth
+are those of the authors and do not indicate concurrence by other members of the research staff or the
+Board of Governors. References in publications to the Finance and Economics Discussion Series (other than
+acknowledgement) should be cleared with the author(s) to protect the tentative character of these papers.
+--- PAGE 2 ---
+Open Source Cross-Sectional Asset Pricing
+Andrew Y. Chen
+Federal Reserve Board
+andrew.y.chen@frb.gov
+Tom Zimmermann
+University of Cologne
+tom.zimmermann@uni-koeln.de
+March 2021∗
+Abstract
+We provide data and code that successfully reproduces nearly all cross-
+sectional stock return predictors. Our 319 characteristics draw from pre-
+vious meta-studies, but we differ by comparing our t-stats to the original
+papers’ results. For the 161 characteristics that were clearly significant in
+the original papers, 98% of our long-short portfolios find t-stats above 1.96.
+For the 44 characteristics that had mixed evidence, our reproductions find
+t-stats of 2 on average. A regression of reproduced t-stats on original long-
+short t-stats finds a slope of 0.90 and anR2 of 83%. Mean returns are mono-
+tonic in predictive signals at the characteristic level. The remaining 114
+characteristics were insignificant in the original papers or are modifica-
+tions of the originals created by Hou, Xue, and Zhang (2020). These remain-
+ing characteristics are almost always significant if the original characteristic
+was also significant.
+∗First posted to SSRN: May 18, 2020. We thank Ivo Welch for encouraging us to work on
+this project, and thank Shane Corwin, Paul Schultz, Luis Palacios, Rabih Moussawi, and Denys
+Glushkov for making their code publically available. We also thank an anonymous referee, Guil-
+laume Coqueret, Sebastian Hillenbrand, Liang Jiang, Yang Liu (from Tsinghua Finance), Yue
+Zhao, and anonymous contributors to our GitHub repo for helpful comments. We are grateful to
+Sebastian Weilbels and Arne Rodloff for excellent research assistance. The project received sup-
+port from the Deutsche Forschungsgemeinschaft (DFG) under Germany’ s Excellence Strategy -
+EXC2126/1-39083886. The views expressed herein are those of the authors and do not necessar-
+ily reflect the position of the Board of Governors of the Federal Reserve or the Federal Reserve
+System.
+--- PAGE 3 ---
+1. Introduction
+Academic finance progresses through a mixture of open collaboration and
+closed competition. In this paper, we attempt to push the culture toward open
+collaboration by providing an “open source dataset” of hundreds of predictors of
+the cross-section of stock returns.
+In our view, an open source dataset is essential because recent studies cast
+doubt on the credibility of the entire cross-sectional asset pricing literature. A
+series of influential critiques argue that at least 45% of the findings in this liter-
+ature are false (Harvey, Liu, and Zhu 2016, Linnainmaa and Roberts 2018, Chor-
+dia, Goyal, and Saretto 2020).1 Hou, Xue, and Zhang (2020) go further and claim
+that roughly 50% of the literature cannot be replicated—even when following the
+original methodologies. 2 This finding implies that much of the literature fails
+to survive reproduction, much less reanalysis. 3 These doubts echo the ongoing
+credibility crises in other fields ranging from medicine to management (Ioanni-
+dis 2005; Nosek, Spies, and Motyl 2012; Bettis 2012).
+Our open source dataset takes a key step toward restoring the credibility
+of cross-sectional asset pricing. It shows that nearly 100% of the literature’ s
+predictability results can be reproduced, including the predictability results for
+100% of the characteristics studied in Hou, Xue, and Zhang (2020). Readers
+may be highly skeptical of our findings, given the critiques noted above. How-
+ever, they do not need to take our word for it. Anyone with access to WRDS
+and Stata can perform this massive replication themselves using our code at
+https://github.com/OpenSourceAP/CrossSection.
+Indeed, our code is written with the user in mind. The code is modular, so
+users can quickly examine a particular characteristic without worrying about
+most of the code. The code uses exception handling to gracefully move past er-
+1Harvey, Liu, and Zhu’ s (2016)“argue that most claimed researching findings in financial eco-
+nomics are likely false.” Chordia, Goyal, and Saretto (2020) “estimate the expected proportion of
+false rejections that researchers would produce if they failed to account for multiple hypothesis
+testing to be about 45%.” Linnainmaa and Roberts (2018) “show the majority of accounting-
+based return anomalies, including investment, are most likely an artifact of data snooping.”
+2Hou, Xue, and Zhang (2020) (HXZ) state “[r]epeating our tests on the shorter samples in the
+original studies, we find that 65.4% of anomalies cannot clear the single test hurdle of |t | ≥ 1.96
+with NYSE breakpoints and value-weighted returns. The failure rate drops to 43.1% if we allow
+microcaps to run amok with NYSE-Amex-NADSQ breakpoints and equal-weighted returns.
+3Following Welch’ s (2019) terminology, we use the term “reproduction” to refer to an attempt
+to produce the same result using the same sample with the same code. Reanalysis refers to a
+broader concept that includes extensions and re-examinations.
+1
+--- PAGE 4 ---
+rors and semantic versioning to make updates easy to understand.4 Last, we are
+committed to updating these data on an annual basis. We hope this demon-
+stration of open collaboration will inspire others to open up their analyses, and
+further support the credibility of academic finance.5
+Our code produces 319 firm-level characteristics, and onlythree fail to repro-
+duce the original paper’ s evidence of statistical significance for long-short port-
+folio returns. Our t-stats even match the originals quantitatively: A regression
+of reproduced t-stats on hand-collected t-stats finds a slope of 0.90 and an R2 of
+83%. We also find that mean returns are nicely monotonic in the predictors. The
+probability that predictor decile k has a higher mean return than decile k − 2 is
+roughly 96%.
+This near-100% reproduction success rate was made possible by a careful ex-
+amination of the original papers. For each of our 319 signals, we hand-collect
+the key table, empirical test, the sign of predictability, t-stat, and other details
+from the original papers. This hand-collected data is also part of our open source
+dataset, and available for public inspection.6
+The hand-collected data shows that characteristics in previous meta-studies
+vary wildly in their original predictability evidence. They include everything
+from dividend seasonality, which was shown to produce a long-short t-stat of
+16.2 (Hartzmark and Solomon 2013), to R&D to sales, which utterly failed to pre-
+dict returns (Chan, Lakonishok, and Sougiannis 2001). Many others were never
+explicitly tested for return predictability (e.g. Francis et al.’ s (2004) accrual qual-
+ity). As a result, judging the reproducibility of these characteristics cannot come
+down to a single t-stat > 1.96 rule.7
+Instead, we apply the t-stat > 1.96 rule only when it is appropriate. This rule
+is appropriate for the 161 characteristics we categorize as “clear predictors.” For
+these characteristics, the original papers showed clear evidence of significant
+predictability for our long-short portfolios. We find that 158 of 161 clear predic-
+4The current version of the code is v1.0.0, indicating a major revision to the previous v0.1.2.
+The modular structure and exception handling was part of this revision.
+5Jensen, Kelly, and Pedersen (2021) is another open source project that provides code for many
+cross-sectional predictors. Harvey and Liu (2019) provides crowd-sourced hand-collected data
+on cross-sectional asset pricing t-stats.
+6Hand collected data is here:
+https://github.com/OpenSourceAP/CrossSection/raw/master/SignalDocumentation.xlsx
+7Throughout the paper, we sign predictor portfolios to have positive mean returns based on
+the original studies. Thus, the rule does not involve the absolute value, and t-stat < -1.96 typically
+indicates a reproduction failure.
+2
+--- PAGE 5 ---
+tors meet t-stat > 1.96, and one of the three which did not still achieved a t-stat
+of 1.93.
+A more subtle evaluation is required for our 44 characteristics that had mixed
+evidence of predictability in the original papers. These “likely predictors” include
+52-week high, with its original long-short t-stat of 2.00 (George and Hwang 2004),
+and sales growth over inventory growth, with its original t-stat of 2.4 in a multi-
+variate regression (Abarbanell and Bushee 1998). Evaluating the reproducibility
+of these t-stats is a subtle exercise, as an immaterial change can cause the 52-
+week high to dip below t = 1.96, and we do not employ Abarbanell and Bushee’ s
+(1998) control variables in our portfolio sorts. Complicating issues further is the
+fact that a few of our likely predictors deviate significantly from the original pa-
+pers in terms of methodology. In a replication project as large as ours, a few
+large deviations are unavoidable, and simply dropping these reproductions (or
+attempted reproductions) is inconsistent with our philosophy of openness.
+To examine the reproducibility of likely predictors, we first examine the sub-
+set for which the original papers provide long-short t-stats. All but four of these
+predictors lead to similar t-stats in our long-short portfolios. The exceptions are
+almost all accounted for by significant deviations between our methodology and
+the original papers, necessitated by the scale and openness of our project. 8 The
+likely predictors that did not have long-short t-stats largely had borderline re-
+gression results. Our reproductions of these predictors find similarly borderline
+significance in long-short portfolios. Once again, we can trace deviations in re-
+sults to deviations in methodology. For example, some likely predictors that per-
+form poorly in our single-sort long-short portfolios were studied in multivariate
+regressions with many significant controls in the original papers.
+Overall, only three of our 205 clear and likely predictors failed to achieve the
+predictability evidence found in the original papers. These three predictors are
+R&D ability from Cohen, Diether, and Malloy (2013) and the two shareholder
+activism measures from Cremers and Nair (2005). These failures should not be
+taken as a criticism of these papers, however, as it is quite likely that there are re-
+maining deviations or coding errors among our hundreds of reproduced charac-
+8For example, our simple regression version of slope-based price delay produces a raw return
+t-stat of 2.01, far smaller than Hou and Moskowitz’ s (2005) characteristic adjusted t-stat of 7.7
+from their two-stage shrinkage estimate. However, Hou and Moskowitz (2005) also show a sim-
+ilar difference in t-stats for their baseline R2-based price delay when the move from a simple
+regression estimate with no adjustment (t-stat = 3.4) to a two-stage estimate with characteristic
+adjustments (t-stat = 8.0).
+3
+--- PAGE 6 ---
+teristics. Indeed, a previous version of this paper failed to reproduce Harvey and
+Siddique’ s (2000) coskewness, but we have since fixed an error which restored
+the power of this predictor.
+The rest of the dataset consists of 14 “not-predictors” that produced clearly
+insignificant predictability in the original papers, and 100 “indirect signals”
+which had only suggestive predictability evidence. Most of the indirect signals
+are variations on other characteristics created by Hou, Xue, and Zhang (2020).
+We refrain from precisely judging the reproducibility of these characteristics, as
+assessing the success of indirect signals requires multiple stages of judgment.
+Nevertheless, visual inspection of the reproduced t-stats for not-predictors and
+indirect signals suggests that the cross-sectional literature is not only shockingly
+replicable, but robust. Almost all of the indirect signals that are modifications of
+clear predictors also produced significant predictability in our reproductions.
+We also provide several supporting demonstrations of the quality of our 205
+clear and likely predictors. Pairwise correlations demonstrate that the dataset
+consists of many distinct predictors. The dataset also displays intuitive proper-
+ties with respect to rebalancing frequencies and liquidity screens. Notably, using
+either value-weighting or screening out stocks below the 20th percentile of NYSE
+market equity leads to in-sample mean returns that are about 30% (20 bps per
+month) lower, consistent with Chen and Velikov’ s (2019) in-sample results.
+Relation to the Literature Our results contrast with Hou, Xue, and Zhang
+(2020) (HXZ), who find that “most anomalies fail to replicate.” HXZ emphasize
+a 65% “failure” rate from value-weighting and NYSE breakpoints, but they also
+find replicability is quite poor when they use methods that are close to the modal
+equal-weighted implementation of the original papers (Green, Hand, and Zhang
+2013; McLean and Pontiff 2016). Specifically, HXZ state that “[t]he failure rate
+drops to 43.1% if we allow microcaps to run amok with NYSE-Amex-NASDAQ
+breakpoints and equal-weighted returns.”
+We find that HXZ’ s findings are driven by their permissive definition of an
+“anomaly.” HXZ analyze 452 “anomalies,” but these derive from only 240 char-
+acteristics, as 212 of these anomalies are just different rebalancing frequencies
+of the 240 basic strategies. And of the 240 characteristics, only 118 showed clear
+evidence of significance for long-short returns in the original papers. In fact,
+our reproductions find that 117 out of these 118 clear predictors achieve t-stats
+4
+--- PAGE 7 ---
+> 1.96, and the remaining predictor has a t-stat of 1.93. In other words, much of
+HXZ’ s “replication failures” are simply due to misclassification: these “anoma-
+lies” never had long-short portfolio significance to replicate in the first place.
+Our reproduction rates also contrast with Chang and Li (2018), who find repli-
+cation rates of 30-50% for 67 papers from general interest and macroeconomics
+journals. Our studies differ in several ways, but a key difference is that Chang
+and Li define a successful replication as “when the authors or journals provide
+data and code that allow [them] to qualitatively reproduce key results of the pa-
+per.” Indeed, lack of author-provided data and code is the most common reason
+Chang and Li cite for their unsuccessful replications. In contrast, we did not use
+author-provided code at all, and simply wrote code based on the text and exhibits
+in the original papers.9 These results suggest that the widespread replication fail-
+ures documented in previous studies (e.g. Dewald, Thursby, and Anderson 1986,
+McCullough, McGeary, and Harrison 2006) could be remedied by applying more
+effort.
+Our reproduction rates may also look high compared to McLean and Pontiff
+(2016), who find that 12% of their 97 predictor portfolios produce t-stats < 1.5.
+These results are reconciled, however, by the fact that 24 of MP’ s predictors have
+what we describe as borderline evidence of statistical significance in the original
+papers. Among the 85 of our characteristics that are also studied by MP , 14% of
+our reproductions lead to t-stats < 1.96, quite close to MP’ s numbers. Most of
+these low t-stats come from “likely predictors,” however, and we do not judge
+them as reproduction failures. We should note that MP’ s inclusion of likely pre-
+dictors is entirely valid for the goals of their study.
+Indeed, our open source data is highly consistent with MP’ s findings. Like
+MP , we find that returns decay post-publication but remain positive, and that
+this decay is stronger for predictors that are stronger in-sample. Our results are
+quantitatively similar to those in MP , even for the subset of our predictors that
+are not studied by MP . These results echo previous papers that replicate MP in
+larger sets of predictors (Chen and Zimmermann 2020; Jacobs and Müller 2020).
+Our paper adds to the evidence that the cross-sectional predictability lit-
+erature is actually quite credible. These studies include out-of-sample tests
+(McLean and Pontiff 2016; Jacobs and Müller 2020), as well as multiple-testing
+adjustments (Chen and Zimmermann 2020; Chen 2020; Jensen, Kelly, and Ped-
+9For one characteristic, we download characteristic data from the authors’ website.
+5
+--- PAGE 8 ---
+ersen 2021). Relative to these papers, ours adds novel evidence that the cross-
+sectional literature is extremely replicable by comparing reproduced t-stats to
+hand-collected t-stats.
+An important caveat is that we do not address the distinct but related ques-
+tion of whether the literature offers implementable trading profits. In a closely
+related paper, Chen and Velikov (2019) suggest that the answer is no. Building
+on Novy-Marx and Velikov (2016), Chen and Velikov find that effective bid-ask
+spreads wipe out most of the post-publication returns for a large set of anoma-
+lies.
+The paper proceeds as follows. Section 2 describes our methodology, includ-
+ing our characteristics selection and predictor category definitions. Section 3
+contains the main results: literature-level reproduction performance. Section 4
+takes a closer look, examining reproductions at the characteristic level. Section
+5 provides additional evidence supporting the quality of our dataset. Section 6
+concludes.
+2. Methods: Characteristic Selection, Variable Con-
+struction, and Predictability Categories
+This section describes our methodology. We describe how we select char-
+acteristics, how we construct characteristics and portfolios, and how we clas-
+sify characteristics based on predictability evidence. Table 1 provides a broad
+overview of the dataset. We explain the terminology and numbers in this table in
+what follows.
+[Table 1: “Overview of Open Source Asset Pricing Data” around here]
+2.1. Characteristic Selection
+We select characteristics to balance three objectives: (1) comprehensive cov-
+erage of previous meta-studies, (2) comprehensive coverage of firm-level cross-
+sectional predictors, and (3) completion of high quality code and data with a
+reasonable amount of economist-hours.
+To balance these goals, our list begins with the 240 characteristics used in
+6
+--- PAGE 9 ---
+Hou, Xue, and Zhang (2020) (HXZ). 10 We focus on HXZ because their study also
+examines the replicability of cross-sectional predictors. We then add an ad-
+ditional 49 characteristics for near-complete coverage of McLean and Pontiff
+(2016) (MP) and Green, Hand, and Zhang (2017) (GHZ). Finally, we add 30 firm-
+level stock return predictors from Harvey, Liu, and Zhu (2016) (HLZ).
+This collection leads to a total of 319 characteristics drawn from 153 papers.
+Covering HXZ requires that we sometimes include many characteristics based
+on a single study.
+We do not add all characteristics from MP and GHZ due to our third goal of
+completing high quality code in a reasonable amount of time. We omit the merg-
+ers and SEO characteristics from MP because they use the difficult-to-integrate
+SDC dataset. From the GHZ dataset, we omit seven characteristics from unpub-
+lished working papers (Asness, Porter, and Stevens 2000; Gettleman and Marks
+2006; Lerman, Livnat, and Mendenhall 2008; Bandyopadhyay, Huang, and Wir-
+janto 2010), and one predictor from a retracted paper (Chen and Zhang 2010).
+In adding characteristics from HLZ, we require that the characteristic was
+clearly shown to predict firm-level stock returns in the original paper. The firm-
+level requirement eliminates many papers that target only portfolio returns,
+which was a prevalent feature of asset pricing papers before the 1990s (e.g. Chan,
+Chen, and Hsieh 1985; Chen, Roll, and Ross 1986) and of macroeconomics-
+motivated papers more generally (e.g. Vassalou 2003; Balvers and Huang 2007).
+This requirement is motivated by our second goal of a covering firm-level pre-
+dictors.
+However, our first goal of meta-study coverage motivates us to not require
+clear firm-level predictability on characteristics from HXZ, MP , or GHZ. As a re-
+sult, our characteristics vary greatly in their predictive power based purely on the
+results in the original studies.
+2.2. Characteristic Construction
+We try to follow the original papers as closely as possible. We aim for “re-
+productions” in the sense of Welch (2019), and avoid reassessing the validity
+of the original papers. In our view, extensions and reexaminations require fo-
+cused studies (e.g. Pontiff and Singla 2019, Novy-Marx and Velikov Forthcom-
+10HXZ use these 240 characteristics to generate 452 “anomalies” by varying rebalancing fre-
+quencies.
+7
+--- PAGE 10 ---
+ing), and are inappropriate for a large-scale meta-study like ours. Indeed, our
+large-scale study necessitates deviations from the original papers, as we explain
+shortly.11 As a result, our reproductions may be better described as “attempted
+reproductions,” but for ease of reading we typically drop the “attempted” modi-
+fier throughout the text.
+We standardize several of our reproduction procedures to maintain the trans-
+parency of our literature-level results, as well as the usability of our data. All char-
+acteristics are computed at a monthly frequency. For variables that are updated
+at a lower frequency, the monthly value is the most recently observed value. This
+allows for portfolios that update at a lower frequency, while maintaining flexi-
+bility for alternative implementations. 12 However, our monthly characteristics
+imply that we deviate from the handful of studies that use weekly rebalancing.
+For almost all characteristics, we use the standard six-month lag for annual
+accounting data availability and a one-quarter lag for quarterly accounting data
+availability. In a couple cases, we use the earnings reporting date (RDQ) to in-
+dicate availablility of quarterly data in order to more closely match the original
+papers. For IBES, we assume earnings estimates are available by the statistical
+period end date. Other data is assumed to be available following the original pa-
+pers. As a consequence of this standardization, we deviate from a few accounting
+studies, which use a shorter data lag.13
+Many characteristics were only shown to be predictive in particular subsets
+of the data. We try to put off this subsetting until the portfolio generation step.
+Thus, the characteristics code and data omit price and exchange filters, which
+are instead imposed in portfolio generation.
+Other filters, however, are quite diverse and difficult to implement at the port-
+folio stage. Several papers exclude stocks based on SIC codes or missing account-
+ing data. Still others find predictability only in subsets of stocks based on specific
+characteristics (Piotroski 2000; Elgers, Lo, and Pfeiffer 2001). To accommodate
+these filters in a manageable fashion, we set to missing stock-months that don’t
+satisfy these filters in the characteristics code.
+11Even for a small-scale study, a perfect reproduction is likely impossible. WRDS’ reproduction
+of HML obtains a correlation of 98.9% with Ken French’ s data, but the monthly returns still have
+deviations of up to 1% in particular months (Vora and Palacios 2010)
+12For a handful of studies, we enforce the timing of the updating in the characteristics code.
+This was done help us find the code that closely matches the original results in a handful of
+difficult cases.
+13For users of the code: the accounting data lag is imposed in the data download step, and is
+not visible in the files that generate characteristics.
+8
+--- PAGE 11 ---
+In a few cases, we deviate from the original papers to trade off costs and ben-
+efits. For most of these cases, we deviate by not acquiring the data used in the
+original papers. For example, Barber et al. (2001) and Jegadeesh et al. (2004) use
+Zack’ s analyst recommendations data, which goes back much further than the
+easily accessible IBES recommendations on WRDS. Similarly, we do not obtain
+the NYSE archive data required for Barry and Brown (1984) or the Fitch’ s Quota-
+tion data used by Amihud and Mendelson (1986).
+But other deviations are more idiosyncratic. We include a “number of con-
+secutive earnings increases” predictor that is somewhat distant from the earn-
+ings streak predictor in Loh and Warachka (2012) in order to cover a predictor in
+Green, Hand, and Zhang (2017). We do, however, also include a characteristic
+that is closely-based on Loh and Warachka’ s (2012) earnings streaks. All of our
+price delay predictors (Hou and Moskowitz 2005) use rolling regressions of daily
+individual stock returns, while the original paper typically uses a 2-stage pro-
+cedure that first estimates a noisy measure of price delay on individual stocks
+and then reduces the noise by running a second set of regressions on portfolios
+formed from the first stage. We use the simpler estimates of price delay largely to
+due to our economist-hours budget.
+These deviations imply that, in a handful of cases, our reproduced portfo-
+lios are very far from the originals. We include these attempted reproductions
+to maintain openness, which we believe is important for the credibility of the
+literature.
+2.3. Portfolio Construction
+The core of our portfolio data consists of predictive long-short portfolios
+formed following the original papers. Like other predictability studies, we im-
+plicitly assume data at the end of month t can be used to make trades in closing
+auctions on the last day of month t.14 These are the portfolios we use in our
+evaluations of reproduction success.
+Using the original paper’ s results, we select the stock-weighting, rebalancing
+frequency, and quantile sort (if applicable). Each portfolio implementation is
+listed in our hand-collected data. Once again, we deviate from the original pa-
+14As pointed out in Chen and Velikov (2019), the hypothetical traders in our portfolio tests
+would add demand to the closing auctions for the long legs, thereby increasing the buying prices
+and reducing trading profits.
+9
+--- PAGE 12 ---
+pers for a handful of portfolios in the spirit of standardizing our code and results.
+The most notable deviation is that we use a simple equal-weighted decile sort
+portfolio for reproduction of Frazzini and Pedersen’ s (2014) betting-against-beta
+instead of the original construction where each stock is weighted depending on
+its beta ranking.
+We also offer portfolios implementations with alternative rebalancing fre-
+quencies and liquidity screens, as well as decile sorts and value-weighted only
+portfolios. We caution the user, however, in that these alternative implementa-
+tions are not as closely examined as the portfolios that follow the original papers.
+In our baseline data, we do not sign our characteristics, but do sign our port-
+folios. That is, a higher idiosyncratic volatility characteristic implies a lower
+mean return, but the corresponding long-short portfolio has a positive mean re-
+turn. The hand-collected data has this sign information, which users can apply
+to transform characteristics if this fits their applications. 15 For simplicity, we do
+not sign portfolios if the original papers do not provide direct evidence on the
+correct sign.
+2.4. Predictability Categories
+To determine predictability categories, we compare results from the original
+papers to our characteristic reproduction code.
+The original results are hand-collected. We hand-collect the key table
+demonstrating predictive power, the empirical test used, the sign of predictabil-
+ity, mean return, t-stat, individual stock weighting, portfolio sort quantile, rebal-
+ancing frequency, among other notes. Figure 1 shows an excerpt of our spread-
+sheet for illustration.16
+Comparing the hand-collected data to our code, we assign our characteristics
+to four categories:
+• “Clear Predictor”: Our characteristic is expected to achieve statistically sig-
+nificant mean raw returns in long-short portfolios (e.g. t-stat > 2.5 in a
+long-short portfolio, monotonic portfolio sort with 80 bps spread, t-stat
+> 4 in a regression, t-stat > 3 in 6-month event study).
+15We also provide a dataset of signed predictors for direct download.
+16The full spreadsheet is found at
+https://github.com/OpenSourceAP/CrossSection/raw/master/SignalDocumentation.xlsx.
+10
+--- PAGE 13 ---
+• “Likely Predictor”: Our characteristic is expected to achieve borderline evi-
+dence for the significance of mean raw returns in long-short portfolios (e.g.
+t-stat = 2.0 in long-short with factor adjustments, t-stat between 2 and 3 in
+a regression, large t-stat in 3-day event study).
+• “Not-Predictor”: Expected to be statistically insignificant in long-short
+portfolios. (e.g. t-stat = 1.5 in long-short, t-stat = 1 in a regression).
+• “Indirect Signal”: Only suggestive evidence of predictive power (e.g. cor-
+related with earnings/price, modified version of a different characteristic,
+in-sample evidence only).
+These categorizations are necessary in order to measure reproduction suc-
+cess. For clear predictors, the measurement is straightforward, as a t-stat > 1.96
+easily identifies a success. Note that we sign our long-short portfolios based on
+the original results, so this rule does not involve the absolute value. For not-
+predictors, the sign flips, and a t-stat < 1.96 is indicative of a success.
+Measuring reproduction success is more subtle for the other categories, how-
+ever. Some likely predictors had t-stats very close to 1.96 in a raw long-short port-
+folio in the original paper. Given that data updates will surely move the t-stat up
+or down, one should then place 50/50 odds that the reproduced t-stat will be
+above or below 1.96. Similarly, if the original paper found a t-stat of 2.6 in a uni-
+variate regression, it’ s hard to say if the reproduced long-short portfolio should
+also produce a t-stat > 1.96. Deviations between our characteristics code and the
+original recipes also lead to likely predictors, and necessitate subtle judgment
+calls.
+Indirect signals are also tricky. Most of our indirect signals are modifications
+of other characteristics, and whether the modification should increase or de-
+crease the t-stat requires judgment. Complicating the issue is the fact that some
+indirect signals are modifications of likely or not-predictors, implying that mul-
+tiple steps of judgment are required to determine which side of t-stat = 1.96 our
+long-short portfolio should land on.
+Each characteristic’ s predictability category can be found in Tables 2-4, and
+the assignments are discussed in some more detail in Section 4.1.
+Table 1 briefly summarizes our predictability category assignments. Of our
+319 characteristics, 161 are clear predictors and 44 are likely predictors. Through-
+out the text, we describe these two categories as simply “predictors.” We also sep-
+11
+--- PAGE 14 ---
+arate these predictors from the other characteristics in our data and code. This
+separation is helpful because of clear and likely predictors are quite distinct from
+the other characteristics in how one should analyze them.
+14 of our characteristics are not-predictors, and 100 are indirect signals. As
+seen in the top panel, not-predictors and indirect signals play a minor role in
+most other meta-studies, with the exception being Hou, Xue, and Zhang (2020).
+Indeed, the vast majority of our not-predictors and indirect signals are drawn
+from Hou, Xue, and Zhang (2020).
+The bottom panel of Table 1 shows that our data provides more-or-less com-
+prehensive coverage of other meta-studies. We cover all 452 of Hou, Xue, and
+Zhang’ s (2020) “anomalies” , 97% of the clear predictors from McLean and Pontiff
+(2016), 88% of the clear predictors from Green, Hand, and Zhang (2017), and 90%
+of the clear firm-level predictors that use widely-available data from Harvey, Liu,
+and Zhu (2016). We also cover all of the likely predictors in McLean and Pontiff
+(2016), Green, Hand, and Zhang (2017), and Hou, Xue, and Zhang (2020). Indeed,
+most of the clear, widely-available predictors that we are missing are closely re-
+lated to predictors that we offer (e.g. the industry-adjusted value and momentum
+predictors of Asness, Porter, and Stevens 2000).
+Throughout the paper and code, we separate out the clear and likely predic-
+tors. We sometimes refer to these characteristics as just “predictors,” for short.
+For many purposes, predictors are the only characteristics that should be
+examined. Moreover, predictors are substantially less redundant than the full
+dataset. While the full dataset consists of 319 characteristics from 153 studies,
+the predictors consist of 205 predictors from 137 studies. For 101 studies, we
+draw only a single predictor from the study.17
+3. Literature-Level Reproduction Performance
+This section contains our main results. We begin by examining literature level
+reproduction performance for clear and likely predictors (Section 3.1). We then
+broaden the scope to not-predictors and indirect signals when we compare to
+17The distribution of predictors per study is right skewed. Most studies have just one predictor,
+but 20 have 2, and a few have many more. Heston and Sadka (2008) provide 10 strategies re-
+lated to return seasonality, and we include all 10 as clear predictors to avoid imposing judgment
+on which is the “right” strategy. A similar philosophy leads us to include many predictors from
+Richardson et al. (2005) and Daniel and Titman (2006).
+12
+--- PAGE 15 ---
+other meta-studies (Section 3.2).
+3.1. Success of Predictor Reproductions
+Our first measure of reproduction success is a simple indicator: does the
+long-short raw return t-stat exceed 1.96? This measure is the primary focus of
+Hou, Xue, and Zhang (2020) (HXZ), and provides an easy-to-understand mea-
+sure of reproduction success.
+Figure 2 shows the share of clear predictors that exceed the simple t-stat >
+1.96 cutoff, broken down by data focus: accounting, analyst forecasts, corporate
+events, stock prices, trading data, and a broad “other” category. It shows only
+clear predictors, as likely predictors had borderline significance in the original
+papers (Section 2.4). As in all of our reproduction success evaluations, we use
+the same sample period in the original papers.
+The figure shows that reproductions are extremely successful. Our success
+rates are nearly 100% in every category. 73 out of our 74 accounting focused
+clear predictor reproductions succeeded. 40 out of 41 price-focused reproduc-
+tions succeeded. And 43 out of 44 reproductions succeeded among the remain-
+ing categories.
+[Figure 2 “Reproduction Success Rates for Clear Predictors” about here.]
+One might be concerned that our extremely high success rate is sensitive to
+our definition of a clear predictor. Similarly, one may be concerned that, even if
+our t-stats exceed 2.0, they may be much smaller than the original t-stats.
+Figure 3 should assuage both of those concerns. The figure examines both
+clear and likely predictors, and evaluates reproduction success more qualita-
+tively, by simply plotting our reproduced t-stats against the t-stats of the original
+papers. To ensure that t-stats are comparable, the figure excludes predictors that
+were only examined in regressions or event studies in the original papers. We
+also drop t-stats from Barber et al. (2001), Frazzini and Pedersen (2014), and Hou
+and Moskowitz (2005) because our portfolio constructions are very far from the
+originals for idiosyncratic reasons (see Sections 2.2 and 2.3).
+[Figure 3 “Comparison of Reproduced and Original t-stats” about here.]
+13
+--- PAGE 16 ---
+The figure shows that our extremely high reproduction success rate is not
+sensitive to our predictor categorizations. Included in this chart are 11 likely pre-
+dictors (triangles), all of which had t-stats close to 2 in the original papers (hori-
+zontal axis). Consistent with the original papers, our reproductions also typically
+produce t-stats close to 2.0, though roughly half of them fall below the arbitrary
+1.96 threshold. More broadly, our extremely high success rate for clear predictors
+is not due to t-stats just above 2.0. Many reproduced t-stats exceed 5.0, and a few
+even exceed 10.0.
+Perhaps most important, Figure 3 shows that our reproductions match the
+original results not just qualitatively but quantitatively. A regression of our re-
+produced t-stats on the original t-stats produces a coefficient of 0.90, not far from
+the ideal slope of 1.0. The R2 is 83%, implying that the reproductions do not stray
+far from the originals. Indeed, much of the remaining deviations may be due to
+the fact that our t-stats use simple raw mean long-short returns, while many of
+the original t-stats adjust for characteristics or factor exposures.
+As a final demonstration of the reproducibility of the cross-sectional litera-
+ture, we examine whether mean returns are monotonic in the predictors. From
+our experience, the vast majority of papers that showed portfolio sorts also
+showed monotonicity—though we did not hand-collect this information.
+Figure 4 examines the monotonicity of decile sorts for clear and likely predic-
+tors. The figure limits the data to 170 continuous predictors, as discrete predic-
+tors are poorly behaved in decile sorts. It plots the mean return as a function of
+the decile, with each marker representing one predictor-decile, and boxes sum-
+marizing the 25th, 50th, and 75th percentile mean return within each decile. The
+figure shows that mean returns are indeed monotonically increasing in the pre-
+dictors. The median across predictors increases monotonically from one decile
+to the next, as does the 25th percentile and the 75th percentile.
+[Figure 4 “Monotonicity” about here.]
+The box plots do not show predictor-level monotonicity, however, so we
+color-code the markers for a closer look. Filled markers indicate predictor-level
+monotonicity for a given predictor-decile. That is, the marker is filled if the mean
+return in decile k for predictor i exceeds the mean return for decile k − 1 for
+the same predictor i . The figure shows that roughly 80% of the predictor-deciles
+show an increase, a strong indication of monotonicity at the predictor level. To
+14
+--- PAGE 17 ---
+get a sense of this ratio, note that it suggests the probability that decilek exceeds
+the return of decile k − 2 is 1 − 0.22 = 96% in a simple binomial framework, and
+that this probability is even higher when comparing deciles further apart.
+Beyond supporting reproducibility, this monotonicity result demonstrates
+robustness of the cross-sectional predictability literature. That is, monotonic-
+ity shows that the predictability evidence we find is not sensitive to the details
+of the empirical test. Deciles sorts, cross-sectional regressions, event studies
+should all produce consistent results. This finding is consistent with early ver-
+sions of McLean and Pontiff (2016), which found that their results were similar
+using Fama-Macbeth regressions instead of long-short portfolios.
+Interestingly, Figure 4 also provides evidence against the p-hacking explana-
+tion for predictability. For p-hacking to explain predictability, it would have to
+operate across the entire predictor distribution, incrementally increasing mean
+returns from one level of the predictor to the next. This fine-tuning is an issue
+that is not examined in previous studies that model p-hacking (Harvey, Liu, and
+Zhu (2016); Chen and Zimmermann 2020; Chen 2020), nor is it examined in Hou,
+Xue, and Zhang (2020).
+This concludes our main results. Nearly 100% of the literature on
+cross-sectional stock return predictability can be replicated. This find-
+ing implies not only the veracity of the literature, but defends the cred-
+ibility of the asset pricing community more generally. Finally, these re-
+sults support the quality of our open source dataset, publically available at
+https://github.com/OpenSourceAP/CrossSection.
+3.2. Not-Predictors, Indirect Signals, and Comparison with
+Other Meta-Studies
+The overwhelming success of our reproductions may appear to be at odds
+with the literature. McLean and Pontiff (2016) (MP) find that 12% of their 97
+predictors produce t-stats < 1.5, suggesting a far higher “failure rate” than to
+our main results. More strikingly, Hou, Xue, and Zhang (2020) (HXZ) find that
+roughly 50% of their 452 long-short portfolios produce t-stats < 1.96 in absolute
+value, even with equal-weighting and when limiting to the original papers’ sam-
+ple periods.
+Our results differ from MP and HXZ primarily because we carefully examine
+15
+--- PAGE 18 ---
+the original papers to check if reproduced long-short t-stats should exceed 1.96
+before testing this threshold in our reproductions. In contrast, MP have a some-
+what more lenient criterion, limiting themselves to papers “in which the null of
+no return predictability is rejected at the 5% level.” HXZ are much more lenient.
+HXZ state their “list encompasses the bulk of the published anomalies literature
+in finance and accounting,” but do not specify any more requirements for inclu-
+sion that we could identify.
+Our careful examination is illustrated in Figure 5, which shows a jitter plot of
+reproduced t-statistics for all of our characteristics, including those in the “not-
+predictor” and “indirect signal” categories. The first two rows echo Figures 2
+and 3: Clear predictors almost uniformly have t-stats > 1.96 and many t-stats
+are much larger. Likely predictors are roughly evenly distributed around 1.96.
+Notably, these rows include predictors with evidence based on regressions and
+event studies, and thus cover far more likely predictors than Figure 3.
+[Figure 5 “Predictive Significance in the Extended Dataset” about here.]
+Unlike the clear and likely predictors, not-predictors and indirect signals gen-
+erally failed to achieve statistical significance in our reproductions. A large mass
+of indirect signals lies to the left of t-stat = 1.6, and almost all of the not-predictors
+fall in the same region.
+Figure 6 shows the analogous plot, restricted to the predictors that also ap-
+pear in MP (top panel) or HXZ (bottom panel).
+[Figure 6 “Performance vs Other Meta-Studies” about here.]
+The top panel echos MP’ s finding that about 12% their predictors have small
+t-stats. 14 of our 85 characteristics that overlap with MP have t-stats < 1.96 (dot-
+ted line). Most of these we judged as likely predictors, though a handful were
+judged as indirect signals and one was judged as a not-predictor. In particular,
+we judged Dichev’ s (1998) Z-Score as a not-predictor, as it finds a t-stat of 1.59 in a
+univariate regression (see Dichev’ s Table 3A). It’ s likely that MP included Z-Score
+due to its t-stat of 3.37 in a multivariate regression with size and B/M controls,
+and reasonable people can disagree on the proper classification of this predic-
+tor. Nevertheless, we argue that our reproduced t-stat of 1.20 for Z-Score (Table
+4) should not be judged as a reproduction failure, as it is quite consistent with
+Dichev’ s univariate results.
+16
+--- PAGE 19 ---
+The bottom panel of Figure 6 shows the breakdown for characteristics that
+overlap with HXZ’ s. The data looks quite similar to our full dataset (Figure 5):
+Clear predictors are almost entirely above 1.96, likely predictors center around
+1.96, not-predictors are below, and indirect signals are dispersed but many fall
+below the 1.96 cutoff. Thus, HXZ’ s failure rate of around 50% seems to be due
+to the misclassification of the “anomalies.” In our reproductions, almost all ap-
+parent failures are linked to studies that never demonstrated predictability in the
+first place.
+Importantly, MP’ s choice to be more lenient in determining original-study-
+predictability is entirely valid for the goals of their study. MP seek to measure
+the decline in the magnitude of predictability out-of-sample, and one may be
+interested in this decline for predictors that don’t quite meet the 1.96 cutoff.
+Indeed, we find that we can closely replicate MP’ s results, even if we limit our
+sample to clear predictors. This robustness is seen in Figure 7, which replicates
+(MP’ s) Figure 1 using only clear predictors. The top panel plots the in-sample
+return vs the post-publication return decay, and the bottom panel swaps out the
+in-sample return for the in-sample t-stat. In both panels, we subset the data to
+clear predictors in MP (dark circle) and clear predictors that are not in MP (light
+triangles).
+[Figure 7 “McLean and Pontiff (2016) Replication” about here.]
+The figure replicates and extends three important facts documented by MP
+about post-publication decay: (1) decay increases in the in-sample return, (2)
+decay increases in the in-sample t-stat, and (3) the decay is not large enough to
+wipe out the in-sample return.
+The first two facts can be seen in the upward slope of the regression lines
+in Figure 7. Strikingly, the upward slope does not depend on whether we fit
+the regression to predictors that are studied by MP (solid) or missing from MP
+(dashed). Indeed, the two standard error confidence bands largely overlap, indi-
+cating that MP’ s findings hold quantitatively in an out-of-sample test (or perhaps
+out-of-out-of-sample test). Visual inspection of MP’ s Figure 1 suggests our re-
+sults are also quantitatively consistent with MP’ s, even though we limit our sam-
+ple to clear predictors. We also find that using of all of MP’ s predictors leads to
+similar results.
+The third fact can be seen by comparing the predictor markers to the 45 de-
+17
+--- PAGE 20 ---
+gree dotted line in the top panel. If post-publication decay is strong enough
+to wipe out in-sample returns, then the predictors would be evenly distributed
+around this 45 degree line. However, the majority of predictors lie above the 45
+degree line, showing that predictability survives post-publication. It’ s important
+to note, however, that these results do not account for trading costs. Indeed,
+Chen and Velikov (2019) find that the remaining predictability is eliminated by
+effective bid-ask spreads.
+Overall, our results appear to differ from other meta-studies because we care-
+fully categorize predictors based on the original results. Only with this care-
+ful categorization can a meta-study accurately evaluate whether replications are
+successful on such a large scale. These categorizations do not affect McLean and
+Pontiff’ s (2016) analysis and indeed we replicate their results among predictors
+with a higher standard for “original significance.”
+In contrast, Hou, Xue, and Zhang’ s (2020) finding of widespread replication
+failure for equal-weighted portfolios does not survive a more careful inspec-
+tion. Our results call into question HXZ’ s main findings regarding value-weighted
+portfolios, though it is certainly true that anomalies are weaker when value-
+weighted (See Section 5.2).
+4. Characteristic-Level Reproduction Performance
+Behind the literature-level results are 319 firm-level characteristics, each of
+which has its own story, original statistics, and reproduction quality. Tables 2-
+4 explore this rich data, listing each individual characteristic, the reproduced
+mean return and t-stat, and the evidence for predictability in the original pa-
+pers. Table 2 lists clear predictors, Table 3 lists likely predictors, and Table 4 lists
+not-predictors and indirect signals.
+At the surface level, these tables provide a quick reference guide to our
+dataset. We sort characteristics by author names and provide the acronym used
+in our code, so readers can easily look up characteristics of interest.
+At a deeper level, the tables provide a detailed characterization of our judg-
+ments of predictor categories (Section 4.1), our reproduction failures and strug-
+gles (Section 4.2), and the reproductions that led to extremely large t-stats (Sec-
+tion 4.3).
+18

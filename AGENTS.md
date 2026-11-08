@@ -16,11 +16,13 @@ the fix for anything missing; ask the user before installing packages).
 
 Workflow options (details in `.agents/skills/deep-research/SKILL.md`):
 
-### Option A (DEFAULT & MANDATORY FOR DIRECT RESEARCH): Deep Research v9.0 The Ultimate Frontier
-Cuts token consumption by >90% and eliminates multi-step CLI bureaucracy via a declarative pipeline with mechanical bullshit filtering (`B1–B9`):
-1. **Turn 0 (Auto-Spec, Skeptic Swarm & Benchmark Radar):** Run `.venv\Scripts\python.exe dr_engine\tools\auto_spec.py generate --prompt "<objective>" --out research/<dir>/study_spec.json` to autonomously classify domain, query `benchmark_radar.py` for live Tier 2 benchmarks (Artificial Analysis / LMSYS), generate orthogonal SQ1..SQ4, deploy the Adversarial Skeptic Swarm for K1..K3 disconfirmation vectors, and optimize Inverse-HHI lead diversity ($N_{\text{eff}} \ge 4.0$) with zero LLM tokens.
-2. **Turn 1 (Concurrent Ingestion & BM25 Distillation):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py ingest --dir research/<dir>` to snapshot sources and compile top-k BM25 passages to `context_pack.md` (0 LLM tokens).
-3. **Turn 2 (Synthesis & Code):** Author `report.md` adhering strictly to Rules `B1–B9`:
+### Option A (DEFAULT & MANDATORY FOR DIRECT RESEARCH): Deep Research v14.1 The Unbreakable Epistemic Pipeline
+Cuts token consumption by >90% and eliminates multi-step CLI bureaucracy via a declarative pipeline with mechanical bullshit filtering (`B1–B14`):
+1. **Turn -1 (Desk Memory & Graveyard Pre-Flight):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py preflight --dir research/<dir> --prompt "<prompt>"`. Scans the prompt, spec, and plan against `CLAUDE_PROJECT_KNOWLEDGE_MASTER.md` and `known_traps.json` before any research begins. Hard-blocks with exit code 1 if any forensically killed strategy is proposed.
+2. **Turn 0 (Auto-Spec, Skeptic Swarm & Benchmark Radar):** Run `.venv\Scripts\python.exe dr_engine\tools\auto_spec.py generate --prompt "<objective>" --out research/<dir>/study_spec.json` to autonomously classify domain, query `benchmark_radar.py` for live Tier 2 benchmarks (Artificial Analysis / LMSYS), generate orthogonal SQ1..SQ4, deploy the Adversarial Skeptic Swarm for K1..K3 disconfirmation vectors, and optimize Inverse-HHI lead diversity ($N_{\text{eff}} \ge 4.0$) with zero LLM tokens.
+3. **Turn 1 (Concurrent Ingestion & BM25 Distillation):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py ingest --dir research/<dir>` to snapshot sources and compile top-k BM25 passages to `context_pack.md` (0 LLM tokens).
+4. **Turn 1.5 (Pre-Synthesis Evidence Locking):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py lock-evidence --dir research/<dir>`. Mechanically verifies all quotes against `sources/S###.txt` before authoring `report.md`. Compiles `evidence_ledger.json` and `evidence_pack.md`. Authors may ONLY cite pre-locked `[E###]` IDs; any unverified quote triggers an immediate failure.
+5. **Turn 2 (Synthesis & Code):** Author `report.md` adhering strictly to Rules `B1–B14`:
    - **B1 (No Fake EV):** Enforce unit breakeven math (`required_clients_breakeven`, `monthly_churn_replacements`) in `python:model`. No arbitrary subjective scenario weights.
    - **B2 (Zero-Liability Solo Physics):** In product/SaaS research, reject mutating 2-way real-time write-syncs; mandate Read-Only Diffs, Preflight File Validators, or In-Browser BYOD parsers.
    - **B3 (Modern Microstructure & Friction Gate):** In quant research, sample end >= 2023, friction/1R <= 3.0%, and >= 35 LOC of clean, runnable, zero-stub Python code.
@@ -30,9 +32,16 @@ Cuts token consumption by >90% and eliminates multi-step CLI bureaucracy via a d
    - **B7 (Legal & Tax Normative Hierarchy):** Bind authority tier (statute vs administrative guidance), prohibit unmapped US/BG cross-jurisdiction conflation, and model net after-tax savings.
    - **B8 (Hardware & Thermodynamic Limits):** Enforce thermodynamic headroom $\le 0.95$ of theoretical limits, BOM unit economics, and manufacturing first-pass yield.
    - **B9 (Temporal Recency & SOTA Benchmark Gate):** Forbid citing deprecated models as current leaders; mandate Tier 2 measured benchmarks (`Artificial Analysis`, `LMSYS`) and recent sample periods ($\ge 2026$) to eliminate Academic Citation Lag.
+   - **B10 (Dialectical Arbitration):** Partition contradictory de jure / de facto regimes; never pool them.
+   - **B11 (Active Dethroning):** Adversarially challenge all superlative and consensus claims.
+   - **B12 (Anti-Hype Multipliers):** Ban hyperbolic verdicts and uncalculated multipliers.
+   - **B13 (Anti-Synthetic Citations & Desk Graveyard Prohibition):** Prohibit citing central banks for prop firm rules or R-multiples, and hard-block killed desk setups.
+   - **B14 (Cryptographic Evidence Ledger Binding):** Strict SHA-256 binding of all cited `[E###]` IDs to `evidence_ledger.json`.
    - Embedded ` ```python:model ` AST block and ` ```json:manifest ` cryptographic evidence record.
-4. **Call 2 (Single-Pass Verification):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py verify --dir research/<dir>` (validates quotes, executes AST math, enforces B1–B9 via `v9_bullshit_filters.py`, evaluates DerSimonian-Laird $I^2$ and Shingle-Jaccard $N_{\text{eff}}$, and scores EI and IDI in < 100 ms).
-5. **Turn 3 (Executable Decision Card):** Run `.venv\Scripts\python.exe dr_engine\tools\decision_card.py build --dir research/<dir>` to compile AST models into a zero-dependency offline HTML5 Decision Card with live interactive sliders, numerical Jacobian sensitivity, and break-even tipping point analytics.
+6. **Turn 3 (Single-Pass Verification):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py verify --dir research/<dir> --strict-v14` (validates quotes, executes AST math, enforces B1–B14 via `v9_bullshit_filters.py`, evaluates DerSimonian-Laird $I^2$ and Shingle-Jaccard $N_{\text{eff}}$, and scores EI and IDI in < 100 ms).
+7. **Turn 3.5 (Deterministic Executable Google Colab Notebook & Headless Verification):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py colab --dir research/<dir>` to compile AST models into an executable nbformat 4.5 notebook, and verify it headlessly via `.venv\Scripts\python.exe dr_engine\tools\notebook_verifier.py research/<dir>/research_notebook.ipynb --receipt research/<dir>/notebook_execution_receipt.json`.
+8. **Turn 4 (Executable Decision Card):** Run `.venv\Scripts\python.exe dr_engine\tools\decision_card.py build --dir research/<dir>` to compile AST models into a zero-dependency offline HTML5 Decision Card with live interactive sliders, numerical Jacobian sensitivity, and break-even tipping point analytics.
+9. **Turn 5 (Attested Deliverable Export):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py export --dir research/<dir> --out reports/<NAME>.md --strict-v14`. Re-verifies study, enforces R21 deliverable attestation, checks notebook execution receipt, and signs deliverable with `<!-- DR-ATTESTATION -->`. Run `lean_engine.py audit-deliverables` (must report 0 violations).
 
 ### v10.0 Hardening (2026-11-06, read before authoring any report)
 An autonomous audit found that v9.0 could certify a false report. These are now

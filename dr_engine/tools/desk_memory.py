@@ -64,8 +64,8 @@ GRAVEYARD_RULES: list[dict[str, Any]] = [
      "concept_groups": [
          ["dax", "dax40", "ger40", "de40", "de30", "uk100", "ftse", "eu50",
           "sx5e", "stoxx", "eurusd", "german index", "frankfurt", "европейск",
-          "германск", "dax40/uk100"],
-         ["cash open", "кеш оупън", "08:00", "09:00", "opening range", "orb", "пробив", "отварянето"],
+          "германск", "dax40/uk100", "deutscher aktienindex", "aktienindex"],
+         ["cash open", "кеш оупън", "08:00", "09:00", "opening range", "orb", "пробив", "отварянето", "eröffnung", "eroeffnung", "ausbruch"],
      ], "min_groups": 2, "refutation_patterns": _ACK},
 
     {"id": "GRAVEYARD_ORB30_MULTI_ASSET",
@@ -98,16 +98,16 @@ GRAVEYARD_RULES: list[dict[str, Any]] = [
      "name": "Trailing stop (TRAIL01), EMA5, break-even placebo variants",
      "description": "Killed: prereg 2026-10-07; Pillar 1 stays 1:1 with the audit.",
      "concept_groups": [
-         ["trail01", "trailing stop", "плаващ стоп", "трейлинг", "breakeven stop", "break-even stop", "ema5 stop"],
-         ["pillar 1", "pillar1", "3-bar displacement", "three-bar displacement", "placebo"],
+         ["trail01", "trailing stop", "плаващ стоп", "трейлинг", "breakeven stop", "break-even stop", "ema5 stop", "dynamic stop", "stop that follows", "following stop"],
+         ["pillar 1", "pillar1", "3-bar displacement", "three-bar displacement", "placebo", "us100", "nasdaq"],
      ], "min_groups": 2, "refutation_patterns": _ACK},
 
     {"id": "GRAVEYARD_DISPLACEMENT_TRANSPLANT",
      "name": "Displacement transplanted to US30/US2000/ES/DAX/NQ London/NQ 5m",
      "description": "Killed: master §2.A/§2.C.5 — ES t=-0.66, US30 -0.73, DAX +0.15, NQ London -3.41, NQ 5m net +1.72 < Bonferroni 2.58.",
      "concept_groups": [
-         ["3-bar displacement", "three-bar displacement", "pillar 1 displacement", "pillar1 displacement", "transplanted displacement"],
-         ["us30", "us2000", "es", "dax", "nq london", "nq 5m", "5m timeframe", "5-minute timeframe", "london session"],
+         ["displacement", "3-bar", "pillar 1", "pillar1", "transplanted displacement", "transplant displacement", "m15 displacement"],
+         ["us30", "us2000", "es", "dax", "nq london", "nq 5m", "london session", "transplant"],
      ], "min_groups": 2, "refutation_patterns": _ACK},
 
     {"id": "GRAVEYARD_SINGLE_STOCK_CFDS",
@@ -122,16 +122,16 @@ GRAVEYARD_RULES: list[dict[str, Any]] = [
      "name": "Reddit leaderboard scraping + LLM cut-limits",
      "description": "Killed: survivorship bias, overfitted ex-post cut-limits, FTMO ban on public EAs.",
      "concept_groups": [
-         ["reddit leaderboard", "leaderboard scraping", "scrape leaderboard"],
-         ["llm", "cut-limit", "cut limit", "public ea", "prop firm", "ftmo"],
+         ["reddit leaderboard", "leaderboard scraping", "scrape leaderboard", "public prop-firm ranking", "public prop firm ranking", "prop-firm ranking", "prop firm ranking", "scrape the public"],
+         ["llm", "cut-limit", "cut limit", "public ea", "prop firm", "prop-firm", "ftmo", "copy the top", "ranking"],
      ], "min_groups": 2, "refutation_patterns": _ACK},
 
     {"id": "GRAVEYARD_REVELIO_10Y",
      "name": "Revelio 10-year linear regression channel",
      "description": "Killed: no stop-loss, 20-40% drawdowns, 4-12 month holds burn CFD swaps.",
      "concept_groups": [
-         ["revelio"],
-         ["regression channel", "linear regression channel", "10-year regression", "10y regression", "linear channel"],
+         ["revelio", "decade-long regression", "decade regression", "10-year regression", "10y regression", "long-term regression"],
+         ["regression channel", "linear regression channel", "linear channel", "channel", "no hard stop", "no stop"],
      ], "min_groups": 2, "refutation_patterns": _ACK},
 
     {"id": "GRAVEYARD_PILLAR2_OUT6",

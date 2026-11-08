@@ -1,0 +1,226 @@
+Quants: How to Improve Earnings Forecasts with Unique Alt Datasets | ExtractAlpha
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+
+ 
+ 
+
+Skip to content
+- Home
+- Solutions
+- Datasets
+- AlphaClub
+- Estimize
+- About
+- History
+- Our Team
+- FAQs
+- Careers
+- Blog
+- Home
+- Solutions
+- Datasets
+- AlphaClub
+- Estimize
+- About
+- History
+- Our Team
+- FAQs
+- Careers
+- Blog
+- Home
+- Solutions
+- Datasets
+- AlphaClub
+- Estimize
+- About
+- History
+- Our Team
+- FAQs
+- Careers
+- Blog
+- Home
+- Solutions
+- Datasets
+- AlphaClub
+- Estimize
+- About
+- History
+- Our Team
+- FAQs
+- Careers
+- Blog
+Log in
+Learn more
+# Quants: How to Improve Earnings Forecasts with Unique Alt Datasets
+- 
+ 
+ 
+ March 8, 2023
+Share This Post
+Quantitative earnings forecasting has evolved over the last 25 years of my career in the quantitative finance space. I’ve been fortunate to participate in some of that evolution, including as head of research on the founding team at StarMine in the late 1990’s and early 2000’s where I designed the SmartEstimate product.
+I’m sharing information from my published white paper, “TrueBeats for EPS and Revenues,” with 3 methods you can use to predict earnings and revenue surprises even more accurately.
+### The Old Methodology
+The creation of the Institutional Brokerage Estimates System (I/B/E/S) in the 1970s—which combined forecasts from multiple brokers to create an equally weighted “consensus” – was the first game changer. This simple consensus remains common in many financial applications today, despite extensive academic and practitioner research demonstrating various aspects of consensus forecast errors in the ensuing decades.
+Starting in the 1990s, academic and practitioner research started to show consensus forecast errors could be mitigated by considering who was providing the estimates, along with their track record, tenure, employer, timeliness, and other features. New and innovative firms such as DAIS Group, Zacks, and perhaps most notably StarMine, built analytics to come up with a better composite forecast of earnings – and earnings surprises – by using these types of analyst-specific features.
+But few of these methodologies have evolved or improved in the last 15 – 20 years. They are limited by the range and quality of forecasts from the underlying analysts. However, there are cases when all analysts are similar and / or they do not provide the most significant source of forecast accuracy.
+A simple weighted average of an analyst’s estimates based on individual characteristics will fail to take into account a wide variety of information. For example, from corporate earnings, including time series and cross-sectional effects.
+The amount of information has increased, along with the data-science tools at our disposal, affording new ways to consider earnings-surprise predictions that may go beyond what is available in commonly used commercial models.
+Below are several enhancements and alternate approaches we have tried in our research. Although there is now a wide variety of data available for corporate earnings, including the unstructured text from earnings call transcripts.
+### Here are 3 Effective Ways to Improve Earnings Forecasts:
+1: Overweight Estimates Based on Analysts’ Ability to Predict Specific Items and the Recency of Their Estimates
+Older “intelligent estimate” models such as StarMine’s SmartEstimate weight forecasts based on the historical accuracy of each analyst and the recency of each estimate. The most recent estimates from the best analysts receive the highest weight.
+As mentioned above, differentially weighting forecasts based on the contributing analyst’s track record can result in a more accurate estimate of earnings or other KPIs. But one can improve the accuracy rate in several critical ways.
+First, one can look at the historical accuracy of each analyst for each item individually. For example, some analysts may be better able to predict revenues compared to EPS, perhaps because of the varying quality of their estimates of expenses. A composite sales estimate, which is weighted by the analyst’s track record in EPS estimation, is more accurate than the consensus 51.8% of the time, whereas using the analyst’s track record in sales estimation results in a 56.6% accuracy rate. The same phenomenon is true for forecasts of cash flow, dividends, and same-store sales.
+Additionally, a dynamic model can help determine weights for prior periods when measuring historical analyst ability. Although analyst ability is somewhat persistent over time, to the extent that it changes it may do so at a varying rate. Analysts who were accurate in one market regime may become relatively inaccurate after a regime change.
+There are also observable seasonal effects in the data, where an analyst’s accuracy four, eight, or 12 quarters ago is especially important in predicting the individual’s accuracy in the current quarter. This is because some analysts are particularly good at prediction in certain fiscal quarters relative to others. In fact, the four-quarter-ago accuracy is nearly twice as important as the three-quarter-ago accuracy.
+2: Follow the Trend in Beats and Misses for Each Stock and Its Peers
+Earnings surprises do not occur in isolation; each company’s time series of prior earnings and revenue surprises contains valuable information on how efficiently the firm has beat expectations in the past.
+The experience of a firm’s peers is also important, as earnings surprises in a particular industry tend to cluster in time. The simple way to define peer stocks is by using industry classifications. An improved method defines peers with overlapping analyst coverage, which results in stronger predictability than using industry classifications that could be too broad, too narrow, or poorly defined for a given stock.
+Moreover, using analyst coverage results in clusters of peer stocks in which the pool of analysts behave similarly. Therefore, earnings surprises may be expected to be more similar. In a multiple regression explaining current surprises using past peer surprises, a peer surprise feature defined by analyst coverage dominates one defined by industry peers.
+3: Pay Attention to Announcement Timing, Guidance, and Variance Across Estimates
+There is academic evidence that companies who tend to miss their numbers are late to announce, or they announce on days with high news volumes, near weekends or holidays. Companies for which analysts are uncertain (as evidenced by high cross-sectional variance in estimates) also tend to miss their targets.
+When a miss is expected, management often seeks to reduce the share price impact of weaker-than-anticipated results, and sometimes attempts to “take a bath” by engineering future quarters’ losses into the current quarter.
+These effects and management behavior can be captured with variables such as management guidance, historical beats and misses versus guidance, the nominal and relative timing of announcements, expectations, and variance across analysts’ estimates.
+### Why These Approaches Work
+By looking at the average daily cross-sectional Spearman rank correlation below, we observe that each group of features – which we categorize as related to Experts, Trends, or Management – is not very correlated to the others.
+We can also measure the accuracy of forecasts using a hit rate: When the forecasted surprise is above or below a minimum threshold, what percentage of the time is the forecast directionally accurate in predicting beats and misses? Below we measure the hit rates for each component and the overall forecast.
+To measure a composite-surprise prediction for stock returns, we backtested a simple long/short, top/bottom decile portfolio based on the TrueBeat value, rebalanced daily and equally weighted. Below we show the non-compounded cumulative return since 2000.
+The signal’s alpha is robust and is confirmed by its exposure to sectors. Returns attribution is confirmed by market beta, factors, and industries, for example.
+### In Summary
+The recent explosion in data about publicly traded companies, and the concurrent growth in analytical techniques such as machine learning, have opened many opportunities for quants and data scientists to improve their predictions of returns.
+There’s an embarrassment of riches when it comes to data and quant work, with much of it in large and often unstructured datasets. But perhaps lost in the flood of data and tools is the fact that one can take structured datasets with long histories and use them to improve one’s predictions. And not just with returns, but with more fundamental measures such as EPS – all through careful feature engineering with an eye towards the fundamental, behavioral, and economic rationales behind each feature.
+A well-designed forecast of earnings built in this way should, in most market conditions, translate to an effective prediction of the cross section of returns.
+Use our TrueBeats Model to accomplish all of the above – it combines the above research findings into an explicit prediction of earnings and sales surprises. Contact us for a free trial, and while you’re on the page, feel free to request information on some of our other datasets and signals.
+PrevPreviousIntroducing the IRP Sentiment Signal
+NextWhat is Stat Arb?(Statistical Arbitrage): Understanding Quantitative Trading Strategies in Modern MarketsNext
+#### More To Explore
+### 
+ 
+ Proprietary Trading Firms in North Dakota
+Introduction In recent years, North Dakota has emerged as an unexpected hub for proprietary trading firms, drawing attention from financial enthusiasts and investors alike. These
+January 17, 2024
+### 
+ 
+ Alterative Data for Agriculture
+Alternative data in agriculture has become increasingly popular. Alternative data refers to any non-traditional data source that can be used to make informed decisions. In
+May 6, 2023
+Subscribe to the ExtractAlpha newsletter​
+Gain alpha with predictive alternative datasets
+Linkedin
+ 
+ 
+ 
+ 
+ Twitter
+#### Solutions
+- 
+ 
+
+ Datasets
+- 
+ 
+
+ AlphaClub
+- 
+ 
+
+ Estimize
+#### About
+- 
+ 
+
+ History
+- 
+ 
+
+ Our Team
+- 
+ 
+
+ FAQs
+- 
+ 
+
+ Careers
+#### Resources
+- 
+ 
+
+ Blog​
+- 
+ 
+
+ Contact Us​
+© 2026 ExtractAlpha. All Rights Reserved.
+Privacy Policy
+### Alan Kwan
+Alan joined ExtractAlpha in 2024. He is a tenured associate professor of finance at the University of Hong Kong, where he serves as the program director of the MFFinTech, teaches classes on quantitative trading and big data in finance, and conducts research in finance specializing in big data and alternative datasets. He has published research in prestigious journals and regularly presents at financial conferences. He previously worked in technical and trading roles at DC Energy, Bridgewater Associates, Microsoft and advises several fintech startups. He received his PhD in finance from Cornell and his Bachelors from Dartmouth.
+### John Chen
+John joined ExtractAlpha in 2023 as the Director of Partnerships & Customer Success. He has extensive experience in the financial information services industry, having previously served as a Director of Client Specialist at Refinitiv. John holds dual Bachelor’s degrees in Commerce and Architecture (Design) from The University of Melbourne.
+### Chloe Miao
+Chloe joined ExtractAlpha in 2023. Prior to joining, she was an associate director at Value Search Asia Limited. She earned her Masters of Arts in Global Communications from the Chinese University of Hong Kong.
+### Matija Ratkovic
+Matija is a specialist in software sales and customer success, bringing experience from various industries. His career, before sales, includes tech support, software development, and managerial roles. He earned his BSc and Specialist Degree in Electrical Engineering at the University of Montenegro.
+### Jack Kim
+Jack joined ExtractAlpha in 2022. Previously, he spent 20+ years supporting pre- and after-sales activities to drive sales in the Asia Pacific market. He has worked in many different industries including, technology, financial services, and manufacturing, where he developed excellent customer relationship management skills. He received his Bachelor of Business in Operations Management from the University of Technology Sydney.
+### Perry Stupp
+Perry brings more than 20 years of Enterprise Software development, sales and customer engagement experience focused on Fortune 1000 customers. Prior to joining ExtractAlpha as a Technical Consultant, Perry was the founder, President and Chief Customer Officer at Solution Labs Inc. a data analytics company that specialized in the analysis of very large-scale computing infrastructures in place at some of the largest corporate data centers in the world.
+### Perry Stupp
+Perry brings more than 20 years of Enterprise Software development, sales and customer engagement experience focused on Fortune 1000 customers. Prior to joining ExtractAlpha as a Technical Consultant, Perry was the founder, President and Chief Customer Officer at Solution Labs Inc. a data analytics company that specialized in the analysis of very large-scale computing infrastructures in place at some of the largest corporate data centers in the world.
+### Janette Ho
+Janette has 22+ years of leadership and management experience in FinTech and analytics sales and business development in the Asia Pacific region. In addition to expertise in quantitative models, she has worked on risk management, portfolio attribution, fund accounting, and custodian services. Janette is currently head of relationship management at Moody’s Analytics in the Asia-Pacific region, and was formerly Managing Director at State Street, head of sales for APAC Asset Management at Thomson Reuters, and head of Asia for StarMine. She is also a board member at Human Financial, a FinTech firm focused on the Australian superannuation industry.
+### Leigh Drogen
+Leigh founded Estimize in 2011. Prior to Estimize, Leigh ran Surfview Capital, a New York based quantitative investment management firm trading medium frequency momentum strategies. He was also an early member of the team at StockTwits where he worked on product and business development.  Leigh is now the CEO of StarKiller Capital, an institutional investment management firm in the digital asset space.
+### Andrew Barry
+Andrew is the CEO of Human Financial, a technology innovator that is pioneering consumer-led solutions for the superannuation industry. Andrew was previously CEO of Alpha Beta, a global quant hedge fund business. Prior to Alpha Beta he held senior roles in a number of hedge funds globally.
+### Natallia Brui
+Natallia has 7+ years experience as an IT professional. She currently manages our Estimize platform. Natallia earned a BS in Computer & Information Science in Baruch College and BS in Economics from BSEU in Belarus. She has a background in finance, cybersecurity and data analytics.
+### June Cook
+June has a background in B2B sales, market research, and analytics. She has 10 years of sales experience in healthcare, private equity M&A, and the tech industry. She holds a B.B.A. from Temple University and an M.S. in Management and Leadership from Western Governors University.
+### Jenny Zhou, PhD
+Jenny joined ExtractAlpha in 2023. Prior to that, she worked as a quantitative researcher for Chorus, a hedge fund under AXA Investment Managers. Jenny received her PhD in finance from the University of Hong Kong in 2023. Her research covers ESG, natural language processing, and market microstructure. Jenny received her Bachelor degree in Finance from The Chinese University of Hong Kong in 2019. Her research has been published in the Journal of Financial Markets.
+### Kristen Gavazzi
+Kristen joined ExtractAlpha in 2021 as a Sales Director. As a past employee of StarMine, Kristen has extensive experience in analyst performance analytics and helped to build out the sell-side solution, StarMine Monitor. She received her BS in Business Management from Cornell University.
+### Triloke Rajbhandary
+Triloke has 10+ years experience in designing and developing software systems in the financial services industry. He joined ExtractAlpha in 2016. Prior to that, he worked as a senior software engineer at HSBC Global Technologies. He holds a Master of Applied Science degree from Ryerson University specializing in signal processing.
+### Qayyum Rajan
+Qayyum (“Q”) joined ExtractAlpha in 2024 as the head of a new division, EA Labs. Q is a data scientist recognized for his innovative work in fintech and venture building. Prior to ExtractAlpha, he founded Nuu Ventures, a venture studio that acquired and scaled startups with a focus on lean growth and strategic exits. Previously, he co-founded iComply Investor Services and ESG Analytics, leveraging AI to assess ESG performance. A recipient of British Columbia’s Top 30 Under 30 award, Q also serves on the Fintech Advisory Committee for the BC Securities Commission and is known for his commitment to disrupting traditional business models through technology.
+### Yunan Liu, PhD
+Yunan joined ExtractAlpha in 2019 as a quantitative researcher. Prior to that, he worked as a research analyst at ICBC, covering the macro economy and the Asian bond market. Yunan received his PhD in Economics & Finance from The University of Hong Kong in 2018. His research fields cover Empirical Asset Pricing, Mergers & Acquisitions, and Intellectual Property. His research outputs have been presented at major conferences such as AFA, FMA and FMA (Asia). Yunan received his Masters degree in Operations Research from London School of Economics in 2013 and his Bachelor degree in International Business from Nottingham University in 2012.
+### Willett Bird, CFA
+Prior to joining ExtractAlpha in 2022, Willett was a sales director for Vidrio Financial. Willett was based in Hong Kong for nearly two decades where he oversaw FIS Global’s Asset Management and Commercial Banking efforts. Willett worked at FactSet, where he built the Asian Portfolio and Quantitative Analytics team and oversaw FactSet’s Southeast Asian operations. Willett completed his undergraduate studies at Georgetown University and finished a joint degree MBA from the Northwestern Kellogg School and the Hong Kong University of Science and Technology in 2010. Willett also holds the Chartered Financial Analyst (CFA) designation.
+### Julie Craig
+Julie Craig is a senior marketing executive with decades of experience marketing high tech, fintech, and financial services offerings. She joined ExtractAlpha in 2022. She was formerly with AlphaSense, where she led marketing at a startup now valued at $4B. Prior to that, she was with Interactive Data where she led marketing initiatives and a multi-million dollar budget for an award-winning product line for individual and institutional investors.
+### Jeff Geisenheimer
+Jeff is the CFO and Head of Operations and Compliance at ExtractAlpha, directing our financial, operational, compliance, and strategic management. He previously served as CFO at Estimize and at two publicly traded firms, Multex and Market Guide. Jeff also served as CFO at private-equity–backed companies including Coleman Research, Ford Models, Instant Information, and Moneyline Telerate. He has also held roles as advisor, partner, and board member at Total Reliance, CreditRiskMonitor, Mochidoki, and Resurge.
+### Vinesh Jha
+Vinesh founded ExtractAlpha in 2013 with the mission of bringing analytical rigor to the analysis and marketing of new datasets for the capital markets. Since ExtractAlpha’s merger with Estimize in early 2021, he has served as the CEO of both entities. From 1999 to 2005, Vinesh was the Director of Quantitative Research at StarMine in San Francisco, where he developed industry leading metrics of sell side analyst performance as well as successful commercial alpha signals and products based on analyst, fundamental, and other data sources. Subsequently, he developed systematic trading strategies for proprietary trading desks at Merrill Lynch and Morgan Stanley in New York. Most recently he was Executive Director at PDT Partners, a spinoff of Morgan Stanley’s premiere quant prop trading group, where in addition to research, he also applied his experience in the communication of complex quantitative concepts to investor relations. Vinesh holds an undergraduate degree from the University of Chicago and a graduate degree from the University of Cambridge, both in mathematics.
+Subscribe to the ExtractAlpha monthly newsletter

@@ -1,0 +1,996 @@
+
+--- PAGE 1 ---
+The Journal of Finance R©
+Campbell R. Harvey
+The President of the American Finance Association 2016
+--- PAGE 2 ---
+THE JOURNAL OF FINANCE • VOL. LXXII, NO. 4 • AUGUST 2017
+Presidential Address: The Scientific Outlook
+in Financial Economics
+CAMPBELL R. HARVEY∗
+ABSTRACT
+Given the competition for top journal space, there is an incentive to produce “sig-
+nificant” results. With the combination of unreported tests, lack of adjustment for
+multiple tests, and direct and indirect p-hacking, many of the results being published
+will fail to hold up in the future. In addition, there are basic issues with the interpre-
+tation of statistical significance. Increasing thresholds may be necessary , but still may
+not be sufficient: if the effect being studied is rare, even t > 3 will produce a large num-
+ber of false positives. Here I explore the meaning and limitations of a p-value. I offer
+a simple alternative (the minimum Bayes factor). I present guidelines for a robust,
+transparent research culture in financial economics. Finally , I offer some thoughts on
+the importance of risk-taking (from the perspective of authors and editors) to advance
+our field.
+SUMMARY
+r Empirical research in financial economics relies too much on p-values, which
+are poorly understood in the first place.
+r Journals want to publish papers with positive results and this incentivizes
+researchers to engage in data mining and “ p-hacking.”
+r The outcome will likely be an embarrassing number of false positives—effects
+that will not be repeated in the future.
+r The minimum Bayes factor (which is a function of the p-value) combined with
+prior odds provides a simple solution that can be reported alongside the usual
+p-value.
+r The Bayesianized p-value answers the question: What is the probability that
+the null is true?
+r The same technique can be used to answer: What threshold of t-statistic do I
+need so that there is only a 5% chance that the null is true?
+r The threshold depends on the economic plausibility of the hypothesis.
+LET ME START WITH AN ORIGINAL EMPIRICAL EXAMPLE . Some of you are familiar
+with my work on identifying factors. Consider a new factor that is based on
+equity returns from CRSP data. The t-statistic of the long-short portfolio is 3.23,
+∗Campbell R. Harvey is with Duke University and the National Bureau of Economic Research. I
+appreciate the comments of Manuel Adelino, Geert Bekaert, Jim Berger, Alon Brav , Anna Cieslak,
+Wayne Ferson, David Hirshleifer, Jay Im, Ben McCartney , Stefan Nagel, Brenda Priebe, Emmanuel
+Roman, Stephan Siegel, Michael Stutzer, Joy Tong, and Ivo Welch. I am especially grateful to
+Y an Liu for comments on many versions of this paper. Jay Im and Jane Day provided research
+assistance.
+DOI: 10.1111/jofi.12530
+1399
+--- PAGE 3 ---
+1400 The Journal of Finance R©
+which exceeds the Harvey , Liu, and Zhu (HLZ; 2016) recommended threshold
+of 3.00. The factor has a near-zero beta with the market and other well-known
+factors, yet an average return that comfortably exceeds the average market
+excess return. What is this factor?
+Here are the instructions that I gave my research assistant: (1) form portfo-
+lios based on the first, second, and third letters of the ticker symbol; (2) show
+results for 1926 to present and 1963 to present; (3) use a monthly , not daily ,
+frequency; (4) rebalance portfolios monthly and once a year; (5) value weight
+and equally weight portfolios; (6) make a choice on delisting returns; and (7)
+find me the best long-short portfolio based on the maximum t-statistic.
+There are 3,160 possible long-short portfolios based on the first three let-
+ters of the tickers. With two sample periods, there are 6,320 possible portfolio
+choices, equal and value weights bring this number to 12,640, and two choices
+for reconstituting the portfolio doubles this number again. In short, there are
+a huge number of choices.
+Many would argue that we should increase the choice space further because
+there are other possible choices that I did not give to my research assistant.
+Suppose, for instance, there are three ways to handle delisting returns. Ex
+ante, one was chosen. The argument is that we should consider the fact that,
+hypothetically , we could have had three choices, not just the one chosen (see
+Gelman and Loken ( 2013)).
+It is not surprising that, under a large enough choice set, the long-short strat-
+egy has a “significant” t-statistic—indeed, dozens of strategies have “signifi-
+cant” t-statistics. This is an egregious example of what is known as p-hacking.
+One might think this is a silly example. But it is not. A paper referenced in
+the HLZ ( 2016) factor list shows that a group of companies with meaningful
+ticker symbols, like Southwest’s LUV , outperform (Head, Smith, and Watson
+(2009)). Another study , this time in psychology , argues that tickers that are
+easy to pronounce, like BAL as opposed to BDL, outperform in IPOs (Alter
+and Oppenheimer ( 2006)). Y et another study , in marketing, suggests that tick-
+ers that are congruent with the company’s name outperform (Srinivasan and
+Umashankar ( 2014)). Indeed, some have quipped that ETF providers such as
+Vanguard might introduce a new family of ETFs called “AlphaBet” with each
+ETF investing in stocks with the same first letter of a ticker symbol.
+Many interpret HLZ (2016) as suggesting that we “raise the threshold for dis-
+covering a new finding to t > 3.” However, the point of that paper is that many
+in our profession (including myself) have been making an error in not adjusting
+thresholds for multiple tests. In this address, I emphasize that making a deci-
+sion based on t > 3 is not sufficient either. In particular, raising the threshold for
+significance may have the unintended consequence of increasing the amount of
+data mining and, in turn, publication bias. Journals contribute to data mining
+through their focus on publishing papers with the most “significant” results.
+The reason is that journal editors are often competing for citation-based impact
+numbers. Indeed, if you go to the American Finance Association’s homepage,
+you will see the Journal of Finance ’s impact factor prominently displayed. Be-
+cause papers that do not report “significant” results generate fewer citations
+--- PAGE 4 ---
+Scientific Outlook in Finance 1401
+Figure 1. Distribution of reported t-statistics from factor studies, 1963 to 2012. Evidence
+from Harvey , Liu, and Zhu (2016).
+(Fanelli (2013)), these papers are less likely to be published. This leads to pub-
+lication bias, whereby readers see only a select sample of the actual research
+conducted.
+Researchers also contribute to publication bias. Knowing journals’ prefer-
+ence for papers with “significant” results, authors may not submit papers with
+“marginal” results. Such bias is known in other sciences as the “file drawer
+effect”—research is filed away rather than submitted to a journal (Rosenthal
+(1979)). Publication bias may also be induced by authors cherry-picking the
+most significant results ( p-hacking) to submit to a journal. And even if jour-
+nals were willing to publish papers with marginal or negative results, many
+authors may file away a research project because they do not want to spend
+their valuable research time on a paper they are not excited about.
+Evidence of publication bias is starkly presented in HLZ ( 2016), who conduct
+a meta-analysis of factor studies published in top journals over the period 1963
+to 2012. Based on their evidence, Figure 1 shows that the number of studies
+reporting t-statistics in the range of 2.0 to 2.57 is almost the same as the
+number reporting in the range of 2.57 to 3.14—which only makes sense if there
+is publication bias. Also, notice that very few papers with negative results
+(t-statistic less than 2.00) are published.
+--- PAGE 5 ---
+1402 The Journal of Finance R©
+To summarize, researchers in our field face a complex agency problem. Ide-
+ally , our goal is to advance knowledge in our field of financial economics. As I
+show below, editors overwhelmingly publish papers with positive results. Re-
+alizing this, many authors believe that a necessary condition for publication is
+to obtain a positive “significant” result. This belief may lead authors to avoid
+certain projects, for example, those that involve time-intensive data collection,
+because they judge the risk to be too high. But these risky projects are exactly
+the type of initiatives that should be encouraged because they are often the
+ones that advance our knowledge the most.
+In this address, I take a step back and examine how we conduct our research.
+Unfortunately , our standard testing methods are often ill-equipped to answer
+the questions that we pose. Other fields have thought deeply about testing. I
+share some of their insights in SectionI. In Section II, I trace the history of thep-
+value and detail the American Statistical Association’s six principles on the use
+of p-values. In Section III, I describe p-hacking and its detection. In Section IV,
+I discuss the problem of rare effects and how they impact our inference, and
+in Sections V and VI, I present a Bayesian perspective on hypothesis testing.
+I propose a simple Bayesian alternative that essentially involves a transfor-
+mation of the usual p-value in Section VII, and I detail the limitations of this
+approach in Section VIII. In Section IX, I outline a set of best practices as well
+as offer recommendations designed to strengthen our research culture and en-
+courage more risk-taking when making research and publication decisions. I
+offer concluding remarks in Section X.
+I. Evidence from Other Fields
+In contrast to financial economics, active research programs in other fields
+analyze how research is conducted. Many of these studies look across disci-
+plines. For example, Fanelli ( 2010) studies how likely it is to get published in
+different fields with results that do not support the main hypothesis developed
+in the paper (see Figure 2).
+Notice that journals in the Space Science field have little problem publishing
+articles that do not support the main hypothesis, while at the bottom of the
+list is the field of Psychology . The Economics and Business field is not that far
+away from Psychology .
+The problem is more serious, however, than this snapshot in time suggests.
+Across all sciences, there is a distinct time trend as also detailed by Fanelli
+(2012). For example, in 1990, only 70% of papers in social sciences reported
+positive results but this proportion grows to 90% by 2007. Figure 3 shows that
+similar trends are evident in the physical and biological sciences.
+So why do we see this pattern? Fanelli ( 2010) links it to Auguste Comte’s
+(1856) famous Hierarchy of Science, with mathematics and astronomy on top
+and sociology on the bottom. As you move down the hierarchy , complexity in-
+creases and the ability to generalize results decreases. Fanelli uses the “hard”
+and “soft” classification. In the hard sciences, the results speak for them-
+selves and are highly generalizable. In soft sciences, findings could depend
+--- PAGE 6 ---
+Scientific Outlook in Finance 1403
+Figure 2. Percent of research papers reporting support for the tested hypothesis by
+field. Source: Fanelli ( 2010).
+on the researcher’s prestige in the community , political beliefs, and personal
+preferences—all of which could be important in selecting the hypotheses to
+be tested, the data to be collected, and the methods used in analyzing and
+interpreting the data—and are often too specific to generalize. A high-profile
+example of a hard scientific endeavor was the search for the Higgs boson. Im-
+portantly , “soft” does not mean “bad” and “hard” does not mean “good.” Indeed,
+Comte ( 1856) considered sociology , which today would encompass economics
+and psychology , as “the principal band of the scientific sheaf.” 1 Part of the
+complexity stems from the challenge in interpreting results when the human
+researcher interacts with the results. This interaction does not play much of a
+role in the hard sciences but can be impossible to avoid in the soft sciences.
+1 See Comte ( 1856, p. 457).
+--- PAGE 7 ---
+1404 The Journal of Finance R©
+50%
+55%
+60%
+65%
+70%
+75%
+80%
+85%
+90%
+95%
+100%
+Physical (1,044 papers)
+50%
+55%
+60%
+65%
+70%
+75%
+80%
+85%
+90%
+95%
+100%
+Biological (2,811 papers)
+50%
+55%
+60%
+65%
+70%
+75%
+80%
+85%
+90%
+95%
+100%
+Social (801 papers)
+Figure 3. “Positive” results increase over time in the science literature. Data from
+Fanelli (2012).
+--- PAGE 8 ---
+Scientific Outlook in Finance 1405
+Returning to the Hierarchy of Science, why is it that most empirical articles
+published in economics and finance “support” the idea being tested? Here, I
+consider possible explanations proposed by Fanelli ( 2010) in the context of our
+field.
+(1) We have better theories in financial economics than, say, in particle
+physics. This seems unlikely .
+(2) By observing phenomena, we have better prior beliefs in financial eco-
+nomics than in other scientific fields where priors are diffuse because
+there may be no direct or indirect observation . This is a credible expla-
+nation given that researchers in our field accumulate knowledge over
+time about how markets work, and this knowledge often forms the basis
+for new theories or hypothesis tests. However, despite the importance
+of prior beliefs in financial economics research, they are often not taken
+into account in standard hypothesis tests, which impacts the way we
+interpret statistical evidence. I elaborate on this point below.
+(3) In financial economics, the hypotheses tested are often narrow and fo-
+cused. This also is a credible explanation. Compare, for example, the
+conclusion that the Higgs boson is a “central part of the Standard Model
+of particle physics that describes how the world is constructed” (Royal
+Swedish Academy of Sciences ( 2013)) to the hypothesis that companies
+with smaller boards of directors outperform or the hypothesis that stock
+returns are higher in January than in other months of the year. A nar-
+rower hypothesis may have a better chance of being supported when
+taken to the data.
+(4) The connection between theories, hypotheses, and empirical findings is
+more flexible in financial economics . We have all seen theories tested
+where choices are made. Perhaps the most fundamental theory in fi-
+nance is the Sharpe ( 1964), Lintner ( 1965), and Mossin ( 1966) Capital
+Asset Pricing Model. Many choices are made for testing. For example,
+what is included in the market portfolio? Do we test on U.S. or inter-
+national assets? Does the theory apply to equities or all assets? What is
+the sample period? Should we test using portfolios or individual assets?
+Should risks be constrained to be constant? Are risk premiums constant?
+This is much different from flipping a 4 TeV switch, collecting trillions
+of new observations from the Large Hadron Collider, and searching for a
+specific particle decay signature as in the quest for the Higgs boson.
+(5) It is more likely that there are interaction effects between the researcher
+and the effect being researched . This is a serious problem in experimental
+and survey-based research in economics and finance as well as other so-
+cial sciences like psychology . For example, experimental subjects might
+be aware of the researchers’ hypotheses and change their behavior. An-
+other version of this problem involves confirmation bias in how the re-
+searcher interprets noisy data. While confirmation bias has been docu-
+mented in many fields, it is most prevalent in behavioral research (Marsh
+and Hanlon ( 2007)).
+--- PAGE 9 ---
+1406 The Journal of Finance R©
+(6) Manipulation of the data and results . Outright fraud is likely minimal
+in our field as most studies are conducted using data such as CRSP and
+Compustat that are readily available to other researchers (in contrast to,
+say , experimental fields, where the researcher creates the data for the
+study). However, the growth in the number of papers that use proprietary
+data decreases the probability of being caught and, in turn, the effective
+cost of fraud. In addition, many empirical design choices may be crucial
+for the results. For example, what should we include in the sample?
+Should the data be winsorized and, if so, at what level? Should certain
+outliers be discarded? Should the data be scaled by another variable? How
+many control variables should be included? What instruments should
+be used? Which estimation method should be used? These and similar
+choices are all tools of the p-hacker.
+(7) A lack of a replication culture . In other fields, replication studies are
+published in top journals and often invalidate previous results (i.e., they
+present a negative result with a new experiment or new data set). In
+financial economics, in contrast, because much of the data are widely
+available to researchers (e.g., CRSP and Compustat), replication studies
+are less interesting and thus are rarely featured in top journals.
+(8) It is hard to publish findings that do not “support” the hypothesis being
+tested. It is well-documented that editors and reviewers are more likely to
+reject negative findings that do not support the hypothesis tested in the
+paper (Song et al. ( 2000)). Research shows that papers with “significant”
+results receive more citations (Fanelli ( 2013)). This pattern can influence
+the way people conduct research. Above I discuss a striking truncation of
+marginally significant or insignificant results in top journals. One danger
+is HARKing (Hypothesizing After the Results are Known) (Kerr ( 1998)).
+Essentially , you have a theory that Y should be correlated with X1. Y ou
+test that theory and include controls X2t o X20. Y ou find no correlation
+between Y and X1, but you find a correlation between Y and X7. Y ou then
+change the theory and throw X1 in with the control variables. HARKing
+is most likely to occur when it is relatively easy to run an experiment,
+for example, a regression that uses Computstat data as opposed to an
+experiment that requires over $5 billion in funding to construct the Large
+Hadron Collider (CERN ( 2017)).2
+In short, the vast majority of papers published in financial economics provide
+“support” for the theory or hypothesis being tested for a variety of reasons. Some
+of these reasons are unavoidable, such as narrow hypotheses and the influence
+of prior information. However, it may be possible to minimize some of the other
+causes, such as p-hacking.
+In an effort to address this issue, I begin by taking a step back. There is a
+reason I put the word “support” in quotations when referring to papers that
+present results that “support” the proposed theory or hypothesis: the traditional
+2 See CERN ( 2017, p. 17). See also https://press.cern/backgrounders/facts-figures.
+--- PAGE 10 ---
+Scientific Outlook in Finance 1407
+hypothesis testing framework is unable to tell researchers the probability the
+hypothesis is true.
+II. Understanding the P-value
+The idea of using a p-value for hypothesis testing was introduced by Fisher
+(1925). His idea is to objectively separate findings of interest from noise. The
+null hypothesis is usually a statement of no relation between variables or
+no effect of an experimental manipulation. The p-value is the probability of
+observing an outcome or a more extreme outcome if the null hypothesis is true.
+Goodman ( 1993) provides an excellent review of the history of the p-value,
+which I draw upon here. Fisher’s approach focuses on measuring the strength
+of the evidence against the null hypothesis. He refers to the p-value as a “signif-
+icance probability ,” that is, the probability of observing data as least as extreme
+as the actual outcome when the null hypothesis is true: if the p-value is less
+than a threshold of say 5%, the test rejects the null hypothesis. In Fisher’s
+original framework, the p-value is not interpreted as the frequency of error if
+the experiment is repeated. Rather, it applies only to the data used in the test.
+This is a crucial philosophical point—because this approach applies only to the
+data under examination, inferences based on this approach may not generalize.
+Importantly , Fisher argues that thep-value should be used in conjunction with
+other types of evidence when available.
+As I explain in more detail below, the most basic mistake in using p-values
+is to assume that a test with a p-value of 5% implies that there is only a 5%
+chance that the null hypothesis is true. This is a mistake because a p-value is
+calculated under the assumption that the null hypothesis is correct.
+Neyman and Pearson (NP 1933) provide a different (and incompatible) frame-
+work that compares two hypotheses, the null and the alternative. Notice that
+in the original Fisher framework, there is no alternative hypothesis. NP intro-
+duce the idea of a Type I error (false positive rate, or rejecting the null when
+the null is true) and a Type II error (false negative rate, or failing to reject
+the null when the alternative is true). Their method focuses on a behavior or
+a decision-making rule, for example, rejecting the null and accepting the alter-
+native, based on the observed data. In this framework, the (false positive) error
+rate, α, is set based on the particular experimental situation before the test
+is conducted (e.g., calibration of an instrument designed to find defects in the
+manufacturing process). 3 The researcher then reports whether the test falls
+3 The error rate is formally known as the “size” of the test. However, the term “size” has at least
+two ambiguities: it can be confused with the sample size and it can be confused with the magnitude
+of the effect. Hence, I prefer not to use the term. The error rate is also sometimes referred to as
+the significance level, but there is a subtle difference between the significance level and the error
+rate. The significance level is the p-value threshold used to reject a null. The error rate is the level
+of Type I error observed in following a particular testing procedure. For example, in small samples
+we can still follow the t = 2.0 rule. We would reject the null if the p-value implied by a normal
+distribution is below 5%. In this case, the significance level would be 5%. However, the actual error
+rate for the test would be higher than 5% since in small samples the normal approximation to a
+t-statistic is inaccurate. In this example, the significance level would be different from the error
+--- PAGE 11 ---
+1408 The Journal of Finance R©
+into the critical region determined by the error rate α, for instance, p-value <
+0.05—not the particular magnitude of the p-value. NP’s motivation was likely
+to reject the null and accept the alternative if the p-value <α or to accept the
+null and reject the alternative if the p-value >α . However, aware of the limita-
+tions of their approach, NP observe that their framework “tells us nothing as
+t o w h e t h e r a p a r t i c u l a r c a s e H i s t r u e...” w h e n t h ep-value <α (p. 291). The
+key words here are “particular case.”
+Consider flipping a coin. The null hypothesis is that the coin is fair. Given
+that it is fair, we know what the null distribution looks like. Suppose we run a
+trial and it produces 10 heads in 10 flips. Under the null, the probability of that
+happening is 0.00097 ( =0.510). With a pre-established cutoff of 0.05, we reject
+the hypothesis that the coin is fair. Notice, however, that the magnitude of thep-
+value itself is not informative—the key is whether we are in the rejection region.
+However, I have described only one experiment. The result could be different
+in a second experiment. The argument in NP is that if you follow a certain
+behavior or rule and reject if p-value < 0.05, then over the long run you will
+have a 5% error rate. To see what this means, consider an example that comes
+from product quality testing. A company uses a machine to manufacture a part
+and employs a separate instrument for quality control. The quality control
+instrument has a tolerance that can be physically established. With a cutoff or
+alpha of 5%, we know that over many trials 5% of the parts will be identified as
+defective when they are, in fact, not defective. 4 So on any given day , a part that
+has p-value < 0.05 is thrown out. It might be the case that, on this particular
+day every single rejection decision is wrong. However, if this rule is followed
+over the long run, the company will make the right decision 95% of the time.
+Another example comes from a legal setting (Goodman ( 1999)). On any given
+day all innocent defendants may be convicted, but if the decision rule is followed
+over the long run, on average innocent people will be convicted only 5% of the
+time. These examples illustrate what NP meant by “particular case.”
+As I mention above, NP suggest that the error rate α be set according to
+the particular situation. As α is decreased, the Type II error rate will usually
+increase. Consider, for example, a household water heater failing because it is
+defective versus a jet engine failing because it is defective. In the case of the jet
+engine, we are willing to accept a lot of false positives (incorrectly label a part
+defective) to minimize chances of false negatives (miss detecting a defective
+part), so α is set to a higher level. The particular situation therefore dictates
+not only how low α will be set but also the Type II error rate.
+In sum, the NP approach is deductive and can best be thought of as a deci-
+sion rule that is useful if the decision is made many times. We assume that we
+know the true error rate, and if our observations fall into a critical region, we
+rate. However, in most situations, we would like the significance level to be exactly the same as the
+error rate. Another way to think about the difference is that the significance level is the desired
+level of Type I error whereas the error rate is the actual level of Type I error.
+4 I do not mention the power of the test, that is, the probability of correctly rejecting the null
+hypothesis, here because I am focusing on the false positive error rate.
+--- PAGE 12 ---
+Scientific Outlook in Finance 1409
+reject the null. Importantly , this approach is not informative about a “particular
+case”—it is valid over the long run. In contrast, the Fisher approach is induc-
+tive. We examine the evidence, and this evidence leads to an increased proba-
+bility of a conclusion. Again, Fisher thought of the p-value as only one input to
+be used in the decision-making process—but this input can change beliefs.
+There was a fierce debate between Fisher and NP . Over time, Fisher’s p-
+value has been embedded in the NP framework in a way that often obscures its
+original meaning. NP introduced the idea of the Type I error rate, which is the
+false positive rate in repetitive experiments. The p-value for a test statistic is
+compared to the Type I error threshold to determine the test outcome, creating
+a subtle link between the p-value and the Type I error rate. As a result, people
+often mistakenly describe the p-value as the Type I error rate.
+Interestingly , both approaches have the same goal: to provide an alternative
+to Bayesian decision making, which many considered too subjective because
+a prior belief has to be imposed before a test is conducted. While the two ap-
+proaches are incompatible, they are usually lumped together under the label of
+null hypothesis statistical testing (NHST). With years of confusion, the differ-
+ence between p-values, error rates, and significance levels has become blurred.
+Indeed, the very definition of p-value is now subject to confusion. For example,
+many incorrectly believe that p-values give the probability that the result could
+have occurred by chance alone.
+To illustrate the extent of the confusion, suppose you have an experimental
+hypothesis that U.S. public companies with small boards of directors outper-
+form companies with large boards. Y ou create two value-weighted portfolios
+and test for differences in mean returns (with a host of controls such as indus-
+try effects).5 The key parameter of interest, the mean performance difference, is
+significant with t = 2.7 (p-value = 0.01). Consider the following six statements
+(true/false):
+(i) Y ou have disproved the null hypothesis (no difference in mean perfor-
+mance).
+(ii) Y ou have found the probability of the null hypothesis being true.
+(iii) Y ou have proved the hypothesis that firms with small boards outperform
+firms with large boards.
+(iv) Y ou can deduce the probability of your hypothesis (small better than
+large) being true.
+(v) If you reject the null hypothesis (no difference), you know the probability
+that you are making a mistake.
+(vi) Y ou have a reliable finding in the sense that if, hypothetically , the ex-
+periment were repeated a large number of times, you would obtain a
+significant result 99% of the time.
+All six of these statements are “false.” 6 The main issues are as follows:
+5 For this illustration, I simplify the empirical tests. See Y ermack ( 1996) and Coles, Daniel, and
+Naveen (2008).
+6 I adapt this example from Gigerenzer ( 2004).
+--- PAGE 13 ---
+1410 The Journal of Finance R©
+(1) The p-value does not indicate whether the null hypothesis or the underly-
+ing experimental hypothesis is “true.” It is also incorrect to interpret the
+test as providing (1 – p-value)% confidence that the effect being tested is
+true. Hence, both (i) and (iii) are false.
+(2) The p-value indicates the probability of observing an effect,D, (or greater)
+given the null hypothesis H0 is true, that is, p(D|H0). It does not tell us
+p(H0|D), and hence (ii) is false.
+(3) The p-value says nothing about the experimental hypothesis being true
+or false, and hence (iv) is false. Question (v) also refers to the probability
+of a hypothesis that the p-value does not address, and hence (v) is false.
+(4) The complement of the p-value does not tell us the probability that a
+similar effect will hold up in the future unless we know the null is true—
+and we do not. Hence, (vi) is false.
+There are also a number of additional issues:
+(5) The p-value is routinely used to choose among specifications, for example,
+specification A has a lower p-value than specification B and hence we
+choose specification A. However, comparing p-values across specifications
+has no statistical meaning. The p-value for one specification does not tell
+us that the other specification is true.
+(6) A low p-value, while rejecting the null hypothesis, tells us little about
+the ability of the hypothesis to explain the data. For example, you might
+observe a low p-value but the model has a low R2.
+(7) Low p-values could result from failing to control for multiple testing.
+(8) Low p-values could result from selection and/or p-hacking.
+(9) Low p-values could result from a misspecified test.
+(10) P-values crucially depend on the amount of data. It has been well-known
+since Berkson (1938, 1942) that, with enough data, you can reject almost
+any null hypothesis.
+(11) P-values do not tell us about the size of the economic effect. 7
+Let me emphasize here the second point above: it is fundamentally impor-
+tant for researchers to answer the right question. A p-value tells us p(D|H).
+However, it is often interpreted incorrectly as indicating p(H|D). Carver (1978,
+pp. 384–385) colorfully illustrates how serious this mistake is as follows:
+What is the probability of obtaining a dead person (label this part D) given
+that the person was hanged (label this part H); this is, in symbol form,
+what is p(D|H)? Obviously , it will be very high, perhaps 0.97 or higher.
+Now, let us reverse the question. What is the probability that a person
+has been hanged (H), given that the person is dead (D); that is, what is
+p(H|D)? No one would be likely to make the mistake of substituting the
+first estimate (0.97) for the second (0.01); that is, to accept 0.97 as the
+7 A related issue is that an economically and statistically small change in a parameter may lead
+the parameter to change from “insignificant” to “significant.” See Gelman and Stern ( 2006).
+--- PAGE 14 ---
+Scientific Outlook in Finance 1411
+probability that a person has been hanged given that the person is dead.
+Even though this seems to be an unlikely mistake, it is exactly the kind
+of mistake that is made with interpretations of statistical significance
+testing—by analogy , calculated estimates of p(H|D) are interpreted as if
+they were estimates of p(D|H), when they are clearly not the same.
+The confusion surrounding the use of p-values has led to considerable dis-
+cussion among scientists (Nuzzo ( 2014)). Indeed, in an extraordinary move in
+2015, a social psychology journal banned the publication of p-values in any of
+their papers (Trafimow and Marks ( 2015)). Other scientific fields such as epi-
+demiology have also demonstrated an aversion to publishing p-values (Lang,
+Rothman, and Cann ( 1998)). Related concerns recently prompted an interven-
+tion by the American Statistical Association. 8
+A. The American Statistical Association’s Six Principles
+Concerned about the growing crisis in the conduct of scientific experiments, 9
+and the declining public confidence in the integrity of scientific experiments,
+the Board of Directors of the American Statistical Association tasked Ronald
+Wasserstein to assemble senior experts in the field with the goal of developing
+a statement that would help correct the course. In March 2016, the Association
+released “Statement on Statistical Significance and P-Values” (American Sta-
+tistical Association ( 2016)). The statement and associated paper (Wasserstein
+and Lazar (2016)) is a reaction to the perception that much of the scientific field
+misunderstands statistical significance, and that in many cases researchers are
+substituting p-values for scientific reasoning. The statement decries the fact
+that “the p-value has become a gatekeeper for whether work is publishable”
+and makes specific references to both p-hacking and data dredging (p. 1).
+Below I reproduce the key principles outlined in the statement and comment
+on each one in the context of our field.
+(1) P-values can indicate how incompatible the data are with a specified sta-
+tistical model. The specified statistical model might be the null hypothe-
+sis of no effect. For example, consider the null hypothesis that expected
+stock returns are constant. The alternative is that past returns predict
+future returns. A low p-value tells us that the observed data appear to
+be incompatible with the null hypothesis.
+(2) P-values do not measure the probability that the studied hypothesis is true,
+or the probability that the data were produced by random chance alone .
+Returning to the stock autocorrelation test, a low p-value is inconsistent
+with the hypothesis that expected returns are constant. A low p-value
+8 In a famous paper published in PLoS Medicine, Ioannidis ( 2005) argues that “most published
+research findings [in his and related fields] are false.” It is the most read and shared article in
+PLoS Medicine ’s history with 2.2 million views. Of course, as some argue, in medicine the stakes
+are higher than in financial economics: life or death.
+9 See also Gelman and Loken ( 2014).
+--- PAGE 15 ---
+1412 The Journal of Finance R©
+does not imply that the autocorrelation model is “true.” In addition, a
+high p-value does not mean that the hypothesis that expected returns
+are constant (i.e., stock returns are pure noise) is “true.” Many other
+tests (e.g., introducing other information like dividend yields) may show
+that the data are not consistent with the null hypothesis.
+(3) Scientific conclusions and business or policy decisions should not be based
+only on whether a p-value passes a specific threshold . It is rare that there
+is a clean dividing line between “true” and “false,” and a p-value should
+not be used as such a dividing line. Rather, it is crucial to account for
+other factors such as the plausibility of the theory and its assumptions,
+the quality of the data, and any other evidence that might be relevant for
+the study . Indeed, this point is explicitly recognized by Fisher (1925), who
+notes that p-values do not substitute for “critical examinations of general
+scientific questions, which would require the examination of much more
+extended data, and of other evidence . . . .”
+(4) Proper inference requires full reporting and transparency . Reporting se-
+lect results that have low p-values makes it impossible to interpret the
+analysis. Such practice amounts to p-hacking and borders on academic
+fraud. Indeed, the American Finance Association’s Code of Professional
+Conduct and Ethics states in Section 6d(4) that “Financial economists
+should not selectively report findings in ways that would mislead or de-
+ceive readers” ( 2016). For interpretation, it is essential that researchers
+reveal the full extent of all hypotheses tested. Internet appendices have
+made it easier to provide all test results.
+(5) A p-value, or statistical significance, does not measure the size of an effect
+or the importance of a result . On the size of an effect, I believe that fi-
+nancial economists do a much better job than researchers in other fields.
+Articles in finance journals routinely report both economic and statisti-
+cal significance. Economic significance is often described as the impact
+of moving from the first quartile to the third quartile of the distribu-
+tion of the variable in question (it should not be the impact of moving
+from the 1 st to the 99 th percentile). The size of an effect is often ignored
+or misconstrued in other fields. For example, a study published in the
+prestigious Proceedings of the National Academy of Science (PNAS)t h a t
+involved a large sample of over 19,000 married couples concluded that
+couples that met online were happier than those that met offline, with
+p-value < 0.0001, but a careful reading of the paper reveals that the
+size of the effect is tiny: the couples that met online scored 5.64/7.00
+while those that met offline scored 5.48/7.00 (Cacioppo et al. ( 2013)).10
+And misconstruing the size of an effect is routine in medicine (Hutton
+10 However, it is crucial to know the variation in happiness across couples. Cacioppo et al. ( 2013,
+p. 10,136) report that M = 5.64, SE = 0.02, and n = 5,349 for one group while M = 5.48, SE =
+0.01, n = 12,253 for the other group. If the mean is 5.64 and the standard error for the mean is
+0.02, then the individual standard error is about 0.02 × √5,349 = 1.4. So there is a lot of variation
+across individuals.
+--- PAGE 16 ---
+Scientific Outlook in Finance 1413
+(2010)). For instance, as a result of a large-scale study on the impact of
+statin drugs on nonfatal coronary events, an advertisement proclaimed
+that these drugs “reduce the risk of heart attack by 36%.” 11 Ye t t h e i n c i -
+dence of heart attacks reported in the study (Sever et al. ( 2003, table 3))
+was 2.7 per 100 among the placebo and 1.7 per 100 among the patients
+taking the statin. Thus, while the relative risk decreases by 36%, the
+absolute risk decreases by only 1%.
+While the reporting of economic significance is fairly routine in finance
+journals, it is common to see the effect of variables with a low p-value
+described using the word “strong.” It is possible, however, to observe a
+low p-value for an effect that explains only a modest part of the variation
+in the measure of interest.
+(6) By itself, a p-value does not provide a good measure of evidence regarding
+a model or hypothesis .Al o w p-value offers only weak evidence against
+the null hypothesis, and such evidence is especially weak if you believe
+that the incidence of the effect in question is rare (see Section VI below).
+Similarly , a highp-value does not imply that the null hypothesis is true. It
+is therefore important not to stop the analysis once a p-value is obtained.
+Potentially , additional data can be gathered to bolster confidence in the
+conclusions.
+III. P-hacking
+As I mention in the introduction, editors’ focus on publishing the most sig-
+nificant results can induce authors not to submit articles with weak results
+or to cherry-pick the results that they submit to a journal, that is, to engage
+in p-hacking. Focusing here on the latter, there are many forms of p-hacking,
+with some more egregious than others. For example, running thousands of
+correlations and reporting only the most significant one constitutes academic
+fraud. Such a practice is red flagged by the American Statistical Association
+(2016) and is contrary to the American Finance Association’s Code of Profes-
+sional Conduct and Ethics . A more subtle version of this type of p-hacking
+is studying correlations among, say , 11 variables and choosing to report only
+10 of the correlations. Unfortunately , not reporting all variables examined in
+empirical work is commonplace in financial economics.
+P-hacking is not limited to the reporting of individual explanatory variables.
+Often researchers investigate aggregation schemes. For example, suppose 11
+variables are tried and none pass the usual test for “significance.” Suppose
+further that various aggregations are tried and the sum of three of the 11 vari-
+ables passes the usual hurdle for significance. Only reporting this particular
+aggregation amounts to p-hacking.
+P-hacking also occurs when the researcher tries a number of statistical
+approaches (e.g., linear probability vs. Logit or Probit, panel regression vs.
+Fama-MacBeth (1973), Newey-West ( 1987) lag 1 vs. lag 4, different clustering
+11 A full-page ad appeared in the Wall Street Journal, November 6, 2007, p. A13.
+--- PAGE 17 ---
+1414 The Journal of Finance R©
+choices, different choices of instrumental variables) and reports the one with
+the most impressive “significance.” Indeed, self-serving reasoning often leads
+researchers to convince themselves that the most significant result is the one
+the researcher originally intended to examine.
+Data manipulation and exclusion can also lead to p-hacking. Researchers
+make many choices in terms of standardization, log or other transformations,
+winsorization, and outlier exclusion. If these choices lead to the most signif-
+icant results being presented, this is p-hacking. Similarly , the choice of data
+set can lead to p-hacking. For example, if the researcher reports a significant
+result using the 1970 to 2017 period and does not reveal that the same result
+is weaker in the 1960 to 2017 period, this is p-hacking. P-hacking is more diffi-
+cult to detect with proprietary data where replication is costly . If a researcher
+intends to hand-collect data on say 1,000 companies, starts to conduct analysis
+midway through the data collection, and stops the data collection upon finding
+a significant result, this too is p-hacking (Simonsohn, Nelson, and Simmons
+(2014), Head et al. ( 2015)).
+Indeed, researchers might not even know that their results reflect p-hacking.
+For example, delegating analysis to a research assistant may lead to p-hacking
+if the assistant searches for a result that they think the researcher will be
+“pleased” with.
+To gauge the degree of publication bias, one can look at the distribution
+of p-values. Both selection (file drawer effect) and p-hacking induce patterns
+in the distribution of p-values. If there is no effect (e.g., there is no reason
+for Y to be correlated with X), the p-value distribution should be flat (e.g., a
+10% probability of obtaining a p-value of 0.10 or less and a 2% probability of
+obtaining a p-value of 0.02 or less when the null hypothesis is true), as in the
+solid line in Panel A of Figure 4. For example, in my ticker symbol exercise, the
+distribution of p-values is flat. However, if there is an effect, the distribution is
+not flat (there are substantially higher probabilities of getting a p-value of 0.05
+than a p-value of 0.10 or 0.20), as shown in the solid curve in Panel B of Figure4.
+The dashed lines in Figure 4 show the effect of selection. If papers are not
+submitted to journals with marginal p-values (say 0.05 to 0.10), then the dis-
+tribution shifts downward to the right of 0.05 (dashed lines).
+Using this same type of analysis, Figure 5 shows the impact of p-hacking.
+The figure plots the same initial p-curves as in Figure 4 using solid lines
+and the impact of p-hacking using dashed lines. The area of interest is below
+a p-value of 0.05. In both panels, there are more results than expected just
+below the 0.05 threshold. Thus, as can be seen, p-hacking has a much different
+effect from selection: while selection decreases the number of papers published,
+p-hacking increases the number of “significant” results that are published.
+Using data from HLZ ( 2016), Figure 6 plots the distribution of p-values in
+factor studies. There is good news and bad news. The good news is that the
+curve is not flat, which is what you would expect to see if the null hypothesis of
+no factors were true. The bad news is that the selection effect is obvious, which
+is also evident in Figure 1, where a surprisingly small number of studies are
+--- PAGE 18 ---
+Scientific Outlook in Finance 1415
+0.00 0.02 0.04 0.06 0.08 0.10Frequency
+p-value
+0.00 0.02 0.04 0.06 0.08 0.10Frequency
+p-value
+Figure 4. Impact of selection (file drawer effect) on p-values. Panels from Head et al.
+(2015). The solid lines represent the distribution of p-values. The dashed lines show the impact of
+selection.
+published with 2.0 < t < 2.57. In effect, the p-value threshold for publication
+in factor studies is not 0.05 but 0.01 for top finance journals.
+IV . The Problem of Rare Incidence and Improbable Effects
+A rare occurrence is an event that occurs very infrequently , such as the on-
+set of a rare disease. An improbable occurrence is different; in this case, the
+effect is implausible. Both pose the same challenge to inference using tradi-
+tional statistical tools. In most areas of finance research, the likelihood that
+empirical researchers uncover a true causal relation is small. When guided by
+theory , the probability could be higher, but not by much given the multiplicity
+of theories available for each area of research and the fact that some theories
+are constructed to fit known facts.
+--- PAGE 19 ---
+1416 The Journal of Finance R©
+0 0.01 0.02 0.03 0.04 0.05Frequency
+p-value
+0 0 . 0 10 . 0 20 . 0 30 . 0 40 . 0 5Frequency
+p-value
+Figure 5. Impact of p-hacking on p-values. Panels from Head et al. ( 2015). The solid lines
+represent the distribution of p-values. The dashed lines show the impact of p-hacking.
+0
+0.1
+0.2
+0.3
+0.4
+0.5
+0.6
+0.7
+0.8
+0 0.01 0.02 0.03 0.04 0.05
+Frequency
+p-value
+Figure 6. The distribution of p-values in factor studies. Data from Harvey , Liu, and Zhu
+(2016).
+--- PAGE 20 ---
+Scientific Outlook in Finance 1417
+When a particular effect is unlikely , classical hypothesis testing often leads
+to severely biased testing outcomes. Unfortunately , such bias is generally not
+mentioned in empirical research. This may be changing after Bem’s ( 2011)
+positive finding on extrasensory perception published in a top journal drew
+many top statisticians’ critiques (e.g., Francis ( 2012), Ritchie, Wiseman, and
+French (2012)).
+I illustrate the problem with a rare incidence example from medical science.
+For women between the age of 40 and 50, breast cancer is a relatively rare
+event that impacts only 1% of this age group. The first-line test, a mammogram,
+is 90% accurate in diagnosing cancer. This is the “power” of the test, that is,
+the probability of correctly rejecting the null hypothesis of no cancer. Let us
+assume that the rate of false diagnosis, or the error rate, is 10%. Suppose a
+woman is told that the test is positive. What is the probability that this woman
+has breast cancer?
+Suppose that among 1,000 cases, 10 ( =1,000 × 1%) have breast cancer and
+the remaining 990 do not. For those with breast cancer, the rate of successful
+diagnosis is 90%, so 9 of 10 will be correctly diagnosed as having breast cancer.
+For those without breast cancer, 10% or 99 ( =990 × 10%) will be incorrectly
+identified as having breast cancer. The rate of incorrectly rejecting the null (or
+Type I error) is often referred to as the “error rate” of the test or the significance
+level.
+In this example, the error rate is a combination of the accuracy of the mam-
+mogram machine and our tolerance for false negatives (missed diagnoses).
+Thus, if we raise the significance level from, say , t > 1.6 to t > 2 (say 5%), this
+might mean that more people with cancer are misdiagnosed as free of cancer,
+while if we set the threshold so low that all 10 women with cancer are correctly
+diagnosed, there will be a huge number of false positives. 12
+If the mammogram machine has been running a long time, we can learn about
+its performance at various test thresholds. It might be the case that, over the
+long run, setting the threshold at t > 1.6 produces a 10% false positive rate.
+However, in most applications we do not have this luxury—we are considering
+a new data set or running a new test on a well-known data set.
+Turning back to the example, a total of 108 ( =9 + 99) patients test positive
+for cancer and the rate of false positives is 92% ( =99/(9 + 99)), even though
+individually the rate of false positives is only 10%. The high rate of false posi-
+tives in breast cancer diagnoses is a well-known issue in medical research that
+has spurred the development of enhanced mammogram tests that reduce this
+rate by increasing the power of the test.
+Consider another example. Nosek, Spies, and Motyl ( 2012) examine the
+hypothesis that political extremists see only black and white, literally .
+In an Internet-based experiment, they presented 1,979 participants with
+12 In general, there is no universal relation between a test’s power and the error rate. In most
+situations, power increases as the error rate increases. Even in the simplest testing scenario, where
+we test for the mean difference, the exact relationship between the error rate and the test’s power
+depends on the sample size.
+--- PAGE 21 ---
+1418 The Journal of Finance R©
+noncontroversial words that appeared in different shades of gray . The par-
+ticipants were asked to identify the shades of gray from a color gradient. De-
+termining the accuracy of the choice was straightforward because the color of
+each word had an exact match on the gradient.
+Following the experiment, the participants were classified into two groups—
+political moderates and political extremists. Moderates saw shades of gray
+more accurately than left - or right -wing extremists, with a p-value of 0.001
+providing strong evidence against the null hypothesis of no difference. Obvi-
+ously , this is a striking finding that potentially links physiology to political
+beliefs.
+Before submitting the paper for publication, however, the authors replicated
+the experiment using 1,300 additional participants. The replicationp-value was
+vastly different, at 0.59. As Nuzzo ( 2014, p. 151) writes, the “more implausible
+the hypothesis—telepathy , aliens, homeopathy—the greater the chance that
+the exciting finding is a false alarm, no matter what the p-value is.”
+What insight does the above discussion have for research in financial eco-
+nomics? The key takeaway is that the more improbable the effect, the more
+careful we have to be because there will be many false positives. Let π be the
+probability of encountering a true causal relationship. In the context of hy-
+pothesis testing, α denotes the significance level when the null is true and β
+denotes the power of the test (the probability that the test will reject the null
+when the alternative is true). If tests are independent, the expected fraction of
+false discoveries is given by
+Expected fraction of false discoveries = απ
+1−π β + α,
+where π1−π is the odds ratio of true versus false hypotheses.
+We can use the above formula to calibrate the false discovery rate for research
+in financial economics. As we often do in empirical research, we fix the test
+threshold α at a prespecified level (e.g., 5%). Holding α constant, the minimum
+level of the expected fraction of false discoveries is απ
+1−π +α , which is achieved
+when the test’s power (i.e., β) is 100%. However, if π is much smaller than α
+(i.e., the effect is rare), then this minimum level is approximately 1/(1 + π /α),
+which is close to one. Hence, if a true discovery is unlikely , then no matter
+how powerful the test is, the probability of a false discovery is high. This
+aggregate view of false discoveries in finance research, which is distinct from
+the usual concern for single-hypothesis tests, casts doubt on the credibility of
+many empirical findings.
+Table I reports false discovery rates for various degrees of unlikeliness for the
+effect in question and various significance levels for three levels of test power.
+Even when the test power is 100%, which means that all women with cancer
+are correctly diagnosed, the false positive rate is an alarming 83% at the 0.05
+level of significance.
+Among the many specifications in Table I, the significance level is nominal
+only when the odds of the null hypothesis being true are 1:1. How often do
+--- PAGE 22 ---
+Scientific Outlook in Finance 1419
+Table I
+The Rate of False Discovery Depends on Test Power and Error Rate
+This table shows the probability that the null hypothesis is true for three levels of power.
+Prior Beliefs (Odds, Null:Alternative)
+Long Shot Even Odds
+99-to-1 49-to-1 24-to-1 19-to-1 4-to-1 1-to-1
+0.01 0.02 0.04 0.05 0.20 0.50
+Panel A: Power = 1.00
+Significance level (α)
+0.100 0.91 0.83 0.71 0.66 0.29 0.09
+0.050 0.83 0.71 0.55 0.49 0.17 0.05
+0.010 0.50 0.33 0.19 0.16 0.04 0.01
+0.001 0.09 0.05 0.02 0.02 0.004 0.001
+Panel B: Power = 0.9
+Significance level (α)
+0.100 0.92 0.84 0.73 0.68 0.31 0.10
+0.050 0.85 0.73 0.57 0.51 0.18 0.05
+0.010 0.52 0.35 0.21 0.17 0.04 0.01
+0.001 0.10 0.05 0.03 0.02 0.004 0.001
+Panel C: Power = 0.8
+Significance level (α)
+0.100 0.93 0.86 0.75 0.70 0.33 0.11
+0.050 0.86 0.75 0.60 0.54 0.20 0.06
+0.010 0.55 0.38 0.23 0.19 0.05 0.01
+0.001 0.11 0.06 0.03 0.02 0.005 0.001
+we see such odds in empirical research in our field? Take, for example, the
+literature on return predictability . Among the many variables that researchers
+have explored, how many do we believe have 1:1 odds of being true return
+predictors before we look at the data? Very few. However, we do not take these
+prior beliefs into account when calculating and interpreting p-values. It is
+therefore not surprising to see that most of the factors identified as return
+predictors are dismissed in out -of-sample tests as in Welch and Goyal ( 2008).
+A more interesting exercise is to think about the time evolution of the rate of
+false discoveries for a particular strand of research. Take, for example, the dis-
+covery of anomalies. HLZ ( 2016) document an explosion of anomaly discovery
+over the last two decades. They argue that, under traditional single-hypothesis
+tests, the rate of false discoveries should also increase. The rationale is that the
+ex ante probability of running into a true anomaly should decline over time.
+There are several reasons for a declining rate of anomaly discovery . First,
+true anomalies should become more scarce over time as the low-hanging fruit
+has been picked. Second, as we run out of theories based on first principles, we
+rely more on specialized theories, which inevitably imply a lower rate of true
+--- PAGE 23 ---
+1420 The Journal of Finance R©
+discovery ex ante. Finally , relative to the large number of financial variables
+and firm characteristics that one can explore, the number of securities is
+limited.
+The discussion so far bears a simple Bayesian interpretation. If the prior
+probability of a true discovery is low, then the posterior probability is also
+likely to be low across a wide range of choices for error rates and test power.
+Such posterior probabilities, when compared to the often-reported frequentist
+p-values that are based on the particular hypotheses being analyzed, should
+be more helpful for researchers to guard against false discoveries from a popu-
+lation perspective.
+V . We Are All Bayesians
+If you are rational, then you are a Bayesian. The most rudimentary example
+of the link to rationality is Bayes’ Rule: we have some belief about an effect,
+we observe the data, and then we revise our belief. The key addition in the
+Bayesian statistical framework is incorporating prior beliefs. Indeed, if you
+accept the argument that the false positive rate should be higher for theories
+that are unlikely , then you have already adopted a fundamentally Bayesian
+line of reasoning.
+Let me motivate the use of prior beliefs with an example from a famous let-
+ter written by Leonard Savage in 1962 (see Greenhouse ( 2012) and Churchill
+(2014)). Consider three experiments. In the first experiment, a musicologist
+claims to be able to distinguish between pages of music written by Mozart or
+Haydn. Using 10 pairs of score pages, Mozart versus Haydn, the musicolo-
+gist identifies each one correctly . In the second experiment, an elderly woman
+claims that she can tell if milk was put in a tea cup before or after the hot tea
+was poured in. Again using 10 different trials, the woman identifies each one
+correctly . In the third experiment, a patron at a bar claims that alcohol helps
+him predict the future. Y ou conduct an experiment using 10 coin flips and the
+patron correctly guesses heads or tails for each flip.
+In each of these experiments, the p-value is less than 0.001 ( =1/210), which
+is highly significant under the usual standards. However, what you take away
+from each test should be different. In the first test, you know that the test
+subject is a musicologist. This is her area of expertise and there is little reason
+for her to make a false claim. Indeed, it is not even obvious that you need
+to run the experiment to verify her claim, but in doing so the experiment
+confirms what you already believe. In the second case, maybe you are initially
+skeptical of the claim, but the evidence convinces you. Personally , I remember
+my grandfather sending his tea back at a restaurant because he always asked
+for the tea bag to be put in the pot before the water was added; he knew when the
+server got it wrong. So in the second experiment, there is a shift in your beliefs
+given the outcome of the experiment. What about the third experiment? The
+claim that alcohol causes clairvoyance is preposterous. Thus, while the p-value
+is less than 0.001, you chalk this up to luck—such an occurrence should happen
+naturally once in every 1,024 trials—and your beliefs are largely unaffected.
+--- PAGE 24 ---
+Scientific Outlook in Finance 1421
+These simple examples illustrate two points. First, as I discuss earlier, if the
+effect is improbable (a drunk foretelling the future), there will be a lot of false
+positives using the standard NHST framework. Second, and more importantly ,
+what really counts is the ability of the test to change beliefs. In the first and
+third tests, beliefs do not change as a result of the evidence. In the second test,
+beliefs are updated.
+VI. The Bayesian Critique
+Most empirical research in financial economics is conducted in the classical
+mode. There are many reasons for this. For instance, many researchers are
+uncomfortable specifying prior beliefs, as the imposition of a prior may be
+arbitrary in that it impacts the results. The perceived computational burden
+is also higher under a Bayesian approach, as are the econometrics—not just to
+the researcher but also to the readers of the research.
+The longstanding debate on hypothesis testing between Bayesian and fre-
+quentist statisticians likely originated with Berkson’s ( 1938) observation that
+you can reject almost any null hypothesis with enough data. My goal is to ex-
+plore a few ideas that are easy to implement and that provide supplementary
+information to the usual test statistics. Before doing so, however, it is useful to
+review the objections that Bayesians have to NHST. 13
+(1) Probability is a long-run concept for a frequentist . The probability that
+comes out of the classical test assumes that we have many hypothetical
+samples and that the probability is the limiting frequency over these
+many samples. Using a Bayesian approach, no such assumption is nec-
+essary . The only data that are relevant are the data involved in the test.
+(2) There are issues with the structure of the hypothesis test . The null hy-
+pothesis is often set to zero. For example, we test mutual fund manager
+performance against a null of zero excess returns. Why zero? Similarly ,
+we compare the difference between two populations and start with the
+null that there is no difference—but they will never be exactly equal.
+Indeed, the null hypothesis is unlikely to ever be true (Cohen ( 1994)) and
+we are sure to reject the null hypothesis with enough data. In addition,
+under NHST, there is no direct inference on the alternative hypothesis.
+In my earlier example of autocorrelation in stock returns, NHST may
+reject the null hypothesis of no serial correlation but it cannot tell us
+whether the alternative hypothesis is true. Finally , what is so special
+about the significance level of 0.05? This is an arbitrary cutoff.
+(3) Prior information is ignored . This point is emphasized in Savage’s ex-
+amples involving the musicologist, the tea drinker, and the bar patron.
+There is no way to formally incorporate prior information into the clas-
+sical approach.
+13 This list comes in part from http://www.stats.org.uk/statistical-inference/, which also contains
+an extensive bibliography .
+--- PAGE 25 ---
+1422 The Journal of Finance R©
+(4) P-values are subject to manipulation . Earlier I presented a p-hacking ex-
+ample where a researcher intending to hand-collect information on 1,000
+companies stops upon finding “significant” results. Using the Bayesian
+approach may not necessarily cure this problem—a Bayesian might
+also stop data collection in the middle of the collection process—but a
+Bayesian might use one part of the data to inform additional analy-
+sis of another part of the data (Jarosz and Wiley ( 2014)). Of course,
+the Bayesian chooses the prior, which some might consider the ultimate
+“hack.” However, the prior is transparent and skeptical readers can use
+whatever prior they think is appropriate.
+(5) P-values do not really answer the right question . As I emphasized earlier,
+p-values do not tell us the probability of the null hypothesis being true
+given the data, p(H0|D). Rather, they simply indicate the probability
+with which the particular evidence will arise if the null hypothesis is
+true, p(D|H0) (Carver ( 1978)).
+VII. A Compromise
+Let us begin with a not -so-modest proposal, namely , the full-blown Bayesian
+approach. Using this approach, we first take prior information into account by
+specifying a prior on all possible hypotheses—for each hypothesis, we calculate
+the data likelihood given the null. Then, using Bayes’s theorem, we derive the
+posterior probability for each hypothesis. The full-blown Bayesian approach
+results in a probabilistic assessment of all hypotheses given the data and thus
+involves inductive reasoning.
+The downside of this approach is that it requires a prior, which is often hard
+to come by . This raises the question of whether we can avoid using a prior and
+still enjoy the advantages of the Bayesian approach.
+The original NP framework, which requires that the researcher specify both
+a null and an alternative hypothesis, partly achieves this. It shares several
+features of the full Bayesian model. For example, the NP test statistic—the
+likelihood ratio—weighs the likelihood of the data under the null against the
+likelihood under the alternative. This is similar to the Bayesian approach where
+the likelihood ratio is used to adjust the ratio of the prior likelihood under both
+the null and the alternative. But there are important differences between the
+NP and the full Bayesian approaches. In particular, the NP approach relies on
+the distribution of the test statistic under the null hypothesis to make infer-
+ences and does not provide a probabilistic assessment of the relative likelihood
+of the null and the alternative. As such, it inherently involves deductive rea-
+soning.14
+Unfortunately , we usually do not have well-specified alternatives in financial
+economics. As a result, use of the NP approach is limited. This begs the question
+14 Under the NP approach, if the null is true, we are unlikely to observe the data so we reject
+the premise that the null is true. This is deductive reasoning. Under the Bayesian approach, given
+the data, we assign probabilities to different premises. This is inductive reasoning.

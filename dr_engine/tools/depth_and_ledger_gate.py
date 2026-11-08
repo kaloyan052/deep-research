@@ -715,8 +715,10 @@ def export_verified_report(
 
     att_data = {
         "study_dir": sdir.name,
-        "protocol_version": PROTOCOL_VERSION_V13 if getattr(rep, "v13_protocol_active", False) else (
-            "12.0" if getattr(rep, "v12_protocol_active", False) else "legacy"
+        "protocol_version": "14.1" if getattr(rep, "v14_protocol_active", False) else (
+            PROTOCOL_VERSION_V13 if getattr(rep, "v13_protocol_active", False) else (
+                "12.0" if getattr(rep, "v12_protocol_active", False) else "legacy"
+            )
         ),
         "body_sha256": body_sha,
         "ei_score": getattr(rep, "epistemic_index", getattr(rep, "ei_score", 0.0)),

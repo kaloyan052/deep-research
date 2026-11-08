@@ -1,0 +1,19 @@
+pydantic>=2.10.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+rich>=13.0.0
+ddgs>=9.0.0
+google-genai>=2.30.0
+openai>=1.50.0
+tavily-python>=0.8.0
+python-dotenv>=1.0.0
+# Optional: science CLIs use polite-http if installed, else a stdlib fallback
+# polite-http>=0.1.3
+# Optional: PDF text for verify_citations.py
+# pymupdf>=1.24
+# v14.1 Executable Colab Notebook & Headless Verification
+nbformat>=5.9
+nbclient>=0.9
+ipykernel>=6.29
+scipy>=1.11
+matplotlib>=3.8

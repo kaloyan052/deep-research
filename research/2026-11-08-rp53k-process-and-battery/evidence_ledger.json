@@ -1,0 +1,162 @@
+[
+  {
+    "id": "E001",
+    "source": "S034",
+    "source_url": "https://tevgeniou.github.io/EquityRiskFactors/bibliography/AcademicReviewFactor.pdf",
+    "title": "Does Academic Research Destroy Stock Return Predictability? (McLean, Pontiff 2016)",
+    "tier": "T1",
+    "quote": "Portfolio returns are 26% lower out-of-sample and 58% lower post-publication.",
+    "char_len": 77,
+    "snapshot_sha256": "cc4a550068cee8bba3630fb7bb072901ea5c9ba26c6a5f623d441c53987ab7ff"
+  },
+  {
+    "id": "E002",
+    "source": "S034",
+    "source_url": "https://tevgeniou.github.io/EquityRiskFactors/bibliography/AcademicReviewFactor.pdf",
+    "title": "Does Academic Research Destroy Stock Return Predictability? (McLean, Pontiff 2016)",
+    "tier": "T1",
+    "quote": "average predictor's long-short return shrinks 58% post-publication.",
+    "char_len": 67,
+    "snapshot_sha256": "cc4a550068cee8bba3630fb7bb072901ea5c9ba26c6a5f623d441c53987ab7ff"
+  },
+  {
+    "id": "E003",
+    "source": "S031",
+    "source_url": "https://faculty.fuqua.duke.edu/~charvey/Research/Published_Papers/P118_and_the_cross.pdf",
+    "title": "... and the Cross-Section of Expected Returns (Harvey, Liu, Zhu 2016)",
+    "tier": "T1",
+    "quote": "with a t-statistic greater than 3.0.We argue that most claimed research findings in financial economicsarelikelyfalse.",
+    "char_len": 118,
+    "snapshot_sha256": "9bd681d59fd8b2c321ff8065caeb949b2fe6a23a86dbe71afa225397049289f5"
+  },
+  {
+    "id": "E004",
+    "source": "S032",
+    "source_url": "https://www.nber.org/papers/w23394.pdf",
+    "title": "Replicating Anomalies (Hou, Xue, Zhang 2020 NBER w23394)",
+    "tier": "T1",
+    "quote": "286 anomalies (64%) including 95 out of 102 liquidity variables (93%) are insignificant at the conventional 5% level.",
+    "char_len": 117,
+    "snapshot_sha256": "d38830cf594b759bd65ccb07e5fe8de856d81aea3d5a07f8d5c34d09fca11a8d"
+  },
+  {
+    "id": "E005",
+    "source": "S032",
+    "source_url": "https://www.nber.org/papers/w23394.pdf",
+    "title": "Replicating Anomalies (Hou, Xue, Zhang 2020 NBER w23394)",
+    "tier": "T1",
+    "quote": "number of insignificance to 380 (85%). Even for the 161 significant anomalies, their magnitudes are often much lower than originally reported.",
+    "char_len": 142,
+    "snapshot_sha256": "d38830cf594b759bd65ccb07e5fe8de856d81aea3d5a07f8d5c34d09fca11a8d"
+  },
+  {
+    "id": "E006",
+    "source": "S042",
+    "source_url": "https://www.federalreserve.gov/econres/feds/files/2021-037pap.pdf",
+    "title": "Open Source Cross-Sectional Asset Pricing",
+    "tier": "T1",
+    "quote": "massive replication themselves using our code at https://github.com/OpenSourceAP/CrossSection.",
+    "char_len": 94,
+    "snapshot_sha256": "96cafee635d8617d6378f3b39ca9abc6374072a5c106eb2c1f630b9dd7b024f4"
+  },
+  {
+    "id": "E007",
+    "source": "S042",
+    "source_url": "https://www.federalreserve.gov/econres/feds/files/2021-037pap.pdf",
+    "title": "Open Source Cross-Sectional Asset Pricing",
+    "tier": "T1",
+    "quote": "A regression of reproduced t-stats on original long- short t-stats finds a slope of 0.90 and anR2 of 83%.",
+    "char_len": 105,
+    "snapshot_sha256": "96cafee635d8617d6378f3b39ca9abc6374072a5c106eb2c1f630b9dd7b024f4"
+  },
+  {
+    "id": "E008",
+    "source": "S033",
+    "source_url": "https://www.nber.org/papers/w28432.pdf",
+    "title": "Is There a Replication Crisis in Finance? (Jensen, Kelly, Pedersen 2023 NBER w28432)",
+    "tier": "T1",
+    "quote": "USfactorreturns\"are26%lowerout-of-sampleand58% lower post-publication",
+    "char_len": 69,
+    "snapshot_sha256": "ac98f2d8f2e48889f4bddaedee4ad3090714a68a3fa981fe6b95f4fab090f575"
+  },
+  {
+    "id": "E009",
+    "source": "S044",
+    "source_url": "https://www.nber.org/system/files/working_papers/w20721/w20721.pdf",
+    "title": "A Taxonomy of Anomalies and Their Trading Costs",
+    "tier": "T1",
+    "quote": "transaction costs reduce the strategies' profitability and its associated statistical significance",
+    "char_len": 98,
+    "snapshot_sha256": "cf7c94994d8bf7e9bee8262ca6db3f24836abb209597491633a3550d53f5fe72"
+  },
+  {
+    "id": "E010",
+    "source": "S043",
+    "source_url": "https://pages.stern.nyu.edu/~lpederse/papers/TimeSeriesMomentum.pdf",
+    "title": "Time Series Momentum",
+    "tier": "T1",
+    "quote": "58 liquid instruments we consider",
+    "char_len": 33,
+    "snapshot_sha256": "f234262347558e4f1f45af89c1a58fcacaa45ecfddc2122707c055db419dc353"
+  },
+  {
+    "id": "E011",
+    "source": "S045",
+    "source_url": "https://warwick.ac.uk/fac/soc/wbs/subjects/finance/events/recentevents/pastevents/behaviouralfinance1day/uppal_paper_06.pdf",
+    "title": "Optimal Versus Naive Diversification: How Inefficient is the 1/N Portfolio Strategy?",
+    "tier": "T1",
+    "quote": "higher Sharpe ratio and lower turnover than the policies suggested by both the static and the dynamic models",
+    "char_len": 108,
+    "snapshot_sha256": "4ad6178cad1670539a2690667998b2667b7bb7e008cdf46e3921ef1ef4dfaaaa"
+  },
+  {
+    "id": "E012",
+    "source": "S046",
+    "source_url": "https://people.duke.edu/~charvey/Research/Published_Papers/P131_The_scientific_outlook.pdf",
+    "title": "Presidential Address: The Scientific Outlook in Financial Economics",
+    "tier": "T1",
+    "quote": "prior beliefs in financial eco- nomics than in other scientific fields where priors are diffuse",
+    "char_len": 95,
+    "snapshot_sha256": "bd40ad06a1fb718994f98357ac9d7ae7494f530ba2fb2ef4284f3c74901d4563"
+  },
+  {
+    "id": "E013",
+    "source": "S047",
+    "source_url": "https://abfer.org/media/abfer-events-2018/annual-conference/investment-finance/21-1-P-tarun-chordia.pdf",
+    "title": "Anomalies and False Rejections / Evidence from Two Million Strategies",
+    "tier": "T1",
+    "quote": "Evidence from Two Million Strategies",
+    "char_len": 36,
+    "snapshot_sha256": "892cd08dacaf24e0f357c98d2c45a499fba3eb300c5734cbceb27aa7a6241bf2"
+  },
+  {
+    "id": "E014",
+    "source": "S047",
+    "source_url": "https://abfer.org/media/abfer-events-2018/annual-conference/investment-finance/21-1-P-tarun-chordia.pdf",
+    "title": "Anomalies and False Rejections / Evidence from Two Million Strategies",
+    "tier": "T1",
+    "quote": "Recommend a t-statistic hurdle of 3",
+    "char_len": 35,
+    "snapshot_sha256": "892cd08dacaf24e0f357c98d2c45a499fba3eb300c5734cbceb27aa7a6241bf2"
+  },
+  {
+    "id": "E015",
+    "source": "S037",
+    "source_url": "https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf",
+    "title": "The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting and Non-Normality (Bailey & Lopez de Prado 2014)",
+    "tier": "T1",
+    "quote": "The Deflated Sharpe Ratio (DSR) corrects for two leading sources of performance inflation: Selection bias under multiple testing and non-Normally distributed returns.",
+    "char_len": 166,
+    "snapshot_sha256": "5e4fc027f835d2fd99dc0005be00c3d4f6593afa4b1cd12ef6c891a7e00b1fbe"
+  },
+  {
+    "id": "E016",
+    "source": "S036",
+    "source_url": "https://www.davidhbailey.com/dhbpapers/overfit-tools.pdf",
+    "title": "Online Tools for Demonstration of Backtest Overfitting (Bailey, Borwein, Salehipour, Lopez de Prado, Zhu 2015)",
+    "tier": "T1",
+    "quote": "Backtest overfitting is now thought to be a primary reason why quantitativeinvestmentmodelsandstrategiesthatlookgoodonpaperoftendisappointinpractice.",
+    "char_len": 149,
+    "snapshot_sha256": "3507a71639f4e814fd0a25bb48d0ee66a390a3fe5f4b4bfbf80c832a2b8e6f78"
+  }
+]

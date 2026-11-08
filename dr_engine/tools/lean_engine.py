@@ -202,7 +202,7 @@ SPEC_LINE_RE = re.compile(
 
 
 # Max characters an `...` ellipsis may span inside a verbatim quote.
-MAX_ELLIPSIS_GAP = 2000
+MAX_ELLIPSIS_GAP = 500
 
 # v14.1 — hard floors for an admissible verbatim quote (fail-closed).
 MIN_QUOTE_CHARS = 20
@@ -1615,11 +1615,10 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
     res.failures.append(f"E2: only {res.n_evidence} verified evidence records; need >= 3")
 
   # v14.1 Rule B14: bind report.md to the pre-synthesis evidence locker.
-  # Enforced whenever a ledger exists or the manifest declares >= 14.1,
-  # so legacy (< 14.0) studies without a ledger remain unaffected.
+  # Enforced whenever a ledger exists, or protocol >= 13.0 (closing the downgrade loophole).
   _v = str(manifest.get("protocol_version", "")).split(".")
-  v14plus = len(_v) >= 1 and _v[0].isdigit() and int(_v[0]) >= 14
-  if v14plus or (d / "evidence_ledger.json").exists():
+  v13plus = len(_v) >= 1 and _v[0].isdigit() and int(_v[0]) >= 13
+  if v13plus or (d / "evidence_ledger.json").exists():
     from dr_engine.tools.evidence_locker import verify_report_against_ledger
     res.failures.extend(verify_report_against_ledger(d, manifest, raw_report))
 
@@ -1722,9 +1721,9 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
       )
 
   # v14.1 Rule B13 — fail-closed (AGENTS.md Rule B0).
-  from dr_engine.tools.desk_memory import scan_text_against_desk_graveyard
-  from dr_engine.tools.traps import check_known_traps_in_text
   try:
+    from dr_engine.tools.desk_memory import scan_text_against_desk_graveyard
+    from dr_engine.tools.traps import check_known_traps_in_text
     desk_violations = scan_text_against_desk_graveyard(raw_report)
     trap_violations = check_known_traps_in_text(raw_report)
   except Exception as e:
@@ -2040,6 +2039,10 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
       protocol_active=v13_active,
   )
   res.v13_protocol_active = bool(v13_active)
+  res.v14_protocol_active = bool(
+      (len(_v) >= 1 and _v[0].isdigit() and int(_v[0]) >= 14)
+      or (d / "evidence_ledger.json").exists()
+  )
   res.depth_diagnostics = dict(v13_diag.get("depth") or {})
   res.ledger_diagnostics = dict(v13_diag.get("ledger") or {})
   res.failures.extend(v13_fail)
@@ -2312,10 +2315,47 @@ def cmd_colab(args: argparse.Namespace) -> int:
         return 1
 
 
+def cmd_colab_verify(args: argparse.Namespace) -> int:
+    """Headlessly executes research_notebook.ipynb and writes notebook_execution_receipt.json."""
+    from dr_engine.tools.notebook_verifier import verify_notebook
+    study_path = Path(args.dir)
+    nb_path = study_path / "research_notebook.ipynb"
+    if not nb_path.exists():
+        print(f"[COLAB-VERIFY REFUSED] {nb_path} does not exist. Run `lean_engine.py colab` first.")
+        return 1
+    receipt_p = Path(getattr(args, "receipt", None) or (study_path / "notebook_execution_receipt.json"))
+    receipt = verify_notebook(nb_path, timeout=getattr(args, "timeout", 300))
+    receipt_p.parent.mkdir(parents=True, exist_ok=True)
+    receipt_p.write_text(json.dumps(receipt, indent=2, ensure_ascii=False), encoding="utf-8")
+    if receipt.get("passed"):
+        print(f"[COLAB-VERIFY OK] Notebook executed headlessly with 0 errors -> {receipt_p}")
+        return 0
+    else:
+        print(f"[COLAB-VERIFY FAIL] Notebook execution errors: {receipt.get('cell_errors') or receipt.get('error')}")
+        return 1
+
+
 def cmd_export(args: argparse.Namespace) -> int:
   """Rule R21 gated deliverable exporter: verifies study before writing to `reports/`."""
-  strict13 = bool(getattr(args, "strict_v13", False))
-  strict12 = bool(getattr(args, "strict_v12", False))
+  sdir = Path(args.dir)
+  nb_p = sdir / "research_notebook.ipynb"
+  if nb_p.exists():
+      rc_p = sdir / "notebook_execution_receipt.json"
+      if not rc_p.exists():
+          print(f"[EXPORT REFUSED] {nb_p} exists but notebook_execution_receipt.json missing. Run `lean_engine.py colab-verify --dir {args.dir}` first.")
+          return 1
+      try:
+          rec = json.loads(rc_p.read_text(encoding="utf-8"))
+          if not rec.get("passed"):
+              print(f"[EXPORT REFUSED] Notebook execution receipt has errors: {rec.get('cell_errors')}")
+              return 1
+      except Exception as e:
+          print(f"[EXPORT REFUSED] Unreadable notebook_execution_receipt.json: {e}")
+          return 1
+
+  strict14 = bool(getattr(args, "strict_v14", False))
+  strict13 = bool(getattr(args, "strict_v13", False)) or strict14
+  strict12 = bool(getattr(args, "strict_v12", False)) or strict13
   ok, fails, dest = export_verified_report(
       args.dir,
       args.out,
@@ -2498,6 +2538,8 @@ def main(argv: list[str] | None = None) -> int:
     p_ver.add_argument("--strict-v13", action="store_true",
                         help="Force v13 Deep-Digging (R19), Claim-Link-Quote Ledger (R20) "
                              "& Anti-Hallucination (B12) gates on any study")
+    p_ver.add_argument("--strict-v14", action="store_true",
+                        help="Force v14 Evidence Locker (B14) & strict pre-synthesis gates on any study")
     p_ver.set_defaults(fn=cmd_verify)
 
     p_exp = sub.add_parser("export", help="Verify study and export attested report to reports/")
@@ -2505,6 +2547,7 @@ def main(argv: list[str] | None = None) -> int:
     p_exp.add_argument("--out", required=True, help="Destination path in reports/<NAME>.md")
     p_exp.add_argument("--strict-v12", action="store_true")
     p_exp.add_argument("--strict-v13", action="store_true")
+    p_exp.add_argument("--strict-v14", action="store_true")
     p_exp.set_defaults(fn=cmd_export)
 
     p_pref = sub.add_parser("preflight", help="Check study against desk memory graveyard and invariants")
@@ -2520,6 +2563,12 @@ def main(argv: list[str] | None = None) -> int:
     p_col.add_argument("--dir", required=True)
     p_col.add_argument("--out", help="Optional output notebook path")
     p_col.set_defaults(fn=cmd_colab)
+
+    p_col_ver = sub.add_parser("colab-verify", help="Execute notebook headlessly and write execution receipt")
+    p_col_ver.add_argument("--dir", required=True)
+    p_col_ver.add_argument("--receipt", help="Optional output receipt path")
+    p_col_ver.add_argument("--timeout", type=int, default=300)
+    p_col_ver.set_defaults(fn=cmd_colab_verify)
 
     p_aud = sub.add_parser("audit-deliverables", help="Audit reports/ against unverified standalone stubs")
     p_aud.add_argument("--reports-dir", default="reports")

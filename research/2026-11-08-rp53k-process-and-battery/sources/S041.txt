@@ -1,0 +1,106 @@
+# MASTER QUANTITATIVE ARCHITECTURE & REPOSITORY DIRECTIVE
+**Project:** Systematic Prop-Firm Trading Engine (Fledge Alpha / Trading Buff)  
+**Last synced:** 2026-10-07 (supersedes the 2026-10-06 version: Pillar 2 removed, live bot = audited v3, venue = FTMO only)  
+**Target Capitalization:** €2,000–€3,000 pool. **FTMO only** for a Bulgarian resident: MyFundedFutures and Tradeify list Bulgaria as restricted (official pages, checked 2026-10-07); Apex is not on its list and Topstep is not confirmed, but both were economically inferior to FTMO in the 2026-10-06 venue simulation.  
+**Monthly Income Target:** Sustainable, recurring €2,000–€3,000/month payout (realistic path with one validated edge: ~11 months median to the first €2k/month via a profit-funded ladder up to 4×100K; see `HV_PORTFOLIO_2026-10-06.md`).  
+**Primary Execution Stack:** MetaTrader 5 (Python API, FTMO CFD `US100.cash`)  
+**Environment:** Windows 11 | Python 3.12 (Vectorized numpy, pandas, scipy, statsmodels)  
+**Repository Root:** `c:\Users\kaloy\Desktop\trading buff\`  
+
+---
+
+## 1. STRATEGIC MISSION & CAPITAL ALLOCATION
+
+We operate an institutional-grade algorithmic research and execution operation designed for retail proprietary trading firms.
+
+### Target venue: FTMO 2-Step 100K
+- **Fee €540**, refundable with the first payout. Targets: Phase 1 +10%, Phase 2 +5%. **Max loss 10% STATIC**, daily loss 5% (resets 00:00 Prague time), min 4 trading days, split 80% (90% after the Scaling Plan).
+- **FTMO Scaling Plan (ftmo.com, checked 2026-10-07):** ≥4-month cycle, ≥10% net profit, ≥2 processed rewards → +25% balance, 90% split. With our edge at 1.25% funded risk (~0.96%/month) the 10%-in-4-months bar is NOT reachable; do not plan on it.
+- **Budget rule:** 1× 100K now; max 3 repurchases (€1,620) then stop and reassess; each payout ≥ €540 over the starting budget funds the next 100K (staggered ≥1 month), up to 4 accounts.
+
+### Audited bot risk layer (live since 2026-10-07)
+- Risk per trade: **2.0% in the evaluation, 1.25% when funded** (`BOT_PHASE=eval|funded`); 1.5% when total drawdown ≤ −7%; **no new entries at −9%**.
+- **Hard daily kill-switch −4% of the START balance** (−3% funded): −$400 on the $10K demo, −$4,000 on 100K. Pre-trade check: day P&L − 1.3×risk$ must stay above the kill level.
+- Max 2 trades/day; the 2nd only if day P&L ≥ −1.4% of the start balance. Max spread to enter 2.5 pts.
+- Mandatory session flat at 15:45 ET (no overnight/weekend). News blackout ±10 min around Tier-1 USD releases (FTMO Clause 7.3): every blackout blocks the entry (no tightened-SL trades).
+- Lots = risk$ / (1.5×ATR × $ per point per lot); 2% on 100K ≈ 26 lots at a 76-pt stop, 1.25% ≈ 16 lots.
+
+### Execution workflow
+- **Current phase (since 2026-10-07 00:55 Sofia):** `_mission\run_bot_audited.bat liveauto` runs `mt5_portfolio_bot_audited.py` under `watchdog_audited.py` on **FTMO Demo #1514847714** ($10,000, real demo orders, `US100.cash`). The old `mt5_portfolio_bot.py` (v2, US500) is stopped.
+- Observation: ≥10 trading days and ≥3 filled trades, **no rule changes**. Go/no-go gates for buying the 100K: `docs/DEMO_TO_100K_GATES_2026-10-07.md`. **No purchase before the gates and an explicit user OK.**
+
+---
+
+## 2. THE ALPHA LANDSCAPE: ONE VALIDATED ENGINE, A LARGE GRAVEYARD
+
+### A. The only surviving frozen pillar
+
+**Pillar 1: Nasdaq-100 M15 Institutional 3-Bar Displacement (RTH only)**
+- **Instrument:** `US100.cash` (FTMO MT5). Validated on NAS100 CFD 2005–2026 and on MNQ futures 2021–26.
+- **Rule (exactly as audited, `_mission/audited_signal.py`):** 15m RTH bars built from 1m (09:30–15:45 ET); ATR14 = mean true range; bull: body[t−1] ≥ 1.0×ATR[t−1] AND low[t] − high[t−2] ≥ 0.4×ATR[t−1] AND close[t]−close[t−20] > 0 (bear mirrored). Signal bar must START 10:00–14:30 ET; entry at the next bar open; **SL 1.5×ATR, TP 2.5×ATR (1.67R)**; flat 15:45 ET; one position at a time; max 2 entries/day. **No volume filter, no adaptive BODY_K, no trailing stop, no break-even** (all rejected by prereg tests).
+- **Evidence (ledger `_nas_paths_trades_20261006.csv`, n = 2,842, 10.97 trades/month):** gross +0.095R/trade; at the US100.cash cost of 0.022R: +0.073R/trade, **≈ +0.80R/month, t = +3.48**; split 2005–20 / 2021–26: t = +2.61 / +2.44; 2×COST (0.044R): t = +2.43 (halves +1.71 / +1.91). Exits: 42% SL, 26% TP, 32% flat. Block-bootstrap/MNQ audit: t = +3.13.
+- **NQ-specific:** the same rule fails on ES (2015–20 t = −0.66), US30 (t = −0.73), US2000 (t = −0.97), DAX (t = +0.15), NQ London session (t = −3.41), and NQ 5m is gross-only (net t = +1.72). Do not transplant it.
+- **Bot:** `_mission/mt5_portfolio_bot_audited.py` + `_mission/audited_signal.py` (replay vs ledger: 2,842/2,842 entries = 100%; live-path 598/600; offline MT5 stub 299/300).
+
+### B. Removed: Pillar 2 `OUT6_10D` (CME micro-FX 10-day reversal) — KILLED / INADMISSIBLE
+- Per `CURRENT_STATUS.md` (2026-10-03): the E7 de-mean bias inflated the BREAKTHROUGH_REPORT metrics, RAW t-stats fail Gate 1 (t < 2.0), and overnight holds incur swap drag on a CFD venue. RUT10 and OUT6-21D were killed on 2026-09-25. The earlier "Sharpe 0.81 / ρ = −0.003" claims are NOT a basis for sizing or planning. No Pillar-2 automation work.
+
+### C. The Graveyard of Forensically Killed Strategies (DO NOT RE-OPEN)
+1. ❌ **Gold & Crude intraday:** Asian Sweep (t_2x −26.06), Asian Breakout (−15.89), Crude NY ORB/Displacement (t_2x −2.31); gold London ORB (gross t +4.56 but net +0.32, 2×COST −3.92); spread $0.50 gold / $0.04 oil erases the edge.
+2. ❌ **MES/MNQ intraday pairs:** ADF p = 0.092, half-life 38 days, t_2x −5.96.
+3. ❌ **European range / ORB breakouts (DAX, EURUSD, EU50, UK100) and ORB30 on NAS/SPX/US30/US2000/DAX/gold (HV battery A1–A7, 2026-10-06, honest clocks):** all KILL.
+4. ❌ **Overnight swing holding on CFDs:** swap/financing drag.
+5. ❌ **Displacement on other instruments/sessions** (US30, US2000, ES, DAX, NQ London) and **NQ 5m** (net t +1.72 < Bonferroni bar 2.58).
+6. ❌ **Trailing stop (TRAIL01) and EMA5 placebo variants** — rejected by prereg 2026-10-07. Rule stays 1:1 with the audit.
+7. ❌ **102 intraday research programs (P1–P102) + 10-test HV battery:** zero passed the mandatory gates. Intraday free-data universe is exhausted; any new edge needs new data or a new instrument class.
+8. ⚠ 17 research scripts used mis-localized clocks (data are stamped Chicago/New York/Berlin by instrument); their kill verdicts were re-confirmed with honest clocks on 2026-10-06. New tests use only `lab_utc.load_canonical_utc`.
+9. ❌ **FTMO Single-Stock CFDs (`PILLAR1_XFTMO01`, 2026-10-07):** 46 stocks, 4,548 trades, gross t=+0.36 (~0 edge), median spread 0.093R, net t=-6.53 -> KILL.
+10. ❌ **Reddit Leaderboard Scraping + LLM Cut-Limits ("My secret is theft", 2026-10-07):** Survivorship bias + overfitted ex-post cut-limits + FTMO ban on public EAs -> KILL.
+11. ❌ **Revelio 10-Year Linear Regression Channel (`xhSbYE7X4ZA`, 2026-10-07):** No stop-loss, 20-40% drawdowns violate FTMO limits, 4-12 mo hold time burns CFD swaps -> FTMO KILL. Full blueprint archived for personal spot investing (IBKR) in `prop_eur2k_lab/docs/REVELIO_10Y_REGRESSION_STRATEGY.md`.
+
+---
+
+## 3. THE 6 NON-NEGOTIABLE FORENSIC QUANT RULES
+
+Every research script, candidate model, and modification MUST comply. Failure on ANY rule equals immediate rejection (`FAIL ANYWHERE = FAIL`):
+
+1. **Rule 1 — Realistic Bid/Ask Friction & Commission:** no mid-price illusions. Futures: MES $2.25/trade, MNQ $1.50/trade. **US100.cash: spread 1.45 pt + ~0.25 pt slippage ≈ 0.022R at a ~76-pt stop.** Spot FX ≥1.5–2.0 pips + commission. Gold ≥$0.50 spread + commission.
+2. **Rule 2 — Zero Lookahead Bias:** signal on bar t−1 close; execution on bar t Open (`.shift(1)` / next open). Intrabar extremes cannot trigger entries before bar close.
+3. **Rule 3 — Strict Session & Timezone Pinning:** `ZoneInfo("America/New_York")` for US RTH, `ZoneInfo("Europe/Prague")` for FTMO day boundaries, UTC for FX. FTMO MT5 server clock = New York + 7 h.
+4. **Rule 4 — Canonical PnL:** Net = (exit_fill − entry_fill) × direction × multiplier − friction. Sign flipping is banned.
+5. **Rule 5 — 2xCOST Survival (Acid Test):** t_2x > 1.0 with spreads and commissions doubled.
+6. **Rule 6 — Chronological OOS Persistence:** t_OOS > 1.0, t_OOS / t_FIT > 0.5, win-rate drift < 10%, |ρ| < 0.20 vs Pillar 1. Multiple-testing bar: Bonferroni-adjusted t (≈2.5–2.6 for 4–10 tests), halves ≥ 1.0.
+
+---
+
+## 4. REPOSITORY ARCHITECTURE & DIRECTORY MAP
+
+- `_mission/`:
+  - `mt5_portfolio_bot_audited.py` + `audited_signal.py`: **production bot** (FTMO Demo, `US100.cash`); `watchdog_audited.py`, `run_bot_audited.bat` (sets `PORTFOLIO_SYMBOLS=US100.cash`, `BOT_PHASE`, `FTMO_START_BALANCE`; args `live` / `liveauto`); logs `live_portfolio_log_audited.csv`, `watchdog_audited.log`; state `bot_state_audited.json`; MAGIC 20261007.
+  - `mt5_portfolio_bot.py` (v2, US500, volume filter) + `watchdog.py`: **retired**, kept for reference. `stress_test_bot.py`, `news_calendar.json` still apply.
+- `prop_eur2k_lab/`:
+  - `_audit_nas_paths_20261006.py` + `_nas_paths_trades_20261006.csv`: audit ledger (2,842 trades) used for the replay test `_replay_audited_bot_20261007.py` and the offline MT5-stub test `_test_audited_bot_offline_20261007.py`.
+  - `_audit_prop_venues/ladder/economics_20261006.py`, `_hv_ftmo_speed_20261006.py`, `_hv_battery_20261006.py`, `_audit_p1_xinstr_20261006.py`, `_trail_placebo_20261007.py`: venue economics and the killed-idea batteries (+ `*_PREREG.md`).
+  - `_cost_per_R_screen_20261007.py`: spread-in-units-of-stop screen over owned index CFDs.
+  - `CANDIDATES.md`, `knowledge/SESSION-STATE.md`, `_assert_alpha_integrity.py`, `_mes_audit.py`, `_mnq_audit.py`.
+  - Superseded: `_audit_candidate_p2.py` (Pillar 2).
+- `quantlab/data/inbox/` (READ-ONLY): `cfd_m1/` (OANDA bid/ask 1m: NAS100, SPX500, US30, US2000, DE30, EU50, UK100, JP225, AU200), `cme_futures/` (1m ES/NQ/YM/RTY/CL/GC/...), `oanda_m1/` (FX, metals, oil), `equity/` (SPY/QQQ), `databento_mbo/`.
+- `quantlab/artifacts/global_trial_ledger.json`: 684,920 trials (2026-10-07).
+
+---
+
+## 5. YOUR ROLE & DIRECTIVES AS CLAUDE (OPUS / SONNET)
+
+You are the **Principal Quantitative Systems Architect & Research Auditor**.
+
+### Operating Principles
+1. **Vectorization:** never write slow Python loops over millions of bars; use numpy/pandas/scipy.
+2. **Empirical Ground Truth:** reject retail clichés; demand the 6 Forensic Rules. Report failures objectively.
+3. **Fail-Closed:** account survival and drawdown prevention above raw win rate. The live bot rules are frozen 1:1 with the audit; changes need a prereg and a new replay.
+4. **Code quality:** clean, self-contained scripts with Empirical Scorecard tables and ACCEPT / REJECT verdicts.
+
+### Priority Collaborative Tasks
+1. **Demo observation (2026-10-07 → ≥2026-10-21):** collect fills, spreads and slippage; run the gate scorecard; decide on the 1× FTMO 100K 2-Step purchase (user's explicit OK required).
+2. **Bot safety:** exactly one watchdog + one bot process; no `CLOCK_WARN` inside the entry window.
+3. **Second independent edge:** only with new data or a new instrument class (the owned intraday universe is exhausted); every test starts with a prereg and a cost screen (`_cost_per_R_screen_20261007.py`).
+4. **Knowledge hygiene:** keep this file, `CURRENT_STATUS.md` and `CANDIDATES.md` consistent (Pillar 2 was still listed as "proven" in the Project instructions until 2026-10-07).

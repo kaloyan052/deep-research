@@ -1,0 +1,94 @@
+Quant Alpha Fees | Transparent Pricing for Nasdaq-100 Investment Strategies
+top of page
+-
+Home
+-
+Suitability Assessment
+-
+Strategies
+-
+Nx1
+-
+Nx2
+-
+Nx3
+-
+Fees
+-
+About Us
+Create Account
+Log In
+Our fee structure is designed to align our interests with yours, scaling based on your invested capital and regulatory classification.​
+## Clients Categories
+### Category
+Testing Clients
+Non-Qualified Clients
+Qualified Clients
+### Account Size
+$35,000 – $50,000
+​$50,000 – $1,100,000
+Above $1,100,000
+### Fee Structure
+​1 year no advisory fees, then AUM fee only
+AUM fee only
+AUM fee plus performance fee
+## Fees by Strategy
+### Product
+Nx1
+Nx2
+Nx3
+Testing Clients
+### $35K–$50K
+1 Year No Fees
+1.0% AUM fee
+1.5% AUM fee
+2.0% AUM fee
+Non-Qualified Clients
+### $50K–$1.1M
+1.0% AUM fee
+1.5% AUM fee
+2.0% AUM fee
+Qualified Clients
+### >$1.1M
+0.75% AUM fee
++10% performance fee
+with 5% Hurdle Rate
+1.125% AUM fee
++15% performance fee
+with 7.5% Hurdle Rate
+1.5% AUM fee
++20% performance fee
+with 10% Hurdle Rate
+## Additional Details
+### Non-Qualified Clients
+Clients with assets less than $1,100,000 are charged only an annual AUM fee based on the selected strategy.
+No performance fees apply to Non-Qualified Clients.
+### Qualified Clients
+Clients with assets above $1,100,000 are charged both an annual AUM fee and a quarterly performance fee based on realized net profits.
+Performance fees are calculated quarterly and apply only to gains exceeding both a fixed annual hurdle rate and the client’s prior peak net asset value (high-water mark).
+## Notes
+We do not take custody of client assets as defined by SEC rules. All client accounts are opened directly under the client’s own name with our independent custodian, Interactive Brokers. While we deduct advisory fees, this is done in accordance with SEC custody rule exemptions, with client authorization and custodian invoicing.
+### Custody
+All advisory fees are deducted automatically from client accounts by Interactive Brokers according to the advisory agreement authorized by the client.
+### Fee Deduction
+Performance fees are charged only to clients who meet the definition of "Qualified Clients" under SEC regulations.
+### Performance Fees
+Fee schedules are subject to change with appropriate advance notice and consent from all affected clients.
+### Fee Changes
+Quant Alpha LLC
+### Quick Links
+Home
+Strategies
+Fees
+About Us
+### Contact Us
+support@quantalpha.net
+Quant Alpha LLC Nothing on this website is an offer, solicitation, or recommendation to buy or sell any security or investment product, or to engage Quant Alpha for advisory services. Any future advisory services will be made available only after Quant Alpha has obtained the required registration or authorization, and only to individuals and entities legally eligible to receive investment advice in their jurisdiction.
+All content on this website is for general informational purposes only. It does not constitute investment advice, a recommendation, or a complete description of any service. Any strategies, account holdings, model allocations, or performance information shown are illustrative only and should not be interpreted as personalized investment advice.
+Past performance is not a guarantee of future results. Investments involve risk, including the potential loss of all invested capital.
+By using this website, you agree to Quant Alpha's Terms of Use and Privacy Policy.
+© 2025 Quant Alpha LLC. All Rights Reserved.
+Disclosures
+Privacy Policy
+Terms of Use
+bottom of page

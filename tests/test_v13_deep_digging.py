@@ -221,6 +221,8 @@ def _build_compliant_v13_study(root: Path, *, compact_words: int | None = None) 
         + "\n```json:manifest\n" + json.dumps(manifest, indent=2) + "\n```\n"
     )
     (d / "report.md").write_text(report_md, encoding="utf-8")
+    from dr_engine.tools.evidence_locker import lock_evidence
+    lock_evidence(d, manifest["evidence"])
     return d
 
 

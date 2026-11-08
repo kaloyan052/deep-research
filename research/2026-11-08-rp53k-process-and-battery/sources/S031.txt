@@ -1,0 +1,3795 @@
+=== Page 1 ===
+... and the Cross-Section of Expected Returns
+CampbellR.Harvey
+DukeUniversity,NationalBureauofEconomicResearch
+YanLiu
+TexasA&MUniversity
+HeqingZhu
+TheUniversityofOklahoma
+Hundredsofpapersandfactorsattempttoexplainthecross-sectionofexpectedreturns.
+Given this extensive data mining, it does not make sense to use the usual criteria for
+establishingsignificance.Whichhurdleshouldbeusedforcurrentresearch?Ourpaper
+introducesanewmultipletestingframeworkandprovideshistoricalcutoffsfromthefirst
+empiricaltestsin1967totoday.Anewfactorneedstoclearamuchhigherhurdle,with
+a t-statistic greater than 3.0.We argue that most claimed research findings in financial
+economicsarelikelyfalse. (JELC12,C52,G12)
+ReceivedOctober22,2014;acceptedJune15,2015byEditorAndrewKarolyi.
+Over forty years ago, one of the first tests of the capital asset pricing model
+(CAPM)foundthatthemarketbetawasasignificantexplanatorofthecrosssection of expected returns. The reported t-statistic of 2.57 in Fama and
+MacBeth (1973, Table III) comfortably exceeded the usual cutoff of 2.0.
+However,sincethattime,hundredsofpapershavetriedtoexplainthecrosssectionofexpectedreturns.Giventheknownnumberoffactorsthathavebeen
+triedandthereasonableassumptionthatmanymorefactorshavebeentriedbut
+didnotmakeittopublication,theusualcutofflevelsforstatisticalsignificance
+WewouldliketothanktheEditor(AndrewKarolyi)andthreeanonymousrefereesfortheirdetailedandthoughtful
+comments.WewouldalsoliketothankViralAcharya,JawadAddoum,TobiasAdrian,AndrewAng,RaviBansal,
+MehmetBeceren,ItzhakBen-David,BernardBlack,JulesvanBinsbergen,OliverBoguth,TimBollerslev,Alon
+Brav,IanDew-Becker,RobertDittmar,JenniferConrad,MichaelCooper,AndresDonangelo,GeneFama,
+WayneFerson,KenFrench,SimonGervais,BingHan,JohnHand,AbbyYeonKyeongKim,Lars-Alexander
+Kuehn,SophiaLi,HarryMarkowitz,KyleMatoba,DavidMcLean,MarceloOchoa,PeterPark,LubosPastor,
+AndrewPatton,LassePedersen,TapioPekkala,JeffPontiff,RyanPratt,TarunRamadorai,AlexandruRosoiu,
+TimSimin,AvanidharSubrahmanyam,IvoWelch,BasilWilliams,YuhangXing,JosefZechner,andXiaofei
+Zhao,aswellasseminarparticipantsatthe2014NewFrontiersinFinanceConferenceatVanderbiltUniversity,
+the2014InquireEurope-UKmeetinginVienna,the2014WFAmeetings,andseminarsatDukeUniversity,
+TexasA&MUniversity,BaylorUniversity,UniversityofUtah,andPennStateUniversity.Ourdataareavailable
+fordownloadandresorting.ThemaintableincludesfullcitationsandWebaddressestoeachofthecitedarticles.
+Seehttp://faculty.fuqua.duke.edu/∼charvey/Factor-List.xlsx.SupplementarydatacanbefoundonTheReview
+ofFinancialStudieswebsite.SendcorrespondencetoCampbellR.Harvey,FuquaSchoolofBusiness,Duke
+University,Durham,NC27708;telephone:919-660-7768.E-mail:cam.harvey@duke.edu.
+©TheAuthor2015.PublishedbyOxfordUniversityPressonbehalfofTheSocietyforFinancialStudies.
+Allrightsreserved.ForPermissions,pleasee-mail:journals.permissions@oup.com.
+doi:10.1093/rfs/hhv059 AdvanceAccesspublicationOctober9,2015
+
+=== Page 2 ===
+maynotbeappropriate.Wepresentanewframeworkthatallowsformultiple
+testsandderiverecommendedstatisticalsignificancelevelsforcurrentresearch
+inassetpricing.
+We begin with 313 papers published in a selection of journals that study
+cross-sectionalreturnpatterns.Weproviderecommendedtestthresholdsfrom
+the first empirical tests in 1967 to present day. We also project minimum t-
+statistics through 2032, assuming the rate of "factor production" remains the
+sameasthelasttenyears.Wepresentataxonomyofhistoricalfactors,aswell
+asdefinitions.1
+Our research is related to a recent paper by McLean and Pontiff (2015),
+whoarguethatcertainstockmarketanomaliesarelessanomalousafterbeing
+published.2 Their paper tests the statistical biases emphasized in Leamer
+(1978), Ross (1989), Lo and Mackinlay (1990), Fama (1991), and Schwert
+(2003).
+Our paper also adds to the recent literature on biases and inefficiencies
+in cross-sectional regression studies. Lewellen, Nagel, and Shanken (2010)
+critique the usual practice of using cross-sectional R2s and pricing errors
+to judge success and show that the explanatory power of many previously
+documentedfactorsarespurious.Ourworkfocusesonevaluatingthestatistical
+significance of a factor given the previous tests on other factors. Our goal is
+to use a multiple testing framework to both re-evaluate past research and to
+provideanewbenchmarkforcurrentandfutureresearch.
+We tackle multiple hypothesis testing from the frequentist perspective.
+Bayesian approaches to multiple testing and variable selection also exist.3
+However, the high dimensionality of the problem combined with the fact
+that we do not observe all the factors that have been tried poses a big
+challengeforBayesianmethods.Whileweproposeafrequentistapproachto
+overcomethismissingdataissue,itisunclearhowtodothisintheBayesian
+framework.Nonetheless,weprovideadetaileddiscussionofBayesianmethods
+inpaper.
+Multiple testing has only recently gained traction in the finance literature.
+For the literature on multiple testing corrections for data snooping biases,
+see Sullivan, Timmermann, and White (1999, 2001) and White (2000). For
+research on data snooping and variable selection in predictive regressions,
+see Foster, Smith, andWhaley (1997), Cooper and Gulen (2006), and Lynch
+and Vital-Ahuja (2012). For applications of multiple testing approach in the
+financeliterature,see,forexample,Shanken(1990),FersonandHarvey(1999),
+1 WealsoprovidealinktoafilewithfullreferencesandWebaddressestotheoriginalarticles:http://faculty.fuqua.
+duke.edu/∼charvey/Factor-List.xlsx.
+2 Otherrecentpapersthatsystematicallystudythecross-sectionalreturnpatternsincludethosebySubrahmanyam
+(2010)andGreen,Hand,andZhang(2013a,2013b).Otherpapersthatstudyanomalydiscoveriesandinvestor
+actionsincludethosebyEdelen,Ince,andKadlec(2014)andLiuetal.(2014).
+3 SeeJefferysandBerger(1992),ScottandBerger(2006),andScott(2009).
+
+=== Page 3 ===
+Boudoukhetal.(2007),andPattonandTimmermann(2010).Morerecently,a
+multipletestingconnectionhasbeenusedtostudytechnicaltradingandmutual
+fund performance, see, for example, Barras, Scaillet, and Wermers (2010),
+BajgrowiczandScaillet(2012),andKosowskietal.(2006).Conrad,Cooper,
+andKaul(2003)pointoutthatdatasnoopingaccountsforalargeproportion
+of the return differential between equity portfolios that are sorted by firm
+characteristics. Bajgrowicz, Scaillet, andTreccani (2013) show that multiple
+testingmethodshelpeliminatealargeproportionofspuriousjumpsdetected
+using conventional test statistics for high-frequency data. Holland, Basu,
+and Sun (2010) emphasize the importance of multiple testing in accounting
+research.Ourpaperisconsistentwiththethemeofthisliterature.
+Therearelimitationstoourframework.First,shouldallfactordiscoveriesbe
+treatedequally?Wethinkno.Afactorderivedfromatheoryshouldhavealower
+hurdle than a factor discovered from a purely empirical exercise. Economic
+theoriesarebasedonafeweconomicprinciplesand,asaresult,thereisless
+roomfordatamining.Nevertheless,whethersuggestedbytheoryorempirical
+work, a t-statistic of 2.0 is too low. Second, our tests focus on unconditional
+tests. While the unconditional test might consider the factor marginal, it is
+possible that this factor is very important in certain economic environments
+andnotimportantinotherenvironments.Thesetwocaveatsneedtobetaken
+intoaccountwhenusingourrecommendedsignificancelevelsforcurrentasset
+pricingresearch.
+Whileourfocusisonthecross-sectionofequityreturns,ourmessageapplies
+to many different areas of finance. For instance, Frank and Goyal (2009)
+investigate around thirty variables that have been documented to explain the
+capital structure decisions of public firms.Welch and Goyal (2008) examine
+theperformanceofadozenvariablesthathavebeenshowntopredictmarket
+excessreturns.Novy-Marx(2014)proposesunconventionalvariablestopredict
+anomalyreturns.Thesethreeapplicationsareidealsettingstoemploymultiple
+testingmethods.
+1. TheSearchProcess
+Ourgoalisnottocatalogeveryassetpricingpapereverpublished.Wenarrow
+the focus to papers that propose and test new factors. For example, Sharpe
+(1964),Lintner(1965),andMossin(1966)alltheoreticallyproposed(atroughly
+thesametime),asingle-factormodel-thecapitalassetpricingmodel(CAPM).
+FollowingFamaandMacBeth(1973),therearehundredsofpapersthattestthe
+CAPM.Weincludethetheoreticalpapers,aswellasthefirstpapertoprovide
+test statistics. We do not include the hundreds of papers that test the CAPM
+indifferentcontexts,forexample,variousinternationalmarketsanddifferent
+timeperiods.Wedo,however,includepapers,suchasKrausandLitzenberger
+(1976),whotestthemarketfactor,aswellasoneadditionalriskfactorlinked
+tothemarketfactor.
+
+=== Page 4 ===
+Sometimesdifferentpapersproposedifferentempiricalproxiesforthesame
+type of economic risk. Although they may look similar from a theoretical
+standpoint, we still include them. An example is the empirical proxies for
+idiosyncraticfinancialconstraintsrisk.WhileLamont,Polk,andSaa-Requejo
+(2001) use the Kaplan and Zingales (1997) index to proxy for firm-level
+financialconstraints,WhitedandWu(2006)estimatetheirownconstraintindex
+basedonthefirst-orderconditionsoffirms'optimizationproblem.Weinclude
+botheventhoughtheyarelikelyhighlycorrelated.
+Since our focus is on factors that can broadly explain return patterns, we
+omitpapersthatfocusonasmallgroupofstocksorashortperiodoftime.This
+will,forexample,excludeasubstantialamountofempiricalcorporatefinance
+researchthatstudiesevent-drivenreturnmovements.4
+Certaintheoreticalmodelslackimmediateempiricalcontent.Althoughthey
+couldbeempiricallyrelevantoncesuitableproxiesareconstructed,wechoose
+toexcludethem.
+Withtheserulesinmind,wenarrowoursearchtogenerallythetopjournals
+infinance,economics,andaccounting.Toincludethemostrecentresearch,we
+search for working papers on the Social Science Research Network (SSRN).
+Workingpapersposeachallengebecausetherearethousandsofthem,andthey
+havenotbeensubjectedtopeerreview.Wechooseasubsetofpapersthatwe
+suspectareinreviewattopjournals,havebeenpresentedattopconferences,
+orareduetobepresentedattopconferences.Weendwith63workingpapers.
+Intotal,wefocuson313articles,amongwhichare250publishedarticles.We
+catalogue316differentfactors.5
+Our collection of 316 factors likely underrepresents the factor population.
+First, we generally only consider top journals. Second, we are selective in
+choosingonlyahandfulofworkingpapers.Third,sometimestherearemany
+variants of the same characteristic, and we usually only include the most
+representative ones. Fourth, and perhaps most importantly, we should be
+measuring the number of factors tested (which is unobservable)-that is, we
+do not observe the factors that were tested but that failed to pass the usual
+significance levels and were never published (see Fama 1991). Our multiple
+testingframeworktriestoaccountforthispossibility.
+4 SeeKothariandWarner(2007)forasurveyoneventstudies.Morespecifically,threecriteriahelpdifferentiate
+ourriskfactorsfromeventsignalsincorporatefinance.First,whilewearegenerallyconsideringreturnsrealized
+atthemonthlyorlowerfrequencyintervalsforriskfactors,itisroutineforeventstudiestoconsiderdailyoreven
+higherfrequencyreturns.Second,portfoliosortsbasedonriskfactorstypicallycovertheentirecross-sectionof
+stocks,whereaseventstudiesusuallyfocusonamuchsmallergroupofsecuritiesthatareaffectedbytheevent
+signal.Finally,portfoliosortsbasedonriskfactorsareusuallyrepeatedatafixedtimeinterval,whereasevents
+mayhappensporadically.
+5 Asalreadymentioned,someofthesefactorsarehighlycorrelated.Forexample,weincludefourversionsof
+idiosyncraticvolatility,thatis,FamaandMacBeth(1973),Ali,Hwang,andTrombley(2003),Angetal.(2006),
+andFu(2009).
+
+=== Page 5 ===
+2. FactorTaxonomy
+Tofacilitateouranalysis,wegroupthefactorsintodifferentcategories.Westart
+with two broad categories: "common" and individual firm "characteristics."
+"Common"meansthefactorcanbeviewedasaproxyforacommonsourceof
+risk.Riskexposuretothisfactororitsinnovationsissupposedtohelpexplain
+cross-sectional return patterns. "Characteristics" means the factor is specific
+to the security or portfolio. A good example is Fama and MacBeth (1973).
+Whilethebetaagainstthemarketreturnissystematic(exposuretoacommon
+risk factor), the standard deviation of the market model residual is not based
+on a common factor-it is a property of the individual firm, that is, it is an
+idiosyncraticcharacteristic.
+Strictly speaking, a risk factor should be a variable that has unpredictable
+variation through time. Moreover, assets'risk exposures to this factor need
+to be able to explain the cross-sectional return patterns. Based on these
+criteria, individual firm characteristics should not qualify as risk factors
+because characteristics are preknown and have limited time-series variation.
+However,weinterpretfirmcharacteristicsinabroadersense.Ifacertainfirm
+characteristic is found to be correlated with the cross-section of expected
+returns, a long-short portfolio can usually be constructed to proxy for the
+underlying unknown risk factor. It is this unknown risk factor that we have
+inmindwhenweclassifyparticularfirmcharacteristicsasriskfactors.
+Basedontheuniquepropertiesoftheproposedfactors,wefurtherdividethe
+"common"and"characteristics"groupsintofinercategories.Inparticular,we
+divide "common" into "financial," "macro," "microstructure," "behavioral,"
+"accounting,"and"other."Wedivide"characteristics"intothesamecategories,
+exceptweomitthe"macro"classification,whichiscommon,bydefinition.The
+followingtableprovidesfurtherdetailsonthedefinitionsofthesesubcategories
+andgivesexamplesforeach.
+3. Adjustedt-statisticsinMultipleTesting
+3.1 Whymultipletesting?
+Given that so many papers have attempted to explain the same cross-section
+ofexpectedreturns,statisticalinferenceshouldnotbebasedona"single"test
+perspective.Ourgoalistoprovideguidanceastotheappropriatesignificance
+levelusingamultipletestingframework.Whenjustonehypothesisistested,
+we use the term "individual test," "single test," and "independent test"
+interchangeably.6
+Strictlyspeaking,differentpapersstudydifferentsampleperiodsandhence
+focusondifferentcross-sectionsofexpectedreturns.However,thebulkofthe
+papersweconsiderhavesubstantialoverlappingsampleperiods.Also,ifone
+6 Thelasttermshouldnotbeconfusedwithanysortofstochasticindependence.
+
+=== Page 6 ===
+1elbaT
+noitacfiissalcrotcaF
+selpmaxE
+noitpircseD
+epytksiR
+derauqs:)6791(regrebneztiLdnasuarK;snrutertekram:)4691(eprahS
+tekramgnidulcni,tnemevomtekramlaicnanfietagerggarofyxorP
+laicnaniF
+nommoC
+snrutertekram
+srehtognoma,snrutertekramderauqs,ytilitalov,snruteroiloftrop
+)64(
+)311(
+tnemtsevni:)1991(enarhcoC;htworgnoitpmusnoc:)9791(nedeerB
+gnidulcni,slatnemadnufcimonoceorcamnitnemevomrofyxorP
+orcaM
+snruter
+srehtognoma,noitaflni,tnemtsevni,noitpmusnoc
+)04(
+:)6002(gnaWdnaoL;ytidiuqiltekram:)3002(hguabmatSdnarotsaP
+laicnanfiroerutcurtsorcimtekramnistnemevometagerggarofyxorP
+erutcurtsorciM
+emulovgnidarttekram
+srehtognoma,stsocnoitcasnart,ytidiuqilgnidulcni,snoitcirftekram
+)11(
+gnaiJdnarefielhsriH;tnemitnesrotsevni:)6002(relgruWdnarekaB
+rotnemitnes,roivahebrotsevninistnemevometagerggarofyxorP
+laroivaheB
+gnicirpsimtekram:)0102(
+gnicirpsimcitametsysnevird-roivaheb
+)3(
+akhcaraWdnaaD;tekram-ot-koobdnaezis:)2991(hcnerFdnaamaF
+,selbairavgnitnuoccalevel-mrfinitnemevometagerggarofyxorP
+gnitnuoccA
+woflhsac:)9002(
+srehtognoma,woflhsac,dleiytuoyapgnidulcni
+)8(
+sfeileb'srotsevni:)9002(zugozO;mutnemomnruter:)7991(trahraC
+evobaehtotnillaftonodtahtstnemevometagerggarofyxorP
+rehtO
+srehtognoma,sfeileb'srotsevni,mutnemomgnidulcni,seirogetac
+)5(
+waletihWdna,icikaC,ilaB;ytilitalovcitarcnysoidi:)6002(.lategnA
+,ytilitalovgnidulcni,sksirlaicnanficitarcnysoidilevel-mrfirofyxorP
+laicnaniF
+scitsiretcarahC
+snruterkcotsemertxe:)1102(
+srehtognoma,snruteremertxe
+)16(
+)202(
+stsocnoitcasnart:)1891(rahsyaM;snoitcirtserelastrohs:)0891(worraJ
+elastrohsgnidulcni,snoitcirftekramlaicnanfilevel-mrfirofyxorP
+erutcurtsorciM
+srehtognoma,stsocnoitcasnart,snoitcirtser
+)82(
+dnagnaF;noisrepsidtsylana:)2002(anibrehcSdna,yollaM,rehteiD
+,noisrepsidtsylanagnidulcni,sesaiblaroivaheblevel-mrfirofyxorP
+laroivaheB
+egarevocaidem:)9002(ssereP
+srehtognoma,egarevocaidem
+)3(
+oitarytiuqe-ot-tbed:)8891(iradnahB;oitarEP:)7791(usaB
+,oitarEPgnidulcni,selbairavgnitnuoccalevel-mrfirofyxorP
+gnitnuoccA
+srehtognoma,oitarytiuqe-ot-tbed
+)78(
+ngiapmaclacitilop:)0102(vokinnihctvOdna,neluG,repooC
+,seirogetacevobaehtotnillaftonodtahtselbairavlevel-mrfirofyxorP
+rehtO
+selbignatni:)1102(snamdE;snoitubirtnoc
+mrfidetaler-gniknar,snoitubirtnocngiapmaclacitilopgnidulcni
+)42(
+srehtognoma,selbignatni
+.xslx.tsiL-rotcaF/yevrahc∼/ude.ekud.auquf.ytlucaf//:ptthdna6elbaTeeS.defiitnedisrotcafforebmunehttneserpersesehtnerapnisrebmunehT
+
+=== Page 7 ===
+believesthatcross-sectionalreturnpatternsarestationary,thenthesepapersare
+studyingroughlythesamecross-sectionofexpectedreturns.
+We want to emphasize that there are many forces that make our guidance
+lenient; that is, a credible case can be made for an even higher threshold for
+discovery.Wehavealreadymentionedthatweonlysampleasubsetofresearch
+papersandthe"publicationbias/hiddentests"issue(i.e.,itisdifficulttopublish
+a nonresult).7 However, there is another publication bias that is more subtle.
+In many scientific fields, replication studies routinely appear in top journals.
+That is, a factor is discovered, and others try to replicate it. In finance and
+economics, it is very difficult to publish replication studies. Hence, there is
+a bias towards publishing "new" factors rather than rigorously verifying the
+existenceofdiscoveredfactors.
+There are two ways to deal with the bias introduced by multiple
+testing: out-of-sample validation and using a statistical framework that
+allows for multiple testing.8 When feasible, out-of-sample testing is the
+cleanest way to rule out spurious factors. In their study of anomalies,
+McLeanandPontiff(2015)taketheout-of-sampleapproach.Theirresultsshow
+adegradationofperformanceofidentifiedanomaliesafterpublication,which
+isconsistentwiththestatisticalbias.Itispossiblethatthisdegradationislarger
+thantheydocument.Inparticular,theydrop12oftheir97anomaliesbecause
+theycouldnotreplicatethein-sampleperformanceofpublishedstudies.Given
+thatthesenonreplicableanomalieswerenotevenabletosurviveroutinedata
+revisions,theyarelikelytobeinsignificantstrategies,eitherin-sampleorout-
+of-sample. The degradation from the original published "alpha" is 100% for
+thesestrategies,whichwouldleadtoahigheraveragerateofdegradationfor
+theirstrategies.
+Whiletheout-of-sampleapproachhasmanystrengths,ithasoneimportant
+drawback:itcannotbeusedinrealtime.Tomakerealtimeassessmentsinthe
+out-of-sampleapproach,itiscommontoholdoutsomedata.However,thisis
+notgenuineout-of-sampletestingasallthedataareobservabletoresearchers.A
+realout-of-sampletestrequiresdatainthefuture.Incontrasttomanytestsinthe
+physicalsciences(wherenewdatacanbecreatedforanexperiment),weoften
+needyearsofdatatodoanout-of-sampletest.Wepursuethemultipletesting
+frameworkbecauseityieldsimmediateguidanceonwhetheradiscoveredfactor
+isreal.
+3.2 Amultipletestingframework
+In statistics, multiple testing refers to simultaneous testing of more than one
+hypothesis.The statistics literature was aware of this multiplicity problem at
+7 SeeRosenthal(1979)foroneoftheearliestandmostinfluentialworksonpublicationbias.
+8 Anotherapproachtotestfactorrobustnessistolookacrossmultipleassetclasses.Thisapproachhasbeen
+followedinseveralrecentpapers,forexample,Asnessetal.(2013)andKoijenetal.(2012).
+
+=== Page 8 ===
+Table2
+ContingencytableintestingMhypotheses
+PanelA:Anexample
+Unpublished Published Total
+Trulyinsignificant 500 50 550
+Trulysignificant 100 50 150
+Total 600 100(R) 700(M)
+PanelB:Thetestingframework
+H 0notrejected H 0rejected Total
+H 0true N 0|a N 0|r M 0
+H 0false N 1|a N 1|r M 1
+Total M−R R M
+PanelAshowsahypotheticalexampleforfactortesting.PanelBpresentsthecorrespondingnotationinastandard
+multipletestingframework.
+least60yearsago.9 Earlygenerationsofmultipletestingproceduresfocuson
+the control of the family-wise error rate (see Section 4.3.1). More recently,
+increasinginterestinmultipletestingfromthemedicalliteraturehasspurred
+thedevelopmentofmethodsthatcontrolthefalsediscoveryrate(seeSection
+4.3.2).Multipletestingisanactiveresearchareainboththestatisticsandthe
+medicalliterature.10
+Despite the rapid development of multiple testing methods, they have not
+attractedmuchattentioninthefinanceliterature.Moreover,mostoftheresearch
+that does involve multiple testing focuses on the Bonferroni adjustment,11
+whichisknowntobetoostringent.Ourpaperaimstofillthisgap.
+First, we introduce a hypothetical example to motivate a more general
+framework. In Table 2, we categorize the possible outcomes of a multiple
+testingexercise.PanelAdisplaysanexampleofwhattheliteraturecouldhave
+discovered,andpanelBnotationalizespanelAtoeaseoursubsequentdefinition
+ofthegeneraltypeIerrorrate-thechanceofmakingatleastonefalsediscovery
+ortheexpectedfractionoffalsediscoveries.
+Our example in panel A assumes 100 published factors (denoted as R).
+Among these factors, suppose 50 are false discoveries and the rest are real
+ones.Inaddition,researchershavetried600otherfactors,butnonewerefound
+tobesignificant.Amongthem,500aretrulyinsignificant,buttheother100are
+truefactors.Thetotalnumberoftests(M)is700.Twotypesofmistakesare
+madeinthisprocess:50factorsarefalselydiscoveredtobetrue(typeIerroror
+falsepositive),while100truefactorsareburiedinunpublishedwork(typeII
+errororfalsenegative).Theusualstatisticalcontrolinamultipletestingcontext
+aimsatreducing"50"or"50/100,"theabsoluteorproportionateoccurrenceof
+9 Forearlyresearchonmultipletesting,seeTukey(1951,1953)forTukey'srangetestandScheffé(1959)for
+Scheffé'smethodonadjustingsignificancelevelsinamultipleregressioncontext.
+10 SeeShaffer(1995)forareviewofmultipletestingproceduresthatcontrolforthefamily-wiseerrorrate.See
+Farcomeni(2007)forareviewthatfocusesonproceduresthatcontrolthefalse-discoveryrate.
+11 SeeShanken(1990),FersonandHarvey(1999),andBoudoukhetal.(2007).
+
+=== Page 9 ===
+false discoveries, respectively. Of course, we only observe published factors
+because factors that are tried and found to be insignificant rarely make it to
+publication.12Thisposesachallengesincetheusualstatisticaltechniquesonly
+handlethecaseinwhichalltestresultsareobservable.
+Panel B defines the corresponding terms in a formal statistical testing
+framework. In a factor testing exercise, the typical null hypothesis is that a
+factorisnotsignificant.Therefore,afactorbeinginsignificantmeansthenull
+hypothesis is "true." Using "0" ("1") to indicate the null is true (false) and
+"a" ("r") to indicate "not reject" ("reject"), we can easily summarize panel
+A.Forinstance,N 0|r measuresthenumberofrejectionswhenthenullistrue
+(i.e.,thenumberoffalsediscoveries)andN 1|a measuresthenumberoffailed
+rejections when the null is false (i.e. the number of missed discoveries). To
+avoidconfusion,wetrynottousestandardstatisticallanguageindescribing
+our notation but rather use words unique to our factor testing context. The
+genericnotationinpanelBisconvenientinformallydefiningdifferenttypes
+oferrorsanddescribingadjustmentproceduresinsubsequentsections.
+3.3 TypeIandtypeIIerrors
+For a single hypothesis test, a value α is used to control type I error rate:
+the probability of finding a factor to be significant when it is not. The α is
+sometimescalledthe"levelofsignificance."Inamultipletestingframework,
+restrictingeachindividualtest'stypeIerrorrateatα isnotenoughtocontrol
+theoverallprobabilityoffalsediscoveries.Theintuitionisthat,underthenull
+thatallfactorsareinsignificant,itisverylikelyforaneventwithαprobability
+tooccurwhenmanyfactorsaretested.Inmultiplehypothesistesting,weneed
+measuresofthetypeIerrorthathelpussimultaneouslyevaluatetheoutcomes
+ofmanyindividualtests.
+TogainsomeintuitionaboutplausiblemeasuresoftypeIerror,wereturnto
+panel B ofTable 2. N 0|r and N 1|a count the total number of the two types of
+errors: N 0|r counts false discoveries, while N 1|a counts missed discoveries.
+As generalized from single hypothesis testing, the type I error in multiple
+hypothesis testing is also related to false discoveries, by which we conclude
+a factor is "significant" when it is not. But, by definition, we must draw
+severalconclusionsinmultiplehypothesistesting,andthereisapossiblefalse
+discoveryforeach.Therefore,plausibledefinitionsofthetypeIerrorshould
+takeintoaccountthejointoccurrenceoffalsediscoveries.
+The literature has adopted at least two ways of summarizing the "joint
+occurrence." One approach is to count the total number of false discoveries
+12 ExamplesofthepublicationofunsuccessfulfactorsincludeFamaandMacBeth(1973)andFersonandHarvey
+(1993).FamaandMacBeth(1973)showthatsquaredbetaandstandarddeviationofthemarketmodelresidual
+haveaninsignificantroleinexplainingthecross-sectionofexpectedreturns.However,theinclusionofthese
+twovariableswasaresultofafalsificationexperimentratherthanasearchfornewfactors.Overall,itisrare
+topublish"nonresults"andallinstancesofpublishednonresultsarecoupledwithsignificantresultsforother
+factors.
+
+=== Page 10 ===
+N 0|r. N 0|r greater than zero suggests incorrect statistical inference for the
+overall multiple testing problem-the occurrence of which we should limit.
+Therefore, the probability of event N 0|r >0 should be a meaningful quantity
+forustocontrol.Indeed,thisistheintuitionbehindthefamily-wiseerrorrate
+introducedlater.Ontheotherhand,whenthetotalnumberofdiscoveriesRis
+large,oneorevenafewfalsediscoveriesmaybetolerable.Inthiscase,N
+0|r
+is no longer a suitable measure; a certain false discovery proportion may be
+more desirable. Unsurprisingly, the expected value of N 0|r /R is the focus of
+falsediscoveryrate,thesecondtypeofcontrol.
+3.3.1 Family-wise error rate. The two aforementioned measures are the
+mostwidelyusedinthestatisticsliterature.Moreover,manyothertechniques
+can be viewed as extensions of these measures. Holm (1979) is the first to
+formally define the family-wise error rate. Benjamini and Hochberg (1995)
+define and study the false discovery rate.Alternative definitions of error rate
+includepercomparisonerrorrate(Saville1990),positivefalsediscoveryrate
+(Storey2003),andgeneralizedfalsediscoveryrate(SarkarandGuo2009).We
+nowdescribethetwoleadingapproachesindetail.
+Thefamily-wiseerrorrate(FWER)istheprobabilityofatleastonetypeI
+error:
+FWER=Pr(N
+0|r
+≥1).
+FWER measures the probability of even a single false discovery, regardless
+of the total number of tests. For instance, researchers might test 100 factors;
+FWERmeasurestheprobabilityofincorrectlyidentifyingoneormorefactors
+to be significant. Given significance or threshold level α, we explore two
+existing methods (Bonferroni and Holm's adjustment) to ensure FWER does
+notexceedα.Evenasthenumberoftrialsincreases,FWERstillmeasuresthe
+probabilityofatleastonefalsediscovery.Thisabsolutecontrolisincontrast
+totheproportionatecontrolaffordedbythefalsediscoveryrate(FDR),defined
+below.
+3.3.2 False discovery rate. The false discovery proportion (FDP) is the
+proportionoftypeIerrors:
+⎧
+N
+⎪⎨ 0|r ifR>0,
+R
+FDP=
+⎪⎩
+0 ifR=0.
+Thefalsediscoveryrate(FDR)isdefinedas
+FDR=E[FDP].
+FDR measures the expected proportion of false discoveries among all
+discoveries. It is less stringent (i.e., leads to more discoveries) than FWER
+
+=== Page 11 ===
+andusuallymuchlesssowhenmanytestsareperformed.13 Intuitively,thisis
+becauseFDRallowsN 0|rtogrowinproportiontoR,whereasFWERmeasures
+theprobabilityofmakingevenasingletypeIerror.
+Returning to example A, panel A shows that a false discovery event has
+occurred under FWER since N 0|r=50≥1 and the realized FDP is high,
+50/100=50%.Thissuggeststhattheprobabilityoffalsediscoveries(FWER)
+and the expected proportion of false discoveries (FDR) may both be high.14
+The remedy, as suggested by many FWER and FDR adjustment procedures,
+istolowerp-valuethresholdsforthesehypotheses(p-value,asdefinedinour
+context, is the single test probability of having a t-statistic that is at least as
+largeastheobservedoneunderthenullhypothesis).IntermsofpanelA,this
+wouldturnsomeofthefiftyfalsediscoveriesinsignificantandpushtheminto
+the"Unpublished"category.Hopefully,thefiftytruediscoverieswouldsurvive
+thischangeinp-valuethresholdandremainsignificant,whichisonlypossible
+iftheirp-valuesarerelativelysmall.
+Ontheotherhand,typeIIerrors-themistakeofmissingtruefactors-are
+alsoimportantinmultiplehypothesistesting.SimilartotypeIerrors,boththe
+totalnumberofmisseddiscoveriesN 1|a andthefractionofmisseddiscoveries
+among all abandoned tests N 1|a /(M−R) are frequently used to measure the
+severityoftypeIIerrors.15Ideally,onewouldliketosimultaneouslyminimize
+thechanceofcommittingatypeIerrorandthatofcommittingatypeIIerror.
+In our context, we would like to include as few insignificant factors (i.e., as
+low a type I error rate) as possible and simultaneously as many significant
+ones (i.e., as low a type II error rate) as possible. Unfortunately, this is not
+13 ThereisanaturalorderingbetweenFDRandFWER.Theoretically,FDRisalwaysboundedabovebyFWER,
+thatis,FDR≤FWER.Toseethis,bydefinition,
+FDR=E[
+N 0|r
+|R>0]Pr(R>0)
+R
+≤E[I (N 0|r≥1) |R>0]Pr(R>0)
+=Pr((N 0|r≥1)∩(R>0))
+≤Pr(N 0|r≥1)=FWER,
+whereI (N 0|r≥1)isanindicatorfunctionofeventN 0|r≥1.ThisimpliesthatproceduresthatcontrolFWERunder
+acertainsignificancelevelautomaticallycontrolFDRunderthesamesignificancelevel.Inourcontext,afactor
+discoverycriterionthatcontrolsFWERatαalsocontrolsFDRatα.
+14 PanelAonlyshowsonerealizationofthetestingoutcomeforacertaintestingprocedure(e.g.,singletests).To
+evaluateFWERandFDR,bothofwhichareexpectationsandhencedependontheunderlyingjointdistribution
+ofthetestingstatistics,weneedtoknowthepopulationofthetestingoutcomes.Togiveanexamplethatis
+compatiblewithpanelA,weassumethatthet-statisticsforthe700hypothesesareindependent.Moreover,we
+assumethet-statisticforafalsefactorfollowsanormaldistributionwithmeanofzeroandvarianceof1.0,that
+is,N(0,1);foratruefactor,weassumeitst-statisticfollowsanormaldistributionwithmeanof2.0andvariance
+of1.0,thatis,N(2,1).Undertheseassumptionsaboutthejointdistributionoftheteststatistics,wefindvia
+simulationsthatFWERis100%andFDRis26%,bothexceeding5%.
+15 SeeSimes(1986)foroneexampleoftypeIIerrorinsimulationstudiesandFarcomeni(2007)foranotherexample
+inmedicalexperiments.
+
+=== Page 12 ===
+feasible:asinsinglehypothesistesting,adecreaseinthetypeIerrorrateoften
+leadstoanincreaseinthetypeIIerrorrateandviceversa.Wethereforeseek
+abalancebetweenthetwotypesoferrors.Astandardapproachistospecifya
+significancelevelαforthetypeIerrorrateandderivetestingproceduresthat
+aimtominimizethetypeIIerrorrate,thatis,maximizepower,amongtheclass
+oftestswithtypeIerrorrateatmostα.
+Whencomparingtwotestingproceduresthatcanbothachieveasignificance
+level α, it seems reasonable to use their type II error rates. However, when
+wehavemultipletests,theexacttypeIIerrorratetypicallydependsonaset
+ofunknownparametersandisthereforedifficulttoassess.16Toovercomethis
+difficulty,researchersfrequentlyusethedistanceoftheactualtypeIerrorrateto
+someprespecifiedsignificancelevelasthemeasureforaprocedure'sefficiency.
+Intuitively,ifaprocedure'sactualtypeIerrorrateisstrictlybelowα,wecan
+probablypushthiserrorrateclosertoα bymakingthetestingprocedureless
+stringent,thatis,ahigherp-valuethresholdsotherewillbemorediscoveries.In
+doingso,thetypeIIerrorrateispresumablyloweredgiventheinverserelation
+betweenthetwotypesoferrorrates.Therefore,onceaprocedure'sactualtype
+I error rate falls below a prespecified significance level, we want it to be as
+closeaspossibletothatsignificancelevelinordertoachievethesmallesttype
+IIerrorrate.Ideally,wewouldlikeaprocedure'sactualtypeIerrorratetobe
+exactlythesameasthegivensignificancelevel.17
+Both FWER and FDR are important concepts that are widely applied in
+many scientific fields. However, based on specific applications, one may be
+preferredovertheother.Whenthenumberoftestsisverylarge(e.g.,amillion),
+FWERcontrollingprocedurestendtobecomeverytoughastheycontrolforthe
+occurrenceofevenasinglefalsediscoveryamongonemilliontests.Asaresult,
+they often lead to a very limited number of discoveries, if any. Conversely,
+FWERcontrolismoredesirablewhenthenumberoftestsisrelativelysmall,
+inwhichcasemorediscoveriescanbeachievedandatthesametimetrusted.
+Inthecontextofourpaper,wearesurethatmanytestshavebeentriedinthe
+financeliterature.Althoughtherearearound300publishedones,hundredsor
+eventhousandsoffactorscouldhavebeenconstructedandtested.However,it
+isnotclearwhetherthisnumbershouldbeconsidered"large"comparedtothe
+16 Insinglehypothesistesting,thetypeIIerrorisafunctionoftheunknowntrueparametervalue-inourcontext,
+thepopulationfactormeanreturn-underthealternativehypothesis.Bytracingoutallpossiblevaluesunder
+thealternativehypothesis,weobtainthetypeIIerrorfunction.Thesituationismorecomplicatedinmultiple
+hypothesistestingbecausethetypeIIerrordependsonmultipleparametersthatcorrespondtothecollectionof
+alternativehypothesesforallthetests.Hence,thetypeIIerrorfunctionismultivariatewhentherearemultiple
+tests.SeeZehetmayerandPosch(2010)forpowerestimationinlarge-scalemultipletestingproblems.
+17 Inourframework,individualp-valuesaresufficientstatisticsforustomakeadjustmentformultipletests.Each
+individualp-valuerepresentstheprobabilityofhavingat-statisticthatisatleastaslargeastheobservedone
+underthenullhypothesis.Whathappensunderthealternativehypotheses(i.e.,typeIIerrorrate)doesnotdirectly
+comeintoplaybecausehypothesistestinginthefrequentistframeworkhasaprimaryfocusonthetypeIerror
+rate.WhenwedeviatefromthefrequentistframeworkandconsiderBayesianmethods,thetypeIIerrorrate
+becomesmoreimportantbecauseBayesianoddsratiosputthetypeIandtypeIIerrorratesonthesamefooting.
+
+=== Page 13 ===
+Table3
+Asummaryofp-valueadjustments
+Adjustmenttype Single/Sequential Multipletest
+Bonferroni single family-wiseerrorrate
+Holm sequential family-wiseerrorrate
+Benjamini,Hochberg,andYekutieli(BHY) sequential falsediscoveryrate
+number of tests conducted in, say, medical research.18 This creates difficulty
+inchoosingbetweenFWERandFDR.Giventhisdifficulty,wedonottakea
+standontherelativeappropriatenessofthesetwomeasuresbutinsteadprovide
+adjustedp-valuesforboth.Researcherscancomparetheirp-valueswiththese
+benchmarkstoseewhetherFDRorevenFWERissatisfied.
+3.4 p-valueadjustment:Threeapproaches
+The statistics literature has developed many methods to control both FWER
+and FDR.19 We choose to present the three most well-known adjustments:
+Bonferroni, Holm, and Benjamini, Hochberg, and Yekutieli (BHY). Both
+BonferroniandHolmcontrolFWER,andBHYcontrolsFDR.Dependingon
+howtheadjustmentisimplemented,theycanbecategorizedintotwogeneral
+types of corrections: a "single-step" correction equally adjusts each p-value,
+anda"sequential"correctionisanadaptiveprocedurethatdependsontheentire
+distributionofp-values.Bonferroniisasingle-stepprocedure,whereasHolm
+andBHYaresequentialprocedures.Table3summarizesthetwopropertiesof
+thethreemethods.
+Suppose there are in total M tests and we choose to set FWER at α w and
+FDRatα d.Inparticular,weconsideranexamplewiththetotalnumberoftests
+M=10 to illustrate how different adjustment procedures work. For our main
+results,wesetbothα w andα d at5%.Table4,panelA,liststhet-statisticsand
+thecorrespondingp-valuesfortenhypotheticaltests.Thenumbersinthetable
+arebroadlyconsistentwiththemagnitudeoft-statisticsthatresearchersreport
+forfactorsignificance.Notethatalltenfactorswillbe"discovered"ifwetest
+one hypothesis at a time. Multiple testing adjustments will usually generate
+differentresults.20
+3.4.1Bonferroni'sadjustment. Bonferroni'sadjustmentisasfollows:
+•
+Rejectanyhypothesiswithp-value≤αw:
+M
+p
+i
+Bonferroni=min[M×p
+i
+,1].
+18 Forinstance,tensofthousandsoftestsareperformedintheanalysisofDNAmicroarrays.SeeFarcomeni(2007)
+formoreapplicationsofmultipletestinginmedicalresearch.
+19 MethodsthatcontrolFWERincludeHolm(1979),Hochberg(1988),andHommel(1988).Methodsthatcontrol
+FDRincludethoseofBenjaminiandHochberg(1995),BenjaminiandLiu(1999),andBenjaminiandYekutieli
+(2001).
+20 ReaderswhoarealreadyfamiliarwiththethreemultipletestingadjustmentprocedurescanskiptoSection4.5
+forourmainresults.
+
+=== Page 14 ===
+Table4
+Anexampleofmultipletesting
+PanelA:Singletestsand"significant"factors
+Test→ 1 2 3 4 5 6 7 8 9 10 #of
+discoveries
+t-statistic 1.99 2.63 2.21 3.43 2.17 2.64 4.56 5.34 2.75 2.49 10
+p-value(%) 4.66 0.85 2.71 0.05 3.00 0.84 0.00 0.00 0.60 1.28
+PanelB:Bonferroni"significant"factors
+Test→ 1 2 3 4 5 6 7 8 9 10
+t-statistic 1.99 2.63 2.21 3.43 2.17 2.64 4.56 5.34 2.75 2.49 3
+p-value(%) 4.66 0.85 2.71 0.05 3.00 0.84 0.00 0.00 0.60 1.28
+PanelC:Holmadjustedp-valuesand"significant"factors
+Reorderedtestsb (1) (2) (3) (4) (5) (6) (7) (8) (9) (10)
+Oldorder 8 7 4 9 6 2 10 3 5 1 4
+p-value(%) 0.00 0.00 0.05 0.60 0.84 0.85 1.28 2.71 3.00 4.66
+αw/(M+1−b)
+αw=5% 0.50 0.56 0.63 0.71 0.83 1.00 1.25 1.67 2.50 5.00
+PanelD:BHYadjustedp-valuesand"significant"factors
+Reorderedtestsb (1) (2) (3) (4) (5) (6) (7) (8) (9) (10)
+Oldorder 8 7 4 9 6 2 10 3 5 1 6
+p-value(%) 0.00 0.00 0.05 0.60 0.84 0.85 1.28 2.71 3.00 4.66
+(
+α
+b
+d
+·
+=
+αd
+5%
+)/(M×c(M))
+0.17 0.34 0.51 0.68 0.85 1.02 1.19 1.37 1.54 1.71
+Thetabledisplaystent-statisticsandtheirassociatedp-valuesforahypotheticalexample.PanelsAandB
+highlightthesignificantfactorsundersingletestsandBonferroni'sprocedure,respectively.PanelsCandD
+explainHolm'sandBHY'sadjustmentprocedure,respectively.Theboldnumbersineachpanelareassociated
+withsignificantfactorsun(cid:6)derthespecificadjustmentprocedureofthatpanel.Mrepresentsthetotalnumberof
+tests(M=10)andc(M)= M
+j=1
+1/j.bistheorderofp-valuesfromlowesttohighest.αwisthesignificancelevel
+forBonferroni'sandHolm'sprocedure,andαdisthesignificancelevelforBHY'sprocedure.Bothnumbersare
+setat5%.Thecutoffp-valueforBonferroniis0.5%,forHolmis0.60%,andforBHYis0.85%.
+Bonferroni applies the same adjustment to each test. It inflates the original
+p-valuebythenumberoftestsM;theadjustedp-valueiscomparedwiththe
+thresholdvalueα w.
+Example 4.4.1 To apply Bonferroni's adjustment to the example in Table 4,
+we simply multiply all the p-values by ten and compare the new p-values
+withα w=5%.Equivalently,wecanlookattheoriginalp-valuesandconsider
+the cutoff of 0.5%(=α w /10).This leaves the t-statistic of tests 4, 7, and 8 as
+significant,whicharehighlightedinpanelB.
+Using the notation in panel B of Table 2 and assuming M of the M null
+0
+hypothesesaretrue,Bonferronioperatesasasingle-stepprocedurethatcanbe
+showntorestrictFWERatlevelslessthanorequalto(M
+0
+×α w)/M,without
+any assumption on the dependence structure of the p-values. Since M ≤M,
+0
+BonferronialsocontrolsFWERatlevelα w.21
+21 ThenumberoftruenullsM 0isunknown,soweusuallycannotmakeBonferronimorepowerfulbyincreasing
+αwtoαˆ=Mαw/M 0(notethatM
+0
+αˆ/M=αw).Howeversomepapers,includingthosebySchwederandSpjotvoll
+
+=== Page 15 ===
+3.4.2Holm'sadjustment. Sequentialmethodshavebeenproposedtoadjust
+p-values in multiple hypothesis testing.22 They are motivated by a seminal
+paperbySchwederandSpjotvoll(1982),whosuggestagraphicalpresentation
+ofthemultipletestingp-values.Inparticular,usingN ptodenotethenumberof
+teststhathaveap-valueexceedingp,SchwederandSpjotvoll(1982)suggest
+plottingN
+p
+against(1−p).Whenpisnotverysmall(e.g.,p>0.2),itisvery
+likely that the associated test is from the null hypothesis. In this case, the p-
+valueforanulltestcanbeshowntobeuniformlydistributedbetween0and
+1.Itthenfollowsthatforalargep andunderindependenceamongtests,the
+expectednumberoftestswithap-valueexceedingp equalsT (1−p),where
+0
+T 0 is the number of null hypotheses, i.e., E(N p)=T 0 (1−p). By plotting N p
+against(1−p),thegraphshouldbeapproximatelylinearwithslopeT forlarge
+0
+p-values.Pointsonthegraphthatsubstantiallydeviatefromthislinearpattern
+should correspond to non-null hypotheses, i.e., discoveries. The gist of this
+argument-large and small p-values should be treated differently-has been
+distilledintomanyvariationsofsequentialadjustmentmethods,amongwhich
+wewillintroduceHolm'smethodthatcontrolsFWERandBHY'smethodthat
+controlsFDR.
+Holm'sadjustmentisasfollows:
+• Ordertheoriginalp-valuessuchthatp (1) ≤p (2) ≤···p (b) ≤···≤p (M) ,and
+lettheassociatednullhypothesesbeH (1) ,H (2) ,···H (b) ···,H (M) .
+• Letkbetheminimumindexsuchthatp (b) > M+ α 1 w −b .
+• Reject the null hypotheses H (1) ···H (k−1) (i.e., declare these factors
+significant),butnotH (k) ···H (M) .
+Theequivalentadjustedp-valueistherefore
+p ( H i) olm =min[m j≤ a i x{(M−j+1)p (j) },1].
+Holm'sadjustmentisastep-downprocedure:fortheorderedp-values,westart
+fromthesmallestp-valueandgodowntothelargestone.23Ifkisthesmallest
+indexthatsatisfiesp (b) > M+ α 1 w −b ,wewillrejectalltestswhoseorderedindexis
+belowk.
+To explore how Holm's adjustment procedure works, suppose k is the
+I s n m p a a ll r e ti s c t u i l n a d r e ,f x o s r u b c = h 1 th ,B at o p n ( f b e ) r > ron M i + α e 1 w q − u b a . l T s h H is ol m m e , a t n h s at t i h s a , t α f w or = b<k αw ,p (b) ; ≤ fo M rb + α 1 w = − 2 b . ,
+M M+1−(b=1)
+(1982)andHochbergandBenjamini(1990),trytoimprovethepowerofBonferronibyestimatingM 0.Wetryto
+achievethesamegoalbyusingeitherHolm'sprocedure,whichalsocontrolsFWER,orproceduresthatcontrol
+FDR,analternativedefinitionoftypeIerrorrate.
+22 Here,"sequential"referstothefactthatweadjusttheorderedp-valuessequentially.Itdoesnotmeanthatthe
+individualtestsarrivesequentially.
+23 Viewingsmallp-valuesas"up"andlargep-valuesas"down,"Holm'sprocedureisa"step-down"procedure
+inthatitgoesfromsmallp-valuestolargeones.Thisterminologyisconsistentwiththestatisticsliterature.Of
+course,smallp-valuesareassociatedwith"large"valuesoftheteststatistics.
+
+=== Page 16 ===
+αw< αw
+,soHolmislessstringentthanBonferroni.Sincelessstringent
+M M+1−(b=2)
+hurdlesareappliedtothesecondtothe(k−1)thp-values,morediscoveriesare
+generatedunderHolm'sthanBonferroni'sadjustment.
+Example 4.4.2 To apply Holm's adjustment to the example in Table 4, we
+firstorderthep-valuesinascendingorderandtrytolocatethesmallestindex
+k the th a a s t s m oc a i k a e te s d p (b) α > w M ' + α s 1 w . − S b t . ar T t a in b g le f 4 ro , m pa t n h e e l s C m , a s l h l o es w t s p t - h v e al o u r e de a r n e d d g p o - i v n a g lu u e p s , a w nd e
+T se h e er t e h f a o t r p e, (b t ) he is s M b m e + a 1 lo l − l w e b st M b + α t 1 w h − a b t u sa n t t i i s l fi b e = sp 5, (b a ) t > w M h + α ic 1 w − h b p i o s in 5 t a p n ( d 5) w is e a re b j o e v c e tth 10 e + α 1 w n − u 5 ll .
+hypothesisforthefirstfourorderedtests(wediscoverfourfactors)andfailto
+reject the null for the remaining six tests.The original labels for the rejected
+testsareinthesecondrowinpanelC.ComparedtoBonferroni,onemorefactor
+(test 9) is discovered; that is, four factors rather than three are significant. In
+general,Holm'sapproachleadstomorediscoveriesandalldiscoveriesunder
+BonferroniarealsodiscoveriesunderHolm'scriteria.
+LikeBonferroni,HolmalsorestrictsFWERatα w withoutanyrequirement
+on the dependence structure of p-values. It can also be shown that Holm
+is uniformly more powerful than Bonferroni in that tests rejected (factors
+discovered) under Bonferroni are always rejected under Holm, but not vice
+versa.Inotherwords,HolmleadstoatleastasmanydiscoveriesasBonferroni.
+Given the dominance of Holm over Bonferroni, one might opt to only use
+Holm.We include Bonferroni because it is the most widely used adjustment
+andasimplesingle-stepprocedure.
+3.4.3 Benjamini, Hochberg, and Yekutieli's adjustment. Benjamini,
+Hochberg,andYekutieli's(BHY)adjustmentisasfollows:
+• As with Holm's procedure, we order the original p-values such that
+p (1) ≤p (2) ≤···p (b) ≤···≤p (M) and let associated null hypotheses be
+H (1) ,H (2) ,···H (b) ···,H (M) .
+• Letkbethemaximumindexsuchthatp (b) ≤ M× b c(M) α d.
+• RejectnullhypothesesH (1) ···H (k) ,butnotH (k+1) ···H (M) .
+Theequivalentadjustedp-valueisdefinedsequentiallyas
+⎧
+⎨ p (M) ifi=M,
+pBHY
+=
+(i) ⎩
+min[p ( B i+ H 1 Y ) ,M× i c(M)p (i) ] ifi≤M−1,
+where,c(M)isafunctionofthetotalnumberoftestsM andcontrolsforthe
+generality of the test. The larger c(M) is the more stringent test and hence
+is more general in guarding against dependency among the test statistics. In
+particular,BenjaminiandYekutieli(2001)showthatsettingc(M)at
+(cid:7)M
+1
+c(M)= (1)
+j
+j=1
+
+=== Page 17 ===
+allows the procedure to work under arbitrary dependency among the test
+statistics.Wefocusonthisspecificationduetoitsgeneralitybutwilldiscuss
+whathappensunderalternativespecificationsofc(M).
+IncontrasttoHolm's,BHY'smethodstartswiththelargestp-valueandgoes
+tothesmallestone.Ifk isthelargestindexthatsatisfiesp (b) ≤ M× b c(M) α d,we
+will reject tests (discover factors) whose ordered index is below or equal to
+k. Also, note that α d (significance level for FDR) is chosen to be the same
+as α w (significance level for FWER). The significance level is subjective in
+nature.Here,wechoosethesamesignificanceleveltomakeanapples-to-apples
+comparisonbetweenFDRandFWERadjustmentprocedures.Wediscussthis
+choiceinmoredetailinSection4.6.
+To explore how BHY works, let k be the largest index, such that p (b) ≤
+M× b c(M) α d.Thismeansthatforb>k,p (b) > M× b c(M) α d.Inparticular,wehave
+p (k+1) > M ( × k+ c( 1 M ) ) α d, p (k+2) > M ( × k+ c( 2 M ) ) α d, ..., p (M) > M× M c(M) α d. We see that the
+(k+1)th to the last null hypotheses, not rejected, are compared to numbers
+smaller than α d, the usual significance level in single hypothesis testing.
+By being stricter than single hypothesis tests, BHYguarantees that the false
+discoveryrate,whichdependsonthejointdistributionofalltheteststatistics,is
+belowtheprespecifiedsignificancelevel.SeeBenjaminiandYekutieli(2001)
+fordetailsontheproof.
+Example4.4.3ToapplyBHY'sadjustmenttotheexampleinTable4,wefirst
+orderthep-valuesinascendingorderandtrytolocatethelargestindexk that
+satisfies p (b) ≤ M× b c(M) α d. Table 4, panel D, shows the ordered p-values and
+theassociated
+M×
+b
+c(M)
+α d's.Startingfromthelargestp-valueandgoingdown,
+we see that p (b) is above M× b c(M) α d until b=6, at which point p (6) is below
+10× 6 2.93 α d.Therefore,thesmallestbthatsatisfiesp (b) ≤ M× b c(M) α d is6,andwe
+rejectthenullhypothesisforthefirstsixorderedtestsandfailtorejectforthe
+remainingfourtests.Intheend,BHYleadstosixsignificantfactors(tests8,
+7,4,9,6,and2),threemorethanBonferroniandtwomorethanHolm.
+In summary, for single tests, using the usual 5% cutoff, 10 out of 10 are
+discovered.Allowingformultipletests,thecutoffsarefarsmaller,withBHY
+at0.85%,Holmat0.60%,andBonferroniat0.5%.
+The choice of c(M) determines the generality of BHY's procedure.
+Intuitively, when c(M) is larger, then the more difficult it is to satisfy the
+inequality p (b) ≤ M× b c(M) α d, and hence there will be fewer discoveries. This
+makes it easier to restrict the false discovery rate below a given significance
+level since fewer discoveries are made. In the original work that develops
+the concept of false discovery rate and related testing procedures, c(M)
+is set equal to one. Under this choice, BHY is only valid when the test
+statistics are(cid:6)independent or positively dependent. With our choice of c(M)
+(i.e.,c(M)= M 1),BHYisvalidunderanyformofdependenceamongthe
+j=1j
+
+=== Page 18 ===
+0.050
+0.045
+0.040
+0.035
+0.030
+0.025
+0.020
+0.015
+0.010
+0.005
+0.000
+0 1 2 3 4 5 6 7 8 9 10
+Ordered tests (b)
+eulav−p
+Figure1
+MultipletestthresholdsforexampleA,
+Thetenp-valuesfortheexampleinTable4andtheadjustedp-valuelinesforvariousadjustmentprocedures.All
+tenfactorsarediscoveredusingthestandardcriteriaforsingletests,threeunderBonferroni,fourunderHolm,
+andsixunderBHY.Thesignificancelevelissetat5%foreachadjustmentmethod.
+p-values.24 Note with c(M)>1, this reduces the size of M× b c(M) α d and it is
+toughertosatisfytheinequalityp (b) ≤ M× b c(M) α d.Thatis,therewillbefewer
+factorsfoundtobesignificant.
+Figure 1 summarizes our example. It plots the original p-values (single
+tests),aswellasadjustedp-valuelines,forvariousmultipletestingadjustment
+procedures. We see the stark difference in outcomes between multiple and
+single hypothesis testing. While all ten factors would be discovered under
+singlehypothesistesting,onlythreetosixfactorswouldbediscoveredunder
+a multiple hypothesis test.Although single hypothesis testing guarantees the
+type I error of each test meets a given significance level, meeting the more
+stringentFWERorFDRboundwillleadustodiscardanumberoffactors.
+3.5 Summarystatistics
+Figure2showsthehistoryofdiscoveredfactorsandpublications.25Weobserve
+a dramatic increase in factor discoveries during the last decade. In the early
+24 SeeBenjaminiandYekutieli(2001)fortheproof.
+25 Tobeclear,weonlycountthosethathavet-statisticsorequivalentstatisticsreported.Roughlytwentynew
+factorsfailtosatisfythisrequirement.Foradditionaldetails,seefactorsinTable6markedwith‡.
+
+[TABLE p18.t1]
+p18.t1 header: Single tests (10 discoveries) (4 discoveries) Holm BHY (6 discoveries)
+p18.t1 r1: Bonferroni (3 discoveries)
+[/TABLE]
+
+=== Page 19 ===
+Figure2
+Factorsandpublications.
+periodfrom1980to1991,onlyaboutonefactorisdiscoveredperyear.This
+number has grown to around five for the 1991-2003 period, during which
+time a number of papers, such as Fama and French (1992), Carhart (1997),
+andPastorandStambaugh(2003),spurredinterestinstudyingcross-sectional
+return patterns. In the last nine years, the annual factor discovery rate has
+increasedsharplytoaround18.Intotal,164factorswerediscoveredinthepast
+nineyears,roughlydoublingthe84factorsdiscoveredinallpreviousyears.We
+donotincludeworkingpapersinFigure2.Inoursample,thereare63working
+paperscovering68factors.
+We obtain t-statistics for each of the 316 factors discovered, including the
+onesintheworkingpapers.26Theoverwhelmingmajorityoft-statisticsexceed
+the 1.96 benchmark for 5% significance.27 The nonsignificant ones typically
+belong to papers that propose a number of factors. These likely represent
+only a small subsample of nonsignificant t-statistics for all tried factors.
+Importantly,wetakepublishedt-statisticsasgiven.Thatis,weassumetheyare
+econometricallysoundwithrespecttotheusualsuspects(dataerrors,coding
+errors, misalignment, heteroscedasticity, autocorrelation, clustering, outliers,
+etc.).
+26 Thesignofat-statisticdependsonthedirectionofthelong/shortstrategy.Weusuallycalculatep-valuesbased
+ontwo-sidedt-tests,sothesigndoesnotmatter.Fromaninvestmentperspective,thesignofthemeanreturnof
+along/shortstrategydoesnotmatteraswecanalwaysreversethedirectionofthestrategy.Thereforeweuse
+absolutevaluesoftheset-statistics.
+27 Themultipletestingframeworkisrobusttooutliers.Theproceduresarebasedoneitherthetotalnumberoftests
+(Bonferroni)ortheorderstatisticsoft-statistics(HolmandBHY).
+
+=== Page 20 ===
+3.6 p-valueadjustmentwhenalltestsarepublished(M=R)
+We now apply the three adjustment methods previously introduced to the
+observed factor tests, under the assumption that the test results of all tried
+factorsareavailable.Weknowthatthisassumptionisfalsesinceoursample
+underrepresentsallinsignificantfactorsbyconventionalsignificancestandards:
+we only observe those insignificant factors that are the results of purposeful
+falsification experiments. We design methods to handle this missing data
+issuelater.
+Despite some limitations, our results in this section are useful for at least
+tworeasons.First,thebenchmarkt-statisticbasedonourincompletesample
+providesalowerboundofthetruet-statisticbenchmark.Inotherwords,ifM
+(totalnumberoftests)>R(totalnumberofdiscoveries),thenwewouldexpect
+fewerfactorsthanwhenM=R,28 sofuturet-statisticsneedtoatleastsurpass
+our benchmark to claim significance. Second, results in this section can be
+rationalizedwithinaBayesianorhierarchicaltestingframework.29 Factorsin
+ourlistconstitutean"elite"group:theyhavesurvivedacademia'sscrutinyfor
+publication.PlacingahighprioronthisgroupinaBayesiantestingframework
+or viewing this group as a cluster in a hierarchical testing framework, one
+caninterpretresultsinthissectionasthefirst-stepfactorselectionwithinana
+priorigroup.
+Basedonoursampleofobservedt-statisticsofpublishedfactors,30weobtain
+threebenchmarkt-statistics.Inparticular,ateachpointintime,wetransform
+thesetofavailablet-statisticsintop-values.Wethenapplythethreeadjustment
+methodstoobtainbenchmarkp-values.Finally,thesep-valuebenchmarksare
+transformedbackintot-statistics,assumingthatstandardnormaldistribution
+approximatesthet-distributionwell.Toguidefutureresearch,weextrapolate
+our benchmark t-statistics into the future, assuming that the rate of "factor
+production"remainsthesameastherecenthistory,thatis,2003-2012.
+We choose to set α w at 5% (Holm, FWER) and α d at 1% (BHY, FDR)
+for our main results. The significance level is subjective, as in individual
+hypothesistesting,whereconventionalsignificancelevelsareusuallyadopted.
+SinceFWERisaspecialcaseofthetypeIerrorinindividualtestingand5%
+seems the default significance level in cross-sectional studies, we set α w at
+5%.Ontheotherhand,FDRisamorelenientcontrolrelativetoFWER.Ifwe
+choose the same α d as α w, then by definition the BHYmethod will be more
+lenient than both Holm and Bonferroni. We set FDR at 1% but will explain
+whathappenswhenα d isincreasedto5%.
+Figure3presentsthethreebenchmarkt-statistics.BothBonferroniandHolm
+adjusted benchmark t-statistics are monotonically increasing in the number
+of discoveries. For Bonferroni, the benchmark t-statistic starts at 1.96 and
+increasesto3.78by2012.Itreaches4.00in2032.Thecorrespondingp-values
+28 ThisisalwaystrueforBonferroni'sadjustmentbutisnotalwaystruefortheothertwotypesofadjustments.The
+Bonferroniadjustedt-statisticismonotonicallyincreasinginthenumberoftrials,sothet-statisticbenchmark
+
+=== Page 21 ===
+3erugiF
+.2302-5691,scitsitats-tdetsujdA
+elpitlumasiYHB.ylevitcepser,2.4.4dna1.4.4snoitceSnidebircsederadna)REWF(etarrorreesiw-ylimafehtlortnoctahtserudecorptnemtsujdagnitsetelpitlumeramloHdnainorrefnoB ,derevocsidsrotcafforebmunevitalumuclacirotsihehtswohsevrucdilosneergehT.3.4.4noitceSnidebircsedsidna)RDF(etaryrevocsideslafehtslortnoctahterudecorptnemtsujdagnitset TRMerayehT.erutaretilehtybdesoporpsrotcafdetceleskramsessorckradehT.noitalopartxeraenilanodesabera)enilneergdettod(stsaceroF.srepapgnikrowmorfesohtgnidulcxe QIL,)7991trahraC;mutnemom(MOM,))2991(hcnerFdnaamaF;tekram-ot-koobdnaezis(LMHdnaBMS,)3891usaB;oitarecirp-sgninrae(PE,)3791hteBcaMdnaamaF;atebtekram( ,)6002ogoY;sdoognoitpmusnocelbarud(GCD;)6002.lategnA;ytilitalovcitarcnysoidi(LOVI,)4002gniXdnauolassaV;doohilekiltluafed(FED,)3002hguabmatSdnarotsaP;ytidiuqil( roF.9.4tadetacnurtera9.4revoscitsitats-t.)2102nheuKdnahtugoB;ytilitalovnoitpmusnoc(LOVCdna,)8002grebnesoRdnanairdA;ytilitalovnur-gnoldnanur-trohs(VRLdnaVRS
+.xslx.tsiL-rotcaF/yevrahc∼/ude.ekud.auquf.ytlucaf//:ptthdna6elbaTees,srotcafesehtfosnoitpircseddeliated
+
+=== Page 22 ===
+(undersingletests)for3.78and4.00are0.02%and0.01%,respectively,much
+lowerthanthestartinglevelof5%.Holmimpliedt-statisticsalwaysfallbelow
+Bonferronit-statistics,consistentwiththefactthatBonferronialwaysresults
+in fewer discoveries than Holm. However, Holm tracks Bonferroni closely
+andtheirdifferencesaresmall.BHYimpliedbenchmarks,ontheotherhand,
+are not monotonic. They fluctuate before year 2000 and stabilize at 3.39 (p-
+value=0.07%)after2010.ThisstationarityfeatureofBHYimpliedt-statistics,
+inherentinthedefinitionofFDR,contrastswiththatofBonferroniandHolm.
+Intuitively, at any fixed significance level α, the law of large numbers forces
+the false discovery rate (FDR) to converge to a constant. If we change α d to
+5%,thecorrespondingBHYimpliedbenchmarkt-statisticis2.78(p-value=
+0.54%) in 2012 and 2.81 (p-value = 0.50%) in 2032, still much higher than
+thestartingvalueof1.96.Insum,aftertakingtestingmultiplicityintoaccount,
+webelievetheminimumthresholdt-statisticfor5%significanceisabout2.8,
+whichcorrespondstoap-value(ifasingletest)of0.5%.
+To see how the new t-statistic benchmarks better reveal the statistical
+significanceoffactors,inFigure3wemarkthet-statisticsofafewprominent
+factors.Amongthesefactors,HML,MOM,DCG,SRV,andMRTaresignificant
+acrossalltypesoft-statisticadjustments,EP,LIQ,andCVOLaresometimes
+significant,andtherestareneversignificant.
+Oneconcernwithourresultsisthatfactorsarediscoveredatdifferenttimes
+andtestsareconductedusingdifferentmethods.Thisheterogeneityinthetime
+of discovery and testing methods may blur the interpretation of our results.
+Ideally,wewantupdatedfactorteststhatarebasedonthemostrecentsample
+and the same testing method.31 To alleviate this concern, we focus on the
+group of factors that are published no earlier than 2000 and rely on FamaMacBeth tests. Additionally, we require that factor tests cover at least the
+1970-1995periodandhaveascontrolsatleasttheFama-Frenchthreefactors
+(FamaandFrench1993).Thisleavesuswith124factors.Basedonthisfactor
+group, the Bonferroni and Holm implied threshold t-statistics are 3.54 and
+3.20(5%significance),respectively,andtheBHYimpliedthresholdsare3.23
+(1%significance)and2.67(5%significance)by2012.Notsurprisingly,these
+statisticsaresmallerthanthecorrespondingthresholdsbasedonthefullsample.
+willonlyriseiftherearemorefactors.HolmandBHYdependontheexactt-statisticdistribution,somorefactors
+donotnecessarilyimplyahighert-statisticbenchmark.
+29 SeeWagenmakersandGrünwald(2006)andStorey(2003)onBayesianinterpretationsoftraditionalhypothesis
+testing.SeeMeinshausen(2008)forahierarchicalapproachonvariableselection.
+30 SeetheOnlineAppendixBfordetailsonoursamplingprocedure.
+31 Wewanttostressthatthethreetypesofadjustmentsinourpaperarerobusttotheheterogeneityinthetimeof
+discoveryandtestingmethodsamongindividualstudies.Thatis,despitethevaryingdegreesofsampleoverlap
+andthedifferencesinthetestingmethods,ouradjustmentproceduresguaranteethatthetypeIerrors(however
+theyaredefined)arecontrolledundertheirprespecifiedlevels.Therefore,fromatechnicalpointofview,neither
+nonsimultaneitynordifferencesintestingmethodsinvalidateourresults.
+
+=== Page 23 ===
+However,thegeneralmessagethatweneedamuchhighert-statisticthreshold
+whenmultipletestingistakenintoaccountisunchanged.
+3.7 Robustness
+3.7.1 Test statistics dependence. There is a caveat for all three methods
+considered so far. In the context of multiple testing, any type of adjustment
+procedurecanbecometoostringentwhenthereisacertaindependencestructure
+inthedata.Thisisbecausetheseproceduresareprimarilydesignedtoguard
+againsttypeIerrors.Underacertaincorrelationstructure,theymaypenalize
+typeIerrorstooharshlyandleadtoahightypeIIerrorrate.
+Intheory,underindependence,BonferroniandHolmapproximatelyachieve
+theprespecifiedsignificancelevelαwhenthenumberoftestsislarge.Onthe
+other hand, both procedures tend to generate fewer discoveries than desired
+when there is a certain degree of dependence among the tests. Intuitively, in
+the extreme case in which all tests are the same (i.e., correlation = 1.0), we
+do not need to adjust at all: FWER is the same as the type I error rate for
+single tests. Hence, the usual single hypothesis test is sufficient. Similarly,
+BHYmaygeneratetoofewdiscoverieswhentestsareindependentorpositively
+correlated.
+Having discussed assumptions for the testing methods to work efficiently,
+wenowtrytothinkofscenariosthatcanpotentiallyviolatetheseassumptions.
+First,factorsthatproxyforthesametypeofriskmaybedependent.Moreover,
+returns of long-short portfolios designed to achieve exposure to a particular
+type of factor may be correlated. For example, there are a number of factors
+withpriceinthedenominatorthatarenaturallycorrelated.Wealsocountfour
+different idiosyncratic volatility factors. If this type of positive dependence
+exists among test statistics, all three methods would likely generate fewer
+significantfactorsthandesired.Ontheotherhand,mostoftenfactorsneedto
+"standtheirground"tobepublished.Intheend,ifyouthinkweareovercounting
+at316,considertakingahaircutto113factors(thenumberof"common"factors
+inTable1).Figure3showsthatourmainconclusionsdonotmateriallychange.
+Forexample,theHolmat113factorsis3.29(p-value=0.10%),whileHolm
+at316factorsis3.64(p-value=0.03%).
+Second, research studying the same factor but based on different samples
+willgeneratehighlydependentteststatistics.Examplesincludethesequence
+ofpapersstudyingthesizeeffect.Wetrytominimizethisconcernbyincluding,
+withafewexceptions,onlytheoriginalpaperthatproposesthefactor.Tothe
+extent that our list includes few such duplicate factors, our method greatly
+reduces the dependence that would be introduced by including all papers
+studyingthesamefactorbutfordifferentsampleperiods.
+Finally,whendependenceamongteststatisticscanbecapturedbyPearson
+correlationsamongcontemporaneousstrategyreturns,wepresentanewmodel
+inSection5tosystematicallyincorporatetheinformationintestcorrelations.
+
+=== Page 24 ===
+3.7.2 The case in which M>R. To deal with the hidden tests issue when
+M>R, we propose in Appendix A a simulation framework to estimate
+benchmarkt-statistics.Theideaistofirstbackouttheunderlyingdistribution
+for the t-statistics of all tried factors, then to generate benchmark t-statistic
+estimates,andapplythethreeadjustmentprocedurestosimulatedt-statistics
+samples.32
+Based on our estimates, 71% of all tried factors are missing. Using this
+information, the new benchmark t-statistics for Bonferroni and Holm are
+estimated to be 4.01 and 3.96, respectively, both slightly higher than when
+M=R.Thisisasexpectedbecausemorefactorsaretriedunderthisframework.
+The BHY implied t-statistic increases from 3.39 to 3.68 at 1% significance
+and from 2.78 to 3.18 at 5% significance. In sum, across various scenarios,
+we think the minimum threshold t-statistic is 3.18, corresponding to BHY's
+adjustmentforM>R at5%significance.Alternativecasesallresultineven
+higherbenchmarkt-statistics.
+OneconcernwithBHYisthatourspecificationofc(M)resultsinanoverly
+stringent threshold for FDR. We therefore try the more lenient choice (i.e.,
+c(M)≡1) as in Benjamini and Hochberg (1995). Based on our estimate that
+71% of tried factors are missing and by simulating the missing tests as in
+Appendix A, we find that the BHY implied threshold equals 3.05 at 5%
+significance and 3.17 at 1% significance. Indeed, these numbers are(cid:6)smaller
+thanthenumbersunderourdefaultspecificationofc(M)(i.e.,c(M)= M 1).
+j=1j
+However, they are above 3.0 and therefore are consistent with our overall
+message.
+3.7.3ABayesianhypothesistestingframework. Wecanalsostudymultiple
+hypothesis testing within a Bayesian framework. One major obstacle of
+applying Bayesian methods in our context is the unobservability of all tried
+factors.Whileweproposenewfrequentistmethodstohandlethismissingdata
+problem,itisnotclearhowtostructuretheBayesianframeworkinthiscontext.
+Inaddition,thehighdimensionalityoftheproblemraisesconcernsonboththe
+accuracyandthecomputationalburdenofBayesianmethods.
+Nevertheless,ignoringthemissingdataissue,weoutlineastandardBayesian
+multiple hypothesis testing framework in Appendix B and explain how it
+relates to our multiple testing framework. We discuss in detail the pros and
+consoftheBayesianapproach.Incontrasttothefrequentistapproach,which
+uses generalized type I error rates to guide multiple testing, the Bayesian
+approachreliesontheposteriorlikelihoodfunctionandthuscontainsanatural
+penaltytermformultiplicity.However,thissimplicitycomesattheexpenseof
+havingarestrictivehierarchicalmodelstructureandindependenceassumptions
+32 TheunderlyingassumptionforthemodelinAppendixAistheindependenceamongt-statistics,whichmaynot
+beplausiblegivenourpreviousdiscussionsontestdependence.Inthatcase,ourstructuralmodelinSection5
+proposesamorerealisticdatageneratingprocessforthecross-sectionofteststatistics.
+
+=== Page 25 ===
+that may not be realistic for our factor testing problem.Although extensions
+incorporating certain forms of dependence are possible, it is unclear what
+preciselyweshoulddoforthe316factorsinourlist.Inaddition,evenforthe
+Bayesianapproach,thefinalreject/acceptdecisionstillinvolvesthethreshold
+choice. Due to these concerns, we choose not to implement the Bayesian
+approach. We leave extensions of the basic Bayesian framework that could
+possiblyalleviatetheaboveconcernstofutureresearch.
+3.7.4 Methods controlling the FDP. Instead of FDR, recent research by
+LehmannandRomano(2005)developsmethodstodirectlycontroltherealized
+FDP. In particular, they propose a step-down method to control for the
+probabilityofFDPexceedingathresholdvalue.SincetheirdefinitionoftypeI
+error(i.e.,P(FDP>γ),whereγ isthethresholdFDPvalue)isdifferentfrom
+either FWER or FDR, results based on their methods are not comparable to
+ours.However,themainconclusionisthesame.Forinstance,whenγ=0.10
+and α=0.05, the benchmark t-statistic is 2.70 (p-value = 0.69%), which is
+much higher than the conventional cutoff of 1.96. Details are presented in
+OnlineAppendixC.
+4. CorrelationamongTestStatistics
+Although the BHY method is robust to arbitrary dependence among test
+statistics,itdoesnotuseanyinformationaboutthedependencestructure.Such
+information, when appropriately incorporated, can be helpful in making the
+methodmoreaccurate(i.e.,lessstringent).Wefocusonthetypeofdependence
+thatcanbecapturedbythePearsoncorrelation.Togeneratecorrelationamong
+teststatistics,wefocusonthecorrelationamongfactorreturns.Thiscorrelation
+is likely driven by macroeconomic and market-wide variables. Therefore, in
+ourcontext,thedependenceamongteststatisticsisequivalenttothecorrelation
+amongfactorreturns.
+Multiple testing corrections in the presence of correlation have been only
+consideredintherecentstatisticsliterature.Existingmethodsincludebootstrapbased permutation tests and direct statistical modeling. Permutation tests
+resampletheentiredatasetandconstructanempiricaldistributionforthepool
+of test statistics.33 Through resampling, the correlation structure in the data
+is taken into account and no model is needed. In contrast, direct statistical
+modelingmakesadditionaldistributionalassumptionsonthedata-generating
+process. These assumptions are usually case dependent as different kinds of
+correlationsaremoreplausibleunderdifferentcircumstances.34
+33 Westfall(1993)andGeetal.(2003)aretheearlypapersthatsuggestthepermutationresamplingapproach
+inmultipletesting.Laterdevelopmentofthepermutationapproachtriestoreducecomputationalburdenby
+proposingefficientalternativeapproaches.ExamplesincludeLin(2005),ConneelyandBoehnke(2007),and
+Han,Kang,andEskin(2009).
+34 SeeSunandCai(2009)andWeietal.(2009).
+
+=== Page 26 ===
+Inaddition,recentresearchinfinanceexploresbootstrapprocedurestoassess
+the statistical significance of individual tests.35 Many of these studies focus
+onperformanceevaluationandtestwhetherfundmanagersexhibitskill.Our
+approachfocusesonthejointdistributionoftheteststatistics(bothFWERand
+FDRdependonthecross-sectionoft-statistics)andevaluatesthesignificance
+ofeachindividualfactor.
+Unfortunately, we do not always observe the time series of factor returns
+(when a t-statistic is based on long-short strategy returns) or the time series
+of slopes in cross-sectional regressions (when a t-statistic is based on the
+slopecoefficientsincross-sectionalregressions).Becausefewresearcherspost
+their original data, often all we have is the single t-statistic that summarizes
+the significance of a factor. We propose a novel approach to overcome this
+missingdataproblem.Itisinessencea"directmodelingapproach"butdoesnot
+requirethefullinformationofthereturnseriesbasedonwhichthet-statisticis
+constructed.Inaddition,ourapproachisflexibleenoughtoincorporatevarious
+kindsofdistributionalassumptions.Weexpectittobeavaluableadditiontothe
+multipletestingliterature,especiallywhenonlyteststatisticsareobservable.
+4.1 Amodelwithcorrelations
+For each factor, suppose researchers construct a corresponding long-short
+tradingstrategyandnormalizethereturnstandarddeviationtobeσ=15%per
+year,whichisclosetotheannualvolatilityofthemarketindex.36Inparticular,
+letthenormalizedstrategyreturninperiodt forthei-thdiscoveredstrategybe
+X i,t.Thenthet-statisticfortestingthesignificanceofthisstrategyis:
+(cid:7)N √
+T i=( X i,t /N)/(σ/ N).
+t=1
+Assumingjointnormalityandzeroserialcorrelationforstrategyreturns,this
+t-statistichasanormaldistribution
+√
+T
+i
+∼N(μ
+i
+/(σ/ N),1),
+where μ i denotes the population mean of the strategy. The μ i's are
+unobservable,andhypothesistestingunderthisframeworkamountstotesting
+μ i >0. We assume that each μ i is an independent draw from the following
+mixturedistribution:
+μ
+i
+∼p
+0
+I {μ=0}+(1−p
+0
+)Exp(λ),
+where I {μ=0} is the distribution that has a point mass at zero, Exp(λ) is the
+exponentialdistributionthathasameanparameterλ,andp istheprobabilityof
+0
+35 SeeEfron(1979)fortheoriginalworkinthestatisticsliterature.Forrecentfinanceapplications,seeKarolyi
+andKho(2004),Kosowskietal.(2006),Kosowski,Naik,andTeo(2007),FamaandFrench(2010),Caoetal.
+(2013),andHarveyandLiu(2014c).
+36 Noticethatthisassumptionisnotnecessaryforourapproach.Fixingthestandarddeviationsofdifferentstrategies
+eliminatestheneedtoseparatelymodelthem,whichcanbedonethroughajointmodelingofthemeanand
+varianceofthecross-sectionofreturns.SeeHarveyandLiu(2014a)forfurtherdiscussionsonthis.
+
+=== Page 27 ===
+drawingfromthepointmassdistribution.Thismixturedistributionassumption
+is the core component for Bayesian multiple testing and succinctly captures
+theideaofhypothesistestinginthetraditionalfrequentist'sview:whilethere
+is a range of possible values for the means of truly profitable strategies, a
+proportionofstrategiesshouldhaveameanthatisindistinguishablefromzero.
+Theexponentialassumptionisnotessentialforourmodelasmoresophisticated
+distributions (e.g., a Gamma distribution featuring two free parameters) can
+beused.Weusetheexponentialdistributionforitssimplicity37 and,perhaps
+moreimportantly,becauseitisconsistentwiththeintuitionthatmoreprofitable
+strategies are less likely to exist. An exponential distribution captures this
+featurebyhavingamonotonicallydecreasingprobabilitydensityfunction.
+Next, we incorporate correlations into the above framework. Among
+the various sources of correlations, the cross-sectional correlations among
+contemporaneous returns are the most important for us to take into account.
+Thesecorrelationsarelikelyinducedbyaresponsetocommonmacroeconomic
+ormarketshocks.Otherkindsofcorrelationscanbeeasilyembeddedintoour
+frameworkaswell.38
+Asastartingpoint,weassumethatthecontemporaneouscorrelationbetween
+twostrategies'returnsisρ.Thenoncontemporaneouscorrelationsareassumed
+tobezero.Thatis,
+Corr(X
+i,t
+,X j,t)=ρ, i(cid:9)=j,
+Corr(X
+i,t
+,X j,s)=0, t(cid:9)=s.
+Finally, to incorporate the impact of hidden tests, we assume that M
+factorsaretried,butonlyfactorsthatexceedacertaint-statisticthresholdare
+published.Wesetthethresholdt-statisticat1.96andfocusonthesubsample
+of factors that have a t-statistic larger than 1.96. However, as shown in
+AppendixA,factorswithmarginalt-statistics(i.e.,t-statisticsjustabove1.96)
+are less likely to be published than those with larger t-statistics. Therefore,
+our subsample of published t-statistics only covers a fraction of t-statistics
+above 1.96 for tried factors. To overcome this missing data problem, we
+assume that our sample covers a fraction r of t-statistics in between 1.96
+and 2.57 and that all t-statistics above 2.57 are covered. We augment the
+existing t-statistic sample to construct the full sample. For instance, when
+r=1/2, we simply duplicate the sample of t-statistics in between 1.96 and
+2.57 and maintain the sample of t-statistics above 2.57 to construct the full
+37 Asshownlater,weneedtoestimatetheparametersinthemixturemodelbasedonourt-statisticssample.An
+overparameterizeddistributionforthecontinuousdistributioninthemixturemodel,albeitflexible,mayresult
+inimpreciseestimates.Wethereforeusethesimpleone-parameterexponentialdistributionfamily.
+38 Toincorporatetheserialcorrelationforindividualstrategies,wecanmodelthemassimpleautoregressive
+processes.SeeHarveyandLiu(2014a)forfurtherdiscussionofthekindsofcorrelationstructuresthatourmodel
+isabletoincorporate.SeeSunandCai(2009)foranexamplethatmodelsthespatialdependenceamongthenull
+hypotheses.
+
+=== Page 28 ===
+sample. For the baseline case, we set r=1/2, consistent with the analysis
+in Appendix A. We try alternative values of r to determine how the results
+change.39
+Giventhecorrelationstructureandthesamplingdistributionforthemeans
+ofreturns,wecanfullycharacterizethedistributionalpropertiesofthecrosssectionofreturns.Wecanalsodeterminethedistributionforthecross-section
+oft-statisticsastheyarefunctionsofreturns.Basedonoursampleoft-statistics
+for published research, we match key sample statistics with their population
+counterpartsinthemodel.
+The sample statistics we choose to match are the quantiles of the sample
+of t-statistics and the sample size (i.e., the total number of discoveries).
+Two concerns motivate us to use quantiles. First, sample quantiles are less
+susceptible to outliers compared to means and other moment-related sample
+statistics.Ourt-statisticsampledoeshaveafewinfluentialobservations,and
+weexpectquantilestobemoreusefuldescriptivestatisticsthanthemeanand
+thestandarddeviation.Second,simulationstudiesshowthatquantilesinour
+modelaremoresensitivetochangesinparametersthanotherstatistics.Tooffer
+amoreefficientestimationofthemodel,wechoosetofocusonquantiles.
+In particular, the quantities we choose to match and their values for the
+baselinesample(i.e.,r=1/2)aregivenby:
+⎧
+⎪⎪⎨ T(cid:8) =Totalnumberofdiscoveries=353,
+Q(cid:8) =The20thpercentileofthesampleoft-statistics=2.39,
+1
+⎪⎪⎩ Q(cid:8)
+2
+=The50thpercentileofthesampleoft-statistics=3.16,
+Q(cid:8) =The90thpercentileofthesampleoft-statistics=6.34.
+3
+Thesethreequantilesarerepresentativeofthespectrumofquantilesandcanbe
+showntobemostsensitivetoparameterchangesinourmodel.Fixingthemodel
+parameters,wecanalsoobtainthemodelimpliedsamplestatisticsT,Q ,Q ,
+1 2
+andQ throughsimulations.40Theestimationworksbyseekingtofindtheset
+3
+ofparametersthatminimizesthefollowingobjectivefunction:
+(cid:7)3
+D(λ,p
+0
+,M,ρ)=w
+0
+(T−T(cid:8) )2+ w i(Q
+i
+−Q(cid:8) i)2,
+i=1
+where w 0 and {w i }3 i=1 are the weights associated with the squared distances.
+Motivated by the optimal weighting for the generalized method of moments
+(GMM)estimators,wesettheseweightsatw =1andw =w =w =10,000.
+0 1 2 3
+39 Ourchoiceofthethresholdt-statisticissmallerthanthe2.57thresholdinAppendixA.Thisallowsustoobserve
+falsediscoveriesthatovercomethethresholdmorefrequentlythanunder2.57.Thisisimportantfortheestimation
+ofp 0inthemodel.Formoredetailsontheselectionofthethresholdt-statistic,seeHarveyandLiu(2014a).
+40 Modelimpliedquantilesaredifficult(andmostlikelyinfeasible)tocalculateanalytically.Weobtainthemthrough
+simulations.Inparticular,forafixedsetofparameters,wesimulate5,000independentsamplesoft-statistics.
+Foreachsample,wecalculatethefoursummarystatistics.Themedianofthesesummarystatisticsacrossthe
+5,000simulationsistakenasthemodelimpliedstatistics.
+
+=== Page 29 ===
+Theycanbeshowntohavethesamemagnitudeastheinversesofthevariances
+of the corresponding model implied sample statistics across a wide range of
+parametervaluesandshouldhelpimproveestimationefficiency.41
+We estimate the three parameters (λ,p , and M) in the model and choose
+0
+to calibrate the correlation coefficient ρ. In particular, for a given level of
+correlationρ,wenumericallysearchforthemodelparameters(λ,p ,M)that
+0
+minimizetheobjectivefunctionD(λ,p ,M,ρ).
+0
+We choose to calibrate the amount of correlation because the correlation
+coefficient is likely to be weakly identified in this framework. Ideally, to
+have a better identification of ρ, we would like to have t-statistics that are
+generated from samples that have varying degrees of overlap.42 We do not
+allowheterogeneityinsampleperiodsineitherourestimationframework(i.e.,
+all t-statistics are generated from samples that cover the same period) or our
+data(wedonotrecordthespecificperiodforwhichthet-statisticisgenerated).
+Asaresult,ourresultsarebestinterpretedastheestimatedt-statisticthresholds
+forahypotheticallevelofcorrelation.
+Toinvestigatehowcorrelationaffectsmultipletesting,wefollowanintuitive
+simulationprocedure.Inparticular,fixingλ,p ,andM attheirestimates,we
+0
+know the data-generating process for the cross-section of returns. Through
+simulations,weareabletocalculatethepreviouslydefinedtypeIerrorrates
+(i.e., FWER and FDR) for any given threshold t-statistic. We search for the
+optimalthresholdt-statisticthatexactlyachievesaprespecifiederrorrate.
+4.2 Results
+Our estimation framework assumes a balanced panel with M factors and N
+periodsofreturns.WeneedtoassignavaluetoN.Publishedpapersusually
+cover a period ranging from twenty to fifty years. In our framework, the
+choice of N does not affect the distribution of T i under the null hypothesis
+(i.e., μ i=0) but will affect T i under the alternative hypoth√esis (i.e., μ i >0).
+When μ i is different from zero, T i has a mean of μ i /(σ/ N). A larger N
+reducesthenoiseinreturnsandmakesitmorelikelyforT i tobesignificant.
+Tobeconservative(i.e.,lesslikelytogeneratesignificantt-statisticsunderthe
+alternativehypotheses),wesetNat240(i.e.,twentyyears).Otherspecifications
+ofN changetheestimateofλbutleavetheotherparametersalmostintact.In
+particular,thethresholdt-statisticsarelittlechangedforalternativevaluesofN.
+The results are presented in Table 5.Across different correlation levels, λ
+(themeanparameterfortheexponentialdistributionthatrepresentsthemean
+41 Wedonotpursuealikelihood-basedestimation.Giventhatwehavemorethanathousandfactorsandeachof
+themisassociatedwithanindicatorvariablethatismissing,thelikelihoodfunctioninvolveshigh-dimensional
+integralsandisdifficulttooptimize.ThisleadsustoaGMM-basedapproach.
+42 Intuitively,t-statisticsthatarebasedonsimilarsampleperiodsaremorecorrelatedthant-statisticsthatare
+basedondistinctsampleperiods.Therefore,thedegreeofoverlapinsampleperiodhelpsidentifythecorrelation
+coefficient.SeeFersonandChen(2013)forasimilarargumentonmeasuringthecorrelationsamongfundreturns.
+
+=== Page 30 ===
+Table5
+Estimationresults:Amodelwithcorrelations
+PanelA:r=1/2(baseline)
+t-statistic
+ρ p 0 λ(%) M FWER(5%) FWER(1%) FDR(5%) FDR(1%)
+0 0.396 0.550 1,297 3.89 4.28 2.16 2.88
+0.2 0.444 0.555 1,378 3.91 4.30 2.27 2.95
+0.4 0.485 0.554 1,477 3.81 4.23 2.34 3.05
+0.6 0.601 0.555 1,775 3.67 4.15 2.43 3.09
+0.8 0.840 0.560 3,110 3.35 3.89 2.59 3.25
+PanelB:r=2/3(moreunobservedtests)
+0 0.683 0.550 2,458 4.17 4.55 2.69 3.30
+0.2 0.722 0.551 2,696 4.15 4.54 2.76 3.38
+0.4 0.773 0.552 3,031 4.06 4.45 2.80 3.40
+0.6 0.885 0.562 4,339 3.86 4.29 2.91 3.55
+0.8 0.922 0.532 5,392 3.44 4.00 2.75 3.39
+Weestimatethemodelwithcorrelations.ristheassumedproportionofmissingfactorswithat-statisticbetween
+1.96and2.57.PanelAshowstheresultsforthebaselinecaseinwhichr=1/2,andpanelBshowstheresults
+forthecaseinwhichr=2/3.ρisthecorrelationcoefficientbetweentwostrategyreturnsinthesameperiod.
+p 0istheprobabilityofhavingastrategythathasameanofzero.λisthemeanparameteroftheexponential
+distributionforthemonthlymeansofthetruefactors.Misthetotalnumberoftrials.
+returns for true factors) is consistently estimated at 0.55% per month. This
+corresponds to an annual factor return of 6.6%. Therefore, we estimate the
+averagemeanreturnsfortrulysignificantfactorstobe6.6%perannum.Given
+thatwestandardizefactorreturnsbyanannualvolatilityof15%,theaverage
+annualSharperatioforthesefactorsis0.44(ormonthlySharperatioof0.13).43
+For the other parameter estimates, both p and M are increasing in ρ.
+0
+Focusing on the baseline case in panel A and at ρ=0, we estimate that
+researchers have tried M=1,297 factors and 60.4% (=1−0.396) are true
+discoveries.Whenρisincreasedto0.60,weestimatethatatotalofM=1,775
+factorshavebeentriedandaround39.9%(=1−0.601)aretruefactors.
+Turning to the estimates of threshold t-statistics and focusing on FWER,
+weseethattheyarenotmonotonicinthelevelofcorrelation.Intuitively,two
+forcesareatworkindrivingthesethresholdt-statistics.Ontheonehand,both
+p andM areincreasinginthelevelofcorrelation.Therefore,morefactors-
+0
+bothinabsolutevalueandinproportion-aredrawnfromthenullhypothesis.
+Tocontroltheoccurrencesoffalsediscoveriesbasedonthesefactors,weneed
+a higher threshold t-statistic. On the other hand, a higher correlation among
+test statistics reduces the required threshold t-statistic. In the extreme case
+whenallteststatisticsareperfectlycorrelated,wedonotneedmultipletesting
+adjustment at all.These two forces work against each other and result in the
+nonmonotonic pattern for the threshold t-statistics under FWER. For FDR,
+43 Ourestimatesarerobusttothesamplepercentilesthatwechoosetomatch.Forinstance,fixingthelevelof
+correlationat0.2,whenweusethe10thtogetherwiththe50thand90thpercentilesofthesampleoft-statistics,
+ourparameterestimateis(p
+0
+,λ,M)=(0.390,0.548,1,287).Alternatively,whenweusethe80thtogetherwiththe
+20thand50thpercentilesofthesampleoft-statistics,ourparameterestimateis(p
+0
+,λ,M)=(0.514,0.579,1,493).
+Bothestimatesareintheneighborhoodofourbaselinemodelestimates.
+
+=== Page 31 ===
+itappearsthattheimpactoflargerp andM dominatessothatthethreshold
+0
+t-statisticsareincreasinginthelevelofcorrelation.
+Acrossvariouscorrelationspecifications,ourestimatesshowthatingeneral
+at-statisticof3.9and3.0isneededtocontrolFWERat5%andFDRat1%,
+respectively.44 Noticethatthesenumbersarenotfarawayfromourprevious
+estimatesof3.78(HolmadjustmentthatcontrolsFWERat5%)and3.38(BHY
+adjustment that controls FDR at 1%). However, these similar numbers are
+generatedthroughdifferentmechanisms.Ourcurrentestimateassumesacertain
+levelofcorrelationamongreturnsandreliesonanestimateofmorethan1,300
+forthetotalnumberoffactortests.Ontheotherhand,ourpreviouscalculation
+assumesthatthe316publishedfactorsareallthefactorsthathavebeentried
+butdoesnotspecifyacorrelationstructure.
+4.3 Howlargeisρ?
+Our sample has limitations in making a direct inference on the level of
+correlation. To give some guidance, we provide indirect evidence on the
+plausiblelevelsofρ.
+First,thevalueoftheoptimizedobjectivefunctionshedslightonthelevel
+ofρ.Intuitively,avalueofρ thatismoreconsistentwiththedata-generating
+processshouldresultinaloweroptimizedobjectivefunction.Acrossthevarious
+specifications of ρ in Table 5, we find that the optimized objective function
+reachesitslowestpointwhenρ=0.2.Therefore,ourt-statisticsamplesuggests
+alowlevelofcorrelation.However,thisevidenceisonlysuggestivegiventhe
+weakidentificationofρ inourmodel.
+Second, we draw on external data source to provide inference. In
+particular,weanalyzetheS&PCAPITALIQdatabase,whichincludesdetailed
+informationonthetime-seriesofreturnsofover400factorsfortheU.S.equity
+market.We estimate the average pairwise correlation among these factors to
+be0.15forthe1985-2014period.
+Finally, existing studies in the literature provide guidance on the level of
+correlation.McLeanandPontiff(2015)estimatethecorrelationamonganomaly
+returnstobearound0.05.Green,Hand,andZhang(2013a)focusonaccountingbased factors and find the average correlation to be between 0.06 and 0.20.
+Focusingonmutualfundreturns,Barras,Scaillet,andWermers(2010)arguefor
+acorrelationofzeroamongfundreturns(i.e.,excessreturnsagainstbenchmark
+factors),whileFersonandChen(2013)calibratethisnumbertobebetween0.04
+and0.09.
+Overall, we believe that the average correlation among factor returns is in
+theneighborhoodof0.20.
+44 Tosavespace,wechoosenottodiscusstheperformanceofourestimationmethod.HarveyandLiu(2014a)
+provideadetailedsimulationstudyofourmodel.
+
+=== Page 32 ===
+4.4 Howmanytruefactorsarethere?
+Thenumberoftruediscoveriesusingourmethodseemshighgiventhatmost
+of us believe as a priori that there are only a handful of true systematic risk
+factors. However, many of these factors that our method deems statistically
+truehavetinySharperatios.Forexample,around70%ofthemhaveaSharpe
+ratiothatislessthan0.5perannum.Fromamodelingperspective,weimpose
+amonotonicexponentialdensityforthemeanreturnsoftruefactors.Hence,by
+assumption,thenumberofdiscoverieswillbedecreasinginthemeanreturn.
+Overall, statistical evidence can only get us so far in reducing the number
+of false discoveries. This is a limitation not only to our framework but also
+probablyinanystatisticalframeworkthatreliesonindividualp-values.Tosee
+this,supposethesmallestt-statisticamongtrueriskfactorsis3.0andassume
+our sample covers fifty risk factors that all have a t-statistic above 3.0.Then
+basedonstatisticalevidenceonly,itisimpossibletoruleoutanyofthesefifty
+factorsfromthelistoftrueriskfactors.
+Weagreethatafurtherscrutinyofthefactoruniverseisavaluableexercise.
+Thereareatleasttworouteswecantake.Onerouteistointroduceadditional
+testable assumptions that a systematic risk factor has to satisfy to claim
+significance. Pukthuanthong and Roll (2014) use the principle components
+ofthecross-sectionofrealizedreturnstoimposesuchassumptions.Theother
+routeistoincrementallyincreasethefactorlistbyallowingdifferentfactorsto
+crowdeachotherout.HarveyandLiu(2014c)providesuchaframework.We
+expectbothlinesofresearchtohelpincullingthenumberoffactors.
+5. Conclusion
+Atleast316factorshavebeentestedtoexplainthecross-sectionofexpected
+returns.Mostofthesefactorshavebeenproposedoverthelasttenyears.Indeed,
+Cochrane(2011)referstothisas"azooofnewfactors."Ourpaperarguesthat
+it is a serious mistake to use the usual statistical significance cutoffs (e.g., a
+t-statisticexceeding2.0)inassetpricingtests.Giventheplethoraoffactors,and
+theinevitabledatamining,manyofthehistoricallydiscoveredfactorswould
+bedeemed"significant"bychance.
+There is an important philosophical issue embedded in our approach. Our
+threshold cutoffs increase through time as more factors are data mined.
+However, data mining is not new. Why should we have a higher threshold
+fortoday'sdataminingthanfordatamininginthe1980s?Webelievethereare
+threereasonsfortoughercriteriatoday.First,thelow-hangingfruithasalready
+beenpicked.Thatis,therateofdiscoveringatruefactorhaslikelydecreased.
+Second,thereisalimitedamountofdata.Indeed,thereisonlysomuchyou
+can do with the CRSPdatabase. In contrast, in particle physics, it is routine
+tocreatetrillionsofnewobservationsinanexperiment.Wedonothavethat
+luxury in finance.Third, the cost of data mining has dramatically decreased.
+Inthepast,datacollectionandestimationweretimeintensive,soitwasmore
+
+=== Page 33 ===
+likelythatonlyfactorswiththehighestpriors-potentiallybasedoneconomic
+firstprinciples-weretried.
+Our paper presents three conventional multiple testing frameworks and
+proposes a new one that particularly suits research in financial economics.
+Whiletheseframeworksdifferintheirassumptions,theyareconsistentintheir
+conclusions. We argue that a newly discovered factor today should have a
+t-statisticthatexceeds3.0.Weprovideatime-seriesofrecommended"cutoffs"
+from the first empirical test in 1967 through to present day. Many published
+factorsfailtoexceedourrecommendedcutoffs.
+Whileat-statisticof3.0(whichcorrespondstoap-valueof0.27%)seems
+like a very high hurdle, we also argue that there are good reasons to expect
+that3.0istoolow.First,weonlycountfactorsthatarepublishedinprominent
+journalsandwesampleonlyasmallfractionoftheworkingpapers.Second,
+therearesurelymanyfactorsthatweretriedbyempiricists,failed,andnever
+madeittopublicationorevenaworkingpaper.Indeed,thecultureinfinancial
+economicsistofocusonthediscoveryofnewfactors.Incontrastwithother
+fields,suchasmedicalscience,itisraretopublishreplicationstudiesfocusing
+ononlyexistingfactors.Giventhatourcountof316testedfactorsissurelytoo
+low,thismeansthet-statisticcutoffislikelyevenhigher.45
+Should a t-statistic of 3.0 be used for every factor proposed in the future?
+Probablynot.Acasecanbemadethatafactordevelopedfromfirstprinciples
+should have a lower threshold t-statistic than a factor that is discovered as
+a purely empirical exercise. Nevertheless, a t-statistic of 2.0 is no longer
+appropriate-evenforfactorsthatarederivedfromtheory.
+In medical research, the recognition of the multiple testing problem has
+led to the disturbing conclusion that "most claimed research findings are
+false"(Ioannidis(2005)).Ouranalysisoffactordiscoveriesleadstothesame
+conclusion-manyofthefactorsdiscoveredinthefieldoffinancearelikelyfalse
+discoveries:ofthe296publishedsignificantfactors,158wouldbeconsidered
+false discoveries under Bonferonni, 142 under Holm, 132 under BHY(1%),
+and80underBHY(5%).Inaddition,theideathattherearesomanyfactorsis
+inconsistent with the principal component analysis, where, perhaps there are
+five"statistical"commonfactorsdrivingtime-seriesvariationinequityreturns
+(Ahn,Horenstein,andWang2012).
+The assumption that researchers follow the rules of classical statistics
+(e.g., randomization, unbiased reporting) is at odds with the notion of
+individualincentives,ironically,oneofthefundamentalpremisesineconomics.
+Importantly, the optimal amount of data mining is not zero since some data
+miningproducesknowledge.Thekey,asarguedbyGlaeser(2008),istodesign
+appropriate statistical methods to adjust for biases, not to eliminate research
+45 Inastronomyandphysics,evenhigherthresholdt-statisticsareoftenusedtocontrolfortestingmultiplicity.For
+instance,thehighprofilediscoveryofHiggsBosonhasat-statisticofmorethan5(p-valuelessthan0.0001%).
+SeeATLASCollaboration(2012),CMSCollaboration(2012),andHarveyandLiu(2014b).
+
+=== Page 34 ===
+6elbaT
+raeyybdetrossrotcaF:tsilrotcaF
+#
+rotcaF
+ecnerefeR
+#
+rotcaF
+ecnerefeR
+T
+htlaews'remusnoclaudividni
+)2891(sedinitnatsnoC
+T
+nrutertekram
+)4691(eprahS
+8C
+oitarPE
+)3891(usaB
+T
+nrutertekram
+)5691(rentniL
+T
+egnahcetarXF
+)3891(samuDdnareldA
+T
+nrutertekram
+)6691(nissoM
+‡gnidlohlanoitutitsni
+)3891(lebertSdna,llevraC,lebrA
+1C
+ytilitalovlatot
+)7691(salguoD
+‡snoitatcepxesgninrae
+)4891(leinaDdna,nilrebmahC,snikwaH
+T
+nrutertekram
+)2791(namrekceH
+‡tnemecnuonnasgnitsilwen
+)4891(regnaSdnallennoCcM
+T
+sdoog.snocfosecirpevitaler
+†nrutertekram
+)5891(heisHdna,nehC,nahC
+nrutertekram
+)2791(selohcSdna,nesneJ,kcalB1
+5F
+htworgnoitcudorplairtsudni
+T
+nrutertekram
+)2791(kcalB
+6F
+*noitaflnidetcepxeniegnahc
+T
+.sppotnemtsevniselbairavetats
+)3791(notreM
+7F
+noitaflnidetapicitnanu
+1F
+nrutertekram
+)3791(hteBcaMdnaamaF
+8F
+muimerptiderc
+2F
+*derauqsateb
+9F
+*erutcurtsmret
+2C
+*ytilitalovcitarcnysoidi
+9C
+lasrevernrutermret-gnol
+)5891(relahTdnatdnoBeD
+T
+nrutertekramredro-hgih
+)3791(nietsnibuR
+T
+seitinutroppotnemtsevni(cid:7)
+)5891(ssoRdna,llosregnI,xoC
+T
+nrutertekramdlrow
+)4791(kinloS
+T
+stsocnoitcasnart
+)6891(nosledneMdnaduhimA
+T
+secruoserrotsevnilaudividni
+)4791(nietsnibuR
+T
+stsocnoitcasnart
+)6891(sedinitnatsnoC
+3C
+snoitatcepxehtworgsgninrae
+)5791(refOdnaatpuG
+T
+noitaflnidetcepxe
+)6891(zlutS
+†nrutertekram
+)6791(regrebneztiLdnasuarK
+01F
+etartseretnimret-gnol
+)6891(agraWdnayeneewS
+3F
+*nrutertekramderauqs
+†htworgnoitcudorplairtsudni
+)6891(ssoRdna,lloR,nehC
+4C
+oitarEP
+)7791(usaB
+†muimerptiderc
+T
+noitutitsbusfoetarlanigram
+)8791(sacuL
+†erutcurtsmret
+5C
+dleiydnedivid
+)9791(ymawsamaRdnaregrebneztiL
+†noitaflnidetapicitnanu
+†nrutertekram
+11F
+*secirplioniegnahc
+T
+htworgnoitpmusnoclaer
+)9791(nedeerB
+01C
+oitarytiuqe-ot-tbed
+)8891(iradnahB
+T
+snoitcirtserelas-trohs
+)0891(worraJ
+‡stsacerofhtworgmret-gnol
+)8891(newoDdnanamuaB
+‡†nrutertekram
+)1891(notpiTdna,nhoJ,relgoF2
+21F
+htworgnoitpmusnoc
+)9891(regrebneztiLdna,snobbiG,nedeerB
+‡nruterdnobyrusaerT
+11C
+ytidiuqilli
+)9891(nosledneMdnaduhimA
+‡nruterdnobetaroproc
+21C
+egnahcsgninraedetciderp
+)9891(namnePdnauO
+4F
+nruterllib-yrusaerT
+)1891(ikslagoRdnadlefidlO
+31C
+ytilibatciderpnruter
+)0991(hseedageJ
+T
+noitpmusnocdlrow
+)1891(zlutS
+T
+stsocnoitcasnart
+)1891(rahsyaM
+6C
+ezismrfi
+)1891(znaB
+7C
+tseretnitrohs
+)1891(ikswelgiF
+)deunitnoc(
+
+=== Page 35 ===
+6elbaT
+deunitnoC
+#
+rotcaF
+ecnerefeR
+#
+rotcaF
+ecnerefeR
+22F
+noitaflnidetcepxeniegnahc
+)5991(ekalBdna,reburG,notlE
+†nrutertekram
+)1991(yevraHdnanosreF
+32F
+PNGdetcepxeniegnahc
+†htworgnoitpmusnoc
+‡sgnireffoytiuqedenosaes
+)9991(sevarG-kceflfAdnasseipS
+†daerpstiderc
+42F
+htworgyenom
+)6991(gnaLdna,iseroF,nahC
+31F
+evrucdleiyehtfoepols(cid:7)
+52F
+.vnilacisyhpnosnruter
+)6991(enarhcoC
+†noitaflnidetcepxenu
+†nrutertekram
+)6991(llebpmaC
+41F
+etartrohslaer
+62F
+emocnirobal
+51F
+ezis
+)2991(hcnerFdnaamaF3
+†dleiydnedivid
+61F
+eulav
+†etartseretni
+‡mutnemomnruter
+)2991(rettiRdna,kohsinokaL,arpohC
+†erutcurtsmret
+‡sngisnruterdetciderp
+)2991(rekcraLdnanesuahtloH
+†nrutertekram
+)6991(gnaWdnanahtannagaJ
+41C
+mutnemomnruter
+)3991(namtiTdnahseedageJ
+†evrucdleiyfoepols
+‡skcotsP&Snosnruter
+)3991(.latenotlE
+†emocnirobal
+‡skcotsP&S-nonnosnruter
+81C
+stsacerofsgninrae
+)6991(atroPaL
+‡snruterdnob&ytiuqeredro-hgih
+)3991(nahtanawsiVdnalasnaB4
+91C
+latipacD&R
+)6991(sinnaiguoSdnaveL
+†nrutertekram
+)3991(hcnerFdnaamaF
+02C
+slaurcca
+)6991(naolS
+†ezis
+12C
+snoitadnemmoceryub
+)6991(kcamoW
+†eulav
+22C
+snoitadnemmocerlles
+†erutcurtsmret
+32C
+gnitartiderc
+)6991(atnaksiVdna,yevraH,brE
+†ksirtiderc
+42C
+ytidiuqilli
+)6991(maynamharbuSdnanannerB
+‡nruterytiuqedlrow
+)3991(yevraHdnanosreF5
+‡htworg.snocfo.nfraenilnon
+)7991(nampahC6
+‡etaregnahcxedethgiewniegnahc
+‡nruterelytscitsinutroppo
+)7991(heisHdnagnuF7
+‡snoitatcepxenoitaflniTL(cid:7)
+‡nruterelytsorcam/labolg
+‡etarmret-trohslaerdethgiew
+‡nruterelytseulav
+‡†ecirplioniegnahc
+‡nruterelytsgniwollofdnert
+‡daerpsDETniegnahc
+‡nruterelyts.vnidessertsid
+‡noitcudorplairtsudni7-Gni(cid:7)
+†ezis
+)7991(trahraC
+‡noitaflni7-Gdetcepxenu
+†eulav
+71F
+nruterytiuqedlrow
+)4991(yevraHdnanosreF
+†nrutertekram
+81F
+*etarXFdethgiewniegnahc
+72F
+mutnemom
+91F
+*snoitatcepxenoitaflniTL(cid:7)
+52C
+levelerusolcsid
+)7991(nasotoB
+†∗ecirplioniegnahc
+62C
+ytniatrecnutsacerofsgninrae
+)7991(sokassanahtAdnatrekcA
+02F
+sniaglatipacrofetarxat
+)4991(nommaDdnastreassoB
+†ezis
+)7991(namtiTdnaleinaD
+12F
+dnedividrofetarxat
+†eulav
+51C
+ecnaussikcotscilbupwen
+)5991(rettiRdnanarhguoL
+61C
+snoitaitinidnedivid
+)5991(kcamoWdna,relahT,yleahciM
+71C
+snoissimodnedivid
+)deunitnoc(
+
+=== Page 36 ===
+6elbaT
+deunitnoC
+#
+rotcaF
+ecnerefeR
+#
+rotcaF
+ecnerefeR
+54C
+ksirssertsid
+)2002(nommeLdnanfifirG
+‡doohilekiltnemeganamsgninrae
+)7991(hsieneB
+64C
+noisrepsidtsylana
+)2002(anibrehcSdna,yollaM,rehteiD
+72C
+snoitisiuqcaetaroproc
+)7991(hjiVdnanarhguoL
+74C
+pihsrenwofohtdaerb
+)2002(nietSdna,gnoH,nehC
+†ezis
+)8991(maynamharbuSdna,aidrohC,nannerB
+84C
+ksirnoitamrofni
+)2002(araH'Odna,reajkdivH,yelsaE
+†oitartekram-ot-koob
+94C
+stniartsnocelas-trohs
+)2002(tnomaLdnasenoJ
+†mutnemom
+05C
+ytilibaniatsussgninrae
+)2002(gnahZdnanamneP
+82C
+emulovgnidart
+33F
+ytidiuqillitekram
+)2002(duhimA
+‡sisylanalatnemadnuf
+)8991(eehsuBdnallenabrabA
+43F
+swenhtworgPDG
+)3002(uolassaV
+‡eulavlatnemadnufmrfi
+)8991(eeLdnaleknarF
+53F
+ytidiuqiltekram
+)3002(hguabmatSdnarotsaP
+92C
+ksiryctpurknab
+)8991(vehciD
+†ytilitalovnrutercitarcnysoidi
+)3002(yelbmorTdna,gnawH,ilA
+03C
+ytidiuqilli
+)8991(effilcdaRdna,kiaN,rataD
+†stsocnoitcasnart
+82F
+nruteroiloftropdetcepxe
+)9991(yevraHdnanosreF
+†noitacitsihposrotsevni
+13C
+mutnemomyrtsudni
+)9991(ttalbnirGdnaztiwoksoM
+15C
+sthgirredloherahs
+)3002(kcirteMdna,iihsI,srepmoG
+‡sgnireffotbed
+)9991(sevarG-kceflfAdnasseipS
+25C
+sesnepxededulcxe
+)3002(namiloSdna,mlohdnuL,elyoD
+92F
+emocniruenerpertne
+)0002(sacuLdnanotaeH
+35C
+stessagnitarepotenTLnihtworg
+)3002(nhoYdna,tnanesihW,dlefiriaF
+03F
+ssenweksoc
+)0002(euqiddiSdnayevraH
+45C
+golkcabredro
+)3002(malahcatakneVdna,nilvehS,lapogjaR
+23C
+emulovgnidart
+)0002(nahtanimawSdnaeeL
+55C
+ycnetsisnocnruter
+)3002(sniktaW
+33C
+ezisyrtsudni-artni
+)0002(snevetSdna,retroP,ssensA
+63F
+noitpmusnoccitarcnysoidi
+)4002(gnaWdnasbocaJ
+43C
+eulavyrtsudni-artni
+73F
+swenwofl-hsac
+)4002(ohaneetlouVdnallebpmaC
+53C
+P/FCyrtsudni-artni
+83F
+swenetartnuocsid
+63C
+seeyolpme#%(cid:7)yrtsudni-artni
+†nrutertekram
+)4002(nednaV8
+73C
+mutnemomyrtsudni-artni
+93F
+snruternoitpoxedni
+83C
+.rofnitnemetatslaicnanfi
+)0002(iksortoiP
+04F
+ksirtluafed
+)4002(gniXdnauolassaV
+†htworgnoitpmusnoc
+)1002(nosgivduLdnauatteL
+14F
+etartseretnilaer
+)4002(aiXdna,gnaW,nannerB
+13F
+oitarhtlaew-noitpmusnoc
+24F
+oiloftropoitareprahSmumixam
+93C
+ytidiuqilfolevel
+)1002(namuhsnAdna,maynamharbuS,aidrohC
+34F
+levelelytsehttaslasrevernruter
+)4002(ooWdnaoeT
+04C
+ytidiuqilfoytilibairav
+65C
+D&Rniegnahcdetcepxenu
+)4002(euqiddiSdna,llewxaM,trahrebE
+14C
+stniartsnoclaicnanfi
+)1002(ojeuqeR-aaSdna,kloP,tnomaL
+75C
+hgihkeew-25
+)4002(gnawHdnaegroeG
+‡nruterelddarts
+)1002(heisHdnagnuF
+∗
+85C
+snoitadnemmocer'stsylana
+)4002(.latehseedageJ
+snoitadnemmocersusnesnoc
+)1002(.laterebraB
+95C
+ytirapllac-tup
+)4002(waletihWdna,nosdrahciR,kefO
+24C
+segnahcgnitardnob
+)1002(iksortoiPdnavehciD
+06C
+tnemtsevnilatipaclamronba
+)4002(eiXdna,ieW,namtiT
+34C
+stsacerof'stsylana
+)1002(reffiefPdna,oL,sreglE
+16C
+msimitpoteehsecnalab
+)4002(.laterefielhsriH
+44C
+pihsrenwolanoitutitsni
+)1002(kcirteMdnasrepmoG
+44F
+htworgnoitpmusnocTL
+)5002(drailluJdnarekraP
+†nrutertekram
+)2002(ramttiD
+54F
+noitpmusnocnur-gnol
+)5002(dalbdnuLdna,ramttiD,lasnaB
+†nrutertekramderauqs †htworgemocnirobal
+23F
+htworgemocnirobalderauqs
+)deunitnoc(
+
+=== Page 37 ===
+6elbaT
+deunitnoC
+#
+rotcaF
+ecnerefeR
+#
+rotcaF
+ecnerefeR
+87C
+*rotacidnitnemnorivne
+)6002(nilevaPdna,skoorB,remmarB
+64F
+oitarecirpgnisuoh
+)5002(hgrubrewueiNnaVdnagitsuL
+97C
+*rotacidnitnemyolpme
+26C
+ecnanrevogetaroproclanretxe
+)5002(riaNdnasremerC
+08C
+*rotacidniytinummoc
+36C
+ecnanrevogetaroproclanretni
+18C
+noitamrofnielbignatni
+)6002(namtiTdnaleinaD
+†nrutertekram
+)5002(nesredePdnaayrahcA9
+28C
+ytilibatfiorp
+)6002(hcnerFdnaamaF
+74F
+*ytidiuqiltekram
+38C
+*tnemtsevni
+46C
+ytidiuqilkcotslaudividni
+†tekram-ot-koob
+56C
+yaledecirp
+)5002(ztiwoksoMdnauoH
+48C
+gnicnanfiten
+)6002(naolSdna,nosdrahciR,wahsdarB
+66C
+sfeilebsuoenegoreteh
+)5002(snegreuJdna,slesyhG,nosrednA
+58C
+erahsrepsgninraedetsacerof
+)6002(gnahZdna,ieW,neC
+76C
+stniartsnocelas-trohs
+)5002(legaN
+68C
+gnidnufnalpnoisnep
+)6002(niraMdnainoznarF
+86C
+stniartsnocelas-trohs
+)5002(rettiRdna,kahtaP,htiuqsA
+78C
+noitarelecca
+)6002(skraMdnanameltteG
+96C
+noitatictnetap
+)5002(uG
+88C
+.rrocotua'sgninraedetcepxenu
+)6002(yhtroomanayaraN
+07C
+ytniatrecnunoitamrofni
+)5002(gnahZdnaeeL,gnaiJ
+26F
+dleiytuoyap
+)7002(.latehkuoduoB
+17C
+D&Rdetsujda
+)5002(samohTdna,missiN,veL
+36F
+ytivitcudorp
+)7002(gnauHdnasrevlaB
+27C
+sesaibgnitroperD&R
+)5002(sinnaiguoSdna,htaraS,veL
+46F
+kcotslatipac
+37C
+xednihtworg
+)5002(marnahoM
+56F
+htworg.snocQht4otQht4
+)7002(gnaWdnanahtannagaJ
+†nrutertekram
+)6002(nednaV01
+98C
+gnitartiderc
+)7002(.latevomarvA
+†nruternoitpoxedni
+09C
+noitisopmocredart
+)7002(uhS
+‡nruternoitpo×tekram
+19C
+golkcabredroniegnahc
+)7002(nhAdnakiaB
+84F
+snoitcirfgnicnanfi
+)6002(gnahZdna,noraY,semoG
+29C
+ytivitcudorpmrfi
+)7002(ewoRdnanworB
+94F
+*sdlohesuoh)GI(htworg.vni
+)6002(gniXdna,uolassaV,iL
+39C
+.lovmrfifostsacerofredisni
+)7002(nosretePdna,rodoF,naroD
+05F
+setaroproclaicnanfinonGI
+49C
+lobmysrekcit
+)7002(nosliWdna,htimS,daeH
+15F
+ssenisubetaroprocnonGI
+66F
+ytilacilcycsgninrae
+)7002(oiruoG
+25F
+smrfilaicnanfiGI
+76F
+noitavonniytilitalovtekram
+)8002(.lateramuK
+‡nrutertekramrewopht01-dr3
+)6002(llihcSdna,nosnhoJ,gnuhC11
+59C
+egamrfi
+47C
+stniartsnoclaicnanfi
+)6002(uWdnadetihW
+†nrutertekram
+35F
+ksiredisnwod
+)6002(.lategnA
+69C
+egamrfi×.lovtekram
+45F
+ytilitalovcitametsys
+)6002(.lategnA
+86F
+ytilitalovtekramnur-trohs
+)8002(grebnesoRdnanairdA
+57C
+ytilitalovcitarcnysoidi
+96F
+ytilitalovtekramnur-gnol
+55F
+tnemitnesrotsevni
+)6002(relgruWdnarekaB
+07F
+htworgtnemtsevni
+)8002(gniX
+65F
+tnemitnesrotsevniliater
+)6002(eeLdnaramuK
+17F
+htworgnoitpmusnocnaem
+)8002(sitoinroK
+75F
+htworg.snoc.rudnon&elbarud
+)6002(ogoY
+27F
+*htworgnoitpmusnocfoecnairav
+†nrutertekram
+)6002(gnaWdnaoL
+37F
+htworgtibahnaem
+85F
+emulovgnidart
+47F
+htworgtibahfoecnairav
+95F
+ytidiuqil
+)6002(akdaS
+57F
+ytidiuqil
+)8002(akdaSdnakyzcjaroK
+06F
+sgninrae
+)6002(ramukavihSdnaaidrohC
+79C
+.lovcitarcnysoidilevel-yrtnuoc
+)8002(sakcivaSdnaouG
+16F
+ytidiuqil
+)6002(uiL
+89C
+ssertsid
+)8002(iygalizSdna,rehcsliH,llebpmaC
+67C
+tnemtsevnilatipac
+)6002(oójieF-aicraGdnanosrednA
+99C
+egatnavdaredloherahs
+)8002(naYdna,uhS,ippalraG
+77C
+noitartnecnocyrtsudni
+)6002(nosniboRdnauoH
+001C
+VMKmorfeulavtekramdeilpmi
+)deunitnoc(
+
+=== Page 38 ===
+6elbaT
+deunitnoC
+#
+rotcaF
+ecnerefeR
+#
+rotcaF
+ecnerefeR
+521C
+ecnalabmiredro
+)9002(uhZdna,naedO,rebraB
+101C
+htworgtessa
+)8002(llihcSdna,neluG,repooC
+58F
+spmujdnaytilitalovtekram
+)0102(muabnieWdna,gnillaH,sremerC
+201C
+ecnaussierahs
+)8002(etagdooWdnaffitnoP
+68F
+gnicirpsimtekram
+)0102(gnaiJdnarefielhsriH
+‡nrutertnemecnuonnasgninrae
+)8002(.latetdnarB
+621C
+ssenwekscitarcnysoidi
+)0102(knikroVdna,nottiM,reyoB
+301C
+sknilcimonocemrfi
+)8002(inizzarFdnanehoC
+721C
+snoitubirtnoclacitilop
+)0102(vokinnihctvOdna,neluG,repooC
+401C
+kcotsnis
+)8002(tnahpilOdna,aM,izzobaF
+821C
+sgnidlohetatselaer
+)0102(lezuT
+501C
+tnemriapmilliwdoog
+)1102(veLdnauG
+921C
+ssenweksdezilaer
+)1102(.lateayamA
+601C
+golkcabredroninoitamrofni
+)8002(eYdna,gnaW,uG
+031C
+sisotrukdezilaer
+701C
+noitingocerrotsevni
+)8002(naolSdnayvaheL
+131C
+elpitlumssecxe
+)0102(gNdna,jarjohB,nA
+801C
+sisylanatnoPuD
+)8002(namiloS
+231C
+ytilauqnoitamrofnimrfi
+)0102(anoroCdna,eejrenaB,gnortsmrA
+901C
+sedartllams
+)8002(reajkdivH
+331C
+.lovcitarcnysoidinur-gnol
+)0102(uXdnaoaC
+67F
+nruter005P&Scitarcnysoidi
+)8002(iLdnanannerB
+78F
+noitamrofnietavirp
+)0102(araH'Odna,reajkdivH,yelsaE
+77F
+.snochtiw.avocwoflhsac
+)9002(aD
+431C
+slasrevernruteryrtsudni-artni
+)0102(naiMdna,gnauH,deemaH
+87F
+noitarudwoflhsac
+531C
+snruteryrtsudnidetaler
+)0102(sabzOdnaylzneM
+stniartsnoclaicnanfi
+)9002(gnahZdna,azirpaS,nadviL
+631C
+sredlohytiuqeotsgninrae
+)0102(gnaWdna,sokamohT,soluoposatsanapaP
+97F
+htworg.snocredlohkcotsTL
+)9002(nesnegroJ-gnissiVdna,ztiwoksoM,yollaM
+731C
+sredlohytiuqeothsacten
+08F
+doohilekilrevoekat
+)9002(nhoJdna,riaN,sremerC
+831C
+hsacssecxe
+)0102(nitumiS
+18F
+ytidiuqilli
+)9002(maynamharbuSdna,huH,aidrohC
+931C
+ksiredisnwodemertxe
+)2102(.lategnauH
+28F
+woflhsac
+)9002(akhcaraWdnaaD
+041C
+krimsytilitalov
+)0102(oahZdna,gnahZ,gniX
+38F
+*sfeileb'srotsevni
+)9002(zugozO
+stsocssertsidlaicnanfierusopxe
+)0102(gnawHdnaegroeG
+48F
+ytniatrecnu'srotsevni
+88F
+sretsasiderar
+)1102(eeLdna,nesbocaJ,namkreB
+011C
+egarevocaidem
+)9002(sserePdnagnaF
+‡ksirssertsid
+)1102(aidapaK21
+111C
+ssertsidlaicnanfi
+)9002(.latevomarvA
+†mutnemom
+)1102(ohKdna,iyloraK,uoH
+211C
+ytilitalovcitarcnysoidi
+)9002(uF
+98F
+ecirp-ot-woflhsac
+311C
+yticapactbed
+)9002(eeLdnanhaH
+141C
+tnemtsevniD&R
+)1102(iL
+411C
+daerps.lovdeilpmi-dezilaer
+)9002(naimikavoHdnailaB
+†stniartsnoclaicnanfi
+511C
+daerps.lovdeilpmitup-llac
+241C
+snruterkcotsemertxe
+)1102(waletihWdna,icikaC,ilaB
+611C
+hsacfoytivitcudorp
+)9002(oaRdnarakehsardnahC
+341C
+snruterkcotslaudividnispmuj
+)1102(naY
+711C
+gnisitrevda
+)9002(naYdnarunammehC
+441C
+selbignatni
+)1102(snamdE
+811C
+msimitpostsaceroftsylana
+)9002(akhcaraWdnaaD
+†nrutertekram
+)1102(gnahZdna,xraM-yvoN,nehC31
+911C
+noitalevernoitamrofni
+)9002(neckoG
+09F
+nruteroiloftroptnemtsevni
+021C
+ytilitalovsgninrae
+)9002(rolyaTdnawoG
+19F
+nruteroiloftropEOR
+121C
+ytilitalovwofl-hsac
+)9002(gnauH
+541C
+ytidiuqilfoytilitalov
+)1102(avoktePdna,gnortsmrA,sabkA
+221C
+tnemyolpmenulacol
+)9002(ramuKdnasitoinroK
+641C
+sfeilebninoisrepsid
+)1102(nuSdnagnaiJ
+321C
+laretallocgnisuohlacol
+741C
+sdaerpspawstluafedtiderc
+)1102(uohZdnanaH
+421C
+erocsycneicfife
+)9002(nosnawSdnaneyugN
+)deunitnoc(
+
+=== Page 39 ===
+6elbaT
+deunitnoC
+#
+rotcaF
+ecnerefeR
+#
+rotcaF
+ecnerefeR
+601F
+yenomfotsoc.ppohtworgerutuf
+)2102(oiaMdnaiuoiL
+841C
+latipaclanoitazinagro
+)1102(uoalokinapaPdnatdlefsiE
+T
+secnereffid.snoctrohoc-retni
+)2102(saeganaPdna,nagoK,unaelrâG
+941C
+emocnilaudiser
+)1102(marnahoMdnanardnahcalaB
+701F
+ytidiuqilediw-tekram
+)2102(gnaWdna,naP,uH
+051C
+ytilitalovlaurcca
+)0102(otnajriWdna,gnauH,yayhdapoydnaB
+661C
+ssenwekskcots
+)3102(slesyhGdna,ramttiD,darnoC
+151C
+latipacfotsocdeilpmi
+)1102(elyLdnanellaC
+761C
+ytniatrecnunruterdetcepxe
+)2102(tneirGrednaVdna,mukkeBnaV,nessutlaB
+251C
+ytilauq.rofnignitnuoccanon
+)3102(uLdna,nahK,nellaC
+861C
+ytisnetninoitamrofni
+)2102(oahZ
+351C
+ytilauq.rofnignitnuocca
+961C
+aimerpksirtiderc
+)2102(renhceZdna,rengaW,dlaweirF
+451C
+snoinurobal
+)1102(aniloM-zitrOdna,kyzcrepcaK,nehC
+071C
+noisrepsidcihpargoeg
+)2102(ilroNdnaaicraG
+551C
+slatnemadnufnonotnoitcaerrevo
+)1102(grubmuahcSdna,uiL,aD
+171C
+yhpargoeglacitilop
+)2102(kraPdna,silaztnaP,miK
+651C
+tseretnitrohs
+)1102(nosnawSdna,seeR,ekarD
+271C
+oitaremulovkcotsotnoitpo
+)2102(oSdnanosnhoJ
+751C
+laurccalatottnecrep
+)1102(elkniWnaVdna,mlohdnuL,allazfaH
+371C
+sgnidlohhsac
+)2102(ozzalaP
+‡ycaruccasgninraedetcejorp
+)1102(rekcuPdna,nnamztuerK,sseH
+471C
+ytilibomrobal
+)2102(olegnanoD
+851C
+ytivitcudorpmrfi
+)1102(lezuTdnaulgorohormI
+571C
+noitcetorptnanevoctbed
+)2102(gnaW
+951C
+sulprusytridyllaer
+)1102(.latenamsdnaL
+671C
+ytivitisneswofl-hsackcots
+)2102(vealubertSdnanehC
+061C
+tsacerofsgninrae
+)1102(iL
+801F
+atebpmuj
+)2102(iL
+161C
+htworgtessa
+)1102(yryöPdnagrebyN
+‡htworg.snocnur-gnol
+)2102(eiXdna,ydderallaN,nosreF51
+261C
+ytidiuqiltessalaer
+)1102(spillihPdnaaniloM-zitrO
+‡htworg.snocnur-trohs
+361C
+noitartnecnocesab-remotsuc
+)1102(sakuotataP
+‡ytilitalovhtworg.snoc
+461C
+sesirprusesnepxexat
+)1102(gnahZdnasamohT
+771C
+.lovdeilpmillacniegnahc
+)2102(icikaCdna,ilaB,gnA
+‡erocsesaercnisgninraedetciderp
+)1102(dnaleiWdnanelhaW
+871C
+.lovdeilpmitupniegnahc
+yrevocerredloherahs
+)1102(naYdnaippalraG
+971C
+etargnirihmrfi
+)2102(niLdnaoleB,hcserdzaB
+29F
+htworgegabrag
+)1102(vovaS
+081C
+ytixelpmocgnissecorp.rofni
+)2102(uoLdnanehoC
+39F
+htlaews'yraidemretnilaicnanfi
+)2102(riuMdna,alutE,nairdA
+181C
+yubcitsinutroppo
+)2102(iksromoPdna,yollaM,nehoC
+49F
+*ytilitalovcitsahcots
+)2102(.latellebpmaC
+281C
+llescitsinutroppo
+59F
+snruterytiuqefoecnairavegareva
+)2102(avoktePdnanehC
+381C
+ycneicfifeevitavonni
+)2102(iLdna,usH,refielhsriH
+69F
+seirtsudnisdooghtworgemocni
+)3102(gniliE
+481C
+swoflhsacgnitarepolamronba
+)2102(iL
+79F
+gnirutcafunamrofhtworgemocni
+581C
+stsocnoitcudorplamronba
+89F
+evitubirtsidrofhtworgemocni
+681C
+seuneverderrefed
+)2102(ahniSdnahsakarP
+99F
+*ecivresrofhtworgemocni
+781C
+sllacecnerefnocsgninrae
+)2102(.lateecirP
+001F
+*tnemnrevogrofhtworgemocni
+881C
+msimitpotsacerofsgninrae
+)2102(oS
+101F
+ytilitalovnoitpmusnoc
+)2102(nheuKdnahtugoB
+901F
+xedniytidommoc
+)2102(akswonamyzSdna,nooReD,snooB
+201F
+ssenwekstekram
+)2102(sbocaJdna,nesreffotsirhC,gnahC
+981C
+mutnemomseires-emit
+)2102(nesredePdna,ioO,ztiwoksoM
+301F
+*gninrael
+)2102(ittennaiGdna,oojieF-aicraG,elaiV
+091C
+yrrac
+)2102(.latenejioK
+401F
+ytniatrecnunaithginK
+191C
+yxorpnruterdetcepxe
+)2102(.lateucalruB
+501F
+ytniatrecnutekram
+)2102(uohZdnailaB
+291C
+ytilibaborpduarf
+)2102(slohciNdna,eeL,hsieneB
+‡emocnirobal
+)2102(oretapaZdna,yeltseirP,zemóG41
+561C
+egnahcecirptcudorp
+)2102(negrebsniBnaV
+)deunitnoc(
+
+=== Page 40 ===
+6elbaT
+deunitnoC
+#
+rotcaF
+ecnerefeR
+#
+rotcaF
+ecnerefeR
+891C
+ateb-tsniaga-gnitteb
+)3102(nesredePdnainizzarF
+391C
+sredroyub
+)2102(.latenannerB
+991C
+tbedderuces
+)3102(atlaV
+491C
+sredrolles
+002C
+tbedelbitrevnoc
+011F
+leveldnedividdetcepxe
+)3102(oriebiRdna,alakkeP,voksoD
+102C
+rotacidnitbedelbitrevnoc
+111F
+htworgdnedividdetcepxe
+211F
+ycneicfifenignicirplanoitces-ssorc
+)3102(.latesabkA
+591C
+etavonniotytilibas'mrfi
+)3102(yollaMdna,rehteiD,nehoC
+202C
+snruterdetaunetta
+)3102(gnoTdna,maynamharbuS,aidrohC
+691C
+ytilartnecdraob
+)3102(gnaWdna,oS,rekcraL
+302C
+noitamrofnietavirpdab
+)3102(maynamharbuSdna,huH,nannerB
+791C
+ytilibatfiorpssorg
+)3102(xraM-yvoN
+311F
+langisdnert
+)3102(uohZdnanaH
+sielbatsihtfo)selcitradeticehtfohcaeotsknilrepyhsallewsa,snoitaticllufsedulcnihcihw(noisrevdetnemguanA.scitsiretcarahc,C;srotcafnommoc,F;laciteroeht,T:elbaTotsetoN
+sdnepeddohtemruoesuacebtub,dehsilbupneebevaheticewsrepapgnikrowehtfoynaM.xslx.tsiL-rotcaF/yevrahc ̃/ude.ekud.auquf.ytlucaf//:pttheeS.gnitroserdnadaolnwodrofelbaliava
+.noisrevrepapgnikrowehtylnoeticew,emitnitniopehtno
+.snruterdetcepxefonoitces-ssorcehtnialpxetahtsrotcafksirfoyrammusasniatnocelbatsihT
+.eulav-pgnissim,‡;detacilpud,†;tnacfiingisni,*
+.)3791(hteBcaMdnaamaFotderapmoctsetlufrewopsselatneserpsuhtdnasoiloftropyrtsudninosucofyeht,revewoH.rotcaftekramehtdetsettsrfi)2791(selohcSdna,nesneJ,kcalB:1
+.rotcaftekramehtrof)3791(hteBcaMdnaamaFniscitsitatstsetehtesueroferehteW
+.sisylanatnenopmoclapicnirpmorfdetcurtsnocsrotcafriehtrofdetroperseulav-poN:2
+dnaamaFtnuoceroferehteW.)1891(znaBnihcaorppagnitsetehtmorftnereffidsisihT.stceffetekram-ot-koobdnaezistsetotsoiloftroptnemtsevni-orezetaerc)2991(hcnerFdnaamaF:3
+.enoetarapesasatceffeezisnotset)2991(s'hcnerF
+.srotcafnruterxedniytiuqeredrohgihriehtrofdetroperseulav-poN:4
+.snruterytiuqelanoitanretninialpxetahtsrotcafksirthgieriehtrofdetroperseulav-poN:5
+.srotcafnrutersihrofdetroperseulav-poN:6
+.srotcafnruterelytsdnufegdehevfiriehtrofdetroperseulav-poN:7
+.scitsitats-t52esehtegarevaeW.soiloftropkcotsdetrostekram-ot-koobdnaezis52hcnerF-amaFhcaerofcitsitats-tastroper)4002(nednaV:8
+riehttnuoceroferehteW.)3002(hguabmatSdnarotsaPnierusaemytidiuqilehtmorftnereffidsisihT.)2002(duhimAnierusaemytidiuqilliehtredisnoc)5002(nesredePdnaayrahcA:9
+.enoetarapesasarotcaf
+.snruternoitpodnanrutertekramneewtebsnoitcaretniehtrofdetroperseulav-poN:01
+.satebtnemomocriehtrofdetroperseulav-poN:11
+.rotcafgnikcartssertsidsihrofdetroperseulav-poN:21
+riehttnuoctonodeW.citsitats-ttnacfiingisnonaevahemocniroballevelnoisividehtfotsom,revewoH.emocniroballevelnoisividsusnecyduts)2102(oretapaZdna,yeltseirP,zemóG:31
+.srotcaf
+.ledomksirnur-gnolehtmorfdetamitsesrotcafriehtrofdetroperseulav-poN:41
+.)4102(gnahZdna,euX,uoHybdecalpersirepapehT:51
+
+=== Page 41 ===
+initiatives.Themultipletestingframeworkdetailedinourpaperistruetothis
+advice.
+Our research quantifies the warnings of both Fama (1991) and Schwert
+(2003).Weattempttonavigatethezooandestablishnewbenchmarkstoguide
+empiricalassetpricingtests.
+AppendixA MultipleTestingWhentheNumberofTests(M)IsUnknown
+Theempiricaldifficultyinapplyingstandardp-valueadjustmentsisthatwedonotobservefactors
+thathavebeentried,foundtobeinsignificantandthendiscarded.Weattempttoovercomethis
+difficultyusingasimulationframework.Theideaisfirsttosimulatetheempiricaldistributionof
+p-valuesforallexperiments(publishedandunpublished)andthentoadjustthep-valuesbasedon
+thesesimulatedsamples.
+First,weassumetheteststatistic(t-statistic,forinstance)foranyexperimentfollowsacertain
+distributionD (e.g.,exponentialdistribution)andthesetofpublishedworksisatruncatedD
+distribution.Basedontheestimationframeworkfortruncateddistributions,46 weestimatethe
+parametersofdistributionDandthetotalnumberoftrialsM.Next,wesimulatemanysequences
+ofp-values,eachcorrespondingtoaplausiblesetofp-valuerealizationsofalltrials.Toaccountfor
+theuncertaintyinparameterestimatesofDandM,wesimulatethep-valuesequencesbasedon
+thedistributionofestimatedDandM.Finally,foreachp-value,wecalculatetheadjustedp-value
+basedonasequenceofsimulatedp-values.Themedianistakenasthefinaladjustedp-value.
+A.1 UsingTruncatedExponentialDistributiontoModelthet-statisticSample
+Truncateddistributionshavebeenusedtostudyhiddentests(i.e.,publicationbias)inmedical
+research.47Theideaisthatstudiesreportingsignificantresultsaremorelikelytogetpublished.
+Assumingathresholdsignificancelevelort-statistic,researcherscan,tosomeextent,inferthe
+resultsofunpublishedworksandgainanunderstandingoftheoveralleffectofadrugortreatment.
+However,inmedicalresearch,insignificantresultsarestillviewedasanindispensablepartofthe
+overallstatisticalevidenceandaregivenmuchmoreprominencethaninthefinancialeconomics
+research.Asaresult,medicalpublicationsaremorelikelytoreportinsignificantresults.Thismakes
+applyingthetruncateddistributionframeworktomedicalstudiesdifficultasthereisnoclear-cut
+thresholdvalue.48Inthissense,thetruncateddistributionalframeworksuitsourstudybetter-1.96
+istheobvioushurdlethatresearchneedstoovercometobepublished.
+On the other hand, not all tried factors with a t-statistic above 1.96 are reported. In the
+quantitativeassetmanagementindustry,significantresultsarenotpublished-theyareconsidered
+"tradesecrets."Fortheacademicliterature,factorswith"borderline"t-statisticsaredifficultto
+getpublished.Thus,oursampleislikelymissinganumberoffactorsthathavet-statisticsjust
+over1.96.Tomakeourinferencerobust,forourbaselineresult,weassumealltriedfactorswith
+t-statisticsabove2.57areobservedandignorethosewitht-statisticsintherangeof(1.96,2.57).
+Weexperimentwithalternativewaystohandlet-statisticsinthisrange.
+Manydistributionscanbeusedtomodelthet-statisticsample.Onerestrictionthatwethink
+anyofthesedistributionsshouldsatisfyisthemonotonicityofthedensitycurve.Intuitively,it
+shouldbeeasiertofindfactorswithsmallt-statisticsthanwithlargeones.49Wechoosetousethe
+simplestdistributionthatincorporatesthismonotonicitycondition:theexponentialdistribution.
+46 SeeHeckman(1979)andGreene(2008),Chapter24).
+47 SeeBeggandBerlin(1988)andThorntonandLee(2000).
+48 Whenthethresholdvalueisunknown,itmustbeestimatedfromthelikelihoodfunction.However,suchestimation
+usuallyincurslargeestimationerrors.
+49 ThisbasicscarcityassumptionisalsothekeyingredientinourmodelinSection5.
+
+=== Page 42 ===
+0.6
+0.4
+0.2
+0
+0 1 2 3 4 5 6 7 8 9 10
+t−ratio
+ytisneD
+ytilibaborP
+Panel A: Baseline t−ratio > 2.57 sample
+0.6
+0.4
+0.2
+0
+0 1 2 3 4 5 6 7 8 9 10
+t−ratio
+ytisneD
+ytilibaborP
+Panel B: Original t−ratio sample
+0.6
+0.4
+0.2
+0
+0 1 2 3 4 5 6 7 8 9 10
+t−ratio
+ytisneD
+ytilibaborP
+Panel C: Augmented t−ratio sample
+Empirical density: added sample
+Empirical density: original sample
+Fitted density, λ = 1.93
+FigureA.1
+Densityplotsfort-statistic
+Empiricaldensityandfittedexponentialdensitycurvesbasedonthreedifferentsamples.PanelAisbasedon
+thebaselinesamplethatincludesallt-statisticsabove2.57.PanelBisbasedontheoriginalsamplewithall
+t-statisticsabove1.96.PanelCisbasedontheaugmentedsamplethataddsthesubsampleofobservationsthat
+fallinbetween1.96and2.57totheoriginalt-statisticsample.Itdoublesthenumberofobservationswithinthe
+rangeof1.96and2.57intheoriginalsample.λisthesingleparameterfortheexponentialcurve.Itgivesthe
+populationmeanfortheunrestricted(i.e.,nontruncated)distribution.
+PanelAofFigureA.1presentsthehistogramofthebaselinet-statisticsampleandthefitted
+truncatedexponentialcurve.50Thefitteddensitycloselytracksthehistogramandhasapopulation
+meanof2.07.51PanelBisahistogramoftheoriginalt-statisticsample,which,aswediscussed
+before,islikelytounderrepresentthesamplewithat-statisticintherangeof(1.96,2.57).PanelC
+istheaugmentedt-statisticsamplewiththeadhocassumptionthatoursamplecoversonlyhalfof
+allfactorswitht-statisticsbetween1.96and2.57.Thepopulationmeanestimateis2.22inpanel
+50 Thereareafewverylarget-statisticsinoursample.Wefitthetruncatedexponentialmodelwithoutdroppingany
+larget-statistics.Incontrasttotheusualnormaldensity,exponentialdistributionisbetteratmodelingextreme
+observations.Inaddition,extremevaluesarepivotalstatisticsforheavy-taileddistributionsandarekeyformodel
+estimation.Whileextremeobservationsareincludedformodelestimation,weexcludetheminFigureA.1to
+betterfocusonthemainpartofthet-statisticrange.
+51 Ourtruncatedexponentialdistributionframeworkallowsasimpleanalyticalestimateforthepopulationmean
+oftheexponentialdistribution.Inparticular,letcbet (cid:6)
+hetruncationpointandthet-statisticsamplebe{ti}N
+i=1 .
+Themeanestimateisgivenbyλˆ=1/(t ̄−c),wheret ̄=( N
+i=1
+ti)/Nisthesamplemean.
+
+[TABLE p42.t1]
+p42.t1 r1: Empirical density Fitted density, λ = 2.07 | 
+[/TABLE]
+
+[TABLE p42.t3]
+p42.t3 r1: Empirical density Fitted density, λ = 2.22 | 
+[/TABLE]
+
+=== Page 43 ===
+Band1.93inpanelC.Asexpected,theunderrepresentationofrelativelysmallt-statisticsresults
+inahighermeanestimateforthet-statisticpopulation.Wethinkthebaselinemodelisthebest
+amongallthreemodelsasitnotonlyovercomesthemissingdataproblemfortheoriginalsample,
+butalsoavoidsguessingthefractionofmissingobservationsinthe1.96-2.57range.Weusethose
+modelestimatesforthefollow-upanalysis.
+Usingthebaselinemodel,wecalculateotherinterestingpopulationcharacteristicsthatarekey
+tomultiplehypothesistesting.Assumingindependence,wemodelobservedt-statisticsasdraws
+fromanexponentialdistributionwithmeanparameterλˆ
+andaknowncutoffpointof2.57.The
+proportionofunobservedfactorsisthenestimatedas
+P(unobserved)=(cid:8)(2.57;λˆ )=1−exp(−2.57/λˆ )=71.1%, (A.1)
+where(cid:8)(c;λ)isthecumulativedistributionfunctionevaluatedatcforaexponentialdistribution
+withmeanλ.Ourestimatesindicatethatthemeanabsolutevalueofthet-statisticfortheunderlying
+factorpopulationis2.07andabout71.1%oftriedfactorsarediscarded.Giventhat238outofthe
+original316factorshaveat-statisticexceeding2.57,thetotalnumberoffactortestsisestimated
+tobe824(=238/(1−71.1%))andthenumberoffactorswithat-statisticbetween1.96and2.57
+isestimatedtobe82.52 Sinceourt-statisticsamplecoversonly57suchfactors,roughly30%
+(=(82-57)/82)oft-statisticsbetween1.96and2.57arehidden.
+A.2 SimulatedBenchmarkt-statisticsunderIndependence
+The truncated exponential distribution framework helps us approximate the distribution of
+t-statisticsforallfactors,bothpublishedandunpublished.Wecanthenapplytheaforementioned
+adjustmenttechniquestothisdistributiontogeneratenewt-statisticbenchmarks.However,there
+aretwosourcesofsamplingandestimationuncertaintythataffectourresults.First,ourt-statistic
+samplemayunderrepresentallfactorswitht-statisticsexceeding2.57.53Hence,ourestimatesofthe
+totaltrialsarebiased(toolow),whichaffectsourcalculationofthebenchmarks.Second,estimation
+errorsinthetruncatedexponentialdistributioncanaffectourbenchmarkt-statistics.Althoughwe
+canapproximatetheestimationerrorthroughtheusualasymptoticdistributiontheoryforMLE,it
+isunclearhowthiserroraffectsourbenchmarkt-statistics.Thisisbecauset-statisticadjustment
+proceduresusuallydependontheentiret-statisticdistributionandsostandardtransformational
+techniques(e.g.,thedeltamethod)donotapply.Moreover,wearenotsurewhetheroursampleis
+largeenoughtotrusttheaccuracyofasymptoticapproximations.
+Giventheseconcerns,weproposeafour-stepsimulationframeworkthatincorporatesthese
+uncertainties.
+StepI EstimateλandMbasedonanewt-statisticsamplewithsizer×R.
+Supposeourcurrentt-statisticsamplesizeisR anditonlycoversafractionof1/r of
+allfactors.Wesampler×R t-statistics(withreplacement)fromtheoriginalt-statistic
+sample.Basedonthisnewt-statisticsample,weapplytheabovetruncatedexponential
+distribution framework to the t-statistics and obtain the parameter estimates λ for the
+exponentialdistribution.ThetruncationprobabilityiscalculatedasPˆ =(cid:8)(2.57;λˆ
+).Wecan
+thenestimatethetotalnumberoftrialsby
+rR
+Mˆ = .
+1−Pˆ
+52 Directlyapplyingourestimateframeworktotheoriginalsamplethatincludesallt-statisticsabove1.96,the
+estimatedtotalnumberoffactortestswouldbe713.Alternatively,assumingoursampleonlycovershalfofthe
+factorswitht-statisticsbetween1.96and2.57,theestimatednumberoffactorsis971.
+53 Thiswillhappenifwemissfactorspublishedbytheacademicliteratureorwedonothaveaccesstothe"trade
+secrets"byindustrypractitioners.
+
+=== Page 44 ===
+TableA.1
+Benchmarkt-statisticswhenMisestimated
+Samplingratio M Bonferroni Holm BHY(1%) BHY(5%)
+(r) [10% 90%] [10% 90%] [10% 90%] [10% 90%] [10% 90%]
+1 817 4.01 3.96 3.68 3.17
+[731 947] [3.98 4.04] [3.92 4.00] [3.63 3.74] [3.12 3.24]
+1.5 1,234 4.11 4.06 3.70 3.20
+[1,128 1,358] [4.08 4.13] [4.03 4.09] [3.66 3.74] [3.16 3.24]
+2 1,646 4.17 4.13 3.71 3.21
+[1,531 1,786] [4.15 4.19] [4.11 4.15] [3.67 3.75] [3.18 3.25]
+Theestimatedtotalnumberoffactorstried(M)andthebenchmarkt-statisticpercentilesbasedonatruncated
+exponentialdistributionframework.Ourestimationisbasedontheoriginalt-statisticsampletruncatedat2.57.
+Thesamplingratioistheassumedratioofthetruepopulationsizeoft-statisticsexceeding2.57overourcurrent
+samplesize.BothBonferroniandHolmhaveasignificancelevelof5%.
+StepII
+Calculatethebenchmarkt-statisticbasedonarandomsamplegeneratedfromλˆ
+andMˆ
+.
+Basedonthepreviousstepestimateofλˆ andMˆ
+,wegeneratearandomsampleoft-statistics
+foralltriedfactors.Wethencalculatetheappropriatebenchmarkt-statisticbasedonthis
+generatedsample.
+StepIII RepeatStepII10,000timestoobtainthemedianbenchmarkt-statistic.
+We take the median as the final benchmark t-statistic corresponding to the parameter
+estimate(λˆ,Mˆ
+).
+StepIV RepeatStepsI-III10,000timestogenerateadistributionofbenchmarkt-statistics.
+RepeatStepsI-III10,000times,eachtimewithanewlygeneratedt-statisticsampleas
+inStepI.Foreachrepetition,weobtainabenchmarkt-statistict i correspondingtothe
+parameterestimates(λˆ
+i
+,Mˆ
+i).Intheend,wehaveacollectionofbenchmarkt-statistics
+{t i }1 i= 0 1 000.
+Toseehowourprocedureworks,noticethatStepsIIandIIIcalculatethetheoreticalbenchmark
+t-statisticforat-statisticdistributioncharacterizedby(λˆ,Mˆ
+).Asaresult,theoutcomeissimply
+onenumberandthereisnouncertaintyaroundit.UncertaintiesareincorporatedinStepsIandIV.
+Inparticular,byrepeatedlysamplingfromtheoriginalt-statisticsampleandre-estimatingλand
+Meachtime,wetakeintoaccounttheestimationerrorofthetruncatedexponentialdistribution.
+Also,undertheassumptionthatneglectedsignificantt-statisticsfollowtheempiricaldistribution
+ofourt-statisticsample,byvaryingr,wecanassesshowthisunderrepresentationofourt-statistic
+sampleaffectsresults.
+TableA.1showsestimatesofM andbenchmarkt-statistics.Whenr=1,themedianestimate
+forthetotalnumberoftrialsis817,54almostthesameasourpreviousestimateof820basedon
+theoriginalsample.Unsurprisingly,theBonferroniimpliedbenchmarkt-statistic(4.01)islarger
+than3.78,whichiswhatweobtainwhenignoringunpublishedworks.TheHolmimpliedt-statistic
+(3.96),whilenotnecessarilyincreasinginthenumberoftrials,isalsohigherthanbefore(3.64).
+TheBHYimpliedt-statisticincreasesfrom3.39to3.68at1%significanceandfrom2.78to3.18
+at5%significance.Asrincreases,thesamplesizeMandthebenchmarkt-statisticsforallfour
+54 Ourpreviousestimateof820isaone-shotestimatebasedonthetruncatedsample.TheresultsinTableA.1are
+basedonrepeatedestimatesbasedonresampleddata:weresamplemanytimes,and817isthemedianofall
+theseestimates.Itisclosetotheone-shotestimate.
+
+=== Page 45 ===
+typesofadjustmentsincrease.Whenr doubles,theestimateofM alsoapproximatelydoubles
+andtheBonferroniandHolmimpliedt-statisticsincreasebyabout0.2,whereastheBHYimplied
+t-statisticsincreasebyaround0.03(underbothsignificancelevels).
+AppendixB ABayesianApproachtoMultipleTests
+ThefollowingframeworkisadoptedfromScottandBerger(2006)andhighlightsthekeyissues
+inBayesianmultiplehypothesistesting.55 Moresophisticatedgeneralizationsmodifythebasic
+modelbutareunlikelytochangethefundamentalhierarchicaltestingstructure.56 Weusethis
+frameworktoexplaintheprosandconsofperformingmultipletestinginaBayesianframework.
+Thehierarchicalmodelisasfollows:
+iid
+H1. (X i |μ i ,σ2,γ i)∼N(γ i μ i ,σ2),
+iid iid
+H2. μ i |τ2∼N(0,τ2),γ i |p 0 ∼Ber(1−p 0),
+H3. (τ2,σ2)∼π 1(τ2,σ2),p 0 ∼π 2(p 0).
+Weexplaineachstepandthenotationindetail
+H1. X idenotestheaveragereturngeneratedfromalong-shorttradingstrategybasedonacertain
+factor;μ i istheunknownmeanreturn;σ2isthecommonvarianceforreturns;andγ i is
+anindicatorfunction,withγ i=0indicatingazerofactormean.γ iisthecounterpartofthe
+reject/acceptdecisionintheusual(frequentists')hypothesistestingframework.
+H1 therefore says that factor returns are independent conditional on mean γ i μ i and
+common variance σ2, with γ i=0 indicating that the factor is spurious. The common
+variance assumption may look restrictive, but we can always scale factor returns by
+changing the dollar investment in the long-short strategy. The crucial assumption is
+conditional independence of average strategy returns. A certain form of conditional
+independenceisunavoidableforBayesianhierarchicalmodeling57-probablyunrealistic
+forourapplication.Wecaneasilythinkofscenariosinwhichaveragereturnsofdifferent
+strategiesarecorrelated,evenwhenpopulationmeansareknown.Forexample,itiswell
+knownthattwoofthemostpopularfactors,theFamaandFrench(1992)HMLandSMB,
+arecorrelated.
+H2. Thefirst-steppopulationparametersμ i'sandγ i'sareassumedtobegeneratedfromtwoother
+parametricdistributions:μ i'sareindependentlygeneratedfromanormaldistribution,and
+γ i'saresimplygeneratedfromaBernoullidistribution,thatis,γ i=0withprobabilityp 0.
+Thenormalityassumptionfortheμ i'srequiresthereportedX i'storandomlyrepresent
+eitherlong/shortorshort/longstrategyreturns.Ifresearchershaveatendencytoreport
+55 WechoosetopresentthefullBayes'approach.Analternativeapproach-theempiricalBayes'approach-is
+closelyrelatedtotheBHYmethodthatcontrolsthefalse-discoveryrate(FDR).SeeStorey(2003)andEfronand
+Tibshirani(2002)fortheempiricalBayes'interpretationofFDR.FordetailsontheempiricalBayes'method,
+seeEfronetal.(2001),andEfron(2004),2008).Foranin-depthinvestigationofthedifferencesbetweenthefull
+Bayes'andtheempirical-Bayes'approach,seeScottandBerger(2010).Foranapplicationoftheempirical-Bayes'
+methodinfinance,seeMarkowitzandXu(1994).
+56 SeeMengandDempster(1987)andWhittemore(2007)formoreworksontheBayesianapproachinhypothesis
+testing.
+57 ConditionalindependenceiscrucialfortheBayesianframeworkandtheconstructionofposteriorlikelihoods.
+Althoughitcanbeextendedtoincorporatespecialdependencestructures,thereisnoconsensusonhowto
+systematicallyhandledependence.SeeBrownetal.(2014)foradiscussionofindependenceinBayesianmultiple
+testing.TheyalsoproposeaspatialdependencestructureintoaBayesiantestingframework.
+
+=== Page 46 ===
+positiveabnormalreturns,weneedtorandomlyassigntothesereturnsplus/minussigns.
+The normality assumptions in both H1 and H2 are important as they are necessary to
+guaranteethepropernessoftheposteriordistributions.
+H3. Finally,thetwovariancevariablesτ2 andσ2 followajointpriordistributionπ 1 andthe
+probabilityp 0followsapriordistributionπ 2.
+Objectiveor"neutral"priorsforπ 1andπ 2canbespecifiedas:
+π 1(τ2,σ2) ∝ (τ2+σ2) −2,
+π 2(p 0) = Uniform(0,1).
+Under this framework, the joint conditional likelihood function for X i's is simply a product
+of individual normal likelihood functions and the posterior probability that γ i=1 (discovery)
+canbecalculatedbyapplyingBayes'law.Whenthenumberoftrialsislarge,tocalculatethe
+posteriorprobability,weneedefficientmethods,suchasimportancesampling,whichinvolves
+high-dimensionalintegrals.
+OnebenefitofaBayesianframeworkformultipletestingisthatthemultiplicitypenaltytermis
+alreadyembedded.Inthefrequentists'framework,thisisdonebyintroducingFWERorFDR.Ina
+Bayesianframework,theso-called"Ockham'srazoreffect"58automaticallyadjuststheposterior
+probabilitieswhenmorefactorsaresimultaneouslytested.59SimulationstudiesinScottandBerger
+(2006)showhowthediscoveryprobabilitiesforafewinitialsignalsincreasewhenmorenoiseis
+addedtotheoriginalsample.
+However,thereareseveralshortcomingsfortheBayesianapproach.Someofthemarespecificto
+thecontextofourapplicationandtheothersaregenerictotheBayesianmultipletestingframework.
+AtleasttwoissuesarisewhenapplyingtheBayesianapproachtoourfactorselectionproblem.
+First,wedonotobservealltriedfactors.Whilewebackoutthedistributionofhiddenfactors
+parametrically under the frequentist framework, it is not clear how the missing data and the
+multipletestingproblemscanbesimultaneouslysolvedundertheBayesianframework.Second,
+thehierarchicaltestingframeworkmaybeoverlyrestrictive.Bothindependenceandnormality
+assumptionscanhavealargeimpactontheposteriordistributions.Althoughnormalitycanbe
+somewhatrelaxedbyusingalternativedistributions,thescopeofalternativedistributionsislimited
+asthereareonlyafewdistributionsthatcanguaranteethepropernessoftheposteriordistributions.
+Independence,aswepreviouslydiscussed,islikelytobeviolatedinourcontext.Incontrast,the
+threeadjustmentproceduresunderthefrequentists'frameworkareabletohandlecomplexdata
+structuressincetheyrelyononlyfundamentalprobabilityinequalitiestorestricttheirobjective
+function-thetypeIerrorrate.
+ThereareafewgeneralconcernsabouttheBayesianmultipletestingframework.First,itisnot
+clearwhattodoafterobtainingtheposteriorprobabilitiesforindividualhypotheses.Presumably,
+weshouldfindacutoffprobabilityP andrejectallhypothesesthathaveaposteriordiscovery
+probabilitylargerthanP.Butthenwereturntotheinitialproblemoffindinganappropriatecutoff
+p-value,whichisnotacleartask.ScottandBerger(2006)suggestadecision-theoreticapproachthat
+choosesthecutoffPbyminimizingalossfunction.Theparametersofthelossfunction,however,
+areagainsubjective.Second,theBayesianposteriordistributionsarecomputationallychallenging.
+Wedocument300factors,buttherearepotentiallymanymoreifmissingfactorsaretakeninto
+account.WhenMgetslarge,importancesamplingisanecessity.However,resultsofimportance
+samplingrelyonsimulationsandsubjectivechoicesofthecentersoftheprobabilitydistributions
+58 SeeJefferysandBerger(1992).
+59 Intuitively, more complex models are penalized because extra parameters involve additional sources of
+uncertainty.SimplicityisrewardedinaBayesianframeworkassimplemodelsproducesharppredictions.See
+thediscussionsinScott(2009).
+
+=== Page 47 ===
+forrandomvariables.Consequently,tworesearcherstryingtocalculatethesamequantitymight
+obtainverydifferentresults.Moreover,inmultipletesting,thecurseofdimensionalitygenerates
+additionalrisksforBayesianstatisticalinference.60Thesetechnicalissuescreateadditionalhurdles
+fortheapplicationoftheBayesianapproach.
+References
+Abarbanell,J.S.,andB.J.Bushee.1998.Abnormalreturnstoafundamentalanalysisstrategy.AccountingReview
+73:19-45.
+Acharya,V.V.,andL.H.Pedersen.2005.Assetpricingwithliquidityrisk.JournalofFinancialEconomics
+77:375-410.
+Ackert,L.F.,andG.Athanassakos.1997.Prioruncertainty,analystbias,andsubsequentabnormalreturns.
+JournalofFinancialResearch20:263-73.
+Adler,M.,andB.Dumas.1983.Internationalportfoliochoiceandcorporationfinance:Asynthesis.Journalof
+Finance38:925-84.
+Adrian,T.,andJ.Rosenberg.2008.Stockreturnsandvolatility:Pricingtheshort-runandlong-runcomponents
+ofmarketrisk.JournalofFinance63:2997-3030.
+Adrian,T.,E.Etula,andT.Muir.2012.Financialintermediariesandthecross-sectionofassetreturns.Journal
+ofFinance,Forthcoming.
+Ahn,S.C.,A.R.Horenstein,andN.Wang.2012.Determiningrankofthebetamatrixofalinearassetpricing
+model.WorkingPaper.
+Akbas,F.,W.J.Armstrong,andR.Petkova.2011.Thevolatilityofliquidityandexpectedstockreturns.Working
+Paper.
+Akbas,F.,W.J.Armstrong,S.Sorescu,andA.Subrahmanyam.2013.Timevaryingmarketefficiencyinthe
+cross-sectionofexpectedstockreturns.WorkingPaper.
+Ali,A.,L.Hwang,andM.A.Trombley.2003.Arbitrageriskandthebook-to-marketanomaly.Journalof
+FinancialEconomics69:355-73.
+Almeida,H.,andM.Campello.2007.Financialconstraints,assettangibility,andcorporateinvestment.Review
+ofFinancialStudies20:1429-60.
+Amaya,D.,P.Christoffersen,K.Jacobs,andA.Vasquez.2011.Dorealizedskewnessandkurtosispredictthe
+cross-sectionofequityreturns?WorkingPaper.
+Amihud,Y.2002.Illiquidityandstockreturns:cross-sectionandtime-serieseffects.JournalofFinancialMarkets
+5:31-56.
+Amihud,Y.,andH.Mendelson.1986.Assetpricingandthebid-askspread.JournalofFinancialEconomics
+17:223-49.
+---.1989.Theeffectsofbeta,bid-askspread,residualrisk,andsizeonstockreturns.JournalofFinance
+44:479-86.
+An,J.,S.Bhojraj,andD.T.Ng.2010.Warrantedmultiplesandfuturereturns.JournalofAccounting,Auditing
+&Finance25:143-69.
+Anderson,C.W.,andL.Garcia-Feijóo.2006.Empiricalevidenceoncapitalinvestment,growthoptions,and
+securityreturns.JournalofFinance61:171-94.
+Anderson,E.W.,E.Ghysels,andJ.L.Juergens.2005.Doheterogeneousbeliefsmatterforassetpricing?Review
+ofFinancialStudies18:875-924.
+60 SeeLiangandKelemen(2008)foradiscussionofthecomputationalissuesinBayesianmultipletesting.
+
+=== Page 48 ===
+Ang,A.,T.G.Bali,andN.Cakici.2012.Thejointcrosssectionofstocksandoptions.WorkingPaper.
+Ang,A.,J.Chen,andY.Xing.2006.Downsiderisk.ReviewofFinancialStudies19:1191-239.
+Ang,A.,R.J.Hodrick,Y.Xing,andX.Zhang.2006.Thecross-sectionofvolatilityandexpectedreturns.Journal
+ofFinance61:259-99.
+Arbel,A.,S.A.Carvell,andP.Strebel.1983.Giraffes,institutionsandneglectedfirms.FinancialAnalysts
+Journal39:57-63.
+Armstrong,C.,S.Banerjee,andC.Corona.2010.Informationqualityandthecross-sectionofexpectedreturns.
+WorkingPaper.
+Asness, C. S., R. B. Porter, and R. Stevens. 2000. Predicting stock returns using industry-relative firm
+characteristics.WorkingPaper.
+Asness,C.S.,T.J.Moskowitz,andL.H.Pedersen.2013.Valueandmomentumeverywhere.JournalofFinance
+68:929-85.
+Asquith,P.,P.A.Pathak,andJ.R.Ritter.2005.Shortinterest,institutionalownershipandstockreturns.Journal
+ofFinancialEconomics78:243-76.
+ATLASCollaboration.2012.ObservationofanewparticleinthesearchfortheStandardModelHiggsboson
+withtheATLASdetectorattheLHC.PhysicsLettersB716:1-29.
+Avramov,D.,T.Chordia,G.Jostova,andA.Philipov.2007.Momentumandcreditrating.JournalofFinance
+62:2503-20.
+---.2009.Dispersioninanalysts'earningsforecastsandcreditrating.JournalofFinancialEconomics
+91:83-101.
+Baik,B.,andT.S.Ahn.2007.Changesinorderbacklogandfuturereturns.SeoulJournalofBusiness13:105-26.
+Bajgrowicz,P.,andO.Scaillet.2012.Technicaltradingrevisited:Falsediscoveries,persistencetests,and
+transactioncosts.JournalofFinancialEconomics106:473-91.
+Bajgrowicz,P.,O.Scaillet,andA.Treccani.2013.Jumpsinhigh-frequencydata:Spuriousdetections,dynamics,
+andnews.WorkingPaper.
+Baker,M.,andJ.Wurgler.2006.Investorsentimentandthecross-sectionofstockreturns.JournalofFinance
+61:1645-80.
+Bailey,D.H.,andM.LópezdePrado.2014.ThedeflatedSharperatio:correctingforselectionbias,backtest
+overfitting,andnon-normality.JournalofPortfolioManagement40:94-107.
+Balachandran,S.,andP.Mohanram.2011.Usingresidualincometorefinetherelationshipbetweenearnings
+growthandstockreturns.ReviewofAccountingStudies17:134-65.
+Bali,T.G.,andA.Hovakimian.2009.Volatilityspreadsandexpectedstockreturns.ManagementScience
+55:1797-812.
+Bali,T.G.,andH.Zhou.2012.Risk,uncertainty,andexpectedreturns.WorkingPaper.
+Bali,T.G.,N.Cakici,andR.F.Whitelaw.2011.Maxingout:Stocksaslotteriesandthecross-sectionofexpected
+returns.JournalofFinancialEconomics99:427-46.
+Baltussen,G.,S.VanBekkum,andB.VanderGrient.2012.Unknownunknowns:Vol-of-volandthecrosssection
+ofstockreturns.WorkingPaper.
+Balvers,R.J.,andD.Huang.2007.Productivity-basedassetpricing:Theoryandevidence.JournalofFinancial
+Economics86:405-45.
+Bandyopadhyay,S.P.,A.G.Huang,andT.S.Wirjanto.2010.Theaccrualvolatilityanomaly.WorkingPaper.
+Bansal,R.,andS.Viswanathan.1993.Noarbitrageandarbitragepricing:anewapproach.JournalofFinance
+48:1231-62.
+
+=== Page 49 ===
+Bansal,R.,andA.Yaron.2005.Risksforthelongrun:apotentialresolutionofassetpricingpuzzles.Journalof
+Finance59:1481-509.
+Bansal,R.,R.F.Dittmar,andC.T.Lundblad.2005.Consumption,dividends,andthecrosssectionofequity
+returns.JournalofFinance60:1639-72.
+Banz,R.W.1981.Therelationshipbetweenreturnandmarketvalueofcommonstocks.JournalofFinancial
+Economics9:3-18.
+Barber,B.,R.Lehavy,M.McNichols,andB.Trueman.2001.Caninvestorsprofitfromtheprophets?Security
+analystrecommendationsandstockreturns.JournalofFinance56:531-63.
+Barber,B.M.,T.Odean,andN.Zhu.2009.Doretailtradesmovemarkets?ReviewofFinancialStudies
+22:152-86.
+Barras,L.,O.Scaillet,andR.Wermers.2010.Falsediscoveriesinmutualfundperformance:Measuringluckin
+estimatedalphas.JournalofFinance65:179-216.
+Basu,S.1977.Investmentperformanceofcommonstocksinrelationtotheirprice-earningsratios:atestofthe
+efficientmarkethypothesis.JournalofFinance32:663-82.
+---.1983.Therelationshipbetweenearnings'yield,marketvalueandreturnforNYSEcommonstocks:
+furtherevidence.JournalofFinancialEconomics12:129-56.
+Bauman,W.S.,andR.Dowen.1988.Growthprojectionsandcommonstockreturns.FinancialAnalystJournal
+44:79-80.
+Bazdresch,S.,F.BeloandX.Lin.2012.Laborhiring,investment,andstockreturnpredictabilityinthecross
+section.WorkingPaper.
+Begg,C.B.,andJ.A.Berlin.1988.Publicationbias:Aproblemininterpretingmedicaldata.Journalofthe
+RoyalStatisticalSocietySeriesA151:419-63.
+Beneish,M.D.1997.DetectingGAAPviolation:Implicationsforassessingearningsmanagementamongfirms
+withextremefinancialperformance.JournalofAccountingandPublicPolicy16:271-309.
+Beneish,M.D.,C.M.C.Lee,andD.C.Nichols.2012.Frauddetectionandexpectedreturns.WorkingPaper.
+Benjamini,Y.,andY.Hochberg.1995.Controllingthefalsediscoveryrate:Apracticalandpowerfulapproach
+tomultipletesting.JournaloftheRoyalStatisticalSocietySeriesB57:289-300.
+Benjamini,Y.,andW.Liu.1999.Astep-downmultiplehypothesestestingprocedurethatcontrolsthefalse
+discoveryrateunderindependence.JournalofStatisticalPlanningandInference82:163-70.
+Benjamini,Y.,andD.Yekutieli.2001.Thecontrolofthefalsediscoveryrateinmultipletestingunderdependency.
+AnnalsofStatistics29:1165-88.
+Berkman,H.,B.Jacobsen,andJ.B.Lee.2011.Time-varyingraredisasterriskandstockreturns.Journalof
+FinancialEconomics101:313-32.
+Bhandari,L.C.1988.Debt/equityratioandexpectedcommonstockreturns:Empiricalevidence.Journalof
+Finance43:507-28.
+Black,F.1972.Capitalmarketequilibriumwithrestrictedborrowing.JournalofBusiness45:444-54.
+Black,F.,M.C.Jensen,andM.Scholes.1972.Thecapitalassetpricingmodel:Someempiricaltests.InStudies
+inthetheoryofcapitalmarkets,ed.MichaelJensen,79-121.NewYork:Praeger.
+Boguth,O.,andL.A.Kuehn.2012.Consumptionvolatilityrisk.JournalofFinance,Forthcoming.
+Boons,M.,F.DeRoon,andM.Szymanowska.2012.Thestockmarketpriceofcommodityrisk.WorkingPaper.
+Bossaerts,P.,andR.M.Dammon.1994.Tax-inducedintertemporalrestrictionsonsecurityreturns.Journalof
+Finance49:1347-71.
+Botosan,C.A.1997.Disclosurelevelandthecostofequitycapital.AccountingReview72:323-49.
+
+=== Page 50 ===
+Boudoukh,J.,R.Michaely,M.RichardsonandM.R.Roberts.2007.Ontheimportanceofmeasuringpayout
+yield:Implicationsforempiricalassetpricing.JournalofFinance62:877-915.
+Boyer,B.,T.Mitton,andK.Vorkink.2010.Expectedidiosyncraticskewness.ReviewofFinancialStudies
+23:169-202.
+Bradshaw,M.T.,S.A.Richardson,andR.G.Sloan.2006.Therelationbetweencorporatefinancingactivities,
+analysts'forecastsandstockreturns.JournalofAccountingandEconomics42:53-85.
+Brammer,S.,C.Brooks,andS.Pavelin.2006.Corporatesocialperformanceandstockreturns:UKevidence
+fromdisaggregatemeasures.FinancialManagement35:97-116.
+Brandt,M.,R.Kishore,P.Santa-Clara,andM.Venkatachalam.2008.Earningsannouncementsarefullof
+surprises.WorkingPaper.
+Breeden, D. T. 1979.An intertemporal asset pricing model with stochastic consumption and investment
+opportunities.JournalofFinancialEconomics7:265-96.
+Breeden,D.T.,M.R.Gibbons,andR.H.Litzenberger.1989.Empiricaltestoftheconsumption-orientedCAPM.
+JournalofFinance44:231-62.
+Brennan, M. J., T. Chordia, and A. Subrahmanyam. 1998. Alternative factor specifications, security
+characteristics, and the cross-section of expected stock returns. Journal of Financial Economics 49:
+345-73.
+Brennan,M.J.,T.Chordia,A.Subrahmanyam,andQ.Tong.2012.Sell-orderliquidityandthecross-sectionof
+expectedstockreturns.JournalofFinancialEconomics105:523-41.
+Brennan,M.J.,S.Huh,andA.Subrahmanyam.2013.Thepricingofgoodandbadprivateinformationinthe
+cross-sectionofexpectedstockreturns.WorkingPaper.
+Brennan,M.J.,andF.Li.2008.Agencyandassetpricing.WorkingPaper.
+Brennan,M.J.,andA.Subrahmanyam.1996.Marketmicrostructureandassetpricing:Onthecompensationfor
+illiquidityinstockreturns.JournalofFinancialEconomics41:441-64.
+Brennan,M.J.,A.W.Wang,andY.Xia.2004.Estimationandtestofasimplemodelofintertemporalcapital
+assetpricing.JournalofFinance59:1743-76.
+Brown,D.A.,N.A.Lazar,G.S.Datta,W.Jang,J.E.McDowell.2014.Incorporatingspatialdependence
+into Bayesian multiple testing of statistical parametric maps in functional neuroimaging. NeuroImage 84:
+97-112.
+Brown,D.P.,andB.Rowe.2007.Theproductivitypremiuminequityreturns.WorkingPaper.
+Burlacu,R.,P.Fontaine,S.Jimenez-Garces,andM.S.Seasholes.2012.Riskandthecrosssectionofstock
+returns.JournalofFinancialEconomics105:511-22.
+Callen,J.L.,M.Khan,andH.Lu.2013.Accountingquality,stockpricedelay,andfuturestockreturns.
+ContemporaryAccountingResearch30:269-95.
+Callen,J.L.,andM.R.Lyle.2011.Thetermstructureofimpliedcostsofequitycapital.WorkingPaper.
+Campbell,J.Y.1996.Understandingriskandreturn.JournalofPoliticalEconomy104:298-345.
+Campbell,J.Y.,S.Giglio,C.Polk,andR.Turley.2012.AnintertemporalCAPMwithstochasticvolatility.
+WorkingPaper.
+Campbell,J.Y.,J.Hilscher,andJ.Szilagyi.2008.Insearchofdistressrisk.JournalofFinance63:2899-939.
+Campbell,J.Y.,andT.Vuolteenaho.2004.Badbeta,goodbeta.AmericanEconomicReview94:1249-75.
+Cao,X.,andY.Xu.2010.Long-runidiosyncraticvolatilitiesandcross-sectionalstockreturns.WorkingPaper.
+Cao,C.,Y.Chen,B.Liang,andA.W.Lo.2013.Canhedgefundstimemarketliquidity?JournalofFinancial
+Economics109:493-516.
+
+=== Page 51 ===
+Carhart,M.M.1997.Onpersistenceinmutualfundperformance.JournalofFinance52:57-82.
+Cen,L.,K.C.J.Wei,andJ.Zhang.2006.Forecastedearningspershareandthecrosssectionofexpectedstock
+returns.WorkingPaper.
+Chan,K.C.,N.Chen,andD.A.Hsieh.1985.Anexploratoryinvestigationofthefirmsizeeffect.Journalof
+FinancialEconomics14:451-71.
+Chan,K.C.,S.Foresi,andL.H.P.Lang.1996.Doesmoneyexplainassetreturns?Theoryandempiricalanalysis.
+JournalofFinance51:345-61.
+Chandrashekar,S.,andR.K.S.Rao.2009.Theproductivityofcorporatecashholdingsandthecross-sectionof
+expectedstockreturns.WorkingPaper.
+Chang,B.Y.,P.Christoffersen,andK.Jacobs.2012.Marketskewnessriskandthecrosssectionofstockreturns.
+JournalofFinancialEconomics,Forthcoming.
+Chapman,D.A.1997.Approximatingtheassetpricingkernel.JournalofFinance52:1383-410.
+Chemmanur,T.J.,andA.Yan.2009.Advertising,attention,andstockreturns.WorkingPaper.
+Chen,J.,H.Hong,andJ.C.Stein.2002.Breadthofownershipandstockreturns.JournalofFinancialEconomics
+66:171-205.
+Chen,H.,M.Kacperczyk,andH.Ortiz-Molina.2011.Laborunions,operatingflexibility,andthecostofequity.
+JournalofFinancialandQuantitativeAnalysis46:25-58.
+Chen,L.,R.Novy-Marx,andL.Zhang.2011.Analternativethree-factormodel.WorkingPaper.
+Chen,Z.,andR.Petkova.2012.Doesidiosyncraticvolatilityproxyforriskexposure?ReviewofFinancial
+Studies25:2745-87.
+Chen,N.F.,R.Roll,andS.A.Ross.1986.Economicforcesandthestockmarket.JournalofBusiness59:383-403.
+Chen,Z.,andI.A.Strebulaev.2012.Contingent-claim-basedexpectedstockreturns.WorkingPaper.
+Chopra,N.,J.Lakonishok,andJ.R.Ritter.1992.Measuringabnormalperformance:dostocksoverreact?Journal
+ofFinancialEconomics31:235-68.
+Chordia,T.,S.W.Huh,andA.Subrahmanyam.2009.Theory-basedilliquidityandassetpricing.Reviewof
+FinancialStudies22:3629-68.
+Chordia,T.,andL.Shivakumar.2006.Earningsandpricemomentum.JournalofFinancialEconomics80:
+627-56.
+Chordia,T.,A.Subrahmanyam,andV.R.Anshuman.2001.Tradingactivityandexpectedstockreturns.Journal
+ofFinancialEconomics59:3-32.
+Chordia,T.,A.Subrahmanyam,andQ.Tong.2013.Havecapitalmarketanomaliesattenuatedintherecentera
+ofhighliquidityandtradingactivity?WorkingPaper.
+Chung,Y.P.,H.Johnson,andM.J.Schill.2006.Assetpricingwhenreturnsarenonnormal:Fama-Frenchfactors
+versushigher-ordersystematiccomoments.JournalofBusiness79:923-40.
+CMSCollaboration.2012.Observationofanewbosonatamassof125GeVwiththeCMSexperimentatthe
+LHC.PhysicsLettersB716:30-61.
+Cochrane, J. H. 1991. Production-based asset pricing and the link between stock returns and economic
+fluctuations.JournalofFinance46:209-37.
+---.1996.Across-sectionaltestofaninvestment-basedassetpricingmodel.JournalofPoliticalEconomy
+104:572-621.
+---.2011.PresidentialAddress:DiscountRates.JournalofFinance66:1047-108.
+Cohen,L.,K.Diether,andC.Malloy.2013.Misvaluinginnovation.ReviewofFinancialStudies26:635-66.
+
+=== Page 52 ===
+Cohen,L.,andA.Frazzini.2008.Economiclinksandpredictablereturns.JournalofFinance63:1977-2011.
+Cohen,L.,andD.Lou.2012.Complicatedfirms.JournalofFinancialEconomics104:383-400.
+Cohen,L.,C.Malloy,andL.Pomorski.2012.Decodinginsideinformation.JournalofFinance67:1009-43.
+Cohen,R.,C.Polk,andB.Silli.2009.Bestideas.WorkingPaper.
+Conneely,K.N.,andM.Boehnke.2007.Somanycorrelatedtests,solittletime!RapidadjustmentofPvalues
+formultiplecorrelatedtests.AmericanJournalofHumanGenetics81:1158-68.
+Conrad,J.,M.Cooper,andG.Kaul.2003.Valueversusglamour.JournalofFinance58:1969-96.
+Conrad,J.,R.F.Dittmar,andE.Ghysels.2013.Exanteskewnessandexpectedstockreturns.JournalofFinance
+68:85-124.
+Constantinides,G.M.1982.Intertemporalassetpricingwithheterogeneousconsumersandwithoutdemand
+aggregation.JournalofBusiness55:253-67.
+---.1986.Capitalmarketequilibriumwithtransactioncosts.JournalofPoliticalEconomy94:842-62.
+Cooper,M.J.,andH.Gulen.2006.Istime-series-basedpredictabilityevidentinrealtime?JournalofBusiness
+79:1263-92.
+Cooper,M.J.,H.Gulen,andA.V.Ovtchinnikov.2010.Corporatepoliticalcontributionsandstockreturns.
+JournalofFinance65:687-724.
+Cooper,M.J.,H.Gulen,andM.J.Schill.2008.Assetgrowthandthecross-sectionofstockreturns.Journalof
+Finance63:1609-51.
+Cox,J.C.,J.E.Ingersoll,Jr.,andS.A.Ross.1985.Anintertemporalgeneralequilibriummodelofassetpricing.
+Econometrica53:363-84.
+Cremers,K.J.M.,M.Halling,andD.Weinbaum.2010.Insearchofaggregatejumpandvolatilityriskinthe
+cross-sectionofstockreturns.WorkingPaper.
+Cremers, K. J. M., andV. B. Nair. 2005. Governance mechanisms and equity prices. Journal of Finance
+60:2859-94.
+Cremers,K.J.M.,V.B.Nair,andK.John.2009.Takeoversandthecross-sectionofreturns.ReviewofFinancial
+Studies22:1409-45.
+Da, Z. 2009. Cash flow, consumption risk, and the cross-section of stock returns. Journal of Finance
+64:923-56.
+Da,Z.,Q.Liu,andE.Schaumburg.2011.Decomposingshort-termreturnreversal.WorkingPaper.
+Da,Z.,andE.Schaumburg.2011.Relativevaluationandanalysttargetpriceforecasts.JournalofFinancial
+Markets14:161-92.
+Da,Z.,andM.C.Warachka.2009.Cashflowrisk,systematicearningsrevisions,andthecross-sectionofstock
+returns.JournalofFinancialEconomics94:448-68.
+---. 2009. Long-term earnings growth forecasts, limited attention, and return predictability. Working
+Paper.
+Daniel,K.,andS.Titman.1997.Evidenceonthecharacteristicsofcrosssectionalvariationinstockreturns.
+JournalofFinance52:1-33.
+---.2006.Marketreactionstotangibleandintangibleinformation.JournalofFinance61:1605-43.
+---.2012.Testingfactor-modelexplanationsofmarketanomalies.CriticalFinanceReview1:103-39.
+Datar,V.T.,N.Y.Naik,andR.Radcliffe.1998.Liquidityandstockreturns:Analternativetest.Journalof
+FinancialMarkets1:203-19.
+DeBondt,W.F.M.,andR.Thaler.1985.Doesthestockmarketoverreact?JournalofFinance40:793-805.
+
+=== Page 53 ===
+Dichev,I.D.1998.Istheriskofbankruptcyasystematicrisk?JournalofFinance53:1131-47.
+Dichev,I.D.,andJ.D.Piotroski.2001.Thelong-runstockreturnsfollowingbondratingschanges.Journalof
+Finance56:173-203.
+Diether,K.B.,C.J.Malloy,andA.Scherbina.2002.Differencesofopinionsandthecrosssectionofstock
+returns.JournalofFinance57:2113-41.
+Dittmar,R.F.2002.Nonlinearpricingkernels,kurtosispreference,andevidencefromthecrosssectionofequity
+returns.JournalofFinance 57:369-403.
+Donangelo,A.2012.Labormobility:ImplicationsforAssetPricing.WorkingPaper.
+Doskov,N.,T.Pekkala,andR.M.Ribeiro.2013.Tradablemacroriskfactorsandthecross-sectionofstock
+returns.WorkingPaper.
+Douglas,G.W.1967.Riskintheequitymarkets:Anempiricalappraisalofmarketefficiency.YaleEconomic
+Essays9:3-48.
+Doran,J.S.,A.Fodor,andD.R.Peterson.2007.Insidersversusoutsiderswithemployeestockoptions:Who
+knowsbestaboutfuturefirmriskandimplicationsforstockreturns.WorkingPaper.
+Doyle,J.T.,R.J.Lundholm,andM.T.Soliman.2003.Thepredictivevalueofexpensesexcludedfrompro
+formaearnings.ReviewofAccountingStudies8:145-74.
+Drake, M. S., L. Rees, and E. P. Swanson. 2011. Should investors follow the prophets or the bears?
+Evidence on the use of public information by analysts and short sellers. Accounting Review 86:
+101-30.
+Dudoit,S.,andM.J.vanderLaan.2008.MultipletestingprocedureswithapplicationstoGenomics.Springer
+SeriesinStatistics.NewYork.
+Easley,D.,S.Hvidkjaer,andM.O'Hara.2002.Isinformationriskadeterminantofassetreturns?Journalof
+Finance57:2185-221.
+---. 2010. Factoring information into returns. Journal of Financial and Quantitative Analysis
+45:293-309.
+Eberhart,A.C.,W.F.Maxwell,andA.R.Siddique.2004.Anexaminationoflong-termabnormalstockreturns
+andoperatingperformancefollowingR&Dincreases.JournalofFinance59:623-50.
+Edelen,R.M.,O.S.Ince,andG.B.Kadlec.2014.Institutionalinvestorsandstockreturnanomalies.Working
+Paper.
+Edmans,A.2011.Doesthestockmarketfullyvalueintangibles?Employeesatisfactionandequityprices.Journal
+ofFinancialEconomics101:621-40.
+Efron,B.1979.Bootstrapmethods:Anotherlookatthejackknife.AnnalsofStatistics7:1-26.
+---.2004.Large-scalesimultaneoushypothesistesting:Thechoiceofanullhypothesis.Journalofthe
+AmericanStatisticalAssociation99:96-104.
+---.2008.Microarrays,empiricalBayes,andthetwo-groupsmodel.StatisticalScience23:1-22.
+Efron,B.,andR.Tibshirani.2002.EmpiricalBayesmethodsandfalsediscoveryratesformicroarrays.Genetic
+Epidemiology23:70-86.
+Efron,B.,R.Tibshirani,J.D.Storey,andV.Tusher.2001.EmpiricalBayesanalysisofamicroarrayexperiment.
+JournaloftheAmericanStatisticalAssociation96:1151-60.
+Eiling,E.2013.Industry-specifichumancapital,idiosyncraticrisk,andthecross-sectionofexpectedstock
+returns.JournalofFinance68:43-84.
+Eisfeldt,A.L.,andD.Papanikolaou.2011.Organizationcapitalandthecross-sectionofexpectedreturns.
+WorkingPaper.
+
+=== Page 54 ===
+Elgers,P.T.,M.H.Lo,andR.J.Pfeiffer,Jr.,2001.Delayedsecuritypriceadjustmentstofinancialanalysts'
+forecastsofannualearnings.AccountingReview76:613-32.
+Elton,E.J.,M.J.Gruber,andC.R.Blake.1995.Fundamentaleconomicvariables,expectedreturns,andbond
+fundperformance.JournalofFinance50:1229-56.
+Elton,E.J.,M.J.Gruber,S.Das,andM.Hlavka.1993.Efficiencywithcostlyinformation:Areinterpretation
+ofevidencefrommanagedportfolios.ReviewofFinancialStudies6:1-22.
+Erb,C.B.,C.R.Harvey,andT.E.Viskanta.1996.Expectedreturnsandvolatilityin135countries.Journalof
+PortfolioManagement22:46-58.
+Fabozzi,F.J.,K.C.Ma,andB.J.Oliphant.2008.Sinstockreturns.JournalofPortfolioManagement35:82-94.
+Fairfield,P.M.,J.S.Whisenant,andT.L.Yohn.2003.Accruedearningsandgrowth:implicationsforfuture
+profitabilityandmarketmispricing.AccountingReview78:353-71.
+Fama,E.F.1991.Efficientcapitalmarkets:II.JournalofFinance46:1575-617.
+Fama,E.F.,andK.R.French.1992.Thecross-sectionofexpectedstockreturns.JournalofFinance47:427-65.
+---.1993.Commonriskfactorsinthereturnsonstocksandbonds,JournalofFinancialEconomics33:3-56.
+---.2006.Profitability,investmentandaveragereturns.JournalofFinancialEconomics82:491-518.
+---.2010.Luckversusskillinthecrosssectionofmutualfundreturns.JournalofFinance65:1915-47.
+Fama,E.F.,andJ.D.MacBeth.1973.Risk,return,andequilibrium:Empiricaltests.JournalofPoliticalEconomy
+81:607-36.
+Fang,L.,andJ.Peress.2009.Mediacoverageandthecross-sectionofstockreturns.JournalofFinance
+64:2023-52.
+Farcomeni,A.2007.Areviewofmodernmultiplehypothesistesting,withparticularattentiontothefalse
+discoveryproportion.StatisticalMethodsinMedicalResearch17:347-88.
+Ferson,W.E.,andY.Chen.2013.Howmanygoodandbadfundmanagersarethere,really?WorkingPaper.
+Ferson,W.E.andC.R.Harvey.1991.Thevariationofeconomicriskpremiums.JournalofPoliticalEconomy
+99:385-415.
+---. 1993. The risk and predictability of international equity returns. Review of Financial Studies
+6:527-66.
+---.1994.Sourcesofriskandexpectedreturnsinglobalequitymarkets.JournalofBankingandFinance
+18:775-803.
+---.1999.Conditioningvariablesandthecrosssectionofstockreturns.JournalofFinance54:1325-60.
+Ferson,W.E.,S.Nallareddy,andB.Xie.2012.The"out-of-sample"performanceoflongrunriskmodels.
+JournalofFinancialEconomics,Forthcoming.
+Figlewski,S.1981.Theinformationaleffectsofrestrictionsonshortsales:someempiricalevidence.Journalof
+FinancialandQuantitativeAnalysis16:463-76.
+Fogler,H.R.,K.John,andJ.Tipton.1981.Threefactors,interestratedifferentialsandstockgroups.Journalof
+Finance36:323-35.
+Foster,F.D.,T.Smith,andR.E.Whaley.1997.Assessinggoodness-of-fitofassetpricingmodels:thedistribution
+ofthemaximalR2.JournalofFinance52:591-607.
+Frank,M.Z.,andV.K.Goyal.2009.Capitalstructuredecisions:Whichfactorsarereliablyimportant?Financial
+Management38:1-37.
+Frankel,R.,andC.M.C.Lee.1998.Accountingvaluation,marketexpectation,andcross-sectionalstockreturns.
+JournalofAccountingandEconomics25:283-319.
+
+=== Page 55 ===
+Franzoni,F.,andJ.M.Marin.2006.Pensionplanfundingandstockmarketefficiency.JournalofFinance
+61:921-56.
+Frazzini,A.,andL.H.Pedersen.2013.Bettingagainstbeta.WorkingPaper.
+Friewald,N.,C.Wagner,andJ.Zechner.2012.Thecross-sectionofcreditriskpremiaandequityreturns.Working
+Paper.
+Fu,F.2009.Idiosyncraticriskandthecross-sectionofexpectedstockreturns.JournalofFinancialEconomics
+91:24-37.
+Fung,W.,andD.A.Hsieh.1997.Empiricalcharacteristicsofdynamictradingstrategies:Thecaseofhedge
+funds.ReviewofFinancialStudies10:275-302.
+---.2001.Theriskinhedgefundstrategies:theoryandevidencefromtrendfollowers.ReviewofFinancial
+Studies14:313-41.
+Garcia,D.,andØ.Norli.2012.Geographicdispersionandstockreturns.JournalofFinancialEconomics,
+Forthcoming.
+Garlappi,L.,andH.Yan.2011.Financialdistressandthecross-sectionofequityreturns.JournalofFinance
+66:789-822.
+Garlappi,L.,T.Shu,andH.Yan.2008.Defaultrisk,shareholderadvantage,andstockreturns.ReviewofFinancial
+Studies21:2743-78.
+Gârleanu,N.,L.Kogan,andS.Panageas.2012.Displacementriskandassetreturns.JournalofFinancial
+Economics105:491-510.
+Ge,Y.,S.Dudoit,andT.P.Speed.2003.Resampling-basedmultipletestingformicroarraydataanalysis.Test
+12:1-77.
+George, T. J., and C.Y. Hwang. 2004. The 52-week high and momentum investing. Journal of Finance
+59:2145-76.
+---.2010.Aresolutionofthedistressriskandleveragepuzzlesinthecrosssectionofstockreturns.Journal
+ofFinancialEconomics96:56-79.
+Gettleman,E.,andJ.M.Marks.2006.Accelerationstrategies.WorkingPaper.
+Glaeser,E.2008.Researchincentivesandempiricalmethods.InTheFoundationsofpositiveandnormative
+economics:Ahandbook,Chapter13.Oxford:OxfordUniversityPress.
+Gokcen,U.2009.Informationrevelationandexpectedstockreturns.WorkingPaper.
+Gomes,J.F.,A.Yaron,andL.Zhang.2006.Assetpricingimplicationsoffirms'financingconstraints.Reviewof
+FinancialStudies19:1321-56.
+Gómez,J.P.,R.Priestley,andF.Zapatero.2012.Laborincome,relativewealthconcerns,andthecross-section
+ofstockreturns.WorkingPaper.
+Gompers,P.A.,andA.Metrick.2001.Institutionalinvestorsandequityprices.QuarterlyJournalofEconomics
+116:229-59.
+Gompers,P.A.,J.L.Ishii,andA.Metrick.2003.Corporategovernanceandequityprices.QuarterlyJournalof
+Economics118:107-55.
+Gourio,F.2007.Laborleverage,firms'heterogeneoussensitivitiestothebusinesscycle,andthecross-section
+ofexpectedreturns.WorkingPaper.
+Gow, I. D., and D. J. Taylor. 2009. Earnings volatility and the cross-section of returns. Working
+Paper.
+Green,J.,J.R.M.Hand,andX.F.Zhang.2013a.Thesupraviewofreturnpredictivesignals.ReviewofAccounting
+Studies18:692-730.
+
+=== Page 56 ===
+---.2013b.TheremarkablemultidimensionalityinthecrosssectionofexpectedUSstockreturns.Working
+Paper.
+Greene,W.H.2008.Econometricanalysis.UpperSaddleRiver,NJ:PrenticeHall.
+Griffin,J.M.,andM.L.Lemmon.2002.Book-to-marketequity,distressrisk,andstockreturns.Journalof
+Finance57:2317-36.
+Gu,F.2005.Innovation,futureearnings,andmarketefficiency.JournalofAccounting,AuditingandFinance
+20:385-418.
+Gu,F.,andB.Lev.2011.Overpricedshares,ill-advisedacquisitions,andgoodwillimpairment.Accounting
+Review86:1995-2022.
+Gu,L.,Z.Wang,andJ.Ye.2008.Informationinorderbacklog:Changeversuslevel.WorkingPaper.
+Guo,H.,andR.Savickas.2008.AverageidiosyncraticvolatilityinG7countries.ReviewofFinancialStudies
+21:1259-96.
+Gupta,M.C.,andA.R.Ofer.1975.Investor'sexpectationsofearningsgrowth,theiraccuracyandeffectsonthe
+structureofrealizedratesofreturn.JournalofFinance30:509-23.
+Hafzalla,N.,R.Lundholm,andE.M.VanWinkle.2011.Percentaccruals.AccountingReview86:209-36.
+Hahn,J.,andH.Lee.2009.Financialconstraints,debtcapacity,andthecross-sectionofstockreturns.Journal
+ofFinance64:891-921.
+Hameed,A.,J.Huang,andG.M.Mian.2010.Industriesandstockreturnreversals.WorkingPaper.
+Han,B.,andY.Zhou.2011.Termstructureofcreditdefaultswapspreadsandcross-sectionofstockreturns.
+WorkingPaper.
+Han,B.,H.M.Kang,andE.Eskin.2009.Rapidandaccuratemultipletestingcorrectionandpowerestimation
+formillionsofcorrelatedmarkers.PLoSgenetics5:e1000456.
+Han,Y.,andG.Zhou.2013.Trendfactor:Anewdeterminantofcross-sectionstockreturns.WorkingPaper.
+Harvey,C.R.,andA.Siddique.2000.Conditionalskewnessinassetpricingtests.JournalofFinance55:1263-95.
+Harvey,C.R.,andY.Liu.2014a.Multipletestingineconomics.WorkingPaper.
+---.2014b.Evaluatingtradingstrategies.JournalofPortfolioManagement40:108-18.
+---.2014c.Luckyfactors.WorkingPaper.
+Hawkins,E.H.,S.C.Chamberlin,andW.E.Daniel.1984.Earningsexpectationsandsecurityprices.Financial
+AnalystsJournal40:24-74.
+Head,A.,G.Smith,andJ.Wilson.2007.Wouldastockbyanyothertickersmellassweet?QuarterlyReviewof
+EconomicsandFinance49:551-61.
+Heaton,J.,andD.Lucas.2000.Portfoliochoiceandassetprices:Theimportanceofentrepreneurialrisk.Journal
+ofFinance55:1163-98.
+Heckerman,D.G.1972.Portfolioselectionandthestructureofcapitalassetpriceswhenrelativepricesof
+consumptiongoodsmaychange.JournalofFinance27:47-60.
+Heckman,J.J.1979.Sampleselectionbiasasaspecificationerror.Econometrica47:153-61.
+Hess, D., D. Kreutzmann, and O. Pucker. 2011. Projected earnings accuracy and profitability of stock
+recommendations.WorkingPaper.
+Hirshleifer,D.,P.H.Hsu,andD.Li.2012.Innovativeefficiencyandstockreturns.JournalofFinancialEconomics
+107:632-54.
+Hirshleifer,D.,andD.Jiang.2010.Afinancing-basedmisvaluationfactorandthecross-sectionofexpected
+returns.ReviewofFinancialStudies23:3401-36.
+
+=== Page 57 ===
+Hirshleifer,D.,K.Kou,S.H.Teoh,andY.Zhang.2004.Doinvestorsovervaluefirmswithbloatedbalance
+sheets?JournalofAccountingandEconomics38:297-331.
+Hochberg,Y.1988.AsharperBonferroniprocedureformultipletestsofsignificance.Biometrika75:800-02.
+Hochberg,Y.,andY.Benjamini.1990.Morepowerfulproceduresformultiplesignificancetesting.Statisticsin
+Medicine9:811-18.
+Hochberg,Y.,andA.C.Tamhane.1987.Multiplecomparisonprocedures.JohnWiley&Sons.
+Holland,B.,S.Basu,andF.Sun.2010.Neglectofmultiplicitywhentestingfamiliesofrelatedhypotheses.
+WorkingPaper.
+Holm,S.1979.Asimplesequentiallyrejectivemultipletestprocedure.ScandinavianJournalofStatistics6:65-
+70.
+Holthausen,R.W.,andD.F.Larcker.1992.Thepredictionofstockreturnsusingfinancialstatementinformation.
+JournalofAccounting&Economics15:373-411.
+Hommel,G.1988.AstagewiserejectivemultipletestprocedurebasedonamodifiedBonferronitest.Biometrika
+75:383-86.
+Hou,K.,G.A.Karolyi,andB.C.Kho.2011.Whatfactorsdriveglobalstockreturns?ReviewofFinancialStudies
+24:2527-74.
+Hou,K.,andT.J.Moskowitz.2005.Marketfrictions,pricedelay,andthecross-sectionofexpectedreturns.
+ReviewofFinancialStudies18:981-1020.
+Hou,K.,andD.T.Robinson.2006.Industryconcentrationandaveragestockreturns.JournalofFinance
+61:1927-56.
+Hou,K.,C.Xue,andL.Zhang.2014.Digestinganomalies:Aninvestmentapproach.ReviewofFinancialStudies,
+Forthcoming.
+Hu,G.X.,J.Pan,andJ.Wang.2012.Noiseasinformationforilliquidity.WorkingPaper.
+Huang,A.G.2009.Thecrosssectionofcashflowvolatilityandexpectedstockreturns.JournalofEmpirical
+Finance16:409-29.
+Huang,W.,Q.Liu,S.G.Rhee,andF.Wu.2012.Extremedownsideriskandexpectedstockreturns.Journalof
+Banking&Finance36:1492-502.
+Hvidkjaer,S.2008.Smalltradesandthecross-sectionofstockreturns.ReviewofFinancialStudies21:1123-51.
+Imrohoroglu,A.,andS.Tuzel.2011.Firmlevelproductivity,risk,andreturn.WorkingPaper.
+Ioannidis,J.P.A.2005.Whymostpublishedresearchfindingsarefalse?PLoSMedicine2e124:696-701.
+Jacobs,K.,andK.Q.Wang.2004.Idiosyncraticconsumptionriskandthecrosssectionofassetreturns.Journal
+ofFinance59:2211-52.
+Jagannathan,R.,andZ.Wang.1996.TheconditionalCAPMandthecross-sectionofexpectedreturns.Journal
+ofFinance51:3-53.
+Jagannathan,R.,andY.Wang.2007.Lazyinvestors,discretionaryconsumption,andthecross-sectionofstock
+returns.JournalofFinance62:1623-61.
+Jarrow,R.1980.Heterogeneousexpectations,restrictionsonshortsales,andequilibriumassetprices.Journal
+ofFinance35:1105-13.
+Jefferys,W.H.,andJ.O.Berger.1992.Ockham'srazorandBayesiananalysis.AmericanScientist80:64-72.
+Jegadeesh,N.1990.Evidenceofpredictablebehaviorofsecurityreturns.JournalofFinance45:881-98.
+Jegadeesh,N.,J.Kim,S.D.Krische,andC.M.C.Lee.2004.Analyzingtheanalysts:Whendorecommendations
+addvalue?JournalofFinance59:1083-124.
+
+=== Page 58 ===
+Jegadeesh,N.,andS.Titman.1993.Returnstobuyingwinnersandsellinglosers:implicationsforstockmarket
+efficiency.JournalofFinance48:65-91.
+Jiang,G.,C.M.C.Lee,andY.Zhang.2005.Informationuncertaintyandexpectedreturns.ReviewofAccounting
+Studies10:185-221.
+Jiang,H.,andZ.Sun.2011.Dispersioninbeliefsamongactivemutualfundsandthecross-sectionofstock
+returns.WorkingPaper.
+Johnson,T.L.andE.C.So.2012.Theoptiontostockvolumeratioandfuturereturns.JournalofFinancial
+Economics106:262-86.
+Jones,C.M.,andO.A.Lamont.2002.Short-saleconstraintsandstockreturns.JournalofFinancialEconomics
+66:207-39.
+Kapadia,N.2011.Trackingdowndistressrisk.JournalofFinancialEconomics102:167-82.
+Kaplan,S.N.,andL.Zingales.1997.Doinvestment-cashflowsensitivitiesprovideusefulmeasuresoffinancing
+constraints?QuarterlyJournalofEconomics112:169-215.
+Karolyi,G.A.,andB.C.Kho.2004.Momentumstrategies:somebootstraptests.JournalofEmpiricalFinance
+11:509-36.
+Kelly,B.,andS.Pruitt.2011.Thethree-passregressionfilter:Anewapproachtoforecastingusingmany
+predictors.WorkingPaper.
+Kim,C.F.,C.Pantzalis,andJ.C.Park.2012.Politicalgeographyandstockreturns:Thevalueandrisk
+implicationsofproximitytopoliticalpower.JournalofFinancialEconomics106:196-228.
+Koijen,R.S.J.,T.J.Moskowitz,L.H.Pedersen,andE.B.Vrugt.2012.Carry.WorkingPaper.
+Korajczyk,R.A.,andR.Sadka.2008.Pricingthecommonalityacrossalternativemeasuresofliquidity.Journal
+ofFinancialEconomics87:45-72.
+Korniotis,G.M.2008.Habitformation,incompletemarkets,andthesignificanceofregionalriskforexpected
+returns.ReviewofFinancialStudies21:2139-72.
+Korniotis,G.M.,andA.Kumar.2009.LongGeorgia,shortColorado?Thegeographyofreturnpredictability.
+WorkingPaper.
+Kosowski,R.,N.Y.Naik,andM.Teo.2007.Dohedgefundsdeliveralpha?ABayesianandbootstrapanalysis.
+JournalofFinancialEconomics84:229-64.
+Kosowski,R.,A.Timmermann,R.Wermers,andH.White.2006.Canmutualfund"stars"reallypickstocks?
+NewevidencefromaBootstrapanalysis.JournalofFinance61:2551-95.
+Kothari,S.P.,andJ.B.Warner.2007,Econometricsofeventstudies.In:Handbookofcorporatefinance:
+Empiricalcorporatefinance,VolumeI,Ed.B.E.Eckbo,3-36.Amsterdam:Elsevier.
+Kraus,A.,andR.H.Litzenberger.1976.Skewnesspreferenceandthevaluationofriskassets.JournalofFinance
+31:1085-100.
+Kumar,A.,andC.M.C.Lee.2006.Retailinvestorsentimentandreturncomovement.JournalofFinance
+61:2451-86.
+Kumar,P.,S.M.Sorescu,R.D.Boehme,andB.R.Danielsen.2008.Estimationrisk,information,andthe
+conditionalCAPM:Theoryandevidence.ReviewofFinancialStudies21:1037-75.
+Kyle,A.S.1985.Continuousauctionsandinsidertrading.Econometrica53:1315-35.
+Lamont,O.,C.Polk,andJ.Saa-Requejo.2001.Financialconstraintsandstockreturns.ReviewofFinancial
+Studies14:529-54.
+Landsman,W.R.,B.L.Miller,K.Peasnell,andS.Yeh.2011.Doinvestorsunderstandreallydirtysurplus?
+AccountingReview86:237-58.
+
+=== Page 59 ===
+LaPorta,R.1996.Expectationsandthecross-sectionofstockreturns.JournalofFinance51:1715-42.
+Larcker,D.F.,E.C.So,andC.C.Y.Wang.2013.Boardroomcentralityandfirmperformance.Journalof
+AccountingandEconomics55:225-50.
+Leamer,E.E.1978.Specificationsearches:Adhocinferencewithnonexperimentaldata.NewYork:JohnWiley
+&Sons.
+Lee,C.M.C.,andB.Swaminathan.2000.Pricemomentumandtradingvolume.JournalofFinance55:2017-69.
+Lehavy, R., and R. G. Sloan. 2008. Investor recognition and stock returns. Review ofAccounting Studies
+13:327-61.
+Lehmann,E.L.,andJ.P.Romano.2005.Generalizationsofthefamilywiseerrorrate.AnnalsofStatistics
+33:1138-54.
+Lettau,M.,andS.Ludvigson.2001.Resurrectingthe(C)CAPM:Across-sectionaltestwhenriskpremiaare
+time-varying.JournalofPoliticalEconomy109:1238-87.
+Lev,B.,D.Nissim,andJ.Thomas.2005.OntheinformationalusefulnessofR&Dcapitalizationandamortization.
+WorkingPaper.
+Lev,B.,B.Sarath,andT.Sougiannis.2005.R&Dreportingbiasesandtheirconsequences.Contemporary
+AccountingResearch22:977-1026.
+Lev,B.,andT.Sougiannis.1996.Thecapitalization,amortization,andvalue-relevanceofR&D.Journalof
+AccountingandEconomics21:107-38.
+Lewellen,J.,S.Nagel,andJ.Shanken.2010.Askepticalappraisalofassetpricingtests.JournalofFinancial
+Economics96:175-94.
+Liang,Y.,andA.Kelemen.2008.Statisticaladvancesandchallengesforanalyzingcorrelatedhighdimensional
+SNPdataingenomicstudyforcomplexdiseases.StatisticsSurveys2:43-60.
+Li,D.2011.Financialconstraints,R&Dinvestment,andstockreturns.ReviewofFinancialStudies24:2975-3007.
+Li,K.K.2011.Howwelldoinvestorsunderstandlosspersistence?ReviewofAccountingStudies16:630-67.
+Li,Q.,M.Vassalou,andY.Xing.2006.Sectorinvestmentgrowthratesandthecrosssectionofequityreturns.
+JournalofBusiness79:1637-65.
+Li,S.Z.2012.Continuousbeta,discontinuousbeta,andthecross-sectionofexpectedstockreturns.Working
+Paper.
+Li,X.2012.Realearningsmanagementandsubsequentstockreturns.WorkingPaper.
+Lin,D.Y.2005.AnefficientMonteCarloapproachtoassessingstatisticalsignificanceingenomicstudies.
+Bioinformatics21:781-7.
+Lintner,J.1965.Securityprices,risk,andmaximalgainsfromdiversification.JournalofFinance20:587-615.
+Lioui,A.,andP.Maio.2012.Interestrateriskandthecross-sectionofstockreturns.WorkingPaper.
+Litzenberger,R.H.,andK.Ramaswamy.1979.Theeffectofpersonaltaxesanddividendsoncapitalassetprices:
+Theoryandempiricalevidence.JournalofFinancialEconomics7:163-95.
+Liu,W.2006.Aliquidity-augmentedcapitalassetpricingmodel.JournalofFinancialEconomics82:631-71.
+Liu,Q.,LeiL.,BoS.,andH.Yan.2014.Amodelofanomalydiscovery.WorkingPaper.
+Livdan,D.,H.Sapriza,andL.Zhang.2009.Financiallyconstrainedstockreturns.JournalofFinance64:1827-62.
+Lo,A.W.,andA.C.Mackinlay.1990.Data-snoopingbiasesintestsoffinancialassetpricingmodels.Reviewof
+FinancialStudies3:431-67.
+Lo,A.W.,andJ.Wang.2006.Tradingvolume:Implicationsofanintertemporalcapitalassetpricingmodel.
+JournalofFinance61:2805-40.
+
+=== Page 60 ===
+Loughran,T.,andJ.R.Ritter.1995.Thenewissuespuzzle.JournalofFinance50:23-51.
+Loughran,T.,andA.M.Vijh.1997.Dolong-termshareholdersbenefitfromcorporateacquisitions?Journalof
+Finance52:1765-90.
+Lucas,R.E.Jr.,1978.Assetpricesinanexchangeeconomy.Econometrica46:1429-45.
+Lustig,H.N.,andS.G.VanNieuwerburgh.2005.Housingcollateral,consumptioninsurance,andriskpremia:
+Anempiricalperspective.JournalofFinance60:1167-219.
+Lynch,A.,andT.Vital-Ahuja.2012.Cansubsampleevidencealleviatethedata-snoopingproblem?:Acomparison
+tothemaximalR2cutofftest.WorkingPaper.
+Malloy,C.J.,T.J.Moskowitz,andA.Vissing-Jorgensen.2009.Long-runstockholderconsumptionriskand
+assetreturns.JournalofFinance64:2427-79.
+Markowitz,H.M.,andG.L.Xu.1994.Dataminingcorrections.JournalofPortfolioManagement21:60-9.
+Mayshar,J.1981.Transactioncostsandthepricingofassets.JournalofFinance36:583-97.
+McConnell,J.J.,andG.C.Sanger.1984.AtradingstrategyfornewlistingsontheNYSE.FinancialAnalysts
+Journal40:34-8.
+McLean,R.D.,andJ.Pontiff.2015.Doesacademicresearchdestroystockreturnpredictability?Journalof
+Finance,Forthcoming.
+Meinshausen,N.2008.Hierarchicaltestingofvariableimportance.Biometrika95:265-78.
+Meng,C.Y.K.,andA.P.Dempster.1987.ABayesianapproachtothemultiplicityproblemforsignificance
+testingwithbinomialdata.Biometrics43:301-11.
+Menzly,L.,andO.Ozbas.2010.Marketsegmentationandcross-predictabilityofreturns.JournalofFinance
+65:1555-80.
+Merton,R.C.1973.Anintertemporalcapitalassetpricingmodel.Econometrica41:867-87.
+Michaely,R.,R.H.Thaler,andK.L.Womack.1995.Pricereactionstodividendinitiationsandomissions:
+overreactionordrift?JournalofFinance50:573-608.
+Mohanram, P. S. 2005. Separating winners from losers among low book-to-market stocks using financial
+statementanalysis.ReviewofAccountingStudies10:133-70.
+Moskowitz, T. J., and M. Grinblatt. 1999. Do industries explain momentum? Journal of Finance 54:
+1249-90.
+Moskowitz,T.J.,Y.H.Ooi,andL.H.Pedersen.2012.Timeseriesmomentum.JournalofFinancialEconomics
+104:228-50.
+Mossin,J.1966.Equilibriuminacapitalassetmarket.Econometrica34:768-83.
+Nagel,S.2005.Shortsales,institutionalinvestorsandthecross-sectionofstockreturns.JournalofFinancial
+Economics78:277-309.
+Narayanamoorthy,G.2006.Conservatismandcross-sectionalvariationinthepost-earningsannouncementdrift.
+JournalofAccountingResearch44:763-89.
+Nguyen,G.X.,andP.E.Swanson.2009.Firmcharacteristics,relativeefficiencyandequityreturns.Journalof
+FinancialandQuantitativeAnalysis44:213-36.
+Novy-Marx,R.2013.Theothersideofvalue:Thegrossprofitabilitypremium.JournalofFinancialEconomics
+108:1-28.
+---.2014.Predictinganomalyperformancewithpolitics,theweather,globalwarming,sunspots,andthe
+stars.JournalofFinancialEconomics112:137-46.
+Nyberg,P.,andS.Pöyry.2011.Firmexpansionandstockpricemomentum.WorkingPaper.
+
+=== Page 61 ===
+Ofek,E.,M.Richardson,andR.F.Whitelaw.2004.Limitedarbitrageandshortsalesrestrictions:evidencefrom
+theoptionsmarkets.JournalofFinancialEconomics74:305-42.
+Oldfield,G.S.Jr.,andR.J.Rogalski.1981.Treasurybillfactorsandcommonstockreturns.JournalofFinance
+36:337-50.
+Ortiz-Molina,H.,andG.M.Phillips.2011.Realassetliquidityandthecostofcapital.WorkingPaper.
+Ou,J.A.,andS.H.Penman.1989.Financialstatementanalysisandthepredictionofstockreturns.Journalof
+AccountingandEconomics11:295-329.
+Ozoguz,A.2009.Goodtimesorbadtimes?Investor'suncertaintyandstockreturns.ReviewofFinancialStudies
+22:4377-422.
+Palazzo,B.2012.Cashholdings,risk,andexpectedreturns.JournalofFinancialEconomics104:162-85.
+Papanastasopoulos,G.,D.Thomakos,andT.Wang.2010.Theimplicationsofretainedanddistributedearnings
+forfutureprofitabilityandstockreturns.ReviewofAccounting&Finance9:395-423.
+Parker,J.A.,andC.Julliard.2005.Consumptionriskandthecrosssectionofexpectedreturns.Journalof
+PoliticalEconomy113:185-222.
+Pastor,L.,andR.F.Stambaugh.2003.Liquidityriskandexpectedstockreturns.JournalofPoliticalEconomy
+111:643-85.
+Patatoukas,P.N.2011.Customer-baseconcentration:implicationsforfirmperformanceandcapitalmarkets.
+WorkingPaper.
+Patton,A.J.,andA.Timmermann.2010.Monotonicityinassetreturns:Newtestswithapplicationstotheterm
+structure,theCAPM,andportfoliosorts.JournalofFinancialEconomics98:605-25.
+Penman,S.,andX.Zhang.2002.ModelingsustainableearningsandP/Eratioswithfinancialstatementanalysis.
+WorkingPaper.
+Pesaran,M.H.,andA.Timmermann.2007.Selectionofestimationwindowinthepresenceofbreaks.Journal
+ofEconometrics137:134-61.
+Piotroski,J.D.2000.Valueinvesting:Theuseofhistoricalfinancialstatementinformationtoseparatewinners
+fromlosers.JournalofAccountingResearch38:1-41.
+Pontiff,J.,andA.Woodgate.2008.Shareissuanceandcross-sectionalreturns.JournalofFinance63:921-45.
+Prakash,R.,andN.Sinha.2012.Deferredrevenuesandthematchingofrevenuesandexpenses.Contemporary
+AccountingResearchForthcoming.
+Price,S.M.,J.S.Doran,D.R.Peterson,andB.A.Bliss.2012.Earningsconferencecallsandstockreturns:The
+incrementalinformativenessoftextualtone.JournalofBankingandFinance36:992-1011.
+Pukthuanthong,K.,andR.Roll.2014.Aprotocolforfactoridentification.WorkingPaper.
+Rajgopal,S.,T.Shevlin,andM.Venkatachalam.2003.Doesthestockmarketfullyappreciatetheimplications
+ofleadingindicatorsforfutureearnings?Evidencefromorderbacklog.ReviewofAccountingStudies8:461-92.
+Roll,R.1988.R2.JournalofFinance43:541-66.
+Romano,J.P.,A.M.Shaikh,andM.Wolf.2008.Formalizeddatasnoopingbasedongeneralizederrorrates.
+EconometricTheory24:404-47.
+Rosenthal,R.1979.The"filedrawerproblem"andtolerancefornullresults.PsychologicalBulletin86:638-41.
+Ross,S.A.1989.Regressiontothemax.WorkingPaper.
+Rubinstein, M. E. 1973. The fundamental theorem of parameter-preference security valuation. Journal of
+FinancialandQuantitativeAnalysis8:61-69.
+---.1974.Anaggregationtheoremforsecuritiesmarkets.JournalofFinancialEconomics1:225-44.
+
+=== Page 62 ===
+Sarkar,S.K.2002.Someresultsonfalsediscoveryrateinstepwisemultipletestingprocedure.AnnalsofStatistics
+30:239-57.
+Sarkar,S.K.,andW.Guo.2009.Onageneralizedfalsediscoveryrate.AnnalsofStatistics37:1545-65.
+Sadka,R.2006.Momentumandpost-earnings-announcementdriftanomalies:Theroleofliquidityrisk.Journal
+ofFinancialEconomics80:309-49.
+Saville,D.J.1990.Multiplecomparisonprocedures:Thepracticalsolution.AmericanStatistician44:174-80.
+Savov,A.2011.Assetpricingwithgarbage.JournalofFinance66:177-201.
+Scheffé,H.1959.Theanalysisofvariance.NewYork:Wiley.
+Schweder,T.,andE.Spjøtvoll.1982.Plotsofp-valuestoevaluatemanytestssimultaneously.Biometrika
+69:493-502.
+Schwert, G. W. 2003.Anomalies and market efficiency. In Handbook of the economics of finance. Eds.
+G.M.Constantinides,M.Harris,andR.Stulz.Amsterdam:ElsevierScience.
+Scott,J.G.2009.Bayesianadjustmentformultiplicity.WorkingPaper.
+Scott,J.G.,andJ.O.Berger.2006.AnexplorationofaspectsofBayesianmultipletesting.JournalofStatistical
+PlanningandInference136:2144-62.
+---.2010.Bayesandempirical-Bayesmultiplicityadjustmentinthevariable-selectionproblem.Annualsof
+Statistics38:2587-619.
+Shaffer,J.P.1995.Multiplehypothesistesting.AnnualReviewofPsychology46:561-84.
+Shanken,J.1990.Intertemporalassetpricing:Anempiricalinvestigation.JournalofEconometrics45:99-120.
+Sharpe,W.F.1964.Capitalassetprices:Atheoryofmarketequilibriumunderconditionsofrisk.Journalof
+Finance19:425-42.
+Shu,T.2007.Tradercomposition,priceefficiency,andthecross-sectionofstockreturns.WorkingPaper.
+Simes,R.J.1986.AnimprovedBonferroniprocedureformultipletestsofsignificance.Biometrika73:751-54.
+Simutin,M.2010.Excesscashandstockreturns.FinancialManagement39:1197-222.
+Sloan,R.G.1996.Dostockpricesfullyreflectinformationinaccrualsandcashflowsaboutfutureearnings?
+AccountingReview71:289-315.
+So,E.C.2012.Anewapproachtopredictinganalystforecasterrors:Doinvestorsoverweightanalystforecasts?
+WorkingPaper.
+Soliman,M.T.2008.TheuseofDuPontanalysisbymarketparticipants.AccountingReview83:823-53.
+Solnik,B.H.1974.Anequilibriummodeloftheinternationalcapitalmarket.JournalofEconomicTheory
+8:500-24.
+Spiess,D.K.,andJ.Affleck-Graves.1999.Underperformanceinlong-runstockreturnsfollowingseasoned
+equityofferings.JournalofFinancialEconomics38:243-67.
+---. 1999. The long-run performance of stock returns following debt offerings. Journal of Financial
+Economics54:45-73.
+Storey,J.D.2003.Thepositivefalsediscoveryrate:ABayesianinterpretationandtheq-value.AnnalsofStatistics
+31:2013-35.
+Stulz,R.M.1981.Amodelofinternationalassetpricing.JournalofFinancialEconomics9:383-406.
+---.1986.Assetpricingandexpectedinflation.JournalofFinance41:209-23.
+Sullivan,R.,A.Timmermann,andH.White.1999.Data-snooping,technicaltradingruleperformance,andthe
+bootstrap.JournalofFinance54:1647-91.
+
+=== Page 63 ===
+---.2001.Dangersofdatamining:Thecaseofcalendareffectsinstockreturns.JournalofEconometrics
+105:249-86.
+Subrahmanyam,A.2010.Thecross-sectionofexpectedstockreturns:Whathavewelearntfromthepasttwentyfiveyearsofresearch?WorkingPaper.
+Sun,W.,andT.T.Cai.2009.Large-scalemultipletestingunderdependence.JournaloftheRoyalStatistical
+Society:SeriesB(StatisticalMethodology)71:393-424.
+Sweeney,R.J.,andA.D.Warga.1986.Thepricingofinterest-raterisk:evidencefromthestockmarket.Journal
+ofFinance41:393-410.
+Teo,M.,andS.J.Woo.2004.Styleeffectsinthecross-sectionofstockreturns.JournalofFinancialEconomics
+74:367-98.
+Thomas,J.,andF.X.Zhang.2011.Taxexpensemomentum.JournalofAccountingResearch49:791-821.
+Thornton,A.,andP.Lee.2000.Publicationbiasinmeta-analysis:itscausesandconsequences.JournalofClinical
+Epidemiology53:207-16.
+Titman,S.,K.C.Wei,andF.Xie.2004.Capitalinvestmentsandstockreturns.JournalofFinancialand
+QuantitativeAnalysis39:677-700.
+Troendle,J.F.2000.Stepwisenormaltheorymultipletestprocedurescontrollingthefalsediscoveryrate.Journal
+ofStatisticalPlanningandInference84:139-58.
+Todorov,V.,andT.Bollerslev.2010.Jumpsandbetas:Anewframeworkfordisentanglingandestimating
+systematicrisks.JournalofEconometrics157:220-35.
+Tukey,J.W.1951.Remindersheetsfor"DiscussionofpaperonmultiplecomparisonsbyHenryScheffe."In
+TheCollectedWorksofJohnW.TukeyVIII.MultipleComparisons:1948-1983,469-475.NewYork:Chapman
+andHall.
+---.1953.Theproblemofmultiplecomparisons.Unpublishedmanuscript.InTheCollectedWorksofJohn
+W.TukeyVIII.MultipleComparisons:1948-1983,1-300.ChapmanandHall,NewYork.
+Tuzel,S.2010.Corporaterealestateholdingsandthecross-sectionofstockreturns.ReviewofFinancialStudies
+23:2268-302.
+Valta,P.2013.Strategicdefault,debtstructure,andstockreturns.WorkingPaper.
+vanBinsbergen,J.H.2012.Good-specifichabitformationandthecross-sectionofexpectedreturns.Working
+Paper.
+Vanden,J.M.2004.OptionstradingandtheCAPM.ReviewofFinancialStudies17:207-38.
+---.2006.Optioncoskewnessandcapitalassetpricing.ReviewofFinancialStudies19:1279-320.
+Vassalou,M.2003.NewsrelatedtofutureGDPgrowthasariskfactorinequityreturns.JournalofFinancial
+Economics68:47-73.
+Vassalou,M.,andY.Xing.2004.Defaultriskinequityreturns.JournalofFinance59:831-68.
+Viale,A.M.,L.Garcia-Feijoo,andA.Giannetti.2012.Safetyfirst,robustdynamicassetpricing,andthe
+cross-sectionofexpectedstockreturns.WorkingPaper.
+Wagenmakers,E.J.,andP.Grünwald.2006.ABayesianperspectiveonhypothesistesting:AcommentonKilleen
+(2005).PsychologicalScience17:641-42.
+Wahlen, J. M., and M. M. Wieland. 2011. Can financial statement analysis beat consensus analysts'
+recommendations?ReviewofAccountingStudies16:89-115.
+Wang,Yuan.2012.Debtcovenantsandcross-sectionalequityreturns.WorkingPaper.
+Watkins,B.2003.Ridingthewaveofsentiment:Ananalysisofreturnconsistencyasapredictoroffuturereturns.
+JournalofBehavioralFinance4:191-200.
+
+=== Page 64 ===
+Wei,Z.,W.Sun,K.Wang,andH.Hakonarson.2009.Multipletestingingenome-wideassociationstudiesvia
+hiddenMarkovmodels.Bioinformatics25:2802-8.
+Westfall,P.H.,andS.S.Young.1993.Resampling-basedmultipletesting.NewYork:JohnWiley&Sons.
+Welch,I.,andA.Goyal.2008.Acomprehensivelookattheempiricalperformanceofequitypremiumprediction.
+ReviewofFinancialStudies21:1455-508.
+White,H.2000.Arealitycheckfordatasnooping.Econometrica68:1097-126.
+Whited,T.M.,andG.Wu.2006.Financialconstraintsrisk.ReviewofFinancialStudies19:531-59.
+Whittemore,A.S.2007.ABayesianfalsediscoveryrateformultipletesting.JournalofAppliedStatistics34:1-9.
+Womack,K.L.1996.Dobrokerageanalysts'recommendationshaveinvestmentvalue?JournalofFinance
+51:137-67.
+Xing,Y.2008.InterpretingthevalueeffectthroughtheQ-theory:Anempiricalinvestigation.ReviewofFinancial
+Studies21:1767-95.
+Xing,Y.,X.Zhang,andR.Zhao.2010.Whatdoestheindividualoptionvolatilitysmirktellusaboutfuture
+equityreturns?JournalofFinancial&QuantitativeAnalysis45:641-62.
+Yan,S.2011.Jumprisk,stockreturns,andslopeofimpliedvolatilitysmile.JournalofFinancialEconomics
+99:216-33.
+Yekutieli,D.,andY.Benjamini.1999.Resampling-basedfalsediscoveryratecontrollingmultipletestprocedures
+forcorrelatedteststatistics.JournalofStatisticalPlanningandInference82:171-96.
+Yogo,M.2006.Aconsumption-basedexplanationofexpectedstockreturns.JournalofFinance61:539-80.
+Zehetmayer,S.,andM.Posch.2010.Posthocpowerestimationinlarge-scalemultipletestingproblems.
+Bioinformatics26:1050-56.
+Zhao,X.2012.Informationintensityandthecross-sectionofstockreturns.WorkingPaper.
