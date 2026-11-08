@@ -9,6 +9,7 @@ Stdlib + nbformat/nbclient. Windows UTF-8-safe.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -50,8 +51,11 @@ def verify_notebook(nb_path: Path, timeout: int = 300) -> dict[str, Any]:
         if o.get("output_type") == "error"
     ]
 
+    nb_sha = hashlib.sha256(nb_path.read_bytes()).hexdigest()
+
     receipt: dict[str, Any] = {
         "notebook": nb_path.name,
+        "notebook_sha256": nb_sha,
         "nbformat": nb.nbformat,
         "nbformat_minor": nb.nbformat_minor,
         "cells": len(nb.cells),
@@ -72,8 +76,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         r = verify_notebook(a.notebook, a.timeout)
     except Exception as e:
+        nb_sha = hashlib.sha256(a.notebook.read_bytes()).hexdigest() if a.notebook.exists() else None
         r = {
             "notebook": a.notebook.name,
+            "notebook_sha256": nb_sha,
             "passed": False,
             "error": f"{type(e).__name__}: {e}",
         }

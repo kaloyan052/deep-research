@@ -201,5 +201,31 @@ class TestV14EpistemicPipeline(unittest.TestCase):
         self.assertTrue(any(v["rule_id"] == "GRAVEYARD_EUROPEAN_CASH_OPEN" for v in v2))
 
 
+
+    def test_b14_downgrade_attempts_are_blocked(self):
+        """Rule B14: citing [E###] without a locked ledger fails across all protocol versions."""
+        from dr_engine.tools.lean_engine import sha256_text
+        for version in ['14.1', '13.0', '12.0', '9.0', '13', '12', '', 'v13', None]:
+            with tempfile.TemporaryDirectory() as td:
+                t = Path(td)
+                (t / 'sources').mkdir(exist_ok=True)
+                q = 'Portfolio returns are 26% lower out-of-sample and 58% lower post-publication.'
+                snap = f'Document 1. {q} Further unrelated content follows here.'
+                (t / 'sources' / 'S001.txt').write_text(snap, encoding='utf-8')
+                (t / 'sources' / 'index.jsonl').write_text(json.dumps(
+                    {'id': 'S001', 'url': 'https://example.org/S001.pdf',
+                     'sha256': sha256_text(snap)}) + '\n', encoding='utf-8')
+                man = {'evidence': [{'id': 'E001', 'source': 'S001', 'quote': q, 'tier': 'T1'}],
+                       'claims': [], 'kills': []}
+                if version is not None:
+                    man['protocol_version'] = version
+                (t / 'report.md').write_text(
+                    '# Study\n\nCites [E001].\n\n```json:manifest\n' + json.dumps(man, indent=2) +
+                    '\n```\n\n```python:model C001\nx = 1.0\ny = 2.0\n```\n', encoding='utf-8')
+                r = verify_study(t)
+                b14 = [f for f in r.failures if f.startswith('B14')]
+                self.assertTrue(len(b14) >= 1, f'B14 failed to fire for protocol_version={version!r}')
+
+
 if __name__ == "__main__":
     unittest.main()

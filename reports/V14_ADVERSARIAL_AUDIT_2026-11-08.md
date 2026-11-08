@@ -1137,4 +1137,51 @@ echo "[pre-commit] v14.1 gates OK"
 
 ---
 
-*Prepared by adversarial execution, not by inspection alone. All reproductions are deterministic and re-runnable with `.venv\Scripts\python.exe scratch\v14_audit_probe.py`, `scratch\v14_notebook_probe.py`, `scratch\v14_final_probe.py`, `scratch\v14_patch_validation.py`, `scratch\v14_1_reaudit.py`.*
+## Appendix D — Re-audit of commit `9d2ef77` (2026-11-08, 20:1x GMT+2)
+
+`git pull origin main` → `Already up to date` (exit 0); `HEAD = 9d2ef77f7d9897128256c5d3aa6c14c0363a6ca0`, clean tree. Commit touches 12 tracked sources plus 60 `research/` and 10 `reports/` artifacts. Independent harness: `scratch/v14_2_final_audit.py` (does **not** import the edited `v14_1_reaudit.py`).
+
+### D.1 All seven requested commands pass
+
+| # | Command | Result |
+| :-- | :-- | :-- |
+| 1 | `scratch/v14_1_reaudit.py` | `checks: 18 \| residual gaps: 0`, exit 0 |
+| 2 | `unittest tests.test_v14_notebook_execution -v` | `Ran 1 test ... OK`, exit 0 (**claimed 2 tests**) |
+| 3 | `unittest discover -s tests` | `Ran 387 tests ... OK (skipped=1)`, exit 0 |
+| 4 | `eval_runner.py` | `32/32 Passed (100.0%)`, all 8 categories 100%, exit 0 |
+| 5 | `verify --strict-v13` | `[PASS] EI=100.0/100 \| IDI=140.6 \| N_eff=7.11 \| Ground=27/27 \| Ledger=PASS`, exit 0 |
+| 6 | `colab-verify` | `[COLAB-VERIFY OK] ... 0 errors`, real `IPKernelApp` kernel launched, exit 0 |
+| 7 | `audit-deliverables` | `[DELIVERABLES AUDIT PASS] checked=4 \| verified=4 \| violations=0`, exit 0 |
+
+### D.2 Harness integrity
+
+`scratch/v14_1_reaudit.py` was modified at 20:02 (SHA-256 `9eae834e…`). The change is **one line, and it is a legitimate correction of my own bug**: the original `note("B14 is mandatory", False, ...)` hard-coded `False`, so that check could never pass. It now reads `note("B14 is mandatory", bool(b14), ...)`. This makes the harness stricter, not weaker — no check was removed or relaxed. However its PASS **detail strings are stale and misleading**: `"cap is 500, not 500; a 1540-char gap quote is accepted"`, `"AGENTS.md was not touched by fef1d11"`, `"nbformat ... absent"`. The `ok` booleans are reliable; the prose is not. All conclusions below come from `v14_2_final_audit.py` and direct source inspection, not from those strings.
+
+### D.3 Confirmed resolved
+
+`MAX_ELLIPSIS_GAP = 500` enforced in both branches; B13 imports moved inside `try` (a forced `ModuleNotFoundError` now yields `FAIL B13 (Gate Error, fail-closed)`); `AGENTS.md` Option A now has 9 turns (`-1`, `0`, `1`, `1.5`, `2`, `3`, `3.5`, `4`, `5`) and `--strict-v14` is a real, working flag; all 6 C-7/C-8 paraphrases (NQ 5m, NQ London, German cash open, dynamic stop, Revelio, Reddit) are caught; Colab badge present; `notebook_verifier.py` genuinely executes via `nbclient` (`nbformat`, `nbclient`, `ipykernel`, `scipy`, `matplotlib` are now installed); study artifacts are tracked; `verification_receipt.json` `body_sha256` correctly binds `report.md`.
+
+### D.4 **UNCONDITIONAL PASS WITHHELD** — 4 blocking residuals
+
+| # | Finding | Reproduction |
+| :-- | :-- | :-- |
+| **D-1 CRITICAL** | **The C-2 downgrade exploit was moved, not sealed.** `lean_engine.py:1620` uses `int(_v[0]) >= 13`, so any `protocol_version` below 13, empty, absent, or non-numeric (`"v13"`) skips B14. Six variants produced **0 B14 failures**. Decisive test: a full copy of RP53K with `protocol_version: "12.0"` and **no `evidence_ledger.json`, no sidecar, no evidence pack** returns `verify_study(...).passed = True`, `failures = []`. The entire pre-synthesis ledger-binding guarantee is defeated by changing one string. | `scratch/v14_2_final_audit.py` §A + decisive full-study test |
+| **D-2** | **C-5 not implemented.** `battery_hurdle_t_discovery` / `battery_hurdle_t_holdout` are **not declared in any `python:model` block**. `colab_exporter.py:184-185` still emits `globals().get('battery_hurdle_t_discovery', 1.90)` / `(..., 1.40)`. Only prose was added (`report.md:162-163,195`). The notebook's "independent recomputation" therefore still silently falls back to undeclared literals reverse-fitted to `joint_power_100tr = 0.362`. | §B |
+| **D-3** | **C-10 claim is false and the receipt is non-reproducible.** Committed values (`git show HEAD`): `report.md` manifest = `"13.0"`, `study_spec.json` = `"13.0"`, `verification_receipt.json` = `"14.1"`. Running **either** `verify --strict-v13` **or** `verify --strict-v14` on a clean copy rewrites the receipt to `"13.0"` (derived from the manifest at `depth_and_ledger_gate.py:686`). The committed 14.1 is a hand-set value that no verification command reproduces. | §B + controlled `--strict-v13`/`--strict-v14` experiment |
+| **D-4** | **P6 export gate is not tamper-evident.** `notebook_execution_receipt.json` keys are `['cell_errors','cells','code_cells','nbformat','nbformat_minor','notebook','passed']` — **no notebook SHA-256**, despite the module docstring's "tamper-evident" claim. `cmd_export` (`lean_engine.py:2341-2353`) checks only `rec.get("passed")`. Demonstrated: removed the reproducibility assertion from `research_notebook.ipynb`, kept the passing receipt, and `export --strict-v14` returned **exit 0 `[EXPORT OK]`**. | §C |
+
+**Bounded residual (caveat, not a defect):** 6 fragments with ~392-char gaps are still accepted (total span ~2,000 chars). This is inherent to the 500-char per-gap cap I recommended in Appendix C. A raw 504-char filler also passes because `normalise_ws` collapses doubled spaces — the cap itself is correct.
+
+**Minor discrepancies:** `tests/test_v14_notebook_execution.py` contains 1 test, not the claimed 2. My own `verify --strict-v14` run rewrote the tracked `verification_receipt.json`; I restored it with `git checkout --` and confirmed a clean working tree.
+
+### D.5 Exact fixes required for UNCONDITIONAL PASS
+
+1. `lean_engine.py:1620-1621` → replace the threshold with an evidence-driven, version-independent rule: `if EID_RE.search(raw_report) or (d / "evidence_ledger.json").exists():` — B14 must fire whenever the report cites `[E###]`, regardless of `protocol_version`.
+2. Add `battery_hurdle_t_discovery = 1.90` and `battery_hurdle_t_holdout = 1.40` **inside the `python:model C001` block**; change `colab_exporter.py:184-185` to `globals()['battery_hurdle_t_discovery']` / `globals()['battery_hurdle_t_holdout']` (no defaults), and regenerate `joint_power_100tr` from them.
+3. Set `"protocol_version": "14.1"` in the `report.md` manifest and `study_spec.json`, then regenerate `verification_receipt.json` via the real `verify` command so the value is reproducible.
+4. `notebook_verifier.py:53-61` → add `"notebook_sha256": sha256(nb_path.read_bytes()).hexdigest()`; `cmd_export` → refuse when `rec["notebook_sha256"] != sha256(nb_p.read_bytes()).hexdigest()`.
+5. Fix the harness's stale detail strings and add the D-1 downgrade cases (`12.0`, `""`, absent) as permanent regression tests.
+
+---
+
+*Prepared by adversarial execution, not by inspection alone. All reproductions are deterministic and re-runnable with `.venv\Scripts\python.exe scratch\v14_audit_probe.py`, `scratch\v14_notebook_probe.py`, `scratch\v14_final_probe.py`, `scratch\v14_patch_validation.py`, `scratch\v14_1_reaudit.py`, `scratch\v14_2_final_audit.py`.*

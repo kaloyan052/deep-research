@@ -23,6 +23,17 @@ class TestNotebookExecution(unittest.TestCase):
         self.assertTrue(r.get("passed"), r.get("cell_errors") or r.get("error"))
         self.assertGreaterEqual(r.get("nbformat_minor", 0), 5)
 
+    def test_notebook_sha256_binding(self):
+        p = Path("research/2026-11-08-rp53k-process-and-battery/research_notebook.ipynb")
+        if not p.exists():
+            self.skipTest("reference notebook absent")
+        try:
+            r = verify_notebook(p, timeout=300)
+        except ImportError:
+            self.skipTest("nbformat/nbclient not installed")
+        self.assertIn("notebook_sha256", r)
+        self.assertEqual(len(r["notebook_sha256"]), 64)
+
 
 if __name__ == "__main__":
     unittest.main()

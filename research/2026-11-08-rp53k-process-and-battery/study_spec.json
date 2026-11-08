@@ -40,7 +40,7 @@
     "skeptic_k1": "Quant stat arb alpha decay replication slippage spread widening execution friction commission capacity decay",
     "skeptic_k2": "Quant stat arb alpha decay replication alpha decay post-2023 crowded trade front-running refuted"
   },
-  "protocol_version": "13.0",
+  "protocol_version": "14.1",
   "deep_digging": {
     "enabled": true,
     "max_depth": 2,

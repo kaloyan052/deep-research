@@ -712,6 +712,8 @@ class FrictionEngine:
                 "```python\n" + code_block + "\n```\n"
             )
             (d / "report.md").write_text(report, encoding="utf-8")
+            from dr_engine.tools.evidence_locker import lock_evidence
+            lock_evidence(d, manifest["evidence"])
 
             rep = lean_engine.verify_study(d)
             self.assertTrue(rep.passed, f"verification unexpectedly failed: {rep.failures}")

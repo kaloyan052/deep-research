@@ -23,7 +23,7 @@
 
 ```json:manifest
 {
-  "protocol_version": "13.0",
+  "protocol_version": "14.1",
   "study_dir": "research/2026-11-08-rp53k-process-and-battery",
   "kills": [
     {
@@ -116,6 +116,8 @@ joint_power_50tr = 0.051
 
 hurdle_t_hlz = 3.0
 hurdle_t_chordia = 3.77
+battery_hurdle_t_discovery = 1.90
+battery_hurdle_t_holdout = 1.40
 
 us100_spread_points = 1.10
 us100_stop_points = 50.0
@@ -254,5 +256,5 @@ def evaluate_naive_portfolio_combination(n_assets: int, avg_sharpe: float, corre
 
 
 ---
-<!-- DR-ATTESTATION: {"study_dir": "2026-11-08-rp53k-process-and-battery", "protocol_version": "14.1", "body_sha256": "a98d6c1c75f0f9b50972183e0dced7f11f4bd69d4d13d0b236ff9dcd739243c8", "ei_score": 100.0, "idi_score": 140.6, "n_sources": 47, "n_evidence": 16, "verified_at": "2026-11-08T18:08:20+00:00"} -->
-*Verified by Deep Research Engine (14.1) · Study: `2026-11-08-rp53k-process-and-battery` · Sources: 47 · Verified Quotes: 16 · EI: 100.0/100 · IDI: 140.6 · SHA-256: `a98d6c1c75f0f9b5`*
+<!-- DR-ATTESTATION: {"study_dir": "2026-11-08-rp53k-process-and-battery", "protocol_version": "14.1", "body_sha256": "6f51aebc0d76c3bbc0553d469d8631a4b0a05a2d891cd5a790e338226a4d59e9", "ei_score": 100.0, "idi_score": 143.7, "n_sources": 47, "n_evidence": 16, "verified_at": "2026-11-08T18:26:36+00:00"} -->
+*Verified by Deep Research Engine (14.1) · Study: `2026-11-08-rp53k-process-and-battery` · Sources: 47 · Verified Quotes: 16 · EI: 100.0/100 · IDI: 143.7 · SHA-256: `6f51aebc0d76c3bb`*

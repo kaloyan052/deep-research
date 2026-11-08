@@ -655,6 +655,9 @@ class TestDialecticalArbitration(unittest.TestCase):
                 "```python:model C001\nspread_bp = 1.2\nnet_alpha_bp = 5.4\n```\n"
             )
             (d / "report.md").write_text(report, encoding="utf-8")
+            from dr_engine.tools.evidence_locker import lock_evidence
+            lock_evidence(d, manifest["evidence"])
+
             rep = lean_engine.verify_study(d)
             self.assertEqual(rep.dialectical_arbitration.get("conflicts_detected"), 1)
             self.assertEqual(rep.dialectical_arbitration.get("confidence_cap"), "Medium")
@@ -757,6 +760,9 @@ class TestAntiFluffGate(unittest.TestCase):
             report = ("# A Broad Overview\n\n" + fluff + "\n\n"
                       "```json:manifest\n" + json.dumps(manifest) + "\n```\n")
             (d / "report.md").write_text(report, encoding="utf-8")
+            from dr_engine.tools.evidence_locker import lock_evidence
+            lock_evidence(d, manifest["evidence"])
+
             rep = lean_engine.verify_study(d)
             self.assertFalse(rep.passed)
             self.assertTrue(any("R17 (Anti-Fluff" in f for f in rep.failures))
@@ -790,6 +796,9 @@ class TestAntiFluffGate(unittest.TestCase):
                       "```json:manifest\n" + json.dumps(manifest) + "\n```\n\n"
                       "```python:model C001\nspread_bp = 1.2\nnet_alpha_bp = 5.4\n```\n")
             (d / "report.md").write_text(report, encoding="utf-8")
+            from dr_engine.tools.evidence_locker import lock_evidence
+            lock_evidence(d, manifest["evidence"])
+
             rep = lean_engine.verify_study(d)
             self.assertGreater(rep.empirical_density_per_100w, 0.0)
             self.assertFalse(any("R17" in f for f in rep.failures),

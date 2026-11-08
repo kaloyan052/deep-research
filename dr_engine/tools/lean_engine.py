@@ -203,6 +203,7 @@ SPEC_LINE_RE = re.compile(
 
 # Max characters an `...` ellipsis may span inside a verbatim quote.
 MAX_ELLIPSIS_GAP = 500
+MAX_TOTAL_ELLIPSIS_GAP = 1000
 
 # v14.1 — hard floors for an admissible verbatim quote (fail-closed).
 MIN_QUOTE_CHARS = 20
@@ -696,11 +697,17 @@ def quote_matches_snapshot(quote: str, snapshot: str) -> bool:
     return False
 
   pos = 0
-  for frag in fragments:
+  total_gap = 0
+  for i, frag in enumerate(fragments):
     idx = snap_norm.find(frag, pos)
     if idx >= 0:
-      if len(fragments) > 1 and idx - pos > MAX_ELLIPSIS_GAP:
-        return False
+      if i > 0:
+        gap = idx - pos
+        if gap > MAX_ELLIPSIS_GAP:
+          return False
+        total_gap += gap
+        if total_gap > MAX_TOTAL_ELLIPSIS_GAP:
+          return False
       pos = idx + len(frag)
       continue
 
@@ -711,8 +718,13 @@ def quote_matches_snapshot(quote: str, snapshot: str) -> bool:
     m = pat.search(snap_norm, min(pos, len(snap_norm)))
     if not m:
       return False
-    if len(fragments) > 1 and m.start() - pos > MAX_ELLIPSIS_GAP:
-      return False
+    if i > 0:
+      gap = m.start() - pos
+      if gap > MAX_ELLIPSIS_GAP:
+        return False
+      total_gap += gap
+      if total_gap > MAX_TOTAL_ELLIPSIS_GAP:
+        return False
     pos = m.end()
   return True
 
@@ -1447,10 +1459,12 @@ def _extract_embedded_blocks(report_text: str) -> tuple[dict[str, Any], list[tup
 
 
 
-def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> VerificationReport:
+def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False, force_v14: bool = False) -> VerificationReport:
 
-  """Verify one study. ``force_v12`` / ``force_v13`` activate v12/v13 gates
-  even on legacy specs (``verify --strict-v12`` / ``--strict-v13``)."""
+  """Verify one study. ``force_v12`` / ``force_v13`` / ``force_v14`` activate v12/v13/v14 gates
+  even on legacy specs (``verify --strict-v12`` / ``--strict-v13`` / ``--strict-v14``)."""
+  force_v13 = bool(force_v13 or force_v14)
+  force_v12 = bool(force_v12 or force_v13)
 
   res = VerificationReport(study_dir=str(d))
 
@@ -1615,10 +1629,8 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
     res.failures.append(f"E2: only {res.n_evidence} verified evidence records; need >= 3")
 
   # v14.1 Rule B14: bind report.md to the pre-synthesis evidence locker.
-  # Enforced whenever a ledger exists, or protocol >= 13.0 (closing the downgrade loophole).
-  _v = str(manifest.get("protocol_version", "")).split(".")
-  v13plus = len(_v) >= 1 and _v[0].isdigit() and int(_v[0]) >= 13
-  if v13plus or (d / "evidence_ledger.json").exists():
+  # Enforced whenever the report cites [E###] or a ledger exists (independent of protocol version).
+  if EID_RE.search(raw_report) or (d / "evidence_ledger.json").exists():
     from dr_engine.tools.evidence_locker import verify_report_against_ledger
     res.failures.extend(verify_report_against_ledger(d, manifest, raw_report))
 
@@ -2039,8 +2051,10 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
       protocol_active=v13_active,
   )
   res.v13_protocol_active = bool(v13_active)
+  _v = str(manifest.get("protocol_version", "")).split(".")
   res.v14_protocol_active = bool(
-      (len(_v) >= 1 and _v[0].isdigit() and int(_v[0]) >= 14)
+      force_v14
+      or (len(_v) >= 1 and _v[0].isdigit() and int(_v[0]) >= 14)
       or (d / "evidence_ledger.json").exists()
   )
   res.depth_diagnostics = dict(v13_diag.get("depth") or {})
@@ -2157,7 +2171,7 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
           raw_report,
           {
               "passed": True,
-              "protocol_version": "13.0" if res.v13_protocol_active else ("12.0" if res.v12_protocol_active else "legacy"),
+              "protocol_version": "14.1" if res.v14_protocol_active else ("13.0" if res.v13_protocol_active else ("12.0" if res.v12_protocol_active else "legacy")),
               "ei_score": res.epistemic_index,
               "idi_score": res.information_density_index,
               "max_confidence": res.max_confidence,
@@ -2181,8 +2195,9 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
   rep = verify_study(
       d,
-      force_v12=bool(getattr(args, "strict_v12", False)),
-      force_v13=bool(getattr(args, "strict_v13", False)),
+      force_v12=bool(getattr(args, "strict_v12", False) or getattr(args, "strict_v13", False) or getattr(args, "strict_v14", False)),
+      force_v13=bool(getattr(args, "strict_v13", False) or getattr(args, "strict_v14", False)),
+      force_v14=bool(getattr(args, "strict_v14", False)),
   )
 
   if args.json:
@@ -2349,6 +2364,11 @@ def cmd_export(args: argparse.Namespace) -> int:
           if not rec.get("passed"):
               print(f"[EXPORT REFUSED] Notebook execution receipt has errors: {rec.get('cell_errors')}")
               return 1
+          current_nb_hash = hashlib.sha256(nb_p.read_bytes()).hexdigest()
+          receipt_nb_hash = rec.get("notebook_sha256")
+          if not receipt_nb_hash or current_nb_hash != receipt_nb_hash:
+              print(f"[EXPORT REFUSED] Notebook bytes do not match verified receipt ({current_nb_hash[:12]} != {str(receipt_nb_hash)[:12]}). Run `colab-verify`.")
+              return 1
       except Exception as e:
           print(f"[EXPORT REFUSED] Unreadable notebook_execution_receipt.json: {e}")
           return 1
@@ -2359,7 +2379,7 @@ def cmd_export(args: argparse.Namespace) -> int:
   ok, fails, dest = export_verified_report(
       args.dir,
       args.out,
-      verify_fn=lambda p: verify_study(p, force_v12=strict12, force_v13=strict13),
+      verify_fn=lambda p: verify_study(p, force_v12=strict12, force_v13=strict13, force_v14=strict14),
   )
   if not ok:
     print(f"[EXPORT REFUSED] Study `{args.dir}` failed verification ({len(fails)} error(s)):")
@@ -2503,6 +2523,7 @@ def compute_gex_displacement_signal(gex_bn: float, atr_15m: float) -> float:
 ```
 """
         (d / "report.md").write_text(report_md, encoding="utf-8")
+        cmd_lock_evidence(argparse.Namespace(dir=str(d)))
 
         rep = verify_study(d)
         assert rep.passed, f"Expected PASS, got failures: {rep.failures}"
