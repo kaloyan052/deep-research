@@ -181,9 +181,10 @@ def build_colab_notebook(study_dir: Path) -> dict[str, Any]:
         "    ax.legend(); plt.tight_layout(); plt.show()",
         "",
         "# Exercise the statistical functions with the declared parameters.",
-        "t_disc = globals()['battery_hurdle_t_discovery']",
-        "t_hold = globals()['battery_hurdle_t_holdout']",
-        "if all(n in globals() for n in ('true_edge_r', 'n_trades_discovery', 'n_trades_holdout')) \\",
+        "_hurdles_ok = all(n in globals() for n in ('battery_hurdle_t_discovery', 'battery_hurdle_t_holdout'))",
+        "t_disc = globals()['battery_hurdle_t_discovery'] if _hurdles_ok else None",
+        "t_hold = globals()['battery_hurdle_t_holdout'] if _hurdles_ok else None",
+        "if _hurdles_ok and all(n in globals() for n in ('true_edge_r', 'n_trades_discovery', 'n_trades_holdout')) \\",
         "        and 'calculate_joint_battery_power' in globals():",
         "    _p = calculate_joint_battery_power(true_edge_r, int(n_trades_discovery),",
         "                                      int(n_trades_holdout), t_disc, t_hold)",
@@ -191,6 +192,8 @@ def build_colab_notebook(study_dir: Path) -> dict[str, Any]:
         "    if 'joint_power_100tr' in globals():",
         "        print(f'[DECLARED]   joint_power_100tr = {joint_power_100tr:.4f}')",
         "        assert abs(_p - joint_power_100tr) < 0.02, 'declared joint power is not reproducible'",
+        "else:",
+        "    print('[SKIP] battery hurdles not declared by this study.')",
     ]
     cells.append(_mk_cell("code", [l + "\n" for l in verification_code], f"{sname}:verification"))
 
