@@ -616,3 +616,40 @@ verbatim in `sources/S###.txt`.
 | Export verified & attested deliverable to `reports/` | `python dr_engine/tools/lean_engine.py export --dir research/<dir> --out reports/<NAME>.md --strict-v13` |
 | Scan `reports/` for unverified bypass files or tampering | `python dr_engine/tools/lean_engine.py audit-deliverables` |
 | v13.0 regression suite | `python -m unittest tests.test_v13_deep_digging -v` (14 offline tests) |
+
+## 13. v14.0 — The Unbreakable Epistemic Pipeline, Pre-Synthesis Locking & Executable Cloud Verification
+
+Built after forensic audits exposed the core reasons why autonomous agents fail:
+1. **The Semantic Illusion / Premature Synthesis Trap:** Agents authoring prose before locking quotes hallucinate quotes and external institutions.
+2. **The Desk Graveyard Blindness:** Agents rediscovering and proposing strategies that the trading desk already killed.
+3. **Passive Text Bias:** Numerical models locked in markdown prose instead of being interactively verifiable by an independent runtime.
+
+### 13.1 Frontier 1 — Turn -1: Desk Memory & Graveyard Pre-Flight Scanner
+`dr_engine/tools/desk_memory.py` and `lean_engine.py preflight`:
+- Automatically scans `CLAUDE_PROJECT_KNOWLEDGE_MASTER.md` and `known_traps.json`.
+- Enforces Rule B13: hard-blocks any proposal of killed edges (Gold LBMA ORB, Crude Oil displacement, DAX40/UK100 cash open, MES/MNQ pairs, FTMO single-stock CFDs, synthetic regulatory citations) with exit code 1 BEFORE research begins.
+
+### 13.2 Frontier 2 — Turn 1.5: Pre-Synthesis Evidence Locker
+`dr_engine/tools/evidence_locker.py` and `lean_engine.py lock-evidence`:
+- Before authoring `report.md`, quotes are extracted and mechanically validated against downloaded snapshots in `sources/S###.txt`.
+- Emits immutable `evidence_ledger.json` and human-readable `evidence_pack.md`.
+- Report authors may ONLY cite pre-locked `[E###]` IDs. Any citation outside the ledger triggers an immediate gate error.
+
+### 13.3 Frontier 3 — Turn 3.5: Deterministic Google Colab Executable Notebook
+`dr_engine/tools/colab_exporter.py` and `lean_engine.py colab`:
+- Compiles all AST models (`python:model`), statistical power analysis, and broker spread friction analytics into an executable Jupyter notebook `research_notebook.ipynb`.
+- Includes direct Google Colab badge (`[![Open In Colab]...]`).
+- Allows the user or auditor to execute all calculations in Python runtime with one click. Eliminates backtest and mathematical hallucinations.
+
+### 13.4 Frontier 4 — Cloud Agent Sandboxing (Simular Box & Google Cloud Trajectory Evaluation)
+- **Google Cloud Trajectory Evaluation:** Evaluates the entire research trajectory (tool calls, snapshot SHA-256 hashes, AST executions) rather than grading passive text.
+- **Simular Box (`box.simular.ai`):** Used as a persistent 24/7 cloud sandbox for long-running scrapers, anti-bot web crawling, and native MT5 desktop terminal automation.
+
+### 13.5 v14.0 tools
+
+| Need | Command / module |
+| :-- | :-- |
+| Pre-flight check prompt & plan against desk graveyard | `python dr_engine/tools/lean_engine.py preflight --dir research/<dir> [--prompt "<text>"]` |
+| Lock verified evidence quotes into immutable ledger | `python dr_engine/tools/lean_engine.py lock-evidence --dir research/<dir>` |
+| Export executable Google Colab notebook | `python dr_engine/tools/lean_engine.py colab --dir research/<dir> [--out <path>]` |
+| Full v14.0 regression suite | `python -m unittest tests.test_v14_epistemic_pipeline -v` (6 offline tests) |

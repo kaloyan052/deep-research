@@ -3,6 +3,26 @@
 Newest first. **Study** lists what an agent must now do differently in a research folder;
 **Tools** lists everything else.
 
+## 2026-11-08 — Deep Research v14.0: The Unbreakable Epistemic Pipeline, Pre-Synthesis Evidence Locker & Executable Google Colab Verification
+
+Solves the structural failure modes of AI research: premature synthesis from ungrounded LLM memory, desk graveyard blindness, and passive text bias. Integrates Google Cloud Deep Research trajectory evaluation principles, interactive Google Colab cloud execution, and Simular Box agent sandboxing.
+Baseline 373 tests → **379 pass (1 skipped), exit 0**; 32/32 epistemic evals (`100.0%`); `doctor` READY.
+
+**Study (mandatory for every research folder):**
+- **Turn -1 (Desk Memory & Graveyard Pre-Flight):** Run `dr_engine/tools/lean_engine.py preflight --dir research/<dir> [--prompt "<text>"]`. Checks prompt and study files against `CLAUDE_PROJECT_KNOWLEDGE_MASTER.md` and `known_traps.json`. Hard-blocks with exit code 1 if any forensically killed strategy (Gold LBMA ORB, Crude Oil displacement, DAX40/UK100 cash open, MES/MNQ pairs, FTMO single-stock CFDs, synthetic regulatory citations) is proposed.
+- **Turn 1.5 (Pre-Synthesis Evidence Locking):** Run `dr_engine/tools/lean_engine.py lock-evidence --dir research/<dir>`. Mechanically verifies candidate quotes against primary snapshots in `sources/S###.txt` and compiles `evidence_ledger.json` and `evidence_pack.md`. Authors may ONLY cite pre-locked `[E###]` IDs. Any uncited or altered quote fails gate verification immediately.
+- **Turn 3.5 (Deterministic Executable Google Colab Notebook):** Run `dr_engine/tools/lean_engine.py colab --dir research/<dir>`. Automatically compiles AST models (`python:model`), statistical power analysis, and broker friction matrices into an executable Jupyter notebook `research_notebook.ipynb` with a one-click Google Colab badge (`[![Open In Colab]...]`). Math and backtest claims are verified deterministically by an independent Python runtime.
+- **Cloud Agent Architecture (Simular Box & Google Cloud Tech):**
+  - Google Cloud Trajectory Evaluation: Continuous evaluation across the entire tool call and data acquisition trajectory rather than isolated text scoring.
+  - Simular Box (`box.simular.ai`): Persistent 24/7 cloud sandbox for long-running scrapers, anti-bot web crawling, and native MT5 desktop terminal backtest automation.
+
+**Tools:**
+- `dr_engine/tools/desk_memory.py`: Scans text against `CLAUDE_PROJECT_KNOWLEDGE_MASTER.md` and `known_traps.json`.
+- `dr_engine/tools/evidence_locker.py`: Mechanically verifies quotes and builds `evidence_ledger.json` and `evidence_pack.md`.
+- `dr_engine/tools/colab_exporter.py`: Compiles study models into standalone, reproducible `research_notebook.ipynb` formatted for Google Colab.
+- `dr_engine/tools/lean_engine.py`: Wire B13 desk memory audit directly into `verify_study`; add `preflight`, `lock-evidence`, and `colab` CLI commands.
+- `tests/test_v14_epistemic_pipeline.py`: 6 adversarial unit tests verifying pre-flight blocking, quote locking, and Colab generation.
+
 ## 2026-11-08 — Deep Research v13.1: Strict Source Grounding & Anti-Graveyard Invariant
 
 Built directly following the RP53K user audit postmortem, which caught two critical violations:

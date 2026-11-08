@@ -1696,6 +1696,25 @@ def verify_study(d: Path, force_v12: bool = False, force_v13: bool = False) -> V
 
       )
 
+  # v14.0 Rule B13: Master Desk Memory & Known Traps Audit
+  try:
+    from dr_engine.tools.desk_memory import scan_text_against_desk_graveyard
+    from dr_engine.tools.traps import check_known_traps_in_text
+
+    desk_violations = scan_text_against_desk_graveyard(raw_report)
+    for dv in desk_violations:
+      res.failures.append(
+          f"FAIL B13 (Desk Graveyard): proposes killed edge '{dv['name']}' without refutation. {dv['description']}"
+      )
+
+    trap_violations = check_known_traps_in_text(raw_report)
+    for tv in trap_violations:
+      res.failures.append(
+          f"FAIL B13 (Known Trap): violates {tv.get('id', 'TRAP')} ({tv.get('name', '')}). {tv.get('description', '')}"
+      )
+  except Exception as e:
+    res.warnings.append(f"W_B13_CHECK_ERROR: {e}")
+
 
 
   if counterparty:
@@ -2177,6 +2196,91 @@ def cmd_verify(args: argparse.Namespace) -> int:
   return 0 if rep.passed else 1
 
 
+def cmd_preflight(args: argparse.Namespace) -> int:
+    """Pre-flight check against desk memory graveyard and basic invariants."""
+    from dr_engine.tools.desk_memory import scan_text_against_desk_graveyard
+    study_path = Path(args.dir)
+    
+    # If a prompt is explicitly provided, evaluate it independently first
+    if getattr(args, "prompt", None):
+        prompt_violations = scan_text_against_desk_graveyard(args.prompt)
+        if prompt_violations:
+            print(f"[PREFLIGHT BLOCKED] {len(prompt_violations)} desk graveyard violation(s) in prompt:")
+            for v in prompt_violations:
+                print(f"  ❌ {v['name']}: {v['description']}")
+                print(f"     Matched snippet: {v['matched_snippet']!r}")
+            print("\nDo not proceed with research until these refuted hypotheses are removed or explicitly framed as refutations.")
+            return 1
+
+    text_to_check = ""
+    if (study_path / "plan.md").exists():
+        text_to_check += (study_path / "plan.md").read_text(encoding="utf-8") + "\n"
+    if (study_path / "study_spec.json").exists():
+        text_to_check += (study_path / "study_spec.json").read_text(encoding="utf-8") + "\n"
+    if (study_path / "report.md").exists():
+        text_to_check += (study_path / "report.md").read_text(encoding="utf-8") + "\n"
+
+    violations = scan_text_against_desk_graveyard(text_to_check)
+    if violations:
+        print(f"[PREFLIGHT BLOCKED] {len(violations)} desk graveyard violation(s) detected in study files:")
+        for v in violations:
+            print(f"  ❌ {v['name']}: {v['description']}")
+            print(f"     Matched snippet: {v['matched_snippet']!r}")
+        print("\nDo not proceed with research until these refuted hypotheses are removed or explicitly framed as refutations.")
+        return 1
+
+    print(f"[PREFLIGHT PASS] Study `{args.dir}` passed desk memory graveyard pre-flight check. Zero violations.")
+    return 0
+
+
+def cmd_lock_evidence(args: argparse.Namespace) -> int:
+    """Locks verified evidence quotes from snapshots into immutable evidence_ledger.json."""
+    from dr_engine.tools.evidence_locker import lock_evidence
+    study_path = Path(args.dir)
+    ev_items = []
+    rep_path = study_path / "report.md"
+    if rep_path.exists():
+        m = re.search(r"```json:manifest\s*\n(.*?)```", rep_path.read_text(encoding="utf-8"), re.S)
+        if m:
+            try:
+                ev_items = json.loads(m.group(1)).get("evidence", [])
+            except Exception:
+                pass
+    if not ev_items and (study_path / "manifest.json").exists():
+        try:
+            ev_items = json.loads((study_path / "manifest.json").read_text(encoding="utf-8")).get("evidence", [])
+        except Exception:
+            pass
+
+    if not ev_items:
+        print(f"[LOCK-EVIDENCE REFUSED] No evidence list found in `{args.dir}/report.md` manifest or `manifest.json`.")
+        return 1
+
+    locked, errs = lock_evidence(study_path, ev_items)
+    if errs:
+        print(f"[LOCK-EVIDENCE FAILED] {len(errs)} quote(s) failed snapshot verification:")
+        for e in errs:
+            print(f"  FAIL  {e}")
+        return 1
+
+    print(f"[LOCK-EVIDENCE OK] Locked {len(locked)} verified quotes -> {study_path / 'evidence_ledger.json'}")
+    return 0
+
+
+def cmd_colab(args: argparse.Namespace) -> int:
+    """Exports AST models and statistical battery to executable Google Colab notebook."""
+    from dr_engine.tools.colab_exporter import export_colab_notebook
+    study_path = Path(args.dir)
+    out_p = Path(args.out) if getattr(args, "out", None) else None
+    try:
+        nb_path = export_colab_notebook(study_path, out_p)
+        print(f"[COLAB OK] Executable Jupyter notebook written -> {nb_path}")
+        return 0
+    except Exception as e:
+        print(f"[COLAB FAILED] Could not export notebook: {e}")
+        return 1
+
+
 def cmd_export(args: argparse.Namespace) -> int:
   """Rule R21 gated deliverable exporter: verifies study before writing to `reports/`."""
   strict13 = bool(getattr(args, "strict_v13", False))
@@ -2371,6 +2475,20 @@ def main(argv: list[str] | None = None) -> int:
     p_exp.add_argument("--strict-v12", action="store_true")
     p_exp.add_argument("--strict-v13", action="store_true")
     p_exp.set_defaults(fn=cmd_export)
+
+    p_pref = sub.add_parser("preflight", help="Check study against desk memory graveyard and invariants")
+    p_pref.add_argument("--dir", required=True)
+    p_pref.add_argument("--prompt", help="Optional user prompt to check before study init")
+    p_pref.set_defaults(fn=cmd_preflight)
+
+    p_lock = sub.add_parser("lock-evidence", help="Lock verified evidence quotes into evidence_ledger.json")
+    p_lock.add_argument("--dir", required=True)
+    p_lock.set_defaults(fn=cmd_lock_evidence)
+
+    p_col = sub.add_parser("colab", help="Compile AST models into executable Google Colab notebook")
+    p_col.add_argument("--dir", required=True)
+    p_col.add_argument("--out", help="Optional output notebook path")
+    p_col.set_defaults(fn=cmd_colab)
 
     p_aud = sub.add_parser("audit-deliverables", help="Audit reports/ against unverified standalone stubs")
     p_aud.add_argument("--reports-dir", default="reports")

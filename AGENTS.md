@@ -161,6 +161,16 @@ epistemic evals (`100.0%`), `doctor` READY.
   2. In trading and quantitative finance research, NEVER propose or resurrect strategies that are already documented as killed in the desk's master architecture directive (`CLAUDE_PROJECT_KNOWLEDGE_MASTER.md`), cost screens, or failure autopsies (e.g. Gold London/LBMA ORB, Crude Oil NY displacement, European DAX/UK100/EU50 cash opens) unless explicit new microstructure or venue physics are proven.
 - Enforced mechanically via 4 new traps in `known_traps.json` (`KILLED_EDGE_GOLD_INTRADAY_ORB_LBMA`, `KILLED_EDGE_CRUDE_OIL_INTRADAY`, `KILLED_EDGE_EUROPEAN_CASH_OPEN_ORB`, `SYNTHETIC_REGULATORY_CITATION_BAN`). All 373 unit tests pass.
 
+### v14.0 The Unbreakable Epistemic Pipeline, Pre-Synthesis Locking & Executable Cloud Verification (2026-11-08)
+Solves the root causes of agent hallucination, graveyard resurrections, and passive text bias:
+- **Turn -1 (Desk Memory & Graveyard Pre-Flight):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py preflight --dir research/<dir> --prompt "<prompt>"`. Scans the prompt, spec, and plan against `CLAUDE_PROJECT_KNOWLEDGE_MASTER.md` and `known_traps.json` before any research begins. Hard-blocks with exit code 1 if any forensically killed strategy is proposed.
+- **Turn 1.5 (Pre-Synthesis Evidence Locking):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py lock-evidence --dir research/<dir>`. Mechanically verifies all quotes against `sources/S###.txt` before authoring `report.md`. Compiles `evidence_ledger.json` and `evidence_pack.md`. Authors may ONLY cite pre-locked `[E###]` IDs; any unverified quote triggers an immediate failure.
+- **Turn 3.5 (Deterministic Executable Google Colab Notebook):** Run `.venv\Scripts\python.exe dr_engine\tools\lean_engine.py colab --dir research/<dir>`. Compiles all AST models (`python:model`), statistical power functions, and friction comparisons into a reproducible `research_notebook.ipynb` runnable in Google Colab with 1 click (`[![Open In Colab]...]`). Math is executed deterministically by a Python runtime, eliminating backtest and numerical hallucinations.
+- **Cloud Agent Architecture & Sandboxes (Simular Box & Google Cloud Tech):**
+  - **Google Cloud Trajectory Evaluation:** Verification does not evaluate the final text in isolation; it inspects the entire trajectory (tools called, SHA-256 snapshot hashes, AST mathematical models, and zero unrefuted traps).
+  - **Simular Box (`box.simular.ai`):** Used as an optional persistent cloud sandbox for 24/7 long-running scrapers, bot-wall bypasses (anti-scraping bypasses), and native MT5 desktop terminal backtest execution.
+- All 379 unit tests pass, exit 0.
+
 ### Option B (FALLBACK): Granular 14-Step CLI Workflow (v4.x–v7.0)
 For complex multi-agent swarms using `next_step.py`:
 1. `evidence.py init <slug>` → `research/<date>-<slug>/`; fill `plan.md`
