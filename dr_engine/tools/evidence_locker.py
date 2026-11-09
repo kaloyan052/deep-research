@@ -33,6 +33,21 @@ if str(PROJECT_ROOT) not in sys.path:
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
+try:
+    import langextract as lx
+except ImportError:
+    lx = None
+
+if lx is not None:
+    CharInterval = lx.data.CharInterval
+else:
+    from dataclasses import dataclass
+
+    @dataclass(frozen=True)
+    class CharInterval:
+        start_pos: int
+        end_pos: int
+
 from dr_engine.tools.lean_engine import (
     quote_matches_snapshot, normalise_ws, sha256_text,
 )
@@ -40,9 +55,11 @@ from dr_engine.tools.lean_engine import (
 __all__ = [
     "lock_evidence",
     "load_locked_evidence",
+    "split_grounded_sentences",
     "extract_candidate_quotes",
     "build_evidence_pack_markdown",
     "verify_report_against_ledger",
+    "CharInterval",
 ]
 
 VALID_TIERS = {"T1", "T2", "T3", "T4", "T5"}
@@ -261,24 +278,189 @@ def load_locked_evidence(study_dir: Path) -> list[dict[str, Any]]:
         return []
 
 
-def extract_candidate_quotes(study_dir: Path, keywords: list[str]) -> list[dict[str, Any]]:
-    """Extracts candidate sentences from snapshots that match specified keywords."""
+PREFIX_ABBREVIATIONS = frozenset({
+    # Statutory / Legal / Academic titles & honorifics (never sentence-terminal before a word/number)
+    "art.", "чл.", "ал.", "пар.", "т.", "dr.", "mr.", "mrs.", "ms.", "prof.",
+    "sec.", "vol.", "no.", "fig.", "figs.", "tab.", "tbl.", "approx.", "est.",
+    "cf.", "ed.", "eds.", "dept.", "div.", "univ.", "co.", "vs.", "eg.", "ie.",
+    "e.g.", "i.e.", "al.", "ст.", "бр.", "вж.", "срв.", "напр.", "рег.", "регл.",
+    "дир.", "тел.", "ул.", "бул."
+})
+
+TERMINAL_ABBREVIATIONS = frozenset({
+    # Common abbreviations that frequently terminate a sentence or clause
+    "etc.", "г.", "лв.", "млн.", "млрд.", "хил.", "стр.", "p.", "pp.", "inc.", "ltd.", "corp."
+})
+
+ABBREVIATIONS = PREFIX_ABBREVIATIONS | TERMINAL_ABBREVIATIONS | {"u.s."}
+
+SENTENCE_START_WORDS = frozenset({
+    "the", "this", "that", "these", "those", "we", "it", "they", "he", "she",
+    "in", "on", "at", "for", "with", "from", "by", "as", "next", "then",
+    "however", "moreover", "furthermore", "nevertheless", "finally", "additionally"
+})
+
+SECTION_PREFIX_RE = re.compile(
+    r"\b(?:section|sec|table|tab|tbl|fig|figure|chapter|part|article|art|чл|ал|пар)\s*\Z",
+    re.I
+)
+
+EDU_DOMAIN_RE = re.compile(
+    r"^(?:https?://)?(?:[^/]+\.)?(?:nber\.org|[a-z0-9-]+\.edu)(?::\d+)?(?:/|$)",
+    re.I,
+)
+
+
+def split_grounded_sentences(text: str) -> list[tuple[int, int, str]]:
+    """Splits text into candidate sentences anchored by exact character spans.
+
+    Preserves decimal numbers (e.g. 5.5%), legal citations (Art. 97a, чл. 26),
+    author initials (e.g. J. K. Rowling, A. Vaswani), section numbering (Section 1., Table 2.),
+    and abbreviations without sentence breakage, while properly recognizing terminal
+    abbreviations (etc., 2026 г.) and Asian CJK punctuation (。, ！, ？) without spaces.
+    Returns a list of (start_char, end_char, quote) tuples where text[start_char:end_char] == quote.
+    """
+    if not text or not isinstance(text, str):
+        return []
+
+    pattern = re.compile(
+        r"(?:([.!?][\'\"”’\)]*)(?:\s+|$)|([\u3002\uff01\uff1f\u06D4\u0964][\'\"”’\)]*)(?:\s*|$))"
+    )
+    spans: list[tuple[int, int, str]] = []
+    start = 0
+
+    for m in pattern.finditer(text):
+        punct = m.group(1) or m.group(2)
+        punct_pos = m.start(1) if m.group(1) is not None else m.start(2)
+        next_pos = m.end()
+
+        # 1. Decimal point: digit before and digit after (e.g. 5.5)
+        if punct.startswith(".") and punct_pos > 0 and punct_pos + 1 < len(text):
+            if text[punct_pos - 1].isdigit() and text[punct_pos + 1].isdigit():
+                continue
+
+        # 2. Check preceding token/abbreviation/section header
+        after_text = text[next_pos:].lstrip()
+        word_match = re.search(r"([A-Za-zА-Яа-я0-9.]+)\Z", text[:punct_pos])
+        if word_match:
+            raw_w = word_match.group(1)
+            word = (raw_w + punct[0]).lower()
+
+            # 2a. Numbered section or list item prefix (e.g. 'Section 1.', 'Table 2.', '1. The model...')
+            if raw_w.isdigit() and punct.startswith("."):
+                before_num = text[:word_match.start(1)]
+                if SECTION_PREFIX_RE.search(before_num):
+                    continue
+                before_in_chunk = text[start:word_match.start(1)]
+                if before_in_chunk.strip() == "" or before_num.rstrip().endswith(("\n", "\r")):
+                    continue
+
+            # 2b. Single-letter author/person initials (e.g. 'J. K. Rowling', 'A. Vaswani', 'И. Иванов')
+            if len(raw_w) == 1 and raw_w.isupper() and punct.startswith("."):
+                if after_text:
+                    continue
+
+            # 2c. Prefix abbreviations (e.g. 'Dr.', 'Mr.', 'Art.', 'чл.')
+            if word in PREFIX_ABBREVIATIONS:
+                continue
+
+            # 2d. U.S. handling
+            if word == "u.s." and punct.startswith("."):
+                first_after_token = re.match(r"[A-Za-zА-Яа-я]+", after_text)
+                first_word_str = first_after_token.group(0).lower() if first_after_token else ""
+                has_newline = "\n" in text[punct_pos:next_pos] or "\r" in text[punct_pos:next_pos]
+                if not (has_newline or first_word_str in SENTENCE_START_WORDS or not after_text):
+                    continue
+
+        # 3. Next character after whitespace: if lowercase, continuation clause
+        if after_text and after_text[0].islower() and punct.startswith("."):
+            continue
+
+        candidate_raw = text[start:next_pos]
+        l_ws = len(candidate_raw) - len(candidate_raw.lstrip())
+        r_ws = len(candidate_raw) - len(candidate_raw.rstrip())
+        actual_start = start + l_ws
+        actual_end = next_pos - r_ws
+        if actual_end > actual_start:
+            quote = text[actual_start:actual_end]
+            spans.append((actual_start, actual_end, quote))
+        start = next_pos
+
+    if start < len(text):
+        candidate_raw = text[start:]
+        l_ws = len(candidate_raw) - len(candidate_raw.lstrip())
+        r_ws = len(candidate_raw) - len(candidate_raw.rstrip())
+        actual_start = start + l_ws
+        actual_end = len(text) - r_ws
+        if actual_end > actual_start:
+            spans.append((actual_start, actual_end, text[actual_start:actual_end]))
+
+    return spans
+
+
+def extract_candidate_quotes(
+    study_dir: Path,
+    keywords: list[str] | None = None,
+    min_chars: int = MIN_LOCKED_QUOTE_CHARS,
+    max_chars: int = 300,
+    use_langextract: bool = True,
+) -> list[dict[str, Any]]:
+    """Extracts candidate sentences from snapshots grounded by exact character spans.
+
+    Uses langextract when available to anchor quotes by exact character intervals,
+    preventing broken sentences or punctuation splitting.
+    """
     sources_meta, source_texts = load_snapshots(study_dir)
-    candidates = []
+    candidates: list[dict[str, Any]] = []
+
+    # Clean and sanitize keywords
+    clean_kws: list[str] = []
+    if keywords:
+        for k in keywords:
+            if isinstance(k, str) and k.strip():
+                clean_kws.append(k.strip().lower())
+            elif k is not None:
+                s_k = str(k).strip().lower()
+                if s_k:
+                    clean_kws.append(s_k)
 
     for sid, text in source_texts.items():
-        sentences = re.split(r"(?<=[.!?])\s+", text)
-        for s in sentences:
-            s_clean = normalise_ws(s)
-            if len(s_clean) < MIN_LOCKED_QUOTE_CHARS or len(s_clean) > 300:
+        if not text or not isinstance(text, str):
+            continue
+
+        meta = sources_meta.get(sid) or {}
+        url = str(meta.get("url", ""))
+        declared_tier = str(meta.get("tier", ""))
+        if declared_tier in VALID_TIERS:
+            resolved_tier = declared_tier
+        elif url and EDU_DOMAIN_RE.search(url):
+            resolved_tier = "T1"
+        else:
+            resolved_tier = "T3"
+
+        spans = split_grounded_sentences(text)
+        for start_idx, end_idx, quote in spans:
+            quote_len = len(quote)
+            if quote_len < min_chars or quote_len > max_chars:
                 continue
-            if any(k.lower() in s_clean.lower() for k in keywords):
-                url = str(sources_meta.get(sid, {}).get("url", ""))
-                candidates.append({
-                    "source": sid,
-                    "quote": s_clean,
-                    "tier": "T1" if ("nber.org" in url or "edu" in url) else "T3",
-                })
+
+            if clean_kws and not any(kw in quote.lower() for kw in clean_kws):
+                continue
+
+            item: dict[str, Any] = {
+                "source": sid,
+                "quote": quote,
+                "char_start": start_idx,
+                "char_end": end_idx,
+                "char_len": quote_len,
+                "tier": resolved_tier,
+                "source_url": url,
+            }
+            if use_langextract:
+                item["char_interval"] = CharInterval(start_pos=start_idx, end_pos=end_idx)
+
+            candidates.append(item)
+
     return candidates
 
 

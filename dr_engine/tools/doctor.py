@@ -31,6 +31,8 @@ REQUIRED = [
 OPTIONAL = [
     ("langextract", "import langextract",
      "extract_doc.py online extraction and its interactive HTML view", "python -m pip install langextract"),
+    ("primp", "import primp",
+     "Tier-0 native TLS impersonation for polyglot HTTP transport", "python -m pip install primp"),
     ("ddgs", "import ddgs", "scanner.py web search", "python -m pip install ddgs"),
     ("polite-http", "import polite_http", "science CLIs (a stdlib fallback is bundled)",
      "python -m pip install polite-http"),

@@ -105,7 +105,8 @@ def offline_heuristic_extract(text: str, category: str) -> List[Dict[str, Any]]:
     Deterministic rule-and-regex extractor when running offline without Gemini API keys.
     Finds load-bearing factual sentences containing numbers, percentages, currency, or key rules.
     """
-    sentences = re.split(r"(?<=[.!?])\s+", text)
+    from dr_engine.tools.evidence_locker import split_grounded_sentences
+    spans = split_grounded_sentences(text)
     extractions = []
     
     number_pattern = re.compile(r"\b(?:\$|€|£)?\d+(?:\.\d+)?(?:%|k|M|bn|bps|pips|EUR|USD|BGN)?\b", re.IGNORECASE)
@@ -116,15 +117,7 @@ def offline_heuristic_extract(text: str, category: str) -> List[Dict[str, Any]]:
         "general": ["%", "eur", "usd", "ratio", "threshold", "limit", "target", "fee"],
     }.get(category, ["%"])
 
-    offset = 0
-    for s in sentences:
-        start_idx = text.find(s, offset)
-        if start_idx == -1:
-            start_idx = offset
-        end_idx = start_idx + len(s)
-        offset = end_idx
-
-        s_clean = s.strip()
+    for start_idx, end_idx, s_clean in spans:
         if not s_clean or len(s_clean) < 15:
             continue
 

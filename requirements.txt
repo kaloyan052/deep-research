@@ -9,6 +9,7 @@ lxml_html_clean>=0.4  # trafilatura -> justext needs it with lxml >= 5.2 (import
 
 # Optional
 # langextract>=1.0     # extract_doc.py (long-document extraction)
+# primp>=2.0           # Tier-0 native TLS impersonation (http_resilience.py)
 # ddgs>=9.0.0          # scanner.py web search
 # polite-http>=0.1.3   # science CLIs (a stdlib fallback is bundled)
 
