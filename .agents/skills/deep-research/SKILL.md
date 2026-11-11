@@ -653,3 +653,38 @@ Built after forensic audits exposed the core reasons why autonomous agents fail:
 | Lock verified evidence quotes into immutable ledger | `python dr_engine/tools/lean_engine.py lock-evidence --dir research/<dir>` |
 | Export executable Google Colab notebook | `python dr_engine/tools/lean_engine.py colab --dir research/<dir> [--out <path>]` |
 | Full v14.0 regression suite | `python -m unittest tests.test_v14_epistemic_pipeline -v` (6 offline tests) |
+
+## 14. v15.1 — Multi-Tier Source Verifier, Attested A4 PDF Exporter & Regulatory Physical Liability Gate
+
+Built directly following the MI02 audit postmortem to prevent false-negative source dismissals, ensure publication-grade PDF deliverability, and block physically unfeasible regulatory advisory proposals:
+
+### 14.1 Frontier 1 — Rule B15: Anti-False-Negative Source Verification Gate (`source_verifier.py`)
+- **Multi-Tier Primary Source Cascade:** Never declare an external URL or published pricing 'fabricated' or 'non-existent' without running `dr_engine/tools/source_verifier.py`.
+  - Tier 1: Canonical URL fetch with browser headers and redirect tracking.
+  - Tier 2: Sitemap traversal (`/sitemap.xml`, `/pages-sitemap.xml`, `/sitemap_index.xml`).
+  - Tier 3: Structured DOM & embedded JSON extraction (Wix rich-text, Next.js `__NEXT_DATA__`, JSON-LD schemas).
+  - Tier 4: Memento / Wayback Machine CDX lookup.
+- **Fail-Closed Trap:** Any unverified source dismissal triggers `TRAP_FALSE_NEGATIVE_SOURCE_DISMISSAL` in `known_traps.json`.
+
+### 14.2 Frontier 2 — Rule B16: Statutory Physical Liability Boundary Gate
+- **Physical Liability Screening:** Hard-blocks recommending solo digital/written business models in statutory domains requiring accredited physical testing laboratories, certified Quality Management Systems (ISO 13485 for medical devices, ISO 17025 for testing labs), or bonded customs declarant licenses with joint personal financial liability (Regulation 2023/1230 machinery safety, MDR 2017/745, CBAM definitive declarant) unless an explicit licensed partner underwriting SLA is proven. Enforced by `TRAP_REGULATED_PHYSICAL_LIABILITY_MISMATCH`.
+
+### 14.3 Frontier 3 — Competitor Commercial Microstructure Quad
+- **Beyond Bare Prices:** Research into competitors must extract the 4 essential economic terms:
+  1. Price & Currency (including VAT and scope).
+  2. Payment Milestones (e.g. 50% upfront, 50% on contract).
+  3. Turnaround SLA (e.g. 10 business days vs 48h).
+  4. Scope Boundaries, Exclusions & Bundling Discounts (e.g. -15% bundled).
+
+### 14.4 Frontier 4 — Attested Executive PDF Exporter (`export_pdf.py` & `lean_engine.py export --pdf`)
+- Run `python dr_engine/tools/lean_engine.py export --dir research/<dir> --out reports/<NAME>.md --pdf` or `python dr_engine/tools/export_pdf.py <file.md> --out <file.pdf>`.
+- Compiles publication-ready A4 PDFs via local headless Chromium/Edge with responsive table styling, typography hierarchy, KaTeX math, and page-break optimization.
+
+### 14.5 v15.1 tools
+
+| Need | Command / module |
+| :-- | :-- |
+| Multi-tier source verification | `python dr_engine/tools/source_verifier.py <URL> [--terms ...]` |
+| Attested PDF compilation | `python dr_engine/tools/export_pdf.py <file.md> [--out <file.pdf>]` |
+| Export verified deliverable with PDF | `python dr_engine/tools/lean_engine.py export --dir research/<dir> --out reports/<NAME>.md --pdf` |
+| v15.1 regression suite | `python -m unittest tests.test_v15_source_verifier_and_pdf -v` (7 tests) |

@@ -2387,6 +2387,17 @@ def cmd_export(args: argparse.Namespace) -> int:
       print(f"  FAIL  {f}")
     return 1
   print(f"[EXPORT OK] Verified & attested deliverable written -> {dest}")
+  if getattr(args, "pdf", False) or str(dest).endswith(".pdf"):
+    try:
+      from dr_engine.tools.export_pdf import convert_md_to_pdf
+      pdf_dest = Path(dest).with_suffix(".pdf")
+      pdf_ok, pdf_msg = convert_md_to_pdf(dest, pdf_dest)
+      if pdf_ok:
+        print(f"[EXPORT OK] Attested PDF generated -> {pdf_dest}")
+      else:
+        print(f"[EXPORT WARN] PDF generation skipped/failed: {pdf_msg}")
+    except Exception as e:
+      print(f"[EXPORT WARN] Exception during PDF export: {e}")
   return 0
 
 
@@ -2569,6 +2580,7 @@ def main(argv: list[str] | None = None) -> int:
     p_exp.add_argument("--strict-v12", action="store_true")
     p_exp.add_argument("--strict-v13", action="store_true")
     p_exp.add_argument("--strict-v14", action="store_true")
+    p_exp.add_argument("--pdf", action="store_true", help="Also compile an attested publication-grade A4 PDF")
     p_exp.set_defaults(fn=cmd_export)
 
     p_pref = sub.add_parser("preflight", help="Check study against desk memory graveyard and invariants")

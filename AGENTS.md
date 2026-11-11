@@ -180,6 +180,14 @@ Solves the root causes of agent hallucination, graveyard resurrections, and pass
   - **Simular Box (`box.simular.ai`):** Used as an optional persistent cloud sandbox for 24/7 long-running scrapers, bot-wall bypasses (anti-scraping bypasses), and native MT5 desktop terminal backtest execution.
 - All 379 unit tests pass, exit 0.
 
+### v15.1 Multi-Tier Source Verifier, Attested A4 PDF Exporter & Regulatory Physical Liability Gate (2026-11-09)
+Built following the MI02 audit postmortem to prevent false-negative source dismissals, ensure publication-grade PDF deliverability, and block physically unfeasible regulatory advisory proposals:
+- **Rule B15 (Anti-False-Negative Source Verification Gate):** Never declare an external URL or published pricing 'fabricated' without running `dr_engine/tools/source_verifier.py`. Requires multi-tier resolution: Tier 1 canonical fetch; Tier 2 sitemap traversal (`/sitemap.xml`, `/pages-sitemap.xml`); Tier 3 rich DOM & embedded JSON extraction (Wix, Next.js, JSON-LD); Tier 4 Wayback/Memento lookup. Enforced by `TRAP_FALSE_NEGATIVE_SOURCE_DISMISSAL`.
+- **Rule B16 (Statutory Physical Liability Boundary Gate):** Hard-blocks recommending solo digital/written business models in statutory domains requiring accredited physical testing laboratories, certified Quality Management Systems (ISO 13485/17025), or bonded customs declarant licenses with joint personal financial liability (Regulation 2023/1230 machinery safety, MDR 2017/745, CBAM definitive declarant) unless an explicit licensed partner underwriting SLA is proven. Enforced by `TRAP_REGULATED_PHYSICAL_LIABILITY_MISMATCH`.
+- **Attested Executive PDF Exporter:** Run `dr_engine/tools/lean_engine.py export --dir research/<dir> --out reports/<NAME>.md --pdf` or `python dr_engine/tools/export_pdf.py <file.md> --out <file.pdf>` to compile publication-ready A4 PDFs via headless Chromium/Edge with table formatting and layout optimization.
+- **Competitor Commercial Microstructure Quad:** Mandates extracting 4 essential economic terms for competitors: Price & VAT status; Payment Milestones (e.g. 50% upfront, 50% on contract); Turnaround SLA (e.g. 10 business days vs 48h); Scope Boundaries, Exclusions & Bundling Discounts.
+- Verify with `python -m unittest tests.test_v15_source_verifier_and_pdf -v` (7 tests) and full discovery suite (**423 tests, exit 0**).
+
 ### Option B (FALLBACK): Granular 14-Step CLI Workflow (v4.x–v7.0)
 For complex multi-agent swarms using `next_step.py`:
 1. `evidence.py init <slug>` → `research/<date>-<slug>/`; fill `plan.md`

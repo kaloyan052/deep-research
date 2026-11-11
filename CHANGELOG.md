@@ -3,6 +3,26 @@
 Newest first. **Study** lists what an agent must now do differently in a research folder;
 **Tools** lists everything else.
 
+## 2026-11-09 — Deep Research v15.1: Multi-Tier Source Verifier, Attested A4 PDF Exporter & Regulatory Boundary Gate
+
+Built directly following the MI02 user audit postmortem, which exposed two critical failure modes:
+(1) False-negative source dismissal: an automated crawler or subagent mistakenly declared a live primary competitor URL (`nortan.bg/izbor-na-izpalnitel-pms-4-2024`) and its published price (€2,500) non-existent / fabricated because of shallow single-request checks on a client-rendered Wix site, failing to inspect `pages-sitemap.xml`;
+(2) Regulated physical liability mismatch: earlier drafts recommended solo digital/written advisory for statutory domains (Machinery safety CE marking under Regulation 2023/1230, CBAM customs filing) that legally require accredited laboratory testing, certified QMS (ISO 13485/17025), and millions in professional liability insurance.
+Baseline 416 tests → **423 pass (1 skipped), exit 0**; `doctor` READY.
+
+**Study (mandatory for every research folder):**
+- **Rule B15 (Anti-False-Negative Source Verification Gate):** Under NO circumstances shall an agent or tool declare an external URL or published pricing 'fabricated' or 'hallucinated' without running `dr_engine/tools/source_verifier.py`. Requires multi-tier verification: Tier 1 canonical fetch with browser headers; Tier 2 sitemap traversal (`/sitemap.xml`, `/pages-sitemap.xml`); Tier 3 DOM & embedded JSON extraction; Tier 4 Memento / Wayback lookup. Any unverified source dismissal is blocked by `TRAP_FALSE_NEGATIVE_SOURCE_DISMISSAL`.
+- **Rule B16 (Statutory Physical Liability Boundary Gate):** Hard-blocks recommending solo digital advisory in domains requiring accredited physical testing labs, ISO 13485/17025 certifications, or bonded statutory customs declarant licenses. Enforced by `TRAP_REGULATED_PHYSICAL_LIABILITY_MISMATCH` in `known_traps.json`.
+- **Competitor Commercial Microstructure Quad:** Mandates extracting the 4 essential economic terms for every competitor: (1) Price & VAT status; (2) Payment Milestones (e.g. 50% upfront, 50% on contract); (3) Turnaround SLA (e.g. 10 business days vs 48h); (4) Scope Boundaries, Exclusions & Bundling Discounts (e.g. -15% bundled).
+- **Deterministic Attested PDF Deliverable:** Run `dr_engine/tools/lean_engine.py export --dir research/<dir> --out reports/<NAME>.md --pdf` (or `python dr_engine/tools/export_pdf.py <file.md> --out <file.pdf>`). Automatically compiles an executive, publication-grade A4 PDF using local headless Chromium/Edge with table formatting and page-break optimization.
+
+**Tools:**
+- `dr_engine/tools/source_verifier.py`: Multi-tier source resolver that traverses sitemaps and extracts embedded DOM/JSON data to verify live presence and terms.
+- `dr_engine/tools/export_pdf.py`: Headless browser-backed A4 PDF compiler with typography styling, KaTeX support, and data table layouts.
+- `dr_engine/tools/lean_engine.py`: Integrated `--pdf` flag into `cmd_export`.
+- `dr_engine/tools/known_traps.json`: Added `TRAP_FALSE_NEGATIVE_SOURCE_DISMISSAL` and `TRAP_REGULATED_PHYSICAL_LIABILITY_MISMATCH`.
+- `tests/test_v15_source_verifier_and_pdf.py`: 7 unit tests verifying source extraction, term matching, PDF compilation, and trap enforcement.
+
 ## 2026-11-08 — Deep Research v14.0: The Unbreakable Epistemic Pipeline, Pre-Synthesis Evidence Locker & Executable Google Colab Verification
 
 Solves the structural failure modes of AI research: premature synthesis from ungrounded LLM memory, desk graveyard blindness, and passive text bias. Integrates Google Cloud Deep Research trajectory evaluation principles, interactive Google Colab cloud execution, and Simular Box agent sandboxing.

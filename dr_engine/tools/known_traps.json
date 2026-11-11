@@ -207,5 +207,33 @@
     "acknowledgment_patterns": [
       "(?:synthetic|fabricated|hallucination|banned|измислен|фалшив)"
     ]
+  },
+  {
+    "id": "TRAP_FALSE_NEGATIVE_SOURCE_DISMISSAL",
+    "name": "False-Negative Source Dismissal Without Sitemap & DOM Verification",
+    "status": "TRAP",
+    "patterns": [
+      "(?:url|линка?|източника?|страницата)[^.\\n]*?(?:nortan|нортан|конкурент|цена|тарифа)[^.\\n]*?(?:измислен|fabricated|не\\s+съществува|does\\s+not\\s+exist)",
+      "(?:nortan|нортан|конкурент|цена|тарифа)[^.\\n]*?(?:url|линка?|източника?|страницата)[^.\\n]*?(?:измислен|fabricated|не\\s+съществува|does\\s+not\\s+exist)",
+      "(?:url|линка?|източника?|страницата)[^.\\n]*?(?:измислен|fabricated|не\\s+съществува|does\\s+not\\s+exist)[^.\\n]*?(?:nortan|нортан|конкурент|цена|тарифа)",
+      "(?:nortan|нортан|конкурент|цена|тарифа)[^.\\n]*?(?:измислен|fabricated|не\\s+съществува|does\\s+not\\s+exist)"
+    ],
+    "refutation": "Declaring a competitor source URL or published pricing 'fabricated' or 'non-existent' without sitemap traversal (/sitemap.xml, /pages-sitemap.xml) and rich DOM extraction is a fatal epistemic false-negative. In MI02, an agent erroneously declared nortan.bg/izbor-na-izpalnitel-pms-4-2024 non-existent when it was live in pages-sitemap.xml with the exact 2 500 € price.",
+    "acknowledgment_patterns": [
+      "(?:verified_live|verified_in_sitemap|sitemap\\.xml|pages-sitemap|верифициран|проверен\\s+в\\s+sitemap|действителен)"
+    ]
+  },
+  {
+    "id": "TRAP_REGULATED_PHYSICAL_LIABILITY_MISMATCH",
+    "name": "Recommending Regulated Physical / Statutory Liability Services for Solo AI Founders",
+    "status": "TRAP",
+    "patterns": [
+      "(?:ce\\s*маркировка|machinery\\s*regulation|2023/1230|cbam\\s*деклара|mdr\\s*2017/745|съответствие\\s*на\\s*машини)[^.\\n]*?(?:препоръчан|препоръчва|top\\s*pick|победител|winner|solo|соло)",
+      "(?:препоръчан|препоръчва|top\\s*pick|победител|winner|solo|соло)[^.\\n]*?(?:ce\\s*маркировка|machinery\\s*regulation|2023/1230|cbam\\s*деклара|mdr\\s*2017/745|съответствие\\s*на\\s*машини)"
+    ],
+    "refutation": "Statutory frameworks like Regulation (EU) 2023/1230 (Machinery safety CE marking), MDR 2017/745 (medical devices), or Regulation 2023/956 (CBAM definitive customs declarants) require accredited physical testing, certified QMS (ISO 13485/17025), and millions in professional liability insurance. Recommending these as solo low-risk digital advisory businesses violates Gate G2 (Founder Fit) and G4 (Liability).",
+    "acknowledgment_patterns": [
+      "(?:g2|g4|неприложим|отпада|kill|killed|liability|застраховка|акредитирана\\s+лаборатория|личен\\s+риск|отговорност)"
+    ]
   }
 ]
